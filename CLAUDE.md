@@ -66,7 +66,7 @@ public/
 ├─ index.html                  작업 목록 (링크는 전부 ./prerender/)
 ├─ html/*.html                 페이지 원본 (루트에만 페이지)
 ├─ html/include/<폴더>/_*.html  파셜 — 서비스·기능별 폴더, 두 곳 이상이 쓰면 common/
-├─ html/include/ui/_ui_*.html   공통 UI 컴포넌트 파셜 (드롭다운 · 입력 · 스테퍼 · LNB · 아코디언 · 토스트 · 확인창 · 날짜 · 기간)
+├─ html/include/ui/_ui_*.html   공통 UI 컴포넌트 파셜 (드롭다운 · 입력 · 체크박스 · 라디오 · 토글 · 툴팁 · 스테퍼 · LNB · 아코디언 · 토스트 · 모달 · 날짜 · 기간)
 ├─ data/<기능>/*.json          목록 데이터
 ├─ prerender/*.html            산출물 (scripts/prerender.js 가 만든다 — 손으로 고치지 않는다)
 ├─ scss/                      _variable(토큰) · _mixin · _font(Pretendard) · _reset · common.scss(진입 → css/common.css)
@@ -95,7 +95,7 @@ public/
 | 하려는 일 | 스킬 |
 | --- | --- |
 | **새 화면·새 컴포넌트를 시작한다** · Figma 시안을 읽는다 · 새 클래스명을 정한다 | **`pub-new-screen`** |
-| **공통 UI** — 드롭다운 · 입력 · 스테퍼 · LNB · 탭 · 아코디언 · 토스트 · 모달 · **날짜 · 기간 달력** · 전체 선택 · 공통 UI 네이밍 | **`pub-common-ui`** |
+| **공통 UI** — 드롭다운 · 입력 · 체크박스 · 라디오 · 토글 · 툴팁 · 스테퍼 · LNB · 탭 · 아코디언 · 토스트 · 모달 · **날짜 · 기간 달력** · 전체 선택 · 공통 UI 네이밍 | **`pub-common-ui`** |
 | 목록 · 테이블 · 카드처럼 **반복되는 행**을 만든다 · 프리렌더 · **index 작업일자 갱신** | **`pub-list-render`** |
 | 같은 마크업이 두 곳 이상 생겼다 · 상태가 여러 개인 화면 · 새 페이지 · 운영 컴포넌트(배너·팝업) | **`pub-markup`** |
 | 로컬 서버 · 줄바꿈/탭 · 산출물 주석 규칙 · 환경 문제 | **`pub-env`** |

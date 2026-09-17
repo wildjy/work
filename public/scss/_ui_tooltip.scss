@@ -1,0 +1,120 @@
+@use 'variable';
+@use 'mixin';
+
+// ─────────────────────────────────────────────────────────────
+// _ui_tooltip.scss — 툴팁 (머터리얼 tooltip + 꼬리)
+// 파셜 : include/ui/_ui_tooltip.html
+// 방향 : --top · --right · --bottom · --left = 아이콘 기준으로 레이어가 뜨는 쪽. 꼬리는 아이콘을 가리킨다
+// 상태 : 레이어 is-open + hidden · 버튼 is-open (common.js)
+// ⚠ 화면 끝에 닿아도 방향을 뒤집지 않는다 — 자리가 좁은 곳은 방향을 골라 넘긴다
+// ─────────────────────────────────────────────────────────────
+
+$tooltip-gap: 8px; // 아이콘과 레이어 사이 (꼬리가 이 안에 들어간다)
+$tooltip-tail: 12px; // 꼬리 밑변 (높이는 그 절반 — $tooltip-gap 안에 들어간다)
+
+.ui-tooltip {
+	position: relative;
+	display: inline-flex;
+	vertical-align: middle;
+
+	&__btn {
+		width: 20px;
+		height: 20px;
+		border-radius: 50%;
+		@include mixin.txt-blind;
+		@include mixin.background-data('info1-line', variable.$color-text-sub, null, center, 20px);
+
+		&:hover,
+		&.is-open {
+			background-image: mixin.icon('info1-line', variable.$color-primary);
+		}
+		&:focus-visible {
+			outline: 2px solid variable.$color-primary;
+			outline-offset: 2px;
+		}
+	}
+
+	&__layer {
+		position: absolute;
+		z-index: 20;
+		width: max-content;
+		max-width: 240px;
+		padding: 8px 12px;
+		border-radius: variable.$radius-sm;
+		background-color: variable.$color-tooltip;
+		box-shadow: variable.$elevation-4;
+		@include mixin.font-set(0.8125rem, 400, variable.$white);
+		line-height: 1.5;
+		text-align: left;
+		white-space: normal;
+		word-break: keep-all;
+
+		&::before {
+			position: absolute;
+		}
+		&.is-open {
+			animation: ui-tooltip-in variable.$duration-short variable.$easing-standard;
+		}
+	}
+
+	// 위 — 레이어가 아이콘 위, 꼬리는 아래를 가리킨다
+	&--top &__layer {
+		bottom: calc(100% + #{$tooltip-gap});
+		left: 50%;
+		translate: -50% 0;
+		&::before {
+			@include mixin.triangle($tooltip-tail, down, variable.$color-tooltip);
+			top: 100%;
+			left: 50%;
+			translate: -50% 0;
+		}
+	}
+	// 아래 — 꼬리는 위를 가리킨다
+	&--bottom &__layer {
+		top: calc(100% + #{$tooltip-gap});
+		left: 50%;
+		translate: -50% 0;
+		&::before {
+			@include mixin.triangle($tooltip-tail, up, variable.$color-tooltip);
+			bottom: 100%;
+			left: 50%;
+			translate: -50% 0;
+		}
+	}
+	// 오른쪽 — 꼬리는 왼쪽을 가리킨다
+	&--right &__layer {
+		top: 50%;
+		left: calc(100% + #{$tooltip-gap});
+		translate: 0 -50%;
+		&::before {
+			@include mixin.triangle($tooltip-tail, left, variable.$color-tooltip);
+			top: 50%;
+			right: 100%;
+			translate: 0 -50%;
+		}
+	}
+	// 왼쪽 — 꼬리는 오른쪽을 가리킨다
+	&--left &__layer {
+		top: 50%;
+		right: calc(100% + #{$tooltip-gap});
+		translate: 0 -50%;
+		&::before {
+			@include mixin.triangle($tooltip-tail, right, variable.$color-tooltip);
+			top: 50%;
+			left: 100%;
+			translate: 0 -50%;
+		}
+	}
+}
+
+// 위치는 translate 속성이 잡고, 모션은 transform 만 쓴다 — 서로 덮지 않는다
+@keyframes ui-tooltip-in {
+	from {
+		opacity: 0;
+		transform: scale(0.9);
+	}
+	to {
+		opacity: 1;
+		transform: scale(1);
+	}
+}

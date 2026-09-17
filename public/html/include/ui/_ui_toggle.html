@@ -1,0 +1,15 @@
+<!-- 공통 토글(스위치) — 받는 값 : data-id(필수) · data-label(필수) · data-name · data-value · data-attrs(checked · disabled) · data-modifier -->
+<!--@ 켜고 끄는 즉시 반영되는 설정에 쓴다. 저장 버튼을 눌러야 반영되는 선택은 체크박스를 쓴다 -->
+<label class="ui-toggle {{modifier|}}">
+	<input
+		type="checkbox"
+		class="ui-toggle__input"
+		role="switch"
+		id="{{id}}"
+		name="{{name|}}"
+		value="{{value|}}"
+		{{{attrs|}}}
+	/>
+	<span class="ui-toggle__track"></span>
+	<span class="ui-toggle__label">{{label}}</span>
+</label>

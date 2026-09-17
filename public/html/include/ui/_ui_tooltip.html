@@ -1,0 +1,7 @@
+<!-- 공통 툴팁 — 받는 값 : data-id(필수) · data-text(필수) · data-position(top · right · bottom · left — 기본 top) · data-label(아이콘 버튼 이름 · 기본 도움말) -->
+<!-- position 은 아이콘 기준으로 레이어가 뜨는 쪽이다. 꼬리(화살표)는 아이콘을 가리킨다 -->
+<!--@ 마우스를 올리거나 포커스하면 열리고, 누르면 고정된다. 바깥을 누르거나 ESC 로 닫힌다(common.js) -->
+<span class="ui-tooltip ui-tooltip--{{position|top}}">
+	<button type="button" class="ui-tooltip__btn" aria-describedby="{{id}}">{{label|도움말}}</button>
+	<span class="ui-tooltip__layer" id="{{id}}" role="tooltip" hidden>{{text}}</span>
+</span>

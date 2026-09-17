@@ -32,6 +32,7 @@
  *  9. 전체 선택 체크박스        CHECK_GROUPS
  * 10. LNB                     lnbActive                     .ui-lnb__link--toggle
  * 11. 날짜 · 기간 달력          datePickerInit (jQuery UI)     [data-datepicker-day] · .ui-period[data-datepicker]
+ * 12. 툴팁                    tooltipSet · tooltipCloseAll   .ui-tooltip__btn (hover · focus · 누르면 고정)
  */
 
 /* ── 0. 공통 헬퍼 ─────────────────────────────────────────── */
@@ -879,3 +880,74 @@ function datePickerInit() {
 }
 document.addEventListener('dynamic-content-loaded', datePickerInit);
 document.addEventListener('DOMContentLoaded', datePickerInit);
+
+/* ── 12. 툴팁 ─────────────────────────────────────────────── */
+// 마크업 : 파셜 include/ui/_ui_tooltip.html
+//   <span class="ui-tooltip ui-tooltip--top">
+//     <button type="button" class="ui-tooltip__btn" aria-describedby="tip_x">도움말</button>
+//     <span class="ui-tooltip__layer" id="tip_x" role="tooltip" hidden>설명</span>
+//   </span>
+// - 마우스를 올리거나 포커스하면 열리고, 벗어나면 닫힌다.
+// - 아이콘을 누르면 **고정**된다(터치 기기는 누르는 것이 곧 여는 방법이다). 다시 누르거나 바깥을 누르거나 ESC 로 닫힌다.
+// - 한 번에 하나만 열린다. 방향(--top · --right · --bottom · --left)은 스타일이 맡는다.
+
+function tooltipSet(tip, open) {
+	var layer = tip.querySelector('.ui-tooltip__layer');
+	if (!layer) return;
+	if (!open) tip._tipPinned = false;
+	if (!layer.hidden === !!open) return;
+	setOpen(layer, open);
+	var btn = tip.querySelector('.ui-tooltip__btn');
+	if (btn) btn.classList.toggle('is-open', !!open);
+}
+
+// except 를 뺀 열린 툴팁을 모두 닫는다
+function tooltipCloseAll(except) {
+	Array.prototype.forEach.call(document.querySelectorAll('.ui-tooltip'), function (tip) {
+		if (tip !== except) tooltipSet(tip, false);
+	});
+}
+
+function tooltipOf(target) {
+	return target && target.closest ? target.closest('.ui-tooltip') : null;
+}
+
+document.addEventListener('mouseover', function (e) {
+	var tip = tooltipOf(e.target);
+	if (!tip || !e.target.closest('.ui-tooltip__btn')) return;
+	tooltipCloseAll(tip);
+	tooltipSet(tip, true);
+});
+document.addEventListener('mouseout', function (e) {
+	var tip = tooltipOf(e.target);
+	if (!tip || tip._tipPinned || tip.contains(e.relatedTarget)) return;
+	tooltipSet(tip, false);
+});
+document.addEventListener('focusin', function (e) {
+	var tip = tooltipOf(e.target);
+	if (!tip || !e.target.closest('.ui-tooltip__btn')) return;
+	tooltipCloseAll(tip);
+	tooltipSet(tip, true);
+});
+document.addEventListener('focusout', function (e) {
+	var tip = tooltipOf(e.target);
+	if (!tip || tip._tipPinned || tip.contains(e.relatedTarget)) return;
+	tooltipSet(tip, false);
+});
+document.addEventListener('click', function (e) {
+	var tip = tooltipOf(e.target);
+	var btn = tip && e.target.closest('.ui-tooltip__btn');
+	if (!btn) {
+		// 레이어 안을 누른 것은 그대로 두고, 바깥을 누르면 모두 닫는다
+		if (!tip) tooltipCloseAll(null);
+		return;
+	}
+	// ⚠ 마우스는 누르기 전에 이미 hover 로 열려 있다 — 「열림」이 아니라 「고정」을 뒤집는다
+	var pin = !tip._tipPinned;
+	tooltipCloseAll(tip);
+	tooltipSet(tip, pin);
+	tip._tipPinned = pin;
+});
+document.addEventListener('keydown', function (e) {
+	if (e.key === 'Escape') tooltipCloseAll(null);
+});

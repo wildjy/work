@@ -14,7 +14,7 @@ public/scss/
 ├─ _font.scss       Pretendard @font-face (100~900 표준 굵기 · woff2)
 ├─ _reset.scss      초기화 + [hidden] · 건너뛰기 링크
 ├─ _layout.scss     페이지 골격 — .layout(__side·__brand·__body·__main) · .app-header · .section · .grid(--2·--3)
-├─ _ui_*.scss       공통 UI (머터리얼) — button · card · table · input(label·helper) · dropdown(menu) · stepper · lnb · tab · accordion · toast · modal · datepicker
+├─ _ui_*.scss       공통 UI (머터리얼) — button · card · table · input(label·helper) · choice(checkbox·radio·toggle) · tooltip · dropdown(menu) · stepper · lnb · tab · accordion · toast · modal · datepicker
 └─ common.scss      진입 파일 → public/css/common.css   (@use 'font'; @use 'reset'; …)
 public/font/Pretendard/Pretendard-*.woff2
 ```

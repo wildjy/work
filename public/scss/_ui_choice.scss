@@ -1,0 +1,213 @@
+@use 'variable';
+@use 'mixin';
+
+// ─────────────────────────────────────────────────────────────
+// _ui_choice.scss — 체크박스 · 라디오 · 토글 · 선택 묶음 (머터리얼 selection controls)
+// 파셜 : include/ui/_ui_checkbox.html · _ui_radio.html · _ui_toggle.html
+// 구조 : label.블록 > input.__input(보이지 않게 · 포커스는 받는다) + span.__box(또는 __track) + span.__label
+// 상태 : 브라우저 기본 checked · disabled 로 판정한다 — 상태 클래스를 붙이지 않는다
+// 묶음 : <div class="ui-choice-group" role="group" aria-label="…"> (라디오는 role="radiogroup") · 세로 --column
+// ─────────────────────────────────────────────────────────────
+
+$choice-halo: 10px; // hover · focus 때 컨트롤 둘레에 번지는 원 크기
+
+//**** 묶음 ****/
+.ui-choice-group {
+	display: flex;
+	flex-wrap: wrap;
+	gap: 4px 24px;
+
+	&--column {
+		flex-direction: column;
+		align-items: flex-start;
+		gap: 4px;
+	}
+}
+
+//**** 공통 뼈대 ****/
+.ui-checkbox,
+.ui-radio,
+.ui-toggle {
+	position: relative;
+	display: inline-flex;
+	align-items: center;
+	gap: 12px;
+	min-height: 40px;
+	cursor: pointer;
+	vertical-align: middle;
+
+	&:has(input:disabled) {
+		cursor: default;
+	}
+}
+.ui-checkbox__input,
+.ui-radio__input,
+.ui-toggle__input {
+	@include mixin.position(absolute, $top: 50%, $left: 0);
+	width: 1px;
+	height: 1px;
+	margin: 0;
+	opacity: 0;
+}
+.ui-checkbox__label,
+.ui-radio__label,
+.ui-toggle__label {
+	@include mixin.font-set(0.9375rem, 400, variable.$color-text);
+	line-height: 1.4;
+}
+.ui-checkbox__input:disabled ~ .ui-checkbox__label,
+.ui-radio__input:disabled ~ .ui-radio__label,
+.ui-toggle__input:disabled ~ .ui-toggle__label {
+	color: variable.$color-text-disabled;
+}
+
+//**** 체크박스 · 라디오 ****/
+.ui-checkbox__box,
+.ui-radio__box {
+	position: relative;
+	flex: none;
+	width: 18px;
+	height: 18px;
+	margin: 0 2px;
+	border: 2px solid variable.$color-text-sub;
+	background-color: variable.$color-surface;
+	transition:
+		background-color variable.$duration-short variable.$easing-standard,
+		border-color variable.$duration-short variable.$easing-standard,
+		box-shadow variable.$duration-short variable.$easing-standard;
+}
+
+.ui-checkbox {
+	&__box {
+		border-radius: 2px;
+		background-repeat: no-repeat;
+		background-position: center;
+		background-size: 14px;
+	}
+	&__input:checked + &__box {
+		border-color: variable.$color-primary;
+		background-color: variable.$color-primary;
+		background-image: mixin.icon('check-S', variable.$white);
+	}
+	&__input:disabled + &__box {
+		border-color: variable.$color-text-disabled;
+	}
+	&__input:disabled:checked + &__box {
+		background-color: variable.$color-text-disabled;
+	}
+
+	&:hover &__input:not(:disabled) + &__box {
+		box-shadow: 0 0 0 $choice-halo rgba(variable.$black, 0.04);
+	}
+	&:hover &__input:not(:disabled):checked + &__box {
+		box-shadow: 0 0 0 $choice-halo rgba(variable.$color-primary, 0.08);
+	}
+	&__input:focus-visible + &__box {
+		box-shadow: 0 0 0 $choice-halo rgba(variable.$color-primary, 0.16) !important;
+	}
+}
+
+.ui-radio {
+	&__box {
+		width: 20px;
+		height: 20px;
+		margin: 0 1px;
+		border-radius: 50%;
+
+		// 가운데 점
+		&::after {
+			content: '';
+			@include mixin.position(absolute, $top: 50%, $left: 50%);
+			width: 10px;
+			height: 10px;
+			border-radius: 50%;
+			background-color: variable.$color-primary;
+			transform: translate(-50%, -50%) scale(0);
+			transition: transform variable.$duration-short variable.$easing-standard;
+		}
+	}
+	&__input:checked + &__box {
+		border-color: variable.$color-primary;
+		&::after {
+			transform: translate(-50%, -50%) scale(1);
+		}
+	}
+	&__input:disabled + &__box {
+		border-color: variable.$color-text-disabled;
+		&::after {
+			background-color: variable.$color-text-disabled;
+		}
+	}
+
+	&:hover &__input:not(:disabled) + &__box {
+		box-shadow: 0 0 0 $choice-halo rgba(variable.$black, 0.04);
+	}
+	&:hover &__input:not(:disabled):checked + &__box {
+		box-shadow: 0 0 0 $choice-halo rgba(variable.$color-primary, 0.08);
+	}
+	&__input:focus-visible + &__box {
+		box-shadow: 0 0 0 $choice-halo rgba(variable.$color-primary, 0.16) !important;
+	}
+}
+
+//**** 토글 ****/ — 트랙 + 손잡이(::after)
+.ui-toggle {
+	&__track {
+		position: relative;
+		flex: none;
+		width: 36px;
+		height: 14px;
+		margin: 0 3px;
+		border-radius: variable.$radius-full;
+		background-color: variable.$color-text-disabled;
+		transition: background-color variable.$duration-short variable.$easing-standard;
+
+		&::after {
+			content: '';
+			@include mixin.position(absolute, $top: 50%, $left: -3px);
+			width: 20px;
+			height: 20px;
+			border-radius: 50%;
+			background-color: variable.$color-surface;
+			box-shadow: variable.$elevation-1;
+			transform: translate(0, -50%);
+			transition:
+				transform variable.$duration-short variable.$easing-standard,
+				background-color variable.$duration-short variable.$easing-standard,
+				box-shadow variable.$duration-short variable.$easing-standard;
+		}
+	}
+	&__input:checked + &__track {
+		background-color: rgba(variable.$color-primary, 0.4);
+		&::after {
+			background-color: variable.$color-primary;
+			transform: translate(22px, -50%);
+		}
+	}
+	&__input:disabled + &__track {
+		background-color: variable.$color-divider;
+		&::after {
+			background-color: variable.$color-hover;
+			box-shadow: none;
+		}
+	}
+	&__input:disabled:checked + &__track::after {
+		background-color: variable.$color-text-disabled;
+	}
+
+	&:hover &__input:not(:disabled) + &__track::after {
+		box-shadow:
+			variable.$elevation-1,
+			0 0 0 $choice-halo rgba(variable.$black, 0.04);
+	}
+	&:hover &__input:not(:disabled):checked + &__track::after {
+		box-shadow:
+			variable.$elevation-1,
+			0 0 0 $choice-halo rgba(variable.$color-primary, 0.08);
+	}
+	&__input:focus-visible + &__track::after {
+		box-shadow:
+			variable.$elevation-1,
+			0 0 0 $choice-halo rgba(variable.$color-primary, 0.16) !important;
+	}
+}

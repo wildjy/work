@@ -150,7 +150,15 @@
 							<div class="ui-card__body">
 								<div class="grid grid--2">
 									<div>
-										<label class="ui-label" for="sample_email">입력</label>
+										<div class="ui-label">
+											<label for="sample_email">입력</label>
+											<!-- 공통 툴팁 -->
+											<!-- 마우스를 올리거나 포커스하면 열리고, 누르면 고정된다. 바깥을 누르거나 ESC 로 닫힌다(common.js) -->
+											<span class="ui-tooltip ui-tooltip--right">
+												<button type="button" class="ui-tooltip__btn" aria-describedby="tip_sample_email">도움말</button>
+												<span class="ui-tooltip__layer" id="tip_sample_email" role="tooltip" hidden>로그인에 쓸 이메일입니다. 가입 후에는 바꿀 수 없습니다.</span>
+											</span>
+										</div>
 										<!-- 공통 입력 -->
 										<div class="ui-field">
 											<div class="ui-input ">
@@ -306,6 +314,164 @@
 						</div>
 					</section>
 					<!--// 구역 : 입력 -->
+
+					<!-- 구역 : 선택 · 툴팁 -->
+					<section class="section">
+						<div class="section__head">
+							<h2 class="section__title">선택 · 툴팁</h2>
+							<p class="section__desc">체크박스 · 라디오 · 토글 · 툴팁 4방향(아이콘에 올리거나 누른다)</p>
+						</div>
+						<div class="ui-card">
+							<div class="ui-card__body">
+								<div class="grid grid--2">
+									<div>
+										<p class="ui-label">체크박스</p>
+										<div class="ui-choice-group ui-choice-group--column" role="group" aria-label="체크박스 예시">
+											<!-- 공통 체크박스 -->
+											<label class="ui-checkbox ">
+												<input type="checkbox" class="ui-checkbox__input" id="sample_check1" name="agree_email" value="Y"  />
+												<span class="ui-checkbox__box"></span>
+												<span class="ui-checkbox__label">이메일 수신</span>
+											</label>
+											<!-- 공통 체크박스 -->
+											<label class="ui-checkbox ">
+												<input type="checkbox" class="ui-checkbox__input" id="sample_check2" name="agree_sms" value="Y" checked />
+												<span class="ui-checkbox__box"></span>
+												<span class="ui-checkbox__label">문자 수신</span>
+											</label>
+											<!-- 공통 체크박스 -->
+											<label class="ui-checkbox ">
+												<input type="checkbox" class="ui-checkbox__input" id="sample_check3" name="agree_push" value="Y" disabled />
+												<span class="ui-checkbox__box"></span>
+												<span class="ui-checkbox__label">앱 알림 (비활성)</span>
+											</label>
+											<!-- 공통 체크박스 -->
+											<label class="ui-checkbox ">
+												<input type="checkbox" class="ui-checkbox__input" id="sample_check4" name="agree_terms" value="Y" checked disabled />
+												<span class="ui-checkbox__box"></span>
+												<span class="ui-checkbox__label">필수 약관 (선택 · 비활성)</span>
+											</label>
+										</div>
+									</div>
+									<div>
+										<p class="ui-label">라디오</p>
+										<div class="ui-choice-group ui-choice-group--column" role="radiogroup" aria-label="라디오 예시">
+											<!-- 공통 라디오 -->
+											<label class="ui-radio ">
+												<input type="radio" class="ui-radio__input" id="sample_radio1" name="sample_radio" value="all" checked />
+												<span class="ui-radio__box"></span>
+												<span class="ui-radio__label">전체 공개</span>
+											</label>
+											<!-- 공통 라디오 -->
+											<label class="ui-radio ">
+												<input type="radio" class="ui-radio__input" id="sample_radio2" name="sample_radio" value="member"  />
+												<span class="ui-radio__box"></span>
+												<span class="ui-radio__label">멤버 공개</span>
+											</label>
+											<!-- 공통 라디오 -->
+											<label class="ui-radio ">
+												<input type="radio" class="ui-radio__input" id="sample_radio3" name="sample_radio" value="private" disabled />
+												<span class="ui-radio__box"></span>
+												<span class="ui-radio__label">비공개 (비활성)</span>
+											</label>
+										</div>
+									</div>
+									<div>
+										<p class="ui-label">토글</p>
+										<div class="ui-choice-group ui-choice-group--column" role="group" aria-label="토글 예시">
+											<!-- 공통 토글(스위치) -->
+											<!-- 켜고 끄는 즉시 반영되는 설정에 쓴다. 저장 버튼을 눌러야 반영되는 선택은 체크박스를 쓴다 -->
+											<label class="ui-toggle ">
+												<input
+													type="checkbox"
+													class="ui-toggle__input"
+													role="switch"
+													id="sample_toggle1"
+													name=""
+													value=""
+
+												/>
+												<span class="ui-toggle__track"></span>
+												<span class="ui-toggle__label">알림 받기</span>
+											</label>
+											<!-- 공통 토글(스위치) -->
+											<!-- 켜고 끄는 즉시 반영되는 설정에 쓴다. 저장 버튼을 눌러야 반영되는 선택은 체크박스를 쓴다 -->
+											<label class="ui-toggle ">
+												<input
+													type="checkbox"
+													class="ui-toggle__input"
+													role="switch"
+													id="sample_toggle2"
+													name=""
+													value=""
+													checked
+												/>
+												<span class="ui-toggle__track"></span>
+												<span class="ui-toggle__label">자동 저장</span>
+											</label>
+											<!-- 공통 토글(스위치) -->
+											<!-- 켜고 끄는 즉시 반영되는 설정에 쓴다. 저장 버튼을 눌러야 반영되는 선택은 체크박스를 쓴다 -->
+											<label class="ui-toggle ">
+												<input
+													type="checkbox"
+													class="ui-toggle__input"
+													role="switch"
+													id="sample_toggle3"
+													name=""
+													value=""
+													disabled
+												/>
+												<span class="ui-toggle__track"></span>
+												<span class="ui-toggle__label">베타 기능 (비활성)</span>
+											</label>
+										</div>
+									</div>
+									<div>
+										<p class="ui-label">툴팁 4방향</p>
+										<div class="ui-choice-group">
+											<div class="ui-label">
+												<span>위</span>
+												<!-- 공통 툴팁 -->
+												<!-- 마우스를 올리거나 포커스하면 열리고, 누르면 고정된다. 바깥을 누르거나 ESC 로 닫힌다(common.js) -->
+												<span class="ui-tooltip ui-tooltip--top">
+													<button type="button" class="ui-tooltip__btn" aria-describedby="tip_sample_top">도움말</button>
+													<span class="ui-tooltip__layer" id="tip_sample_top" role="tooltip" hidden>아이콘 위에 뜨는 툴팁입니다.</span>
+												</span>
+											</div>
+											<div class="ui-label">
+												<span>오른쪽</span>
+												<!-- 공통 툴팁 -->
+												<!-- 마우스를 올리거나 포커스하면 열리고, 누르면 고정된다. 바깥을 누르거나 ESC 로 닫힌다(common.js) -->
+												<span class="ui-tooltip ui-tooltip--right">
+													<button type="button" class="ui-tooltip__btn" aria-describedby="tip_sample_right">도움말</button>
+													<span class="ui-tooltip__layer" id="tip_sample_right" role="tooltip" hidden>아이콘 오른쪽에 뜨는 툴팁입니다.</span>
+												</span>
+											</div>
+											<div class="ui-label">
+												<span>아래</span>
+												<!-- 공통 툴팁 -->
+												<!-- 마우스를 올리거나 포커스하면 열리고, 누르면 고정된다. 바깥을 누르거나 ESC 로 닫힌다(common.js) -->
+												<span class="ui-tooltip ui-tooltip--bottom">
+													<button type="button" class="ui-tooltip__btn" aria-describedby="tip_sample_bottom">도움말</button>
+													<span class="ui-tooltip__layer" id="tip_sample_bottom" role="tooltip" hidden>아이콘 아래에 뜨는 툴팁입니다. 문구가 길면 240px 에서 줄이 바뀝니다.</span>
+												</span>
+											</div>
+											<div class="ui-label">
+												<span>왼쪽</span>
+												<!-- 공통 툴팁 -->
+												<!-- 마우스를 올리거나 포커스하면 열리고, 누르면 고정된다. 바깥을 누르거나 ESC 로 닫힌다(common.js) -->
+												<span class="ui-tooltip ui-tooltip--left">
+													<button type="button" class="ui-tooltip__btn" aria-describedby="tip_sample_left">도움말</button>
+													<span class="ui-tooltip__layer" id="tip_sample_left" role="tooltip" hidden>아이콘 왼쪽에 뜨는 툴팁입니다.</span>
+												</span>
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+					</section>
+					<!--// 구역 : 선택 · 툴팁 -->
 
 					<!-- 구역 : 탭 · 아코디언 -->
 					<section class="section">

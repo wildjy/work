@@ -1,7 +1,7 @@
 ---
 name: pub-common-ui
 description: >-
-  공통 UI 컴포넌트를 화면에 넣거나 고칠 때 — 드롭다운·검색 드롭다운·입력+지우기+안내문·수량 스테퍼·LNB·탭·아코디언·토스트·모달(확인창)·날짜 입력·기간 입력(jQuery UI datepicker). 공통 UI 는 BEM(ui- 접두어 · is-/has- 상태) 네이밍이고, 보이고 숨기기는 상태 클래스 + hidden 속성, 동작은 onclick 없이 클래스·data-* 위임(public/js/common.js)이다. 마크업은 public/html/include/ui/_ui_*.html 파셜을 data-* 변수로 include 하고, 탭은 구조 규칙대로 직접 쓰고 모달은 프레임 파셜에 본문 파셜을 넘긴다. 파셜별 받는 값, 함수별 호출법, 새 컴포넌트를 추가할 때 함께 고칠 곳(eslint.config.js COMMON_FUNCTIONS · WORKLOG)을 담는다. ui-dropdown·ui-input·ui-stepper·ui-lnb·ui-tab·ui-accordion·ui-toast·ui-modal·ui-period·ui-calendar·data-modal-open·data-toast·toggleMenu·dropdownSelect·modalOpen·tabActivate·accordionToggle·toastShow·stepperChange·CHECK_GROUPS·lnbActive·datepicker 키워드에서 사용.
+  공통 UI 컴포넌트를 화면에 넣거나 고칠 때 — 드롭다운·검색 드롭다운·입력+지우기+안내문·수량 스테퍼·LNB·탭·아코디언·토스트·모달(프레임·알림·확인창)·체크박스·라디오·토글·툴팁·날짜 입력·기간 입력(jQuery UI datepicker). 공통 UI 는 BEM(ui- 접두어 · is-/has- 상태) 네이밍이고, 보이고 숨기기는 상태 클래스 + hidden 속성, 동작은 onclick 없이 클래스·data-* 위임(public/js/common.js)이다. 마크업은 public/html/include/ui/_ui_*.html 파셜을 data-* 변수로 include 하고, 탭은 구조 규칙대로 직접 쓰고 모달은 프레임 파셜에 본문 파셜을 넘긴다. 파셜별 받는 값, 함수별 호출법, 새 컴포넌트를 추가할 때 함께 고칠 곳(eslint.config.js COMMON_FUNCTIONS · WORKLOG)을 담는다. ui-dropdown·ui-input·ui-stepper·ui-lnb·ui-tab·ui-accordion·ui-toast·ui-tooltip·ui-checkbox·ui-radio·ui-toggle·ui-modal·ui-period·ui-calendar·data-modal-open·data-toast·toggleMenu·dropdownSelect·modalOpen·tabActivate·accordionToggle·toastShow·stepperChange·CHECK_GROUPS·lnbActive·datepicker 키워드에서 사용.
 ---
 # 공통 UI (`include/ui/_ui_*.html` + `public/js/common.js`)
 
@@ -78,6 +78,10 @@ description: >-
 | `_ui_modal_alert.html` | **`id`** · **`title`** · `subtext` · `text` · `body`(본문 파셜 경로) · `modifier`(`ui-modal--sm`) | 정보성 알림 — 버튼 없음 · **딤 클릭으로 닫힘** |
 | `_ui_modal_text.html` | `text` | 알림의 기본 본문(한 문단). **직접 쓰지 않는다** |
 | `_ui_modal_confirm.html` | **`id`** · **`title`** · `text` · `confirm`(확인) · `cancel`(취소) · `modifier`(추가 변형) | 확인창 전용(`ui-modal--confirm`) |
+| `_ui_checkbox.html` | **`id`** · **`label`** · `name` · `value` · `attrs`(`checked` · `disabled`) · `modifier` | |
+| `_ui_radio.html` | **`id`** · **`name`** · **`label`** · `value` · `attrs` · `modifier` | 같은 묶음은 같은 `name` |
+| `_ui_toggle.html` | **`id`** · **`label`** · `name` · `value` · `attrs` · `modifier` | 즉시 반영되는 설정 |
+| `_ui_tooltip.html` | **`id`** · **`text`** · `position`(`top` \| `right` \| `bottom` \| `left`) · `label`(도움말) | |
 | `_ui_date.html` | **`id`** · `name` · `placeholder` · `value` | jQuery UI 필요 |
 | `_ui_period.html` | **`id`** · `name` · `placeholder` | jQuery UI 필요 · 달력 id = `아이디_period` |
 
@@ -279,7 +283,47 @@ description: >-
 - ⚠ jQuery UI 기본 팝업(입력에 바로 `.datepicker()`)은 쓰지 않는다 — `<body>` 좌표에 못박혀 스크롤 영역에서 자리를 잃는다.
 - ⚠ 달력 안 클릭이 「바깥 클릭」으로 판정돼 닫히는 문제는 `dpKeepOpen` 이 막는다. 우회하지 않는다.
 
-## 11. 그 밖의 공통 동작
+## 11. 체크박스 · 라디오 · 토글
+
+```html
+<div class="ui-choice-group ui-choice-group--column" role="group" aria-label="수신 동의">
+	<div class="dynamic-content" data-source="./include/ui/_ui_checkbox.html" data-id="agree_email" data-name="agree_email" data-value="Y" data-label="이메일 수신" data-attrs="checked"></div>
+	<div class="dynamic-content" data-source="./include/ui/_ui_checkbox.html" data-id="agree_sms" data-name="agree_sms" data-value="Y" data-label="문자 수신"></div>
+</div>
+
+<div class="ui-choice-group" role="radiogroup" aria-label="공개 범위">
+	<div class="dynamic-content" data-source="./include/ui/_ui_radio.html" data-id="open_all" data-name="open" data-value="all" data-label="전체 공개" data-attrs="checked"></div>
+	<div class="dynamic-content" data-source="./include/ui/_ui_radio.html" data-id="open_private" data-name="open" data-value="private" data-label="비공개"></div>
+</div>
+
+<div class="dynamic-content" data-source="./include/ui/_ui_toggle.html" data-id="noti_on" data-label="알림 받기"></div>
+```
+
+- 구조는 `label.블록 > input.__input + span.__box(토글은 __track) + span.__label` — 라벨 어디를 눌러도 바뀐다. 입력은 보이지 않지만 포커스는 받는다.
+- **처음 상태는 `data-attrs` 로 넘긴다** — `checked` · `disabled` · `checked disabled`. 원문 그대로 태그 안에 들어간다(`{{{attrs}}}`).
+- 모양은 **브라우저의 `:checked` · `:disabled` 로만** 판정한다 — `is-checked` 같은 상태 클래스를 만들지 않는다. JS 도 없다.
+- 묶음은 `.ui-choice-group`(가로 · 줄바꿈) · `--column`(세로). 체크박스 묶음은 `role="group"`, 라디오는 `role="radiogroup"` + `aria-label`.
+- ⚠ **체크박스끼리 `name` 을 같게 두지 않는다** — html-validate(`form-dup-name`)가 막는다. 라디오만 같은 `name`.
+- 토글은 **누르는 즉시 반영되는 설정**에 쓴다. 저장 버튼을 눌러야 반영되는 선택은 체크박스.
+- 표의 전체 선택은 §13 `CHECK_GROUPS`.
+
+## 12. 툴팁
+
+```html
+<div class="ui-label">
+	<label for="join_email">이메일</label>
+	<div class="dynamic-content" data-source="./include/ui/_ui_tooltip.html"
+	     data-id="tip_join_email" data-position="right" data-text="로그인에 쓸 이메일입니다."></div>
+</div>
+```
+
+- `position` 은 **아이콘 기준으로 레이어가 뜨는 쪽**이다 — `top`(기본) · `right` · `bottom` · `left`. 꼬리(화살표)는 아이콘을 가리킨다.
+- 마우스를 올리거나 키보드로 포커스하면 열리고 벗어나면 닫힌다. **아이콘을 누르면 고정**(터치 기기는 누르는 것이 여는 방법) → 다시 누르기 · 바깥 누르기 · ESC 로 닫힌다. 한 번에 하나만 열린다.
+- 레이어 `hidden` + `is-open`, 아이콘 버튼 `is-open`. 레이어 최대 폭 240px.
+- ⚠ 파셜 include 는 `div` 라 **문장(`p`) 안에 넣을 수 없다** — `div.ui-label` 처럼 flex 줄에 라벨과 나란히 둔다.
+- ⚠ 화면 끝에 닿아도 방향을 뒤집지 않는다. 오른쪽 끝의 아이콘은 `left`·`bottom` 을 고른다. `overflow` 가 잘리는 영역(모달 본문 · 표 스크롤) 안에서는 레이어가 잘린다.
+
+## 13. 그 밖의 공통 동작
 
 | 함수 | 쓰임 |
 | --- | --- |

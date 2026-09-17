@@ -8,8 +8,11 @@
 // ─────────────────────────────────────────────────────────────
 
 //**** 라벨 ****/ — <label class="ui-label" for="아이디">
+// 툴팁을 붙일 때는 <div class="ui-label"> 안에 label + 툴팁 include 를 나란히 둔다
 .ui-label {
-	display: block;
+	display: flex;
+	align-items: center;
+	gap: 4px;
 	margin-bottom: 8px;
 	@include mixin.font-set(0.875rem, 500, variable.$color-text-sub);
 }
