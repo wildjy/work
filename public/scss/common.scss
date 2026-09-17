@@ -9,3 +9,20 @@
 // ─────────────────────────────────────────────────────────────
 @use 'font';
 @use 'reset';
+
+// 페이지 골격
+@use 'layout';
+
+// 공통 UI (머터리얼 디자인 기준)
+@use 'ui_button';
+@use 'ui_card';
+@use 'ui_table';
+@use 'ui_input';
+@use 'ui_dropdown';
+@use 'ui_stepper';
+@use 'ui_lnb';
+@use 'ui_tab';
+@use 'ui_accordion';
+@use 'ui_toast';
+@use 'ui_modal';
+@use 'ui_datepicker';

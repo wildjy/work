@@ -217,17 +217,18 @@ function dropdownSelect(_this) {
 }
 
 /* ── 2. 모달 ──────────────────────────────────────────────── */
-// 마크업 : 확인창은 파셜 include/ui/_ui_modal_confirm.html, 그 밖의 모달은 같은 구조로 모달마다 파셜을 만든다.
-//   <div class="ui-modal ui-modal--sm" id="modal_x" role="dialog" aria-modal="true" aria-labelledby="modal_x_title" hidden>
+// 마크업 : 공통 프레임 include/ui/_ui_modal.html(본문은 data-body 파셜) · 확인창 include/ui/_ui_modal_confirm.html
+//   <div class="ui-modal ui-modal--md" id="modal_x" role="dialog" aria-modal="true" aria-labelledby="modal_x_title" hidden>
 //     <div class="ui-modal__dialog">
-//       <div class="ui-modal__header"><h2 class="ui-modal__title" id="modal_x_title">제목</h2></div>
-//       <div class="ui-modal__body">…</div>
-//       <div class="ui-modal__footer"><button type="button" data-modal-close>취소</button> …</div>
+//       <div class="ui-modal__header"><h2 class="ui-modal__title" id="modal_x_title">제목</h2><p class="ui-modal__subtext">보조 문구</p></div>
+//       <div class="ui-modal__body">…</div>   ← 본문만 스크롤
+//       <div class="ui-modal__footer"><button type="button" class="ui-btn ui-btn--outlined" data-modal-close>취소</button> …</div>
 //       <button type="button" class="ui-modal__close">닫기</button>
 //     </div>
 //   </div>
 //   여는 버튼 : <button type="button" data-modal-open="modal_x">열기</button>
 // ⚠ 딤 클릭·ESC 로 닫지 않는다 — 입력 중인 내용을 잃지 않게 하는 의도다.
+//    예외 : 버튼 영역(.ui-modal__footer 안 버튼)이 없는 정보성 모달(_ui_modal_alert)은 딤을 누르면 닫힌다.
 // ⚠ 모달 위에 모달을 열면 DOM 순서로 쌓인다. 하나라도 열려 있으면 <html> 에 has-modal (스크롤 잠금용 훅).
 
 function modalSyncRoot() {
@@ -263,6 +264,24 @@ document.addEventListener('click', function (e) {
 		var id = closer.getAttribute('data-modal-close');
 		modalClose(id ? id : closer.closest('.ui-modal'));
 	}
+});
+
+// 액션(버튼)이 없는 모달인가 — 고를 것이 없으니 딤을 눌러 닫아도 잃는 것이 없다
+function modalIsPassive(modal) {
+	return !modal.querySelector('.ui-modal__footer button');
+}
+
+// 딤 클릭으로 닫기 — 누른 곳과 뗀 곳이 **둘 다 딤(블록 자신)** 일 때만.
+// ⚠ 대화상자 안에서 글자를 드래그하다 딤에서 놓으면 click 의 target 이 블록이 된다 — 누른 자리를 함께 본다.
+var _modalDownTarget = null;
+document.addEventListener('mousedown', function (e) {
+	_modalDownTarget = e.target;
+});
+document.addEventListener('click', function (e) {
+	var modal = e.target;
+	if (!modal || !modal.classList || !modal.classList.contains('ui-modal')) return;
+	if (_modalDownTarget !== modal || modal.hidden || !modalIsPassive(modal)) return;
+	modalClose(modal);
 });
 
 /* ── 3. 탭 ────────────────────────────────────────────────── */

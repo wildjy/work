@@ -1,0 +1,117 @@
+@use 'variable';
+@use 'mixin';
+
+// ─────────────────────────────────────────────────────────────
+// _ui_dropdown.scss — 드롭다운 · 검색 드롭다운 · 옵션 메뉴 (머터리얼 select · menu)
+// 파셜 : include/ui/_ui_dropdown.html · _ui_dropdown_search.html
+// 상태 : 버튼 is-placeholder · is-open · is-selected / 항목 is-active (common.js)
+// ⚠ 목록은 hidden 으로 여닫는다 — 여기서는 모양만 준다
+// ─────────────────────────────────────────────────────────────
+
+.ui-dropdown {
+	position: relative;
+
+	&__btn {
+		display: block;
+		width: 100%;
+		height: variable.$control-height;
+		padding: 0 44px 0 16px;
+		border: 1px solid variable.$color-border;
+		border-radius: variable.$radius-sm;
+		@include mixin.background-data(
+			'arr3-down',
+			variable.$color-text-sub,
+			variable.$color-surface,
+			right 18px center,
+			10px 6px
+		);
+		@include mixin.font-set(1rem, 400, variable.$color-text);
+		text-align: left;
+		@include mixin.txt-shorten;
+		transition:
+			border-color variable.$duration-short variable.$easing-standard,
+			box-shadow variable.$duration-short variable.$easing-standard;
+
+		&:hover {
+			border-color: variable.$color-border-hover;
+		}
+		&:focus-visible {
+			outline: 0;
+			border-color: variable.$color-primary;
+		}
+		&.is-placeholder {
+			color: variable.$color-placeholder;
+		}
+		&.is-open {
+			border-color: variable.$color-primary;
+			box-shadow: inset 0 0 0 1px variable.$color-primary;
+			background-image: mixin.icon('arr3-up', variable.$color-primary);
+		}
+	}
+
+	&__list {
+		@include mixin.position(absolute, $top: calc(100% + 4px), $right: 0, $left: 0, $z-index: 10);
+		max-height: 264px;
+		padding: 8px 0;
+		overflow-y: auto;
+		border-radius: variable.$radius-sm;
+		background-color: variable.$color-surface;
+		box-shadow: variable.$elevation-8;
+		@include mixin.scrollbar(6px, variable.$gray-400);
+	}
+
+	&__item {
+		display: block;
+		width: 100%;
+		min-height: 44px;
+		padding: 10px 16px;
+		@include mixin.font-set(0.9375rem, 400, variable.$color-text);
+		text-align: left;
+		transition: background-color variable.$duration-short variable.$easing-standard;
+
+		&:hover {
+			background-color: variable.$color-hover;
+		}
+		&.is-active {
+			background-color: variable.$color-primary-light;
+			color: variable.$color-primary;
+			font-weight: 500;
+		}
+		// 선택값이 아닌 액션(직접 입력하기 · 추가)
+		&--action {
+			color: variable.$color-primary;
+			font-weight: 500;
+		}
+	}
+
+	&__empty {
+		padding: 12px 16px;
+		@include mixin.font-set(0.875rem, 400, variable.$color-text-sub);
+	}
+}
+
+//**** 옵션 메뉴 ****/ — 행의 「더보기」 (파셜 없음)
+.ui-menu {
+	position: relative;
+	display: inline-block;
+
+	&__btn {
+		width: 36px;
+		height: 36px;
+		border-radius: 50%;
+		@include mixin.txt-blind;
+		@include mixin.background-data('more1', variable.$color-text-sub, null, center, 12px 3px);
+		&:hover,
+		&.is-open {
+			background-color: variable.$color-hover;
+		}
+	}
+	&__list {
+		@include mixin.position(absolute, $top: calc(100% + 4px), $right: 0, $z-index: 10);
+		min-width: 140px;
+		padding: 8px 0;
+		border-radius: variable.$radius-sm;
+		background-color: variable.$color-surface;
+		box-shadow: variable.$elevation-8;
+	}
+}

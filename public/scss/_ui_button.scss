@@ -1,0 +1,77 @@
+@use 'variable';
+@use 'mixin';
+
+// ─────────────────────────────────────────────────────────────
+// _ui_button.scss — 버튼 (머터리얼 text · contained · outlined)
+// <button type="button" class="ui-btn ui-btn--contained">저장</button>
+// 변형 : --contained(주요 동작) · --outlined(보조) · 없음(텍스트 버튼) · --sm(작게)
+// 묶음 : <div class="ui-btn-group"> … </div>
+// ─────────────────────────────────────────────────────────────
+
+.ui-btn {
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	gap: 8px;
+	min-width: 64px;
+	height: variable.$control-height-sm;
+	padding: 0 16px;
+	border: 1px solid transparent;
+	border-radius: variable.$radius-sm;
+	background-color: transparent;
+	@include mixin.font-set(0.875rem, 500, variable.$color-primary);
+	letter-spacing: 0.02em;
+	white-space: nowrap;
+	transition:
+		background-color variable.$duration-short variable.$easing-standard,
+		border-color variable.$duration-short variable.$easing-standard,
+		box-shadow variable.$duration-short variable.$easing-standard;
+
+	&:hover {
+		background-color: rgba(variable.$color-primary, 0.08);
+	}
+	&:focus-visible {
+		outline: 2px solid variable.$color-primary;
+		outline-offset: 2px;
+	}
+	&:disabled {
+		color: variable.$color-text-disabled;
+		background-color: transparent;
+	}
+
+	&--contained {
+		background-color: variable.$color-primary;
+		color: variable.$white;
+		box-shadow: variable.$elevation-2;
+		&:hover {
+			background-color: variable.$color-primary-dark;
+			box-shadow: variable.$elevation-4;
+		}
+		&:disabled {
+			background-color: variable.$color-divider;
+			box-shadow: none;
+		}
+	}
+	&--outlined {
+		border-color: variable.$color-border;
+		&:hover {
+			background-color: rgba(variable.$color-primary, 0.04);
+		}
+		&:disabled {
+			border-color: variable.$color-divider;
+		}
+	}
+	&--sm {
+		min-width: 48px;
+		height: 32px;
+		padding: 0 12px;
+		font-size: 0.8125rem;
+	}
+}
+
+.ui-btn-group {
+	display: flex;
+	flex-wrap: wrap;
+	align-items: center;
+	gap: 8px;
+}

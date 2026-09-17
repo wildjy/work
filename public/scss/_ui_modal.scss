@@ -1,0 +1,173 @@
+@use 'variable';
+@use 'mixin';
+
+// ─────────────────────────────────────────────────────────────
+// _ui_modal.scss — 모달 프레임 · 확인창 (머터리얼 dialog)
+// 파셜 : include/ui/_ui_modal.html(프레임) · _ui_modal_footer.html(기본 버튼) · _ui_modal_confirm.html(확인창)
+// 구조 : .ui-modal(딤) > __dialog > __header(__title · __subtext) · __body · __footer(버튼) · __close
+// 높이 : 최대 90dvh — 머리 · 버튼 영역은 고정, 본문(__body)만 스크롤된다
+// 변형 : 크기 --sm(360) · --md(560) · --lg(800) / 종류 --alert(버튼 없는 알림) · --confirm(확인창)
+// 상태 : is-open + hidden · <html> has-modal (common.js)
+// ─────────────────────────────────────────────────────────────
+
+// 모달이 열려 있는 동안 뒤 페이지 스크롤을 잠근다
+html.has-modal {
+	overflow: hidden;
+}
+
+.ui-modal {
+	@include mixin.position(fixed, $top: 0, $right: 0, $bottom: 0, $left: 0, $z-index: 900);
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	padding: 16px;
+	background-color: variable.$scrim;
+
+	&.is-open {
+		animation: ui-modal-fade variable.$duration-short variable.$easing-standard;
+	}
+	&.is-open &__dialog {
+		animation: ui-modal-in variable.$duration-medium variable.$easing-standard;
+	}
+
+	//**** 프레임 ****/
+	&__dialog {
+		position: relative;
+		display: flex;
+		flex-direction: column;
+		width: 100%;
+		max-width: 560px;
+		max-height: 90vh; // dvh 를 모르는 브라우저용
+		max-height: 90dvh;
+		overflow: hidden;
+		border-radius: variable.$radius-md;
+		background-color: variable.$color-surface;
+		box-shadow: variable.$elevation-24;
+	}
+	&--sm &__dialog {
+		max-width: 360px;
+	}
+	&--md &__dialog {
+		max-width: 560px;
+	}
+	&--lg &__dialog {
+		max-width: 800px;
+	}
+
+	// 머리 — 제목 + 보조 문구 (고정)
+	&__header {
+		flex: none;
+		padding: 20px 64px 16px 24px;
+		border-bottom: 1px solid variable.$color-divider;
+	}
+	&__title {
+		@include mixin.font-set(1.25rem, 600, variable.$color-text);
+		line-height: 1.4;
+	}
+	&__subtext {
+		margin-top: 4px;
+		@include mixin.font-set(0.875rem, 400, variable.$color-text-sub);
+		line-height: 1.5;
+		&:empty {
+			display: none;
+		}
+	}
+
+	// 본문 — 넘치면 여기만 스크롤
+	&__body {
+		flex: 1 1 auto;
+		min-height: 0;
+		padding: 20px 24px;
+		overflow-y: auto;
+		overscroll-behavior: contain;
+		@include mixin.scroll-inset(24px, 6px);
+		@include mixin.scrollbar(6px, variable.$gray-400);
+		@include mixin.font-set(0.9375rem, 400, variable.$color-text-sub);
+		line-height: 1.6;
+	}
+	&__text {
+		& + & {
+			margin-top: 12px;
+		}
+		&:empty {
+			display: none;
+		}
+	}
+
+	// 버튼 영역 (고정)
+	&__footer {
+		flex: none;
+		display: flex;
+		flex-wrap: wrap;
+		justify-content: flex-end;
+		gap: 8px;
+		padding: 16px 24px;
+		border-top: 1px solid variable.$color-divider;
+	}
+
+	&__close {
+		@include mixin.position(absolute, $top: 12px, $right: 12px);
+		width: 40px;
+		height: 40px;
+		border-radius: 50%;
+		@include mixin.txt-blind;
+		@include mixin.background-data('close-M', variable.$color-text-sub, null, center, 24px);
+		&:hover {
+			background-color: variable.$color-hover;
+		}
+	}
+
+	//**** 알림(정보성) ****/ — 버튼 영역 없음 · 딤을 누르면 닫힌다(common.js)
+	&--alert &__header {
+		padding-bottom: 0;
+		border-bottom: 0;
+	}
+	&--alert &__body {
+		padding-top: 12px;
+		padding-bottom: 24px;
+	}
+
+	//**** 확인창 ****/ — 작은 폭 · 구분선 없음 · 닫기(X) 없음
+	&--confirm &__dialog {
+		max-width: 360px;
+	}
+	&--confirm &__header {
+		padding: 24px 24px 0;
+		border-bottom: 0;
+	}
+	&--confirm &__body {
+		padding: 12px 24px 0;
+	}
+	&--confirm &__footer {
+		padding: 24px 16px 16px;
+		border-top: 0;
+	}
+
+	@include mixin.small {
+		&__footer .ui-btn {
+			flex: 1;
+		}
+		&--confirm &__footer .ui-btn {
+			flex: none;
+		}
+	}
+}
+
+@keyframes ui-modal-fade {
+	from {
+		opacity: 0;
+	}
+	to {
+		opacity: 1;
+	}
+}
+@keyframes ui-modal-in {
+	from {
+		opacity: 0;
+		transform: scale(0.96);
+	}
+	to {
+		opacity: 1;
+		transform: scale(1);
+	}
+}

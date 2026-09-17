@@ -1,0 +1,47 @@
+@use 'variable';
+@use 'mixin';
+
+// ─────────────────────────────────────────────────────────────
+// _ui_table.scss — 표 (머터리얼 data table)
+// <table class="ui-table"> … 0건 행은 <td class="ui-table__empty" colspan="…">
+// 가로로 넘치면 감싸는 요소에 overflow-x: auto (ui-card__body--flush 가 갖고 있다)
+// ─────────────────────────────────────────────────────────────
+
+.ui-table {
+	width: 100%;
+
+	th,
+	td {
+		padding: 0 16px;
+		border-bottom: 1px solid variable.$color-divider;
+		text-align: left;
+		white-space: nowrap;
+	}
+	th {
+		height: 48px;
+		background-color: variable.$color-hover;
+		@include mixin.font-set(0.8125rem, 500, variable.$color-text-sub);
+	}
+	td {
+		height: 52px;
+		@include mixin.font-set(0.875rem, 400, variable.$color-text);
+	}
+	tbody tr {
+		transition: background-color variable.$duration-short variable.$easing-standard;
+		&:hover {
+			background-color: variable.$color-hover;
+		}
+		&:last-child td {
+			border-bottom: 0;
+		}
+	}
+
+	td.ui-table__empty {
+		height: 120px;
+		text-align: center;
+		color: variable.$color-text-sub;
+	}
+	tbody tr:has(.ui-table__empty):hover {
+		background-color: transparent;
+	}
+}

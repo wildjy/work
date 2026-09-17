@@ -1,0 +1,50 @@
+<!-- 샘플 모달 본문 — Sample.html 의 _ui_modal include 가 data-body 로 넘긴다 -->
+<div class="grid">
+	<div>
+		<label class="ui-label" for="modal_sample_name">이름</label>
+		<div
+			class="dynamic-content"
+			data-source="./include/ui/_ui_input.html"
+			data-id="modal_sample_name"
+			data-placeholder="이름을 입력해주세요."
+		></div>
+	</div>
+	<div>
+		<label class="ui-label" for="modal_sample_email">이메일</label>
+		<div
+			class="dynamic-content"
+			data-source="./include/ui/_ui_input.html"
+			data-id="modal_sample_email"
+			data-placeholder="이메일을 입력해주세요."
+		></div>
+	</div>
+	<div>
+		<label class="ui-label" for="modal_sample_count">초대 인원</label>
+		<div
+			class="dynamic-content"
+			data-source="./include/ui/_ui_stepper.html"
+			data-id="modal_sample_count"
+			data-value="1"
+			data-min="1"
+			data-max="10"
+		></div>
+	</div>
+	<div>
+		<p class="ui-label">초대 안내</p>
+		<p class="ui-modal__text">
+			초대 메일은 입력한 주소로 즉시 발송되며, 받은 사람이 7일 안에 수락하지 않으면 초대가 만료됩니다. 만료된 초대는
+			목록에서 다시 보낼 수 있습니다.
+		</p>
+		<p class="ui-modal__text">
+			초대받은 멤버는 수락한 시점부터 워크스페이스의 공개 프로젝트를 볼 수 있습니다. 비공개 프로젝트는 프로젝트 관리자가
+			따로 권한을 줘야 합니다.
+		</p>
+		<p class="ui-modal__text">
+			멤버 수가 요금제 한도를 넘으면 초대를 보낼 수 없습니다. 한도는 설정의 요금제 화면에서 확인할 수 있으며, 결제 주기
+			중간에 늘린 인원은 남은 기간만큼 나누어 청구됩니다.
+		</p>
+		<p class="ui-modal__text">
+			이 안내는 본문이 길어졌을 때 머리와 버튼 영역은 그대로 두고 본문만 스크롤되는지 확인하기 위한 샘플 문구입니다.
+		</p>
+	</div>
+</div>

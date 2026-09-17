@@ -1,0 +1,133 @@
+@use 'variable';
+@use 'mixin';
+
+// ─────────────────────────────────────────────────────────────
+// _layout.scss — 페이지 골격 : 레이아웃(사이드 + 본문) · 앱 헤더 · 구역 · 그리드
+// ⚠ 공통 UI 컴포넌트(.ui-*)를 이 셀렉터 안에 넣지 않는다 — 배치만 여기서 잡는다.
+// ─────────────────────────────────────────────────────────────
+
+//**** 레이아웃 ****/
+// <div class="layout">
+//   <aside class="layout__side"> 브랜드 + LNB </aside>
+//   <div class="layout__body"> 헤더 + <main class="layout__main"> </div>
+// </div>
+.layout {
+	display: flex;
+	min-height: 100vh;
+	background-color: variable.$color-background;
+
+	&__side {
+		@include mixin.position(sticky, $top: 0);
+		flex: none;
+		width: 256px;
+		height: 100vh;
+		overflow-y: auto;
+		border-right: 1px solid variable.$color-divider;
+		background-color: variable.$color-surface;
+		@include mixin.scrollbar(6px, variable.$gray-400);
+	}
+	&__brand {
+		display: flex;
+		align-items: center;
+		height: 64px;
+		padding: 0 28px;
+		border-bottom: 1px solid variable.$color-divider;
+		@include mixin.font-set(1.125rem, 700, variable.$color-primary);
+	}
+	&__body {
+		display: flex;
+		flex: 1;
+		flex-direction: column;
+		min-width: 0;
+	}
+	&__main {
+		display: flex;
+		flex-direction: column;
+		gap: 40px;
+		width: 100%;
+		max-width: 1080px;
+		margin: 0 auto;
+		padding: 32px 32px 80px;
+	}
+
+	@include mixin.medium {
+		flex-direction: column;
+		&__side {
+			position: static;
+			width: auto;
+			height: auto;
+			border-right: 0;
+			border-bottom: 1px solid variable.$color-divider;
+		}
+		&__brand {
+			height: 56px;
+			padding: 0 16px;
+		}
+	}
+	@include mixin.small {
+		&__main {
+			gap: 32px;
+			padding: 20px 16px 60px;
+		}
+	}
+}
+
+//**** 앱 헤더 ****/ — 파셜 include/common/_header.html
+.app-header {
+	display: flex;
+	align-items: center;
+	min-height: 64px;
+	padding: 0 32px;
+	border-bottom: 1px solid variable.$color-divider;
+	background-color: variable.$color-surface;
+
+	&__title {
+		@include mixin.font-set(1.25rem, 600, variable.$color-text);
+		@include mixin.txt-shorten;
+	}
+
+	@include mixin.small {
+		min-height: 56px;
+		padding: 0 16px;
+		&__title {
+			font-size: 1.125rem;
+		}
+	}
+}
+
+//**** 구역 ****/ — 제목 + 설명 + 내용
+.section {
+	&__head {
+		margin-bottom: 16px;
+	}
+	&__title {
+		@include mixin.font-set(1.125rem, 600, variable.$color-text);
+	}
+	&__desc {
+		margin-top: 4px;
+		@include mixin.font-set(0.875rem, 400, variable.$color-text-sub);
+	}
+}
+
+//**** 그리드 ****/ — 기본 1열 · --2 · --3 (작은 화면은 1열)
+.grid {
+	display: grid;
+	grid-template-columns: minmax(0, 1fr);
+	align-items: start;
+	gap: 24px;
+
+	&--2 {
+		grid-template-columns: repeat(2, minmax(0, 1fr));
+		column-gap: 32px;
+	}
+	&--3 {
+		grid-template-columns: repeat(3, minmax(0, 1fr));
+	}
+
+	@include mixin.small {
+		&--2,
+		&--3 {
+			grid-template-columns: minmax(0, 1fr);
+		}
+	}
+}

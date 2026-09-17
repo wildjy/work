@@ -3,7 +3,7 @@
 	<head>
 		<meta charset="utf-8" />
 		<meta name="viewport" content="width=device-width,initial-scale=1.0" />
-		<title>[개발 확인용] 파셜 · 목록 · 0건 샘플</title>
+		<title>[개발 확인용] 공통 UI · 파셜 · 목록 샘플</title>
 		<link rel="stylesheet" href="../css/common.css" />
 		<script src="../js/dynamicImport.js"></script>
 		<script src="../js/listRender.js"></script>
@@ -14,138 +14,289 @@
 	</head>
 
 	<body>
-		<div class="dynamic-content" data-source="./include/ui/_ui_lnb.html"></div>
+		<div class="layout">
+			<!-- 사이드 : 브랜드 + LNB -->
+			<aside class="layout__side">
+				<p class="layout__brand">pub-base</p>
+				<div class="dynamic-content" data-source="./include/ui/_ui_lnb.html"></div>
+			</aside>
 
-		<!-- 파셜 include + 파셜 변수 (data-page-title → {{pageTitle}}) -->
-		<div class="dynamic-content" data-source="./include/common/_header.html" data-page-title="파셜 · 목록 샘플"></div>
+			<div class="layout__body">
+				<!-- 파셜 include + 파셜 변수 (data-page-title → {{pageTitle}}) -->
+				<div class="dynamic-content" data-source="./include/common/_header.html" data-page-title="공통 UI 샘플"></div>
 
-		<main>
-			<!-- 목록 : 데이터 있음 -->
-			<h2>회원 목록</h2>
-			<table>
-				<thead>
-					<tr>
-						<th>No</th>
-						<th>이름</th>
-						<th>이메일</th>
-					</tr>
-				</thead>
-				<tbody
-					class="dynamic-list"
-					data-source="../data/common/sample_list.json"
-					data-template="#tpl_sample_row"
-					data-empty="#tpl_sample_row_none"
-				></tbody>
-			</table>
+				<main class="layout__main">
+					<!-- 구역 : 목록 -->
+					<section class="section">
+						<div class="section__head">
+							<h2 class="section__title">목록</h2>
+							<p class="section__desc">JSON + 템플릿으로 그리는 표 · 0건 상태</p>
+						</div>
+						<div class="grid grid--2">
+							<div class="ui-card">
+								<div class="ui-card__header">
+									<h3 class="ui-card__title">회원 목록</h3>
+								</div>
+								<div class="ui-card__body ui-card__body--flush">
+									<table class="ui-table">
+										<caption>
+											회원 목록
+										</caption>
+										<thead>
+											<tr>
+												<th scope="col">No</th>
+												<th scope="col">이름</th>
+												<th scope="col">이메일</th>
+											</tr>
+										</thead>
+										<tbody
+											class="dynamic-list"
+											data-source="../data/common/sample_list.json"
+											data-template="#tpl_sample_row"
+											data-empty="#tpl_sample_row_none"
+										></tbody>
+									</table>
+								</div>
+							</div>
+							<div class="ui-card">
+								<div class="ui-card__header">
+									<h3 class="ui-card__title">회원 목록 (0건)</h3>
+								</div>
+								<div class="ui-card__body ui-card__body--flush">
+									<table class="ui-table">
+										<caption>
+											회원 목록 (0건)
+										</caption>
+										<thead>
+											<tr>
+												<th scope="col">No</th>
+												<th scope="col">이름</th>
+												<th scope="col">이메일</th>
+											</tr>
+										</thead>
+										<tbody
+											class="dynamic-list"
+											data-source="../data/common/sample_list_empty.json"
+											data-template="#tpl_sample_row"
+											data-empty="#tpl_sample_row_none"
+										></tbody>
+									</table>
+								</div>
+							</div>
+						</div>
+					</section>
+					<!--// 구역 : 목록 -->
 
-			<!-- 목록 : 0건 (같은 템플릿 · 빈 JSON) -->
-			<h2>회원 목록 (0건)</h2>
-			<table>
-				<thead>
-					<tr>
-						<th>No</th>
-						<th>이름</th>
-						<th>이메일</th>
-					</tr>
-				</thead>
-				<tbody
-					class="dynamic-list"
-					data-source="../data/common/sample_list_empty.json"
-					data-template="#tpl_sample_row"
-					data-empty="#tpl_sample_row_none"
-				></tbody>
-			</table>
+					<!-- 구역 : 버튼 -->
+					<section class="section">
+						<div class="section__head">
+							<h2 class="section__title">버튼</h2>
+							<p class="section__desc">contained · outlined · text · 작은 크기 · 비활성</p>
+						</div>
+						<div class="ui-card">
+							<div class="ui-card__body">
+								<div class="ui-btn-group">
+									<button type="button" class="ui-btn ui-btn--contained">저장</button>
+									<button type="button" class="ui-btn ui-btn--outlined">임시 저장</button>
+									<button type="button" class="ui-btn">취소</button>
+									<button type="button" class="ui-btn ui-btn--contained ui-btn--sm">작은 버튼</button>
+									<button type="button" class="ui-btn ui-btn--contained" disabled>비활성</button>
+									<button type="button" class="ui-btn ui-btn--outlined" disabled>비활성</button>
+								</div>
+							</div>
+						</div>
+					</section>
+					<!--// 구역 : 버튼 -->
 
-			<!-- 공통 UI 파셜 -->
-			<h2>공통 UI 파셜</h2>
-			<h3>드롭다운</h3>
-			<div
-				class="dynamic-content"
-				data-source="./include/ui/_ui_dropdown.html"
-				data-items="../data/ui/sample_options.json"
-				data-placeholder="정렬을 선택해주세요."
-			></div>
-			<h3>드롭다운 (0건)</h3>
-			<div
-				class="dynamic-content"
-				data-source="./include/ui/_ui_dropdown.html"
-				data-items="../data/ui/empty.json"
-			></div>
-			<h3>검색 드롭다운</h3>
-			<div
-				class="dynamic-content"
-				data-source="./include/ui/_ui_dropdown_search.html"
-				data-items="../data/ui/sample_options.json"
-				data-placeholder="회사명을 검색해주세요."
-			></div>
-			<h3>입력</h3>
-			<div
-				class="dynamic-content"
-				data-source="./include/ui/_ui_input.html"
-				data-id="sample_email"
-				data-placeholder="이메일을 입력해주세요."
-			></div>
-			<h3>입력 (오류 안내)</h3>
-			<div
-				class="dynamic-content"
-				data-source="./include/ui/_ui_input.html"
-				data-id="sample_birth"
-				data-value="1999"
-				data-modifier="is-error"
-				data-helper="생년월일 8자리를 입력해주세요."
-				data-helper-type="ui-helper--error"
-			></div>
-			<h3>수량 스테퍼</h3>
-			<div
-				class="dynamic-content"
-				data-source="./include/ui/_ui_stepper.html"
-				data-id="sample_count"
-				data-value="1"
-				data-min="1"
-				data-max="3"
-			></div>
+					<!-- 구역 : 입력 -->
+					<section class="section">
+						<div class="section__head">
+							<h2 class="section__title">입력</h2>
+							<p class="section__desc">입력 · 드롭다운 · 스테퍼 · 날짜 · 기간</p>
+						</div>
+						<div class="ui-card">
+							<div class="ui-card__body">
+								<div class="grid grid--2">
+									<div>
+										<label class="ui-label" for="sample_email">입력</label>
+										<div
+											class="dynamic-content"
+											data-source="./include/ui/_ui_input.html"
+											data-id="sample_email"
+											data-placeholder="이메일을 입력해주세요."
+										></div>
+									</div>
+									<div>
+										<label class="ui-label" for="sample_birth">입력 (오류 안내)</label>
+										<div
+											class="dynamic-content"
+											data-source="./include/ui/_ui_input.html"
+											data-id="sample_birth"
+											data-value="1999"
+											data-modifier="is-error"
+											data-helper="생년월일 8자리를 입력해주세요."
+											data-helper-type="ui-helper--error"
+										></div>
+									</div>
+									<div>
+										<p class="ui-label">드롭다운</p>
+										<div
+											class="dynamic-content"
+											data-source="./include/ui/_ui_dropdown.html"
+											data-items="../data/ui/sample_options.json"
+											data-placeholder="정렬을 선택해주세요."
+										></div>
+									</div>
+									<div>
+										<p class="ui-label">드롭다운 (0건)</p>
+										<div
+											class="dynamic-content"
+											data-source="./include/ui/_ui_dropdown.html"
+											data-items="../data/ui/empty.json"
+										></div>
+									</div>
+									<div>
+										<p class="ui-label">검색 드롭다운</p>
+										<div
+											class="dynamic-content"
+											data-source="./include/ui/_ui_dropdown_search.html"
+											data-items="../data/ui/sample_options.json"
+											data-placeholder="회사명을 검색해주세요."
+										></div>
+									</div>
+									<div>
+										<label class="ui-label" for="sample_count">수량 스테퍼</label>
+										<div
+											class="dynamic-content"
+											data-source="./include/ui/_ui_stepper.html"
+											data-id="sample_count"
+											data-value="1"
+											data-min="1"
+											data-max="3"
+										></div>
+									</div>
+									<div>
+										<label class="ui-label" for="sample_period">기간</label>
+										<div
+											class="dynamic-content"
+											data-source="./include/ui/_ui_period.html"
+											data-id="sample_period"
+										></div>
+									</div>
+									<div>
+										<label class="ui-label" for="sample_date">날짜</label>
+										<div class="dynamic-content" data-source="./include/ui/_ui_date.html" data-id="sample_date"></div>
+									</div>
+								</div>
+							</div>
+						</div>
+					</section>
+					<!--// 구역 : 입력 -->
 
-			<h3>탭 (파셜 없음 — 직접 마크업)</h3>
-			<div class="ui-tab">
-				<div class="ui-tab__list" role="tablist">
-					<button type="button" class="ui-tab__btn is-active" role="tab" data-tab="basic">기본 정보</button>
-					<button type="button" class="ui-tab__btn" role="tab" data-tab="detail">상세 정보</button>
-				</div>
-				<div class="ui-tab__panel" role="tabpanel" data-tab="basic">기본 정보 패널</div>
-				<div class="ui-tab__panel" role="tabpanel" data-tab="detail" hidden>상세 정보 패널</div>
+					<!-- 구역 : 탭 · 아코디언 -->
+					<section class="section">
+						<div class="section__head">
+							<h2 class="section__title">탭 · 아코디언</h2>
+							<p class="section__desc">탭은 파셜 없이 직접 마크업 · 아코디언은 JSON</p>
+						</div>
+						<div class="grid">
+							<div class="ui-card">
+								<div class="ui-card__body">
+									<div class="ui-tab">
+										<div class="ui-tab__list" role="tablist">
+											<button type="button" class="ui-tab__btn is-active" role="tab" data-tab="basic">기본 정보</button>
+											<button type="button" class="ui-tab__btn" role="tab" data-tab="detail">상세 정보</button>
+										</div>
+										<div class="ui-tab__panel" role="tabpanel" data-tab="basic">기본 정보 패널</div>
+										<div class="ui-tab__panel" role="tabpanel" data-tab="detail" hidden>상세 정보 패널</div>
+									</div>
+								</div>
+							</div>
+							<div class="grid grid--2">
+								<div
+									class="dynamic-content"
+									data-source="./include/ui/_ui_accordion.html"
+									data-items="../data/ui/sample_accordion.json"
+								></div>
+								<div
+									class="dynamic-content"
+									data-source="./include/ui/_ui_accordion.html"
+									data-items="../data/ui/empty.json"
+								></div>
+							</div>
+						</div>
+					</section>
+					<!--// 구역 : 탭 · 아코디언 -->
+
+					<!-- 구역 : 피드백 -->
+					<section class="section">
+						<div class="section__head">
+							<h2 class="section__title">토스트 · 모달</h2>
+							<p class="section__desc">모달 프레임은 본문만 스크롤 · 확인창 · 버튼 없는 알림은 딤을 누르면 닫힘</p>
+						</div>
+						<div class="ui-card">
+							<div class="ui-card__body">
+								<div class="ui-btn-group">
+									<button type="button" class="ui-btn ui-btn--outlined" data-toast="sample_toast">토스트 띄우기</button>
+									<button type="button" class="ui-btn ui-btn--contained" data-modal-open="sample_confirm">
+										확인창 열기
+									</button>
+									<button type="button" class="ui-btn ui-btn--contained" data-modal-open="sample_modal">
+										모달 열기
+									</button>
+									<button type="button" class="ui-btn ui-btn--outlined" data-modal-open="sample_alert">
+										알림 모달 열기
+									</button>
+								</div>
+							</div>
+						</div>
+					</section>
+					<!--// 구역 : 피드백 -->
+
+					<!-- 구역 : 파셜 기본값 · 개발단 표시 -->
+					<section class="section">
+						<div class="section__head">
+							<h2 class="section__title">파셜 기본값 · 개발단 표시</h2>
+							<p class="section__desc">data-page-title 을 넘기지 않은 헤더 · 개발단이 채울 값</p>
+						</div>
+						<div class="ui-card">
+							<div class="ui-card__body ui-card__body--flush">
+								<!-- 파셜 : 기본값 사용 (data-page-title 을 넘기지 않음) -->
+								<div class="dynamic-content" data-source="./include/common/_header.html"></div>
+							</div>
+							<div class="ui-card__body">
+								<!--@ 이메일 인증 전 회원에게만 노출 -->
+								<p>인증 대기 {{<em>3명</em>}}</p>
+							</div>
+						</div>
+					</section>
+					<!--// 구역 : 파셜 기본값 · 개발단 표시 -->
+				</main>
 			</div>
-			<h3>아코디언</h3>
-			<div
-				class="dynamic-content"
-				data-source="./include/ui/_ui_accordion.html"
-				data-items="../data/ui/sample_accordion.json"
-			></div>
-			<h3>아코디언 (0건)</h3>
-			<div
-				class="dynamic-content"
-				data-source="./include/ui/_ui_accordion.html"
-				data-items="../data/ui/empty.json"
-			></div>
-			<h3>날짜</h3>
-			<div class="dynamic-content" data-source="./include/ui/_ui_date.html" data-id="sample_date"></div>
-			<h3>기간</h3>
-			<div class="dynamic-content" data-source="./include/ui/_ui_period.html" data-id="sample_period"></div>
-			<h3>토스트 · 확인창</h3>
-			<button type="button" data-toast="sample_toast">토스트 띄우기</button>
-			<button type="button" data-modal-open="sample_confirm">확인창 열기</button>
-
-			<!--@ 이메일 인증 전 회원에게만 노출 -->
-			<p>인증 대기 {{<em>3명</em>}}</p>
-		</main>
-
-		<!-- 파셜 : 기본값 사용 (data-page-title 을 넘기지 않음) -->
-		<div class="dynamic-content" data-source="./include/common/_header.html"></div>
+		</div>
 
 		<div
 			class="dynamic-content"
 			data-source="./include/ui/_ui_toast.html"
 			data-id="sample_toast"
 			data-text="저장되었습니다."
+		></div>
+		<div
+			class="dynamic-content"
+			data-source="./include/ui/_ui_modal.html"
+			data-id="sample_modal"
+			data-title="멤버 초대"
+			data-subtext="초대할 멤버의 정보를 입력해주세요."
+			data-body="./include/sample/_modal_sample_body.html"
+			data-confirm="초대하기"
+		></div>
+		<div
+			class="dynamic-content"
+			data-source="./include/ui/_ui_modal_alert.html"
+			data-id="sample_alert"
+			data-title="점검 안내"
+			data-subtext="2026.09.20 02:00 ~ 06:00"
+			data-text="서비스 점검 시간에는 로그인과 결제를 이용할 수 없습니다. 바깥 영역을 누르면 닫힙니다."
 		></div>
 		<div
 			class="dynamic-content"
@@ -166,7 +317,7 @@
 		</template>
 		<template id="tpl_sample_row_none">
 			<tr>
-				<td colspan="3" class="tbl_empty">등록된 회원이 없습니다.</td>
+				<td colspan="3" class="ui-table__empty">등록된 회원이 없습니다.</td>
 			</tr>
 		</template>
 		<!--// 목록 템플릿 -->

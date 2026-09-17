@@ -1,0 +1,30 @@
+<!-- 공통 모달 프레임 — 받는 값 : data-id(필수) · data-title(필수) · data-body(본문 파셜 경로 · 필수) · data-subtext · data-footer(버튼 파셜 경로) · data-cancel · data-confirm · data-modifier(크기 · 기본 ui-modal--md) -->
+<!--@ 열기 : data-modal-open="아이디" 버튼 또는 modalOpen('아이디') -->
+<!--@ 머리 · 버튼 영역은 고정이고 본문만 스크롤된다(모달 최대 높이 90dvh) -->
+<div
+	class="ui-modal {{modifier|ui-modal--md}}"
+	id="{{id}}"
+	role="dialog"
+	aria-modal="true"
+	aria-labelledby="{{id}}_title"
+	hidden
+>
+	<div class="ui-modal__dialog">
+		<div class="ui-modal__header">
+			<h2 class="ui-modal__title" id="{{id}}_title">{{title}}</h2>
+			<p class="ui-modal__subtext">{{subtext|}}</p>
+		</div>
+		<div class="ui-modal__body">
+			<div class="dynamic-content" data-source="{{body}}"></div>
+		</div>
+		<div class="ui-modal__footer">
+			<div
+				class="dynamic-content"
+				data-source="{{footer|./include/ui/_ui_modal_footer.html}}"
+				data-cancel="{{cancel|취소}}"
+				data-confirm="{{confirm|확인}}"
+			></div>
+		</div>
+		<button type="button" class="ui-modal__close">닫기</button>
+	</div>
+</div>

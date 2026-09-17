@@ -1,0 +1,64 @@
+@use 'variable';
+@use 'mixin';
+
+// ─────────────────────────────────────────────────────────────
+// _ui_toast.scss — 토스트 (머터리얼 snackbar)
+// 파셜 : include/ui/_ui_toast.html
+// 상태 : 보이는 동안 is-show · 닫히면 hidden (common.js) — 나타날 때만 모션을 준다
+// ─────────────────────────────────────────────────────────────
+
+.ui-toast {
+	@include mixin.position(fixed, $bottom: 24px, $left: 50%, $z-index: 1000);
+	display: flex;
+	align-items: center;
+	gap: 12px;
+	width: max-content;
+	min-width: 288px;
+	max-width: calc(100% - 32px);
+	padding: 14px 16px;
+	border-radius: variable.$radius-sm;
+	background-color: variable.$color-snackbar;
+	box-shadow: variable.$elevation-6;
+	transform: translateX(-50%);
+
+	&.is-show {
+		animation: ui-toast-in variable.$duration-medium variable.$easing-standard;
+	}
+
+	&__icon {
+		flex: none;
+		width: 24px;
+		height: 24px;
+		background-repeat: no-repeat;
+		background-position: center;
+		background-size: 24px;
+	}
+	&--success &__icon {
+		background-image: mixin.icon('success', variable.$green-400);
+	}
+	&--error &__icon {
+		background-image: mixin.icon('error', variable.$red-400);
+	}
+
+	&__text {
+		@include mixin.font-set(0.875rem, 400, variable.$white);
+		line-height: 1.5;
+	}
+
+	@include mixin.small {
+		bottom: 16px;
+		min-width: 0;
+		width: calc(100% - 32px);
+	}
+}
+
+@keyframes ui-toast-in {
+	from {
+		opacity: 0;
+		transform: translate(-50%, 16px);
+	}
+	to {
+		opacity: 1;
+		transform: translate(-50%, 0);
+	}
+}

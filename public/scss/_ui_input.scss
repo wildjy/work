@@ -1,0 +1,139 @@
+@use 'variable';
+@use 'mixin';
+
+// ─────────────────────────────────────────────────────────────
+// _ui_input.scss — 입력 · 지우기 · 안내문 · 라벨 (머터리얼 outlined text field)
+// 파셜 : include/ui/_ui_input.html · _ui_date.html · _ui_period.html · _ui_dropdown_search.html
+// 상태 : is-filled · has-value(common.js) · is-error · is-disabled(modifier 로 넘긴다)
+// ─────────────────────────────────────────────────────────────
+
+//**** 라벨 ****/ — <label class="ui-label" for="아이디">
+.ui-label {
+	display: block;
+	margin-bottom: 8px;
+	@include mixin.font-set(0.875rem, 500, variable.$color-text-sub);
+}
+
+//**** 필드 ****/ — 입력 + 안내문 · 달력 레이어의 기준점
+.ui-field {
+	position: relative;
+}
+
+//**** 입력 ****/
+.ui-input {
+	display: flex;
+	align-items: center;
+	gap: 4px;
+	height: variable.$control-height;
+	padding: 0 8px 0 16px;
+	border: 1px solid variable.$color-border;
+	border-radius: variable.$radius-sm;
+	background-color: variable.$color-surface;
+	transition:
+		border-color variable.$duration-short variable.$easing-standard,
+		box-shadow variable.$duration-short variable.$easing-standard;
+
+	input {
+		flex: 1;
+		min-width: 0;
+		height: 100%;
+		padding: 0;
+		border: 0;
+		outline: 0;
+		background: transparent;
+		@include mixin.font-set(1rem, 400, variable.$color-text);
+		@include mixin.placeholder(variable.$color-placeholder);
+	}
+
+	&:hover {
+		border-color: variable.$color-border-hover;
+	}
+	&.is-filled {
+		border-color: variable.$gray-400;
+	}
+	// 포커스 — 테두리를 2px 로 보이게(안쪽 그림자라 크기가 변하지 않는다)
+	&:focus-within {
+		border-color: variable.$color-primary;
+		box-shadow: inset 0 0 0 1px variable.$color-primary;
+	}
+	&.is-error {
+		border-color: variable.$color-error;
+		&:focus-within {
+			box-shadow: inset 0 0 0 1px variable.$color-error;
+		}
+	}
+	&.is-disabled {
+		border-color: variable.$color-divider;
+		background-color: variable.$color-hover;
+		input {
+			color: variable.$color-text-disabled;
+		}
+	}
+
+	// 지우기 — 값이 있을 때(has-value)만 보인다. 자리는 늘 차지해 입력 폭이 흔들리지 않게 한다
+	&__clear {
+		flex: none;
+		width: 32px;
+		height: 32px;
+		border-radius: 50%;
+		@include mixin.txt-blind;
+		@include mixin.background-data('clear-S', variable.$color-placeholder, null, center, 20px);
+		visibility: hidden;
+		&:hover {
+			background-color: variable.$color-hover;
+		}
+	}
+	&.has-value &__clear {
+		visibility: visible;
+	}
+
+	// 검색 버튼 (검색 드롭다운)
+	&__search {
+		flex: none;
+		width: 36px;
+		height: 36px;
+		border-radius: 50%;
+		@include mixin.txt-blind;
+		@include mixin.background-data('search1', variable.$color-text-sub, null, center, 20px);
+		&:hover {
+			background-color: variable.$color-hover;
+		}
+	}
+
+	// 날짜 · 기간 — 앞에 달력 아이콘
+	&--date {
+		padding-left: 44px;
+		@include mixin.background-data('cal', variable.$color-text-sub, null, 16px center, 16px);
+		background-color: variable.$color-surface;
+		input {
+			cursor: pointer;
+		}
+	}
+
+	&--sm {
+		height: variable.$control-height-sm;
+		input {
+			font-size: 0.875rem;
+		}
+	}
+}
+
+//**** 안내문 ****/ — 문구가 없으면 숨긴다
+.ui-helper {
+	margin-top: 6px;
+	padding: 0 16px;
+	@include mixin.font-set(0.75rem, 400, variable.$color-text-sub);
+
+	&:empty {
+		display: none;
+	}
+	&--error {
+		color: variable.$color-error-text;
+	}
+	&--success {
+		color: variable.$color-success-text;
+	}
+	&--info {
+		color: variable.$color-text-sub;
+	}
+}

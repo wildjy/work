@@ -1,0 +1,64 @@
+@use 'variable';
+@use 'mixin';
+
+// ─────────────────────────────────────────────────────────────
+// _ui_stepper.scss — 수량 스테퍼
+// 파셜 : include/ui/_ui_stepper.html
+// 상태 : 경계에 닿은 버튼 is-disabled (common.js)
+// ─────────────────────────────────────────────────────────────
+
+.ui-stepper {
+	display: inline-flex;
+	height: variable.$control-height-sm;
+	overflow: hidden;
+	border: 1px solid variable.$color-border;
+	border-radius: variable.$radius-sm;
+	background-color: variable.$color-surface;
+	transition: border-color variable.$duration-short variable.$easing-standard;
+
+	&:focus-within {
+		border-color: variable.$color-primary;
+	}
+
+	&__btn {
+		flex: none;
+		width: 40px;
+		@include mixin.txt-blind;
+		background-repeat: no-repeat;
+		background-position: center;
+		background-size: 12px;
+		transition: background-color variable.$duration-short variable.$easing-standard;
+
+		&:hover {
+			background-color: variable.$color-hover;
+		}
+		&.is-disabled {
+			background-color: transparent;
+			cursor: default;
+		}
+
+		&--minus {
+			background-image: mixin.icon('minus-S', variable.$color-text);
+			&.is-disabled {
+				background-image: mixin.icon('minus-S', variable.$color-text-disabled);
+			}
+		}
+		&--plus {
+			background-image: mixin.icon('plus-S', variable.$color-text);
+			&.is-disabled {
+				background-image: mixin.icon('plus-S', variable.$color-text-disabled);
+			}
+		}
+	}
+
+	&__input {
+		width: 56px;
+		padding: 0;
+		border: 0;
+		border-right: 1px solid variable.$color-divider;
+		border-left: 1px solid variable.$color-divider;
+		outline: 0;
+		@include mixin.font-set(0.9375rem, 500, variable.$color-text);
+		text-align: center;
+	}
+}

@@ -1,0 +1,58 @@
+@use 'variable';
+@use 'mixin';
+
+// ─────────────────────────────────────────────────────────────
+// _ui_tab.scss — 탭 (머터리얼 tabs · 아래 표시줄)
+// 마크업 : 파셜 없음 — .ui-tab > .ui-tab__list > .ui-tab__btn + .ui-tab__panel
+// 상태 : 버튼 is-active · 패널은 hidden (common.js)
+// ─────────────────────────────────────────────────────────────
+
+.ui-tab {
+	&__list {
+		display: flex;
+		overflow-x: auto;
+		border-bottom: 1px solid variable.$color-divider;
+		@include mixin.hide-scroll;
+	}
+
+	&__btn {
+		position: relative;
+		flex: none;
+		min-width: 90px;
+		height: 48px;
+		padding: 0 16px;
+		@include mixin.font-set(0.875rem, 500, variable.$color-text-sub);
+		transition:
+			background-color variable.$duration-short variable.$easing-standard,
+			color variable.$duration-short variable.$easing-standard;
+
+		&::after {
+			content: '';
+			@include mixin.position(absolute, $right: 0, $bottom: 0, $left: 0);
+			height: 2px;
+			background-color: variable.$color-primary;
+			transform: scaleX(0);
+			transition: transform variable.$duration-medium variable.$easing-standard;
+		}
+		&:hover {
+			background-color: variable.$color-hover;
+			color: variable.$color-text;
+		}
+		&:focus-visible {
+			outline: 2px solid variable.$color-primary;
+			outline-offset: -2px;
+		}
+		&.is-active {
+			color: variable.$color-primary;
+			&::after {
+				transform: scaleX(1);
+			}
+		}
+	}
+
+	&__panel {
+		padding-top: 20px;
+		@include mixin.font-set(0.9375rem, 400, variable.$color-text-sub);
+		line-height: 1.6;
+	}
+}

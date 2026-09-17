@@ -1,0 +1,61 @@
+@use 'variable';
+@use 'mixin';
+
+// ─────────────────────────────────────────────────────────────
+// _ui_accordion.scss — 아코디언 (머터리얼 expansion panel)
+// 파셜 : include/ui/_ui_accordion.html
+// 상태 : 항목 is-open · 본문은 hidden (common.js)
+// ─────────────────────────────────────────────────────────────
+
+.ui-accordion {
+	overflow: hidden;
+	border: 1px solid variable.$color-divider;
+	border-radius: variable.$radius-sm;
+	background-color: variable.$color-surface;
+
+	&__item {
+		& + & {
+			border-top: 1px solid variable.$color-divider;
+		}
+		&.is-open > .ui-accordion__head {
+			color: variable.$color-primary;
+			background-image: mixin.icon('arr3-up', variable.$color-primary);
+		}
+	}
+
+	&__head {
+		display: block;
+		width: 100%;
+		min-height: 56px;
+		padding: 16px 52px 16px 20px;
+		@include mixin.background-data('arr3-down', variable.$color-text-sub, null, right 22px center, 10px 6px);
+		@include mixin.font-set(0.9375rem, 500, variable.$color-text);
+		text-align: left;
+		transition: background-color variable.$duration-short variable.$easing-standard;
+
+		&:hover {
+			background-color: variable.$color-hover;
+		}
+		&:focus-visible {
+			outline: 2px solid variable.$color-primary;
+			outline-offset: -2px;
+		}
+	}
+
+	&__body {
+		padding: 0 20px 20px;
+		@include mixin.font-set(0.875rem, 400, variable.$color-text-sub);
+		line-height: 1.6;
+		b,
+		strong {
+			font-weight: 600;
+			color: variable.$color-text;
+		}
+	}
+
+	&__empty {
+		padding: 32px 20px;
+		@include mixin.font-set(0.875rem, 400, variable.$color-text-sub);
+		text-align: center;
+	}
+}

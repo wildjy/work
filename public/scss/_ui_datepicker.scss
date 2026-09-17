@@ -1,0 +1,204 @@
+@use 'variable';
+@use 'mixin';
+
+// ─────────────────────────────────────────────────────────────
+// _ui_datepicker.scss — 날짜 · 기간 달력 (머터리얼 date picker)
+// 파셜 : include/ui/_ui_date.html(.ui-calendar 는 JS 가 만든다) · _ui_period.html(.ui-period)
+// 달력 안쪽은 jQuery UI 가 그린다 — jQuery UI 테마 CSS 는 불러오지 않고 여기서 모양을 맞춘다.
+// 범위 칸(td) : dp_in · dp_start · dp_end (common.js beforeShowDay)
+// ─────────────────────────────────────────────────────────────
+
+//**** 레이어 ****/ — .ui-field 기준으로 입력 아래에 뜬다 · hidden 으로 여닫는다
+.ui-calendar,
+.ui-period {
+	@include mixin.position(absolute, $top: calc(100% + 4px), $left: 0, $z-index: 10);
+	padding: 16px;
+	border-radius: variable.$radius-md;
+	background-color: variable.$color-surface;
+	box-shadow: variable.$elevation-8;
+}
+
+.ui-period {
+	width: max-content;
+	max-width: calc(100vw - 32px);
+
+	&__header {
+		display: flex;
+		align-items: center;
+		gap: 8px;
+		margin-bottom: 12px;
+	}
+	&__date {
+		flex: 1;
+		min-width: 0;
+		height: 40px;
+		padding: 0 12px;
+		border: 1px solid variable.$color-border;
+		border-radius: variable.$radius-sm;
+		outline: 0;
+		background-color: variable.$color-hover;
+		@include mixin.font-set(0.875rem, 500, variable.$color-text);
+		text-align: center;
+	}
+	&__sep {
+		color: variable.$color-text-sub;
+	}
+	&__footer {
+		margin-top: 12px;
+		padding-top: 12px;
+		border-top: 1px solid variable.$color-divider;
+		&:empty {
+			display: none;
+		}
+	}
+}
+
+//**** jQuery UI ****/
+// jQuery UI 가 <body> 끝에 붙이는 빈 팝업 상자 — 인라인 달력만 쓰므로 늘 감춘다
+#ui-datepicker-div {
+	display: none;
+}
+
+.ui-datepicker {
+	// ⚠ 여러 달이면 jQuery UI 가 width 를 em 으로 박는다 — 내용에 맞춘다
+	width: auto !important;
+
+	// ⚠ 인라인 달력에 jQuery UI 가 style="display: block" 을 박는다 — 두 달을 나란히 두려면 !important
+	&-multi {
+		display: flex !important;
+		flex-wrap: wrap;
+		gap: 24px;
+	}
+	&-row-break {
+		display: none; // float 해제용 빈 요소 — flex 에서는 필요 없다
+	}
+	&-group,
+	&-inline:not(.ui-datepicker-multi) {
+		width: 280px;
+	}
+
+	&-header {
+		position: relative;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		height: 40px;
+		margin-bottom: 8px;
+	}
+	&-title {
+		@include mixin.font-set(0.9375rem, 600, variable.$color-text);
+	}
+	&-year::after {
+		content: '년';
+		margin-right: 4px;
+	}
+
+	&-prev,
+	&-next {
+		@include mixin.position(absolute, $top: 0);
+		width: 40px;
+		height: 40px;
+		border-radius: 50%;
+		background-repeat: no-repeat;
+		background-position: center;
+		background-size: 12px;
+		cursor: pointer;
+		&:hover {
+			background-color: variable.$color-hover;
+		}
+		span {
+			@include mixin.blind;
+		}
+	}
+	&-prev {
+		left: 0;
+		background-image: mixin.icon('arrow-left-S', variable.$color-text);
+	}
+	&-next {
+		right: 0;
+		background-image: mixin.icon('arrow-right-S', variable.$color-text);
+	}
+
+	&-calendar {
+		width: 100%;
+		border-collapse: separate;
+		border-spacing: 0 2px;
+		table-layout: fixed;
+
+		th {
+			height: 32px;
+			@include mixin.font-set(0.75rem, 500, variable.$color-text-sub);
+			text-align: center;
+		}
+		td {
+			padding: 0;
+			text-align: center;
+
+			a,
+			span {
+				display: flex;
+				align-items: center;
+				justify-content: center;
+				width: 36px;
+				height: 36px;
+				margin: 0 auto;
+				border-radius: 50%;
+				@include mixin.font-set(0.875rem, 400, variable.$color-text);
+			}
+			a:hover {
+				background-color: variable.$color-hover;
+			}
+		}
+		// 앞뒤 달 날짜
+		.ui-datepicker-other-month span {
+			color: variable.$color-text-disabled;
+		}
+		// 오늘
+		.ui-datepicker-today a {
+			box-shadow: inset 0 0 0 1px variable.$color-primary;
+			color: variable.$color-primary;
+		}
+		// 고른 날짜 (날짜 하나)
+		a.ui-state-active {
+			background-color: variable.$color-primary;
+			color: variable.$white;
+			font-weight: 500;
+			&:hover {
+				background-color: variable.$color-primary-dark;
+			}
+		}
+	}
+}
+
+//**** 기간 범위 ****/
+.ui-period {
+	// 마지막으로 누른 날짜 표시는 쓰지 않는다 — 범위(dp_*)가 대신한다
+	.ui-datepicker-calendar a.ui-state-active {
+		background-color: transparent;
+		color: variable.$color-text;
+		font-weight: 400;
+	}
+	.ui-datepicker-calendar {
+		td.dp_in {
+			background-color: variable.$color-primary-light;
+			a {
+				color: variable.$color-primary;
+			}
+		}
+		td.dp_start {
+			border-radius: 18px 0 0 18px;
+		}
+		td.dp_end {
+			border-radius: 0 18px 18px 0;
+		}
+		td.dp_start.dp_end {
+			border-radius: 18px;
+		}
+		td.dp_start a,
+		td.dp_end a {
+			background-color: variable.$color-primary;
+			color: variable.$white;
+			font-weight: 500;
+		}
+	}
+}

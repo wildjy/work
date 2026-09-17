@@ -13,6 +13,8 @@ public/scss/
 ├─ _mixin.scss      믹스인·함수 — 배치 · 글자 · 숨김 · 스크롤 · 도형 · 배경/아이콘 · 반응형
 ├─ _font.scss       Pretendard @font-face (100~900 표준 굵기 · woff2)
 ├─ _reset.scss      초기화 + [hidden] · 건너뛰기 링크
+├─ _layout.scss     페이지 골격 — .layout(__side·__brand·__body·__main) · .app-header · .section · .grid(--2·--3)
+├─ _ui_*.scss       공통 UI (머터리얼) — button · card · table · input(label·helper) · dropdown(menu) · stepper · lnb · tab · accordion · toast · modal · datepicker
 └─ common.scss      진입 파일 → public/css/common.css   (@use 'font'; @use 'reset'; …)
 public/font/Pretendard/Pretendard-*.woff2
 ```
@@ -41,6 +43,7 @@ public/font/Pretendard/Pretendard-*.woff2
 
 ## 3. 토큰 규칙
 
+- **공통 UI · 레이아웃은 역할 토큰을 먼저 쓴다** — `$color-primary` · `$color-text` · `$color-text-sub` · `$color-border` · `$color-divider` · `$color-hover` · `$color-surface` · `$color-error` · `$radius-sm/md` · `$elevation-1~24` · `$duration-*` · `$easing-standard`. 주 색을 바꿀 때는 `$color-primary*` 만 고친다.
 - **색은 `_variable.scss` 토큰만** — 스타일에 HEX 를 적지 않는다. 시안 색이 토큰에 없으면 **작업 전에 묻는다.**
   토큰으로 바꿀 때는 **단계 수를 시안 그대로 유지**한다(비슷한 두 색을 하나로 합치면 정보 위계가 사라진다).
 - **폰트 굵기는 시안 값 그대로** 적는다. `_font.scss` 가 표준 굵기(400 Regular · 500 Medium · 600 SemiBold · 700 Bold …)로 연결한다 — **보정(+200 등)하지 않는다.**

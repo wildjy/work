@@ -1,0 +1,49 @@
+@use 'variable';
+@use 'mixin';
+
+// ─────────────────────────────────────────────────────────────
+// _ui_card.scss — 카드 (머터리얼 surface · elevation 1)
+// <div class="ui-card">
+//   <div class="ui-card__header"><h3 class="ui-card__title">제목</h3></div>
+//   <div class="ui-card__body"> … </div>
+// </div>
+// 표처럼 여백 없이 붙이는 내용은 ui-card__body--flush
+// ─────────────────────────────────────────────────────────────
+
+.ui-card {
+	border-radius: variable.$radius-md;
+	background-color: variable.$color-surface;
+	box-shadow: variable.$elevation-1;
+
+	&__header {
+		display: flex;
+		align-items: center;
+		justify-content: space-between;
+		gap: 12px;
+		min-height: 56px;
+		padding: 12px 24px;
+		border-bottom: 1px solid variable.$color-divider;
+	}
+	&__title {
+		@include mixin.font-set(1rem, 600, variable.$color-text);
+	}
+	&__body {
+		padding: 24px;
+		&--flush {
+			padding: 0;
+			overflow-x: auto;
+		}
+	}
+
+	@include mixin.small {
+		&__header {
+			padding: 12px 16px;
+		}
+		&__body {
+			padding: 16px;
+			&--flush {
+				padding: 0;
+			}
+		}
+	}
+}

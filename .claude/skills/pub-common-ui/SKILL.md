@@ -1,7 +1,7 @@
 ---
 name: pub-common-ui
 description: >-
-  공통 UI 컴포넌트를 화면에 넣거나 고칠 때 — 드롭다운·검색 드롭다운·입력+지우기+안내문·수량 스테퍼·LNB·탭·아코디언·토스트·모달(확인창)·날짜 입력·기간 입력(jQuery UI datepicker). 공통 UI 는 BEM(ui- 접두어 · is-/has- 상태) 네이밍이고, 보이고 숨기기는 상태 클래스 + hidden 속성, 동작은 onclick 없이 클래스·data-* 위임(public/js/common.js)이다. 마크업은 public/html/include/ui/_ui_*.html 파셜을 data-* 변수로 include 하고, 탭과 일반 모달은 구조 규칙대로 직접 쓴다. 파셜별 받는 값, 함수별 호출법, 새 컴포넌트를 추가할 때 함께 고칠 곳(eslint.config.js COMMON_FUNCTIONS · WORKLOG)을 담는다. ui-dropdown·ui-input·ui-stepper·ui-lnb·ui-tab·ui-accordion·ui-toast·ui-modal·ui-period·ui-calendar·data-modal-open·data-toast·toggleMenu·dropdownSelect·modalOpen·tabActivate·accordionToggle·toastShow·stepperChange·CHECK_GROUPS·lnbActive·datepicker 키워드에서 사용.
+  공통 UI 컴포넌트를 화면에 넣거나 고칠 때 — 드롭다운·검색 드롭다운·입력+지우기+안내문·수량 스테퍼·LNB·탭·아코디언·토스트·모달(확인창)·날짜 입력·기간 입력(jQuery UI datepicker). 공통 UI 는 BEM(ui- 접두어 · is-/has- 상태) 네이밍이고, 보이고 숨기기는 상태 클래스 + hidden 속성, 동작은 onclick 없이 클래스·data-* 위임(public/js/common.js)이다. 마크업은 public/html/include/ui/_ui_*.html 파셜을 data-* 변수로 include 하고, 탭은 구조 규칙대로 직접 쓰고 모달은 프레임 파셜에 본문 파셜을 넘긴다. 파셜별 받는 값, 함수별 호출법, 새 컴포넌트를 추가할 때 함께 고칠 곳(eslint.config.js COMMON_FUNCTIONS · WORKLOG)을 담는다. ui-dropdown·ui-input·ui-stepper·ui-lnb·ui-tab·ui-accordion·ui-toast·ui-modal·ui-period·ui-calendar·data-modal-open·data-toast·toggleMenu·dropdownSelect·modalOpen·tabActivate·accordionToggle·toastShow·stepperChange·CHECK_GROUPS·lnbActive·datepicker 키워드에서 사용.
 ---
 # 공통 UI (`include/ui/_ui_*.html` + `public/js/common.js`)
 
@@ -73,7 +73,11 @@ description: >-
 | `_ui_lnb.html` | — | 메뉴는 **파셜 안에서** 고친다 |
 | `_ui_accordion.html` | **`items`** · `mode`(`single` \| `multiple`) | 항목 JSON `title`·`body`(HTML)·`state` |
 | `_ui_toast.html` | **`id`** · `text` · `type`(`success` \| `error`) | 페이지 끝에 둔다 |
-| `_ui_modal_confirm.html` | **`id`** · **`title`** · `text` · `confirm`(확인) · `cancel`(취소) · `modifier`(`ui-modal--sm`) | |
+| `_ui_modal.html` | **`id`** · **`title`** · **`body`**(본문 파셜 경로) · `subtext` · `footer`(버튼 파셜 경로) · `cancel`(취소) · `confirm`(확인) · `modifier`(`ui-modal--md`) | 공통 모달 프레임 |
+| `_ui_modal_footer.html` | `cancel` · `confirm` | 프레임의 기본 버튼. **직접 쓰지 않는다** |
+| `_ui_modal_alert.html` | **`id`** · **`title`** · `subtext` · `text` · `body`(본문 파셜 경로) · `modifier`(`ui-modal--sm`) | 정보성 알림 — 버튼 없음 · **딤 클릭으로 닫힘** |
+| `_ui_modal_text.html` | `text` | 알림의 기본 본문(한 문단). **직접 쓰지 않는다** |
+| `_ui_modal_confirm.html` | **`id`** · **`title`** · `text` · `confirm`(확인) · `cancel`(취소) · `modifier`(추가 변형) | 확인창 전용(`ui-modal--confirm`) |
 | `_ui_date.html` | **`id`** · `name` · `placeholder` · `value` | jQuery UI 필요 |
 | `_ui_period.html` | **`id`** · `name` · `placeholder` | jQuery UI 필요 · 달력 id = `아이디_period` |
 
@@ -190,7 +194,49 @@ description: >-
 
 ## 9. 모달
 
-### 확인창 — 파셜
+세 가지뿐이다 — **공통 프레임**(`_ui_modal`) · **알림**(`_ui_modal_alert`) · **확인창**(`_ui_modal_confirm`). 모달 마크업을 손으로 짜지 않는다.
+
+```
+.ui-modal(딤 · id) > .ui-modal__dialog
+  ├─ __header   __title + __subtext      고정
+  ├─ __body     본문                     넘치면 여기만 스크롤
+  ├─ __footer   버튼                     고정
+  └─ __close    닫기(X)                  확인창에는 없다 · 알림에는 __footer 가 없다
+```
+
+- 대화상자 **최대 높이 90dvh**(모르는 브라우저는 90vh). 머리·버튼은 늘 보이고 본문만 스크롤된다.
+- 크기 변형 `ui-modal--sm`(360) · `--md`(560 · 기본) · `--lg`(800) → `data-modifier`.
+
+### 공통 프레임 — 본문은 파셜로 넘긴다
+
+```html
+<button type="button" class="ui-btn ui-btn--contained" data-modal-open="modal_member_invite">멤버 초대</button>
+
+<div class="dynamic-content" data-source="./include/ui/_ui_modal.html"
+     data-id="modal_member_invite" data-title="멤버 초대" data-subtext="초대할 멤버의 정보를 입력해주세요."
+     data-body="./include/member/_modal_invite_body.html" data-confirm="초대하기"></div>
+```
+
+- **본문**은 `include/<폴더>/_modal_이름_body.html` 로 만들어 `data-body` 에 넘긴다(경로는 페이지 기준). 본문 안에서 입력·스테퍼 파셜을 include 해도 된다. 문단은 `p.ui-modal__text`.
+- **버튼**은 기본이 「취소(outlined · 닫기) + 확인(contained)」 — 문구만 `data-cancel` · `data-confirm`. 확인은 닫지 않는다(개발 연동이 처리 후 닫는다).
+  구성이 다르면(버튼 1개 · 3개 · 삭제 버튼 추가) **버튼 파셜을 만들어 `data-footer` 로** 넘긴다 — 버튼은 `ui-btn` 을 쓴다.
+- `subtext` 를 넘기지 않으면 보조 문구 줄이 사라진다(`:empty`).
+- ⚠ 본문 안 드롭다운·달력 레이어는 본문 스크롤 영역에 잘린다 — 모달 본문에는 되도록 넣지 않는다.
+
+### 알림 — 버튼 없는 정보성 모달
+
+```html
+<button type="button" data-modal-open="modal_notice">점검 안내</button>
+
+<div class="dynamic-content" data-source="./include/ui/_ui_modal_alert.html"
+     data-id="modal_notice" data-title="점검 안내" data-subtext="2026.09.20 02:00 ~ 06:00"
+     data-text="서비스 점검 시간에는 로그인과 결제를 이용할 수 없습니다."></div>
+```
+
+- 본문은 `data-text` 한 문단이 기본이다. 내용이 많으면 본문 파셜을 만들어 `data-body` 로 넘긴다(그때 `text` 는 쓰지 않는다).
+- 고를 것이 없으니 **딤을 누르면 닫힌다**. 닫기(X)도 있다.
+
+### 확인창 — 전용
 
 ```html
 <button type="button" data-modal-open="modal_delete">삭제</button>
@@ -199,27 +245,15 @@ description: >-
      data-id="modal_delete" data-title="이벤트를 삭제하시겠습니까?" data-text="삭제한 이벤트는 복구할 수 없습니다." data-confirm="삭제"></div>
 ```
 
-### 그 밖의 모달(폼·목록·단계) — 구조대로 **모달마다 파셜**을 만든다
+- 폭 360 · 구분선 없음 · **닫기(X) 없음**(취소·확인 중 하나를 고르게 한다). 두 버튼 모두 누르면 닫힌다.
 
-```html
-<div class="ui-modal ui-modal--md" id="modal_member_invite" role="dialog" aria-modal="true" aria-labelledby="modal_member_invite_title" hidden>
-	<div class="ui-modal__dialog">
-		<div class="ui-modal__header">
-			<h2 class="ui-modal__title" id="modal_member_invite_title">멤버 초대</h2>
-		</div>
-		<div class="ui-modal__body">…(공통 입력·드롭다운 파셜을 include)…</div>
-		<div class="ui-modal__footer">
-			<button type="button" data-modal-close>취소</button>
-			<button type="button">초대</button>
-		</div>
-		<button type="button" class="ui-modal__close">닫기</button>
-	</div>
-</div>
-```
+### 공통 규칙
 
-- 블록(`.ui-modal`)이 곧 **딤**이고 id 도 여기. 크기·위치 변형은 블록에(`ui-modal--sm` · `--md` · `--center`).
+- 블록(`.ui-modal`)이 곧 **딤**이고 id 도 여기. 변형은 블록에(`ui-modal--sm` · `--md` · `--lg` · `--alert` · `--confirm`).
 - 열면 `is-open` + `<html>` 에 **`has-modal`**(스크롤 잠금용 훅). 코드에서는 `modalOpen(id)` · `modalClose(id 또는 요소)`.
 - **딤 클릭·ESC 로 닫지 않는다** — 입력 중인 내용을 잃지 않게 하는 의도다.
+  **예외 : 버튼 영역(`.ui-modal__footer` 안 버튼)이 없는 모달은 딤을 누르면 닫힌다**(`modalIsPassive`). 판정은 마크업으로만 한다 — 알림에 버튼을 넣으면 딤으로 닫히지 않는다.
+  누른 곳과 뗀 곳이 **둘 다 딤**일 때만 닫는다(대화상자 안에서 글자를 드래그하다 딤에서 놓아도 닫히지 않는다).
 - 모달 위에 모달을 열면 **DOM 순서**로 쌓인다(뒤에 있는 것이 위).
 - 단계 전환(다음 모달로)은 `data-modal-close` + `data-modal-open` 을 한 버튼에 같이 쓰지 말고 개발 연동 코드에서 `modalClose` → `modalOpen` 순서로 부른다(위임 핸들러는 열기를 먼저 본다).
 

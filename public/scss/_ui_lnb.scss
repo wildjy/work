@@ -1,0 +1,68 @@
+@use 'variable';
+@use 'mixin';
+
+// ─────────────────────────────────────────────────────────────
+// _ui_lnb.scss — LNB (머터리얼 navigation drawer)
+// 파셜 : include/ui/_ui_lnb.html
+// 상태 : 항목 is-active(현재 페이지) · is-open(하위 펼침) — lnbActive 가 붙인다
+// ─────────────────────────────────────────────────────────────
+
+.ui-lnb {
+	padding: 12px;
+
+	&__group {
+		display: flex;
+		flex-direction: column;
+		gap: 2px;
+	}
+
+	&__link {
+		display: flex;
+		align-items: center;
+		width: 100%;
+		height: 48px;
+		padding: 0 16px;
+		border-radius: variable.$radius-full;
+		@include mixin.font-set(0.9375rem, 500, variable.$color-text-sub);
+		text-align: left;
+		transition:
+			background-color variable.$duration-short variable.$easing-standard,
+			color variable.$duration-short variable.$easing-standard;
+
+		&:hover {
+			background-color: variable.$color-hover;
+			color: variable.$color-text;
+		}
+		&:focus-visible {
+			outline: 2px solid variable.$color-primary;
+			outline-offset: -2px;
+		}
+
+		&--toggle {
+			padding-right: 40px;
+			@include mixin.background-data('arr3-down', variable.$color-text-sub, null, right 20px center, 10px 6px);
+		}
+	}
+
+	&__sub {
+		padding-top: 2px;
+		.ui-lnb__link {
+			height: 40px;
+			padding-left: 32px;
+			font-size: 0.875rem;
+			font-weight: 400;
+		}
+	}
+
+	&__item {
+		&.is-open > .ui-lnb__link--toggle {
+			color: variable.$color-text;
+			background-image: mixin.icon('arr3-up', variable.$color-text);
+		}
+		&.is-active > .ui-lnb__link {
+			background-color: variable.$color-primary-light;
+			color: variable.$color-primary;
+			font-weight: 600;
+		}
+	}
+}
