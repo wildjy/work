@@ -1,0 +1,5 @@
+[
+  { "text": "최신순", "value": "latest", "state": "" },
+  { "text": "이름순", "value": "name", "state": "" },
+  { "text": "직접 입력하기", "value": "", "state": "ui-dropdown__item--action" }
+]

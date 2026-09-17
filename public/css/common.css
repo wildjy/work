@@ -1,0 +1,258 @@
+@charset "UTF-8";
+@font-face {
+  font-family: "Pretendard";
+  font-style: normal;
+  font-weight: 100;
+  font-display: swap;
+  src: url("../font/Pretendard/Pretendard-Thin.woff2") format("woff2");
+}
+@font-face {
+  font-family: "Pretendard";
+  font-style: normal;
+  font-weight: 200;
+  font-display: swap;
+  src: url("../font/Pretendard/Pretendard-ExtraLight.woff2") format("woff2");
+}
+@font-face {
+  font-family: "Pretendard";
+  font-style: normal;
+  font-weight: 300;
+  font-display: swap;
+  src: url("../font/Pretendard/Pretendard-Light.woff2") format("woff2");
+}
+@font-face {
+  font-family: "Pretendard";
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url("../font/Pretendard/Pretendard-Regular.woff2") format("woff2");
+}
+@font-face {
+  font-family: "Pretendard";
+  font-style: normal;
+  font-weight: 500;
+  font-display: swap;
+  src: url("../font/Pretendard/Pretendard-Medium.woff2") format("woff2");
+}
+@font-face {
+  font-family: "Pretendard";
+  font-style: normal;
+  font-weight: 600;
+  font-display: swap;
+  src: url("../font/Pretendard/Pretendard-SemiBold.woff2") format("woff2");
+}
+@font-face {
+  font-family: "Pretendard";
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap;
+  src: url("../font/Pretendard/Pretendard-Bold.woff2") format("woff2");
+}
+@font-face {
+  font-family: "Pretendard";
+  font-style: normal;
+  font-weight: 800;
+  font-display: swap;
+  src: url("../font/Pretendard/Pretendard-ExtraBold.woff2") format("woff2");
+}
+@font-face {
+  font-family: "Pretendard";
+  font-style: normal;
+  font-weight: 900;
+  font-display: swap;
+  src: url("../font/Pretendard/Pretendard-Black.woff2") format("woff2");
+}
+/* ── 1. 배치 ──────────────────────────────────────────────── */
+/* ── 2. 글자 ──────────────────────────────────────────────── */
+/* ── 3. 숨김 ──────────────────────────────────────────────── */
+/* ── 4. 스크롤 ────────────────────────────────────────────── */
+/* ── 5. 도형 ──────────────────────────────────────────────── */
+/* ── 6. 배경 · 아이콘 ─────────────────────────────────────── */
+/* ── 7. 반응형 ────────────────────────────────────────────── */
+/**** RESET ****/
+*,
+*::before,
+*::after {
+  -webkit-box-sizing: border-box;
+          box-sizing: border-box;
+}
+
+html,
+body {
+  width: 100%;
+  min-height: 100%;
+  margin: 0;
+  padding: 0;
+  -webkit-text-size-adjust: 100%;
+  -moz-text-size-adjust: 100%;
+   -ms-text-size-adjust: 100%;
+       text-size-adjust: 100%;
+  font-family: "Pretendard", "Apple SD Gothic Neo", "Malgun Gothic", "Dotum", sans-serif;
+  font-size: 1rem;
+  font-weight: 400;
+  letter-spacing: -0.016em;
+  color: #5a5b6a;
+}
+
+body {
+  overflow-x: hidden;
+}
+
+html {
+  scrollbar-width: thin;
+  scrollbar-color: #8b8b8b transparent;
+}
+html::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+html::-webkit-scrollbar-thumb {
+  background-color: #8b8b8b;
+  border-radius: 4px;
+}
+html::-webkit-scrollbar-track {
+  background-color: transparent;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+p,
+ul,
+ol,
+li,
+dl,
+dt,
+dd,
+figure,
+fieldset,
+legend,
+blockquote,
+pre {
+  margin: 0;
+  padding: 0;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+p,
+li,
+dt,
+dd,
+th,
+td,
+label {
+  font-size: 1em;
+  font-weight: inherit;
+  word-break: keep-all;
+}
+
+ul,
+ol {
+  list-style: none;
+}
+
+em,
+i,
+address {
+  font-style: normal;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+img,
+svg,
+video,
+canvas,
+iframe {
+  vertical-align: middle;
+  border: 0;
+}
+
+img,
+video {
+  max-width: 100%;
+  height: auto;
+}
+
+table {
+  border-collapse: collapse;
+  border-spacing: 0;
+}
+
+caption,
+legend {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  padding: 0;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  clip-path: inset(50%);
+  white-space: nowrap;
+  border: 0;
+}
+
+button,
+input,
+select,
+textarea {
+  margin: 0;
+  font: inherit;
+  letter-spacing: inherit;
+  color: inherit;
+  vertical-align: middle;
+}
+
+button {
+  padding: 0;
+  border: 0;
+  background: none;
+  cursor: pointer;
+}
+
+button:disabled {
+  cursor: default;
+}
+
+label {
+  cursor: pointer;
+}
+
+textarea {
+  resize: vertical;
+}
+
+[hidden] {
+  display: none !important;
+}
+
+.skip {
+  position: relative;
+}
+.skip a {
+  position: absolute;
+  top: -30px;
+  left: 0;
+  z-index: 99999;
+}
+.skip a:focus, .skip a:active {
+  top: 0;
+  display: block;
+  padding: 5px 15px;
+  background-color: #292a31;
+  color: #ffffff;
+  font-weight: 700;
+}

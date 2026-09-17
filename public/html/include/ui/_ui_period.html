@@ -1,0 +1,24 @@
+<!-- 공통 기간 입력 — 받는 값 : data-id(필수) · data-name · data-placeholder -->
+<!--@ 달력은 jQuery UI 가 그린다 — 이 파셜을 쓰는 페이지는 jquery · jquery-ui 를 불러야 한다 -->
+<div class="ui-field ui-field--period">
+	<div class="ui-input ui-input--date">
+		<input
+			type="text"
+			id="{{id}}"
+			name="{{name|}}"
+			placeholder="{{placeholder|기간을 선택해주세요.}}"
+			autocomplete="off"
+		/>
+		<button type="button" class="ui-input__clear">지우기</button>
+	</div>
+	<div class="ui-period" id="{{id}}_period" data-datepicker hidden>
+		<div class="ui-period__header">
+			<input type="text" class="ui-period__date" aria-label="시작일" readonly />
+			<span class="ui-period__sep">~</span>
+			<input type="text" class="ui-period__date" aria-label="종료일" readonly />
+		</div>
+		<div class="ui-period__calendar"></div>
+		<!--@ 종료일 · 시간 포함 같은 옵션은 화면에 따라 이 자리에 넣는다 -->
+		<div class="ui-period__footer"></div>
+	</div>
+</div>

@@ -1,0 +1,158 @@
+@use 'variable';
+@use 'mixin';
+
+// ─────────────────────────────────────────────────────────────
+// _reset.scss — 기본 초기화
+// ─────────────────────────────────────────────────────────────
+
+/**** RESET ****/
+*,
+*::before,
+*::after {
+	box-sizing: border-box;
+}
+
+html,
+body {
+	width: 100%;
+	min-height: 100%;
+	margin: 0;
+	padding: 0;
+	-webkit-text-size-adjust: 100%;
+	text-size-adjust: 100%;
+	font-family: variable.$font-family-base;
+	font-size: variable.$font-size-base;
+	font-weight: variable.$font-weight-base;
+	letter-spacing: variable.$letter-spacing-base;
+	color: variable.$gray-600;
+}
+body {
+	overflow-x: hidden;
+}
+// 페이지(뷰포트) 스크롤바 — 뷰포트 스크롤바는 root(html)에 걸어야 적용된다
+html {
+	@include mixin.scrollbar();
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+p,
+ul,
+ol,
+li,
+dl,
+dt,
+dd,
+figure,
+fieldset,
+legend,
+blockquote,
+pre {
+	margin: 0;
+	padding: 0;
+}
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+p,
+li,
+dt,
+dd,
+th,
+td,
+label {
+	font-size: 1em;
+	font-weight: inherit;
+	word-break: keep-all; // 한글 단어 중간에서 줄이 바뀌지 않게
+}
+ul,
+ol {
+	list-style: none;
+}
+em,
+i,
+address {
+	font-style: normal;
+}
+a {
+	color: inherit;
+	text-decoration: none;
+	cursor: pointer;
+}
+img,
+svg,
+video,
+canvas,
+iframe {
+	vertical-align: middle;
+	border: 0;
+}
+img,
+video {
+	max-width: 100%;
+	height: auto;
+}
+table {
+	border-collapse: collapse;
+	border-spacing: 0;
+}
+caption,
+legend {
+	@include mixin.blind;
+}
+
+// 폼 요소는 기본으로 부모의 글꼴을 물려받지 않는다 — 맞춰 준다
+button,
+input,
+select,
+textarea {
+	margin: 0;
+	font: inherit;
+	letter-spacing: inherit;
+	color: inherit;
+	vertical-align: middle;
+}
+button {
+	padding: 0;
+	border: 0;
+	background: none;
+	cursor: pointer;
+}
+button:disabled {
+	cursor: default;
+}
+label {
+	cursor: pointer;
+}
+textarea {
+	resize: vertical;
+}
+
+// ⚠ 공통 UI 는 hidden 속성으로 여닫는다(common.js) — display 를 주는 규칙이 hidden 을 이기지 못하게 한다
+[hidden] {
+	display: none !important;
+}
+
+//**** 건너뛰기 링크 ****/ — 키보드 사용자가 본문으로 바로 가는 링크(포커스를 받을 때만 보인다)
+.skip {
+	@include mixin.position(relative);
+	a {
+		@include mixin.position(absolute, $top: -30px, $left: 0, $z-index: 99999);
+		&:focus,
+		&:active {
+			top: 0;
+			display: block;
+			padding: 5px 15px;
+			background-color: variable.$gray-900;
+			color: variable.$white;
+			font-weight: 700;
+		}
+	}
+}

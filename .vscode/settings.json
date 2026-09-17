@@ -1,0 +1,37 @@
+{
+  // ── Live Server 를 쓰지 않는다 — 파셜에 라이브리로드 스크립트가 주입돼 마크업이 깨진다.
+  //    로컬 서버는 `npm run serve` (npx serve public · http://localhost:3500 고정).
+
+  // ── Open File From Path (jack89ita.open-file-from-path)
+  //    파셜 경로(data-source="./include/...") 위에서 Alt+D 를 누르면 그 파일이 열린다.
+  //    ⚠ Ctrl+클릭은 지원하지 않는다 — 단축키(Alt+D)로 연다.
+
+  // data-source 는 **페이지(public/html) 기준** 상대경로라 루트("/")로 두면 못 찾는다.
+  "open-file-from-path.startingPath": "public/html",
+
+  // 경로 대신 **파일명만** 맞춰 찾는다 — 파셜 파일명을 저장소 안에서 고유하게 유지한다.
+  "open-file-from-path.matchFileName": true,
+
+  // 산출물이 후보로 끼어들지 않게 한다
+  "open-file-from-path.searchExclusion": ["**/node_modules/**", "**/.vscode/**", "**/prerender/**"],
+
+  "files.eol": "\r\n",
+
+  // ── Live Sass Compiler (glenn2223.live-sass) — 하단 상태바 「Watch Sass」 를 켜고 작업한다
+  //    public/scss/*.scss(_ 로 시작하지 않는 것) → public/css/*.css
+  //    ⚠ css 는 산출물이다 — 직접 고치지 않는다. scss 와 css 를 함께 커밋한다.
+  "liveSassCompile.settings.formats": [
+    {
+      "format": "expanded",
+      "extensionName": ".css",
+      "savePath": "~/../css/"
+    }
+  ],
+  "liveSassCompile.settings.autoprefix": ["> 1%", "last 2 versions"],
+  "liveSassCompile.settings.generateMap": false,
+
+  // ── Prettier · ESLint — 설정은 .prettierrc · eslint.config.js
+  //    저장 시 자동 정렬은 켜지 않는다(열어서 저장만 해도 diff 가 커진다). Shift+Alt+F 로 정렬한다.
+  "editor.defaultFormatter": "esbenp.prettier-vscode",
+  "eslint.useFlatConfig": true
+}

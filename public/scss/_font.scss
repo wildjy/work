@@ -1,0 +1,32 @@
+@use 'variable';
+
+// ─────────────────────────────────────────────────────────────
+// _font.scss — Pretendard 웹폰트
+//
+// **표준 굵기로 연결한다** — 시안의 굵기 값을 그대로 적는다(보정하지 않는다).
+//   100 Thin · 200 ExtraLight · 300 Light · 400 Regular · 500 Medium
+//   600 SemiBold · 700 Bold · 800 ExtraBold · 900 Black
+// woff2 만 쓴다(지원 브라우저 전부). 파일 : public/font/Pretendard/Pretendard-*.woff2
+// ─────────────────────────────────────────────────────────────
+
+$pretendard-weights: (
+	100: 'Thin',
+	200: 'ExtraLight',
+	300: 'Light',
+	400: 'Regular',
+	500: 'Medium',
+	600: 'SemiBold',
+	700: 'Bold',
+	800: 'ExtraBold',
+	900: 'Black',
+);
+
+@each $weight, $name in $pretendard-weights {
+	@font-face {
+		font-family: 'Pretendard';
+		font-style: normal;
+		font-weight: $weight;
+		font-display: swap;
+		src: url('#{variable.$font-path}/Pretendard-#{$name}.woff2') format('woff2');
+	}
+}

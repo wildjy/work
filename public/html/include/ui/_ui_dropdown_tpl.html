@@ -1,0 +1,12 @@
+<!-- 목록 템플릿 (listRender.js 가 JSON 을 순회해 렌더 · _ui_dropdown 과 _ui_dropdown_search 가 함께 쓴다) -->
+<template id="tpl_ui_dropdown_item">
+	<li>
+		<button type="button" class="ui-dropdown__item {{state}}" data-value="{{value}}" onclick="dropdownSelect(this)">
+			{{text}}
+		</button>
+	</li>
+</template>
+<template id="tpl_ui_dropdown_empty">
+	<li class="ui-dropdown__empty">선택할 항목이 없습니다.</li>
+</template>
+<!--// 목록 템플릿 -->

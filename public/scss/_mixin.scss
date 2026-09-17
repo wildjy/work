@@ -1,0 +1,331 @@
+@use 'sass:map';
+@use 'sass:math';
+@use 'sass:string';
+@use 'variable';
+
+// ─────────────────────────────────────────────────────────────
+// _mixin.scss — 공통 믹스인 · 함수
+//
+// 쓰는 법 : @use 'mixin';  →  @include mixin.txt-shorten;
+// ⚠ 벤더 접두어 믹스인(border-radius · rotate · appearance …)은 두지 않는다 — 속성을 그대로 쓴다.
+// ⚠ 컴포넌트 모양(입력칸 · 표 · 그림자)은 믹스인으로 만들지 않고 컴포넌트 스타일에 둔다.
+//
+// 목차
+//  1. 배치          position · clear
+//  2. 글자          font-set · txt-shorten · line-clamp · txt-anywhere · placeholder
+//  3. 숨김          blind(스크린리더는 읽음) · txt-blind(글자만 숨김)
+//  4. 스크롤        scrollbar · scroll-inset · hide-scroll
+//  5. 도형          triangle
+//  6. 배경 · 아이콘  background · icon() · background-data
+//  7. 반응형        xsmall · small · medium · large · print · calc-vw()
+// ─────────────────────────────────────────────────────────────
+
+/* ── 1. 배치 ──────────────────────────────────────────────── */
+
+// null 인 값은 출력되지 않는다
+// 예) @include mixin.position(absolute, $top: 0, $right: 0, $z-index: 10);
+// z-index 기준 : 드롭다운·달력 10 · 토스트 1000 · 모달 딤 900 / 모달 910 · 건너뛰기 링크 99999
+@mixin position($position, $top: null, $right: null, $bottom: null, $left: null, $z-index: null) {
+	position: $position;
+	top: $top;
+	right: $right;
+	bottom: $bottom;
+	left: $left;
+	z-index: $z-index;
+}
+
+@mixin clear {
+	&::after {
+		content: '';
+		display: block;
+		clear: both;
+	}
+}
+
+/* ── 2. 글자 ──────────────────────────────────────────────── */
+
+// 예) @include mixin.font-set(0.875rem, 600, variable.$gray-900);
+@mixin font-set($size, $weight: null, $color: null) {
+	font-size: $size;
+	font-weight: $weight;
+	color: $color;
+}
+
+// 한 줄 말줄임
+@mixin txt-shorten {
+	overflow: hidden;
+	text-overflow: ellipsis;
+	white-space: nowrap;
+	word-wrap: normal;
+}
+
+// 여러 줄 말줄임 — $line 줄을 넘으면 … 으로 자른다
+@mixin line-clamp($line: 2) {
+	display: -webkit-box;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	word-wrap: break-word;
+	-webkit-box-orient: vertical;
+	-webkit-line-clamp: $line;
+}
+
+// URL·영문 긴 단어가 칸을 뚫고 나갈 때
+@mixin txt-anywhere {
+	word-break: break-all;
+	overflow-wrap: anywhere;
+}
+
+// 예) input { @include mixin.placeholder(variable.$gray-300); }
+@mixin placeholder($color, $size: null, $weight: null) {
+	&::placeholder {
+		color: $color;
+		font-size: $size;
+		font-weight: $weight;
+		opacity: 1;
+	}
+}
+
+/* ── 3. 숨김 ──────────────────────────────────────────────── */
+
+// 화면에서는 숨기고 **스크린리더는 읽는다** — 아이콘 버튼의 글자, 표 caption, 폼 legend
+@mixin blind {
+	position: absolute;
+	width: 1px;
+	height: 1px;
+	margin: -1px;
+	padding: 0;
+	overflow: hidden;
+	clip: rect(0 0 0 0);
+	clip-path: inset(50%);
+	white-space: nowrap;
+	border: 0;
+}
+
+// 요소는 자리를 유지하고 **글자만** 숨긴다 — 배경 아이콘을 쓰는 버튼(크기가 정해진 경우)
+@mixin txt-blind {
+	overflow: hidden;
+	text-indent: -9999px;
+	white-space: nowrap;
+}
+
+/* ── 4. 스크롤 ────────────────────────────────────────────── */
+
+// 얇은 스크롤바 — 스크롤 영역(overflow: auto / scroll)에 함께 선언한다.
+// $thumb 기본값 #8B8B8B — gray-200/300 은 너무 흐려 잘 안 보인다.
+// 예) @include mixin.scrollbar(6px, variable.$gray-400);
+@mixin scrollbar($size: 8px, $thumb: #8b8b8b, $track: transparent) {
+	scrollbar-width: thin;
+	scrollbar-color: $thumb $track;
+	&::-webkit-scrollbar {
+		width: $size;
+		height: $size;
+	}
+	&::-webkit-scrollbar-thumb {
+		background-color: $thumb;
+		border-radius: math.div($size, 2);
+	}
+	&::-webkit-scrollbar-track {
+		background-color: $track;
+	}
+}
+
+// 세로 스크롤 영역의 우측 여백 — 스크롤바가 콘텐츠를 밀어 여백이 어긋나는 것을 막는다.
+// 「시안 여백」을 넘기면 스크롤바 폭을 빼서 잡고, gutter 를 고정해 스크롤 유무와 관계없이 같은 자리를 유지한다.
+// ⚠ 세로 스크롤에만 쓴다 · ⚠ padding 단축 선언 「뒤」에 호출한다 · ⚠ 시안 여백이 스크롤바 폭보다 좁으면 쓰지 않는다
+// 예) .box { padding: 20px 24px; overflow-y: auto; @include mixin.scroll-inset(24px); @include mixin.scrollbar(); }
+@mixin scroll-inset($right, $size: 8px) {
+	@if $right > $size {
+		padding-right: $right - $size;
+	} @else {
+		padding-right: 0;
+	}
+	scrollbar-gutter: stable;
+}
+
+// 스크롤은 되고 스크롤바만 감춘다(가로 스크롤 탭 · 칩 목록)
+@mixin hide-scroll {
+	-ms-overflow-style: none;
+	scrollbar-width: none;
+	&::-webkit-scrollbar {
+		display: none;
+	}
+}
+
+/* ── 5. 도형 ──────────────────────────────────────────────── */
+
+// CSS 삼각형 — 말풍선 꼬리 등. ::before / ::after 안에서 쓴다
+// 예) &::after { @include mixin.triangle(10px, down, variable.$gray-900); }
+@mixin triangle($base, $direction, $color) {
+	content: '';
+	display: block;
+	width: 0;
+	height: 0;
+	$half: math.div($base, 2);
+	@if $direction == up {
+		border-left: $half solid transparent;
+		border-right: $half solid transparent;
+		border-bottom: $half solid $color;
+	} @else if $direction == down {
+		border-left: $half solid transparent;
+		border-right: $half solid transparent;
+		border-top: $half solid $color;
+	} @else if $direction == left {
+		border-top: $half solid transparent;
+		border-bottom: $half solid transparent;
+		border-right: $half solid $color;
+	} @else if $direction == right {
+		border-top: $half solid transparent;
+		border-bottom: $half solid transparent;
+		border-left: $half solid $color;
+	}
+}
+
+/* ── 6. 배경 · 아이콘 ─────────────────────────────────────── */
+
+// 입고된 이미지 파일 — 경로는 「파일명만」 넘긴다($img-path 가 앞에 붙는다)
+// 예) @include mixin.background(null, 'bg_main.png', center center, cover);
+// ⚠ '../images/xxx.png' 를 넘기면 ../images/../images/xxx.png 가 되어 깨진다
+@mixin background($bg-color: null, $bg-image: null, $bg-position: null, $bg-size: null) {
+	background-color: $bg-color;
+	@if $bg-image != null {
+		background-image: url('#{variable.$img-path}/#{$bg-image}');
+	}
+	background-repeat: no-repeat;
+	background-position: $bg-position;
+	background-size: $bg-size;
+}
+
+// '#292A31' → '%23292A31' (data URI 안에서 # 은 인코딩해야 한다)
+@function data-color($color) {
+	@return '%23' + string.slice('#{$color}', 2, -1);
+}
+
+// 색을 코드에서 바꾸는 SVG 아이콘 — 아래 목록의 이름과 색을 넘긴다
+// 예) background-image: mixin.icon('close-S', variable.$gray-900);
+// ⚠ 새 아이콘은 목록에 추가한다 : Figma 에서 SVG 로 내보내 → < > # " 를 %3C %3E %23 ' 로 바꾸고,
+//   색 자리(fill · stroke)를 '#{data-color($color)}' 로 바꾼다. 색이 고정인 부분은 그대로 둔다.
+@function icon($iconName, $color: variable.$gray-900) {
+	$iconList: (
+		'arr3-down':
+			"%3Csvg width='10' height='6' viewBox='0 0 10 6' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M1 1L5 5L9 1' stroke='#{data-color($color)}' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E%0A",
+		'arr3-up':
+			"%3Csvg width='10' height='6' viewBox='0 0 10 6' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M1 5L5 1L9 5' stroke='#{data-color($color)}' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E%0A",
+		'arrow-left-S':
+			"%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12' fill='none'%3E%3Cpath d='M8 2L4 6L8 10' stroke='#{data-color($color)}' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E",
+		'arrow-right-S':
+			"%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12' fill='none'%3E%3Cpath d='M4 10L8 6L4 2' stroke='#{data-color($color)}' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E",
+		'close-S':
+			"%3Csvg width='20' height='20' viewBox='0 0 20 20' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M14 6L6 14' stroke='#{data-color($color)}' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'/%3E%3Cpath d='M6 6L14 14' stroke='#{data-color($color)}' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E%0A",
+		'close-M':
+			"%3Csvg width='24' height='24' viewBox='0 0 24 24' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M17.2002 7.20312L7.2002 17.2031' stroke='#{data-color($color)}' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'/%3E%3Cpath d='M7.2002 7.20312L17.2002 17.2031' stroke='#{data-color($color)}' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E",
+		'clear-S':
+			"%3Csvg width='20' height='20' viewBox='0 0 20 20' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Ccircle cx='10' cy='10' r='7' fill='#{data-color($color)}'/%3E%3Cpath d='M7.77783 7.77344L12.2223 12.2179' stroke='white' stroke-width='2' stroke-linecap='round'/%3E%3Cpath d='M12.2222 7.77344L7.77772 12.2179' stroke='white' stroke-width='2' stroke-linecap='round'/%3E%3C/svg%3E%0A",
+		'search1':
+			"%3Csvg width='20' height='20' viewBox='0 0 20 20' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M8.85619 14.7124C12.0905 14.7124 14.7124 12.0905 14.7124 8.85619C14.7124 5.62191 12.0905 3 8.85619 3C5.62191 3 3 5.62191 3 8.85619C3 12.0905 5.62191 14.7124 8.85619 14.7124Z' stroke='#{data-color($color)}' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'/%3E%3Cpath d='M16.9999 16.9972L13.7058 13.7031' stroke='#{data-color($color)}' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E%0A",
+		'check-S':
+			"%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 16 16' fill='none'%3E%3Cpath d='M3.00195 8.26667L6.50195 12L14.002 4' stroke='#{data-color($color)}' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E",
+		'checkbox-S':
+			"%3Csvg width='14' height='14' viewBox='0 0 14 14' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Crect x='0.5' y='0.5' width='13' height='13' rx='1.5' fill='transparent' stroke='#{data-color($color)}'/%3E%3C/svg%3E",
+		'checkbox-S-checked':
+			"%3Csvg xmlns='http://www.w3.org/2000/svg' width='14' height='14' viewBox='0 0 14 14' fill='none'%3E%3Crect x='0.8' y='0.8' width='12.4' height='12.4' rx='0.8' fill='#{data-color($color)}' stroke='#{data-color($color)}' stroke-width='1.6'/%3E%3Cpath d='M10.5 4.5L5.49999 9.5L3.5 7.5' stroke='white' stroke-width='1.6' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E",
+		'checkbox-S-disabled':
+			"%3Csvg xmlns='http://www.w3.org/2000/svg' width='14' height='14' viewBox='0 0 14 14' fill='none'%3E%3Crect x='0.8' y='0.8' width='12.4' height='12.4' rx='0.8' fill='#{data-color($color)}' stroke='#{data-color($color)}' stroke-width='1.6'/%3E%3Cpath d='M3.5 7L10.5 7' stroke='white' stroke-width='1.6' stroke-linecap='round'/%3E%3C/svg%3E",
+		'radio-M':
+			"%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='none'%3E%3Crect x='2.5' y='2.5' width='19' height='19' rx='9.5' fill='white' stroke='#{data-color($color)}'/%3E%3C/svg%3E",
+		'radio-M-checked':
+			"%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='none'%3E%3Ccircle cx='12' cy='12' r='4' fill='white'/%3E%3Crect x='5' y='5' width='14' height='14' rx='7' stroke='#{data-color($color)}' stroke-width='6'/%3E%3C/svg%3E",
+		'radio-M-disabled':
+			"%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='none'%3E%3Crect x='2' y='2' width='20' height='20' rx='10' fill='#{data-color($color)}'/%3E%3Cpath d='M7.5 12L16.5 12' stroke='white' stroke-width='2' stroke-linecap='round'/%3E%3C/svg%3E",
+		'info1':
+			"%3Csvg xmlns='http://www.w3.org/2000/svg' width='20' height='20' viewBox='0 0 20 20' fill='none'%3E%3Cpath fill-rule='evenodd' clip-rule='evenodd' d='M10 18C14.4183 18 18 14.4183 18 10C18 5.58172 14.4183 2 10 2C5.58172 2 2 5.58172 2 10C2 14.4183 5.58172 18 10 18ZM11 6.5C11 7.05228 10.5523 7.5 10 7.5C9.44772 7.5 9 7.05228 9 6.5C9 5.94772 9.44772 5.5 10 5.5C10.5523 5.5 11 5.94772 11 6.5ZM9.8335 8.95801C10.3858 8.95801 10.8335 9.40572 10.8335 9.95801V13.458C10.8335 14.0103 10.3858 14.458 9.8335 14.458C9.28121 14.458 8.8335 14.0103 8.8335 13.458V9.95801C8.8335 9.40572 9.28121 8.95801 9.8335 8.95801Z' fill='#{data-color($color)}'/%3E%3C/svg%3E",
+		'info1-line':
+			"%3Csvg xmlns='http://www.w3.org/2000/svg' width='20' height='20' viewBox='0 0 20 20' fill='none'%3E%3Ccircle cx='10' cy='10' r='7.25' stroke='#{data-color($color)}' stroke-width='1.5'/%3E%3Cpath d='M9.8335 9.95801V13.458' stroke='#{data-color($color)}' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'/%3E%3Ccircle cx='10' cy='6.5' r='1' fill='#{data-color($color)}'/%3E%3C/svg%3E",
+		'error':
+			"%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='none'%3E%3Cpath fill-rule='evenodd' clip-rule='evenodd' d='M20 12C20 16.4183 16.4183 20 12 20C7.58172 20 4 16.4183 4 12C4 7.58172 7.58172 4 12 4C16.4183 4 20 7.58172 20 12ZM13 15.5C13 16.0523 12.5523 16.5 12 16.5C11.4477 16.5 11 16.0523 11 15.5C11 14.9477 11.4477 14.5 12 14.5C12.5523 14.5 13 14.9477 13 15.5ZM13 8.5C13 7.94772 12.5523 7.5 12 7.5C11.4477 7.5 11 7.94772 11 8.5V12.5C11 13.0523 11.4477 13.5 12 13.5C12.5523 13.5 13 13.0523 13 12.5V8.5Z' fill='#{data-color($color)}'/%3E%3C/svg%3E",
+		'success':
+			"%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='none'%3E%3Cpath fill-rule='evenodd' clip-rule='evenodd' d='M12 20C16.4183 20 20 16.4183 20 12C20 7.58172 16.4183 4 12 4C7.58172 4 4 7.58172 4 12C4 16.4183 7.58172 20 12 20ZM16.0642 10.7071C16.4548 10.3166 16.4548 9.68342 16.0642 9.29289C15.6737 8.90237 15.0406 8.90237 14.65 9.29289L11.1786 12.7644L9.70711 11.2929C9.31658 10.9024 8.68342 10.9024 8.29289 11.2929C7.90237 11.6834 7.90237 12.3166 8.29289 12.7071L10.4715 14.8857C10.659 15.0732 10.9134 15.1786 11.1786 15.1786C11.4438 15.1786 11.6981 15.0732 11.8857 14.8857L16.0642 10.7071Z' fill='#{data-color($color)}'/%3E%3C/svg%3E",
+		'caution':
+			"%3Csvg xmlns='http://www.w3.org/2000/svg' width='20' height='20' viewBox='0 0 20 20' fill='none'%3E%3Cpath d='M8.5765 3.3925L1.5471 15.25C1.397 15.5099 1.3177 15.8046 1.3169 16.1047C1.316 16.4048 1.3937 16.6999 1.5424 16.9606C1.691 17.2213 1.9053 17.4385 2.1639 17.5908C2.4225 17.7431 2.7164 17.8251 3.0165 17.8285H17.0753C17.3754 17.8251 17.6693 17.7431 17.9279 17.5908C18.1865 17.4385 18.4008 17.2213 18.5494 16.9606C18.6981 16.6999 18.7758 16.4048 18.7749 16.1047C18.7741 15.8046 18.6948 15.5099 18.5447 15.25L11.5153 3.3925C11.3621 3.1399 11.1465 2.931 10.8892 2.7861C10.6319 2.6412 10.3416 2.5651 10.0459 2.5651C9.7502 2.5651 9.4599 2.6412 9.2026 2.7861C8.9453 2.931 8.7297 3.1399 8.5765 3.3925Z' stroke='#{data-color($color)}' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'/%3E%3Cpath d='M10.0459 7.5554V10.8888' stroke='#{data-color($color)}' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'/%3E%3Cpath d='M10.0459 14.2222H10.0542' stroke='#{data-color($color)}' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E%0A",
+		'plus-S':
+			"%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12' fill='none'%3E%3Crect x='1' y='5' width='10' height='1.5' rx='0.75' fill='#{data-color($color)}'/%3E%3Crect x='6.80005' y='1' width='10' height='1.5' rx='0.75' transform='rotate(90 6.80005 1)' fill='#{data-color($color)}'/%3E%3C/svg%3E",
+		'minus-S':
+			"%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12' fill='none'%3E%3Crect x='1' y='5' width='10' height='1.5' rx='0.75' fill='#{data-color($color)}'/%3E%3C/svg%3E",
+		'more1':
+			"%3Csvg width='12' height='3' viewBox='0 0 12 3' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M3 1.75C3 2.44036 2.44036 3 1.75 3C1.05964 3 0.5 2.44036 0.5 1.75C0.5 1.05964 1.05964 0.5 1.75 0.5C2.44036 0.5 3 1.05964 3 1.75Z' fill='#{data-color($color)}'/%3E%3Cpath d='M7.5 1.75C7.5 2.44036 6.94036 3 6.25 3C5.55964 3 5 2.44036 5 1.75C5 1.05964 5.55964 0.5 6.25 0.5C6.94036 0.5 7.5 1.05964 7.5 1.75Z' fill='#{data-color($color)}'/%3E%3Cpath d='M12 1.75C12 2.44036 11.4404 3 10.75 3C10.0596 3 9.5 2.44036 9.5 1.75C9.5 1.05964 10.0596 0.5 10.75 0.5C11.4404 0.5 12 1.05964 12 1.75Z' fill='#{data-color($color)}'/%3E%3C/svg%3E%0A",
+		'cal':
+			"%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 16 16' fill='none'%3E%3Cpath d='M5 1.5V4.25' stroke='#{data-color($color)}' stroke-linecap='round'/%3E%3Cpath d='M11 1.5V4.25' stroke='#{data-color($color)}' stroke-linecap='round'/%3E%3Crect x='2' y='2.75' width='12' height='11' rx='1.5' stroke='#{data-color($color)}'/%3E%3Cpath d='M2 6.5H14' stroke='#{data-color($color)}'/%3E%3C/svg%3E",
+		'time':
+			"%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 16 16' fill='none'%3E%3Cpath d='M1.5 8C1.5 8.85359 1.66813 9.69883 1.99478 10.4874C2.32144 11.2761 2.80022 11.9926 3.40381 12.5962C4.00739 13.1998 4.72394 13.6786 5.51256 14.0052C6.30117 14.3319 7.14641 14.5 8 14.5C8.85359 14.5 9.69883 14.3319 10.4874 14.0052C11.2761 13.6786 11.9926 13.1998 12.5962 12.5962C13.1998 11.9926 13.6786 11.2761 14.0052 10.4874C14.3319 9.69883 14.5 8.85359 14.5 8C14.5 6.27609 13.8152 4.62279 12.5962 3.40381C11.3772 2.18482 9.72391 1.5 8 1.5C6.27609 1.5 4.62279 2.18482 3.40381 3.40381C2.18482 4.62279 1.5 6.27609 1.5 8Z' stroke='#{data-color($color)}' stroke-linecap='round' stroke-linejoin='round'/%3E%3Cpath d='M8 4.38965V8.00076L10.1667 10.1674' stroke='#{data-color($color)}' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E",
+		'eye-S-view':
+			"%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 16 16' fill='none'%3E%3Cpath d='M8.00033 6C7.46989 6 6.96118 6.21071 6.58611 6.58579C6.21104 6.96086 6.00033 7.46957 6.00033 8C6.00033 8.53043 6.21104 9.03914 6.58611 9.41421C6.96118 9.78929 7.46989 10 8.00033 10C8.53076 10 9.03947 9.78929 9.41454 9.41421C9.78961 9.03914 10.0003 8.53043 10.0003 8C10.0003 7.46957 9.78961 6.96086 9.41454 6.58579C9.03947 6.21071 8.53076 6 8.00033 6ZM8.00033 11.3333C7.11627 11.3333 6.26842 10.9821 5.6433 10.357C5.01818 9.7319 4.66699 8.88406 4.66699 8C4.66699 7.11595 5.01818 6.2681 5.6433 5.64298C6.26842 5.01786 7.11627 4.66667 8.00033 4.66667C8.88438 4.66667 9.73223 5.01786 10.3573 5.64298C10.9825 6.2681 11.3337 7.11595 11.3337 8C11.3337 8.88406 10.9825 9.7319 10.3573 10.357C9.73223 10.9821 8.88438 11.3333 8.00033 11.3333ZM8.00033 3C4.66699 3 1.82033 5.07333 0.666992 8C1.82033 10.9267 4.66699 13 8.00033 13C11.3337 13 14.1803 10.9267 15.3337 8C14.1803 5.07333 11.3337 3 8.00033 3Z' fill='#{data-color($color)}'/%3E%3C/svg%3E",
+		'eye-S-close':
+			"%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 16 16' fill='none'%3E%3Cpath d='M7.88699 6L10.0003 8.10667V8C10.0003 7.46957 9.78961 6.96086 9.41454 6.58579C9.03947 6.21071 8.53076 6 8.00033 6H7.88699ZM5.02033 6.53333L6.05366 7.56667C6.02033 7.70667 6.00033 7.84667 6.00033 8C6.00033 8.53043 6.21104 9.03914 6.58611 9.41421C6.96118 9.78929 7.46989 10 8.00033 10C8.14699 10 8.29366 9.98 8.43366 9.94667L9.46699 10.98C9.02033 11.2 8.52699 11.3333 8.00033 11.3333C7.11627 11.3333 6.26842 10.9821 5.6433 10.357C5.01818 9.7319 4.66699 8.88406 4.66699 8C4.66699 7.47333 4.80033 6.98 5.02033 6.53333ZM1.33366 2.84667L2.85366 4.36667L3.15366 4.66667C2.05366 5.53333 1.18699 6.66667 0.666992 8C1.82033 10.9267 4.66699 13 8.00033 13C9.03366 13 10.0203 12.8 10.9203 12.44L11.207 12.72L13.1537 14.6667L14.0003 13.82L2.18033 2M8.00033 4.66667C8.88438 4.66667 9.73223 5.01786 10.3573 5.64298C10.9825 6.2681 11.3337 7.11595 11.3337 8C11.3337 8.42667 11.247 8.84 11.0937 9.21333L13.047 11.1667C14.047 10.3333 14.847 9.24 15.3337 8C14.1803 5.07333 11.3337 3 8.00033 3C7.06699 3 6.17366 3.16667 5.33366 3.46667L6.78033 4.9C7.16033 4.75333 7.56699 4.66667 8.00033 4.66667Z' fill='#{data-color($color)}'/%3E%3C/svg%3E",
+		'link':
+			"%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 16 16' fill='none'%3E%3Cpath d='M9 7L14 2M14 2H10.6667M14 2V5.33333M14 9.33333V12.6667C14 13.0203 13.8595 13.3594 13.6095 13.6095C13.3594 13.8595 13.0203 14 12.6667 14H3.33333C2.97971 14 2.64057 13.8595 2.39052 13.6095C2.14048 13.3594 2 13.0203 2 12.6667V3.33333C2 2.97971 2.14048 2.64057 2.39052 2.39052C2.64057 2.14048 2.97971 2 3.33333 2H6.66667' stroke='#{data-color($color)}' stroke-width='1.4' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E",
+		'copy1':
+			"%3Csvg xmlns='http://www.w3.org/2000/svg' width='13' height='13' viewBox='0 0 13 13' fill='none'%3E%3Cpath d='M9.00012 1H2C1.44772 1 1 1.44772 1 2V9.6668' stroke='#{data-color($color)}' stroke-width='1.4' stroke-linecap='round' stroke-linejoin='round'/%3E%3Crect x='3.70049' y='3.69685' width='8.60016' height='8.60016' rx='1.3' stroke='#{data-color($color)}' stroke-width='1.4'/%3E%3C/svg%3E",
+		'delete1':
+			"%3Csvg xmlns='http://www.w3.org/2000/svg' width='14' height='16' viewBox='0 0 14 16' fill='none'%3E%3Cpath d='M6.99731 0.941406L6.99731 2.84186' stroke='#{data-color($color)}' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'/%3E%3Cpath d='M0.821533 3.31641L13.1745 3.31641' stroke='#{data-color($color)}' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'/%3E%3Cpath d='M2.72144 3.58789V12.8412C2.72144 13.9457 3.61687 14.8412 4.72144 14.8412H9.27347C10.378 14.8412 11.2735 13.9457 11.2735 12.8412V3.58789' stroke='#{data-color($color)}' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'/%3E%3Cpath d='M5.76245 6.67676V11.6179' stroke='#{data-color($color)}' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'/%3E%3Cpath d='M8.23315 6.67676V11.6179' stroke='#{data-color($color)}' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E",
+		'edit':
+			"%3Csvg width='13' height='16' viewBox='0 0 13 16' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M11 0.5C12.1046 0.5 13 1.39543 13 2.5V13.5C13 14.6046 12.1046 15.5 11 15.5H2C0.89543 15.5 0 14.6046 0 13.5V2.5C0 1.39543 0.895431 0.5 2 0.5H11Z' fill='#{data-color($color)}'/%3E%3Crect x='3' y='4.5' width='7' height='1.2' rx='0.6' fill='white'/%3E%3Crect x='3' y='7.69922' width='7' height='1.2' rx='0.6' fill='white'/%3E%3Crect x='3' y='10.8984' width='7' height='1.2' rx='0.6' fill='white'/%3E%3C/svg%3E%0A",
+	);
+	@if not map.has-key($iconList, $iconName) {
+		@error 'icon() : 목록에 없는 아이콘 — #{$iconName}';
+	}
+	@return url('data:image/svg+xml;charset=utf8,#{map.get($iconList, $iconName)}');
+}
+
+// 아이콘 배경 한 번에
+// 예) .ui-modal__close { @include mixin.background-data('close-M', variable.$gray-900, null, center, 24px); }
+@mixin background-data($iconName, $color, $bg-color: null, $bg-position: null, $bg-size: null) {
+	background-color: $bg-color;
+	@if $iconName != null {
+		background-image: icon($iconName, $color);
+	}
+	background-repeat: no-repeat;
+	background-position: $bg-position;
+	background-size: $bg-size;
+}
+
+/* ── 7. 반응형 ────────────────────────────────────────────── */
+
+// 이하(max-width) 기준 — 큰 화면 스타일을 먼저 쓰고 작은 화면을 덮는다
+// 예) .box { padding: 40px; @include mixin.small { padding: 20px; } }
+@mixin xsmall {
+	@media (max-width: #{variable.$breakpoint-xsmall}) {
+		@content;
+	}
+}
+@mixin small {
+	@media (max-width: #{variable.$breakpoint-small}) {
+		@content;
+	}
+}
+@mixin medium {
+	@media (max-width: #{variable.$breakpoint-medium}) {
+		@content;
+	}
+}
+@mixin large {
+	@media (max-width: #{variable.$breakpoint-large}) {
+		@content;
+	}
+}
+
+@mixin print {
+	@media print {
+		@content;
+	}
+}
+
+// 단위를 떼어낸다 — px · vw 어느 쪽을 넘겨도 계산되게
+@function strip-unit($value) {
+	@return math.div($value, $value * 0 + 1);
+}
+
+// $px 를 $base 뷰포트 너비 기준 vw 로 변환
+// 예) mixin.calc-vw(24)                              → 6.4vw (375px 기준)
+//     mixin.calc-vw(24, variable.$breakpoint-small)  → 3.2vw (750px 기준)
+@function calc-vw($px, $base: variable.$breakpoint-xsmall) {
+	@return math.div(strip-unit($px), strip-unit($base)) * 100vw;
+}

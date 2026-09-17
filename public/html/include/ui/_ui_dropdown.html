@@ -1,0 +1,15 @@
+<!-- 공통 드롭다운 — 받는 값 : data-items(JSON 경로 · 필수) · data-placeholder · data-modifier -->
+<div class="ui-dropdown {{modifier|}}">
+	<button type="button" class="ui-dropdown__btn is-placeholder" onclick="toggleMenu(this)">
+		{{placeholder|선택해주세요.}}
+	</button>
+	<div class="ui-dropdown__list" hidden>
+		<ul
+			class="dynamic-list"
+			data-source="{{items}}"
+			data-template="#tpl_ui_dropdown_item"
+			data-empty="#tpl_ui_dropdown_empty"
+		></ul>
+	</div>
+</div>
+<div class="dynamic-content" data-source="./include/ui/_ui_dropdown_tpl.html"></div>

@@ -1,0 +1,16 @@
+<!-- 공통 날짜 입력 — 받는 값 : data-id(필수) · data-name · data-placeholder · data-value -->
+<!--@ 달력은 jQuery UI 가 그린다 — 이 파셜을 쓰는 페이지는 jquery · jquery-ui 를 불러야 한다 -->
+<div class="ui-field">
+	<div class="ui-input ui-input--date">
+		<input
+			type="text"
+			id="{{id}}"
+			name="{{name|}}"
+			placeholder="{{placeholder|날짜를 선택해주세요.}}"
+			value="{{value|}}"
+			autocomplete="off"
+			data-datepicker-day
+		/>
+		<button type="button" class="ui-input__clear">지우기</button>
+	</div>
+</div>

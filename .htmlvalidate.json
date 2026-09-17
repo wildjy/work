@@ -1,0 +1,18 @@
+{
+  "$schema": "https://html-validate.org/schemas/config.json",
+  "extends": ["html-validate:recommended"],
+  "rules": {
+    "doctype-style": "off",
+    "void-style": "off",
+    "no-inline-style": "off",
+    "no-trailing-whitespace": "off",
+    "no-implicit-button-type": "warn",
+    "prefer-tbody": "warn",
+    "unique-landmark": "warn",
+    "wcag/h30": "warn",
+    "wcag/h32": "warn",
+    "wcag/h37": "warn",
+    "wcag/h63": "warn",
+    "text-content": "warn"
+  }
+}

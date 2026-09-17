@@ -1,0 +1,21 @@
+<!-- 공통 아코디언 — 받는 값 : data-items(JSON 경로 · 필수) · data-mode(single 하나만 열림 · multiple 여러 개) -->
+<div class="ui-accordion" data-accordion="{{mode|single}}">
+	<ul
+		class="dynamic-list"
+		data-source="{{items}}"
+		data-template="#tpl_ui_accordion_item"
+		data-empty="#tpl_ui_accordion_empty"
+	></ul>
+</div>
+
+<!-- 목록 템플릿 (listRender.js 가 JSON 을 순회해 렌더 · 필드 title · body(HTML) · state) -->
+<template id="tpl_ui_accordion_item">
+	<li class="ui-accordion__item {{state}}">
+		<button type="button" class="ui-accordion__head" aria-expanded="false">{{title}}</button>
+		<div class="ui-accordion__body" hidden>{{{body}}}</div>
+	</li>
+</template>
+<template id="tpl_ui_accordion_empty">
+	<li class="ui-accordion__empty">등록된 내용이 없습니다.</li>
+</template>
+<!--// 목록 템플릿 -->

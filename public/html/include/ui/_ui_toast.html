@@ -1,0 +1,6 @@
+<!-- 공통 토스트 — 받는 값 : data-id(필수) · data-text · data-type(success · error) -->
+<!--@ 페이지 끝에 둔다. 띄우기 : data-toast="아이디" 버튼 또는 toastShow('아이디') -->
+<div class="ui-toast ui-toast--{{type|success}}" id="{{id}}" role="status" aria-live="polite" hidden>
+	<span class="ui-toast__icon"></span>
+	<p class="ui-toast__text">{{text|처리되었습니다.}}</p>
+</div>

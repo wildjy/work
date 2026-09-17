@@ -1,0 +1,157 @@
+// ─────────────────────────────────────────────────────────────
+// _variable.scss — 디자인 토큰 (폰트 · 경로 · 색 · 브레이크포인트)
+//
+// ⚠ 색은 **이 파일의 토큰만** 쓴다. 스타일에 HEX 를 직접 적지 않는다.
+//   시안 색이 토큰에 없으면 작업 전에 작업자에게 묻는다(가장 가까운 토큰으로 조용히 바꾸지 않는다).
+// ⚠ 폰트 굵기는 **시안 값 그대로** 적는다(_font.scss 가 표준 굵기로 연결한다).
+// ─────────────────────────────────────────────────────────────
+
+//**** FONT ****/
+$font-family-base: 'Pretendard', 'Apple SD Gothic Neo', 'Malgun Gothic', 'Dotum', sans-serif;
+$font-size-base: 1rem;
+$font-weight-base: 400;
+$letter-spacing-base: -0.016em;
+
+//**** PATH ****/ — 컴파일된 css 기준(public/css → public/font · public/images)
+$font-path: '../font/Pretendard';
+$img-path: '../images';
+
+//**** COLOR ****/
+$white: #ffffff;
+$black: #000000;
+
+$gray-10: #f9f9fa;
+$gray-50: #f0f0f1;
+$gray-100: #e1e1e3;
+$gray-200: #d2d2d6;
+$gray-300: #b4b4bb;
+$gray-400: #9e96a0;
+$gray-500: #787885;
+$gray-600: #5a5b6a;
+$gray-700: #4a4b57;
+$gray-800: #3a3a44;
+$gray-900: #292a31;
+$gray-1000: #19191d;
+
+$blue-10: #f6f9ff;
+$blue-50: #ebf2ff;
+$blue-100: #d8e6ff;
+$blue-200: #c4daff;
+$blue-300: #9dc2ff;
+$blue-400: #76a9ff;
+$blue-500: #4f91ff;
+$blue-600: #2979ff;
+$blue-700: #2264d1;
+$blue-800: #1b4ea3;
+$blue-900: #133774;
+$blue-1000: #0c2146;
+
+$green-10: #f7fbf6;
+$green-50: #edf6ee;
+$green-100: #dceddd;
+$green-200: #cbe5cc;
+$green-300: #a9d3ab;
+$green-400: #87c289;
+$green-500: #65b168;
+$green-600: #43a047;
+$green-700: #37833b;
+$green-800: #2b662e;
+$green-900: #1f4921;
+$green-1000: #132c14;
+
+$yellow-10: #fffcf6;
+$yellow-50: #fff8ea;
+$yellow-100: #fff1d6;
+$yellow-200: #ffeac1;
+$yellow-300: #ffdc99;
+$yellow-400: #ffcf70;
+$yellow-500: #ffc147;
+$yellow-600: #ffb41f;
+$yellow-700: #d1941a;
+$yellow-800: #a37314;
+$yellow-900: #74520f;
+$yellow-1000: #463209;
+
+$red-10: #fff7f7;
+$red-50: #feedec;
+$red-100: #fddcda;
+$red-200: #fccbc8;
+$red-300: #faa9a3;
+$red-400: #f8877f;
+$red-500: #f6655a;
+$red-600: #f44336;
+$red-700: #c8372d;
+$red-800: #9c2b23;
+$red-900: #6f1f19;
+$red-1000: #43130f;
+
+$indigo-10: #f8f9fd;
+$indigo-50: #f0f1f9;
+$indigo-100: #e1e4f3;
+$indigo-200: #d2d6ed;
+$indigo-300: #b4bbe2;
+$indigo-400: #97a0d6;
+$indigo-500: #7985cb;
+$indigo-600: #5c6bc0;
+$indigo-700: #4c589e;
+$indigo-800: #3b457b;
+$indigo-900: #2a3158;
+$indigo-1000: #1a1e35;
+
+$teal-10: #f5fbfb;
+$teal-50: #e8f5f5;
+$teal-100: #d1ebec;
+$teal-200: #bbe2e2;
+$teal-300: #8dcfcf;
+$teal-400: #60bcbc;
+$teal-500: #33a9a9;
+$teal-600: #069697;
+$teal-700: #057b7c;
+$teal-800: #046061;
+$teal-900: #034545;
+$teal-1000: #02292a;
+
+$orange-10: #fffaf4;
+$orange-50: #fef3e7;
+$orange-100: #fee8d0;
+$orange-200: #fddcb9;
+$orange-300: #fdc68b;
+$orange-400: #fcaf5c;
+$orange-500: #fb982e;
+$orange-600: #fb8200;
+$orange-700: #ce6b00;
+$orange-800: #a05300;
+$orange-900: #733c00;
+$orange-1000: #452400;
+
+$pink-10: #fef7f9;
+$pink-50: #fdedf2;
+$pink-100: #fbdce6;
+$pink-200: #f9cada;
+$pink-300: #f6a8c2;
+$pink-400: #f285aa;
+$pink-500: #ef6292;
+$pink-600: #ec407a;
+$pink-700: #c23564;
+$pink-800: #97294e;
+$pink-900: #6c1e38;
+$pink-1000: #411222;
+
+$brand-10: #f4fbf4;
+$brand-50: #eafce7;
+$brand-100: #ccf5c2;
+$brand-200: #a7ee9a;
+$brand-300: #7de66d;
+$brand-400: #53e046;
+$brand-500: #00d90e;
+$brand-600: #00b80c;
+$brand-700: #00990a;
+$brand-800: #007a08;
+$brand-900: #005c06;
+$brand-1000: #003d04;
+
+//**** BREAKPOINT ****/ — 이하(max-width) 기준. 믹스인 mixin.xsmall / small / medium / large 로 쓴다
+$breakpoint-xsmall: 375px;
+$breakpoint-small: 750px;
+$breakpoint-medium: 1000px;
+$breakpoint-large: 1280px;

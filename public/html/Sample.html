@@ -1,0 +1,174 @@
+<!doctype html>
+<html lang="ko">
+	<head>
+		<meta charset="utf-8" />
+		<meta name="viewport" content="width=device-width,initial-scale=1.0" />
+		<title>[개발 확인용] 파셜 · 목록 · 0건 샘플</title>
+		<link rel="stylesheet" href="../css/common.css" />
+		<script src="../js/dynamicImport.js"></script>
+		<script src="../js/listRender.js"></script>
+		<script src="../js/common.js"></script>
+		<!-- 날짜 · 기간 달력용 -->
+		<script src="../js/jquery-3.7.1.min.js"></script>
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.13.2/jquery-ui.min.js"></script>
+	</head>
+
+	<body>
+		<div class="dynamic-content" data-source="./include/ui/_ui_lnb.html"></div>
+
+		<!-- 파셜 include + 파셜 변수 (data-page-title → {{pageTitle}}) -->
+		<div class="dynamic-content" data-source="./include/common/_header.html" data-page-title="파셜 · 목록 샘플"></div>
+
+		<main>
+			<!-- 목록 : 데이터 있음 -->
+			<h2>회원 목록</h2>
+			<table>
+				<thead>
+					<tr>
+						<th>No</th>
+						<th>이름</th>
+						<th>이메일</th>
+					</tr>
+				</thead>
+				<tbody
+					class="dynamic-list"
+					data-source="../data/common/sample_list.json"
+					data-template="#tpl_sample_row"
+					data-empty="#tpl_sample_row_none"
+				></tbody>
+			</table>
+
+			<!-- 목록 : 0건 (같은 템플릿 · 빈 JSON) -->
+			<h2>회원 목록 (0건)</h2>
+			<table>
+				<thead>
+					<tr>
+						<th>No</th>
+						<th>이름</th>
+						<th>이메일</th>
+					</tr>
+				</thead>
+				<tbody
+					class="dynamic-list"
+					data-source="../data/common/sample_list_empty.json"
+					data-template="#tpl_sample_row"
+					data-empty="#tpl_sample_row_none"
+				></tbody>
+			</table>
+
+			<!-- 공통 UI 파셜 -->
+			<h2>공통 UI 파셜</h2>
+			<h3>드롭다운</h3>
+			<div
+				class="dynamic-content"
+				data-source="./include/ui/_ui_dropdown.html"
+				data-items="../data/ui/sample_options.json"
+				data-placeholder="정렬을 선택해주세요."
+			></div>
+			<h3>드롭다운 (0건)</h3>
+			<div
+				class="dynamic-content"
+				data-source="./include/ui/_ui_dropdown.html"
+				data-items="../data/ui/empty.json"
+			></div>
+			<h3>검색 드롭다운</h3>
+			<div
+				class="dynamic-content"
+				data-source="./include/ui/_ui_dropdown_search.html"
+				data-items="../data/ui/sample_options.json"
+				data-placeholder="회사명을 검색해주세요."
+			></div>
+			<h3>입력</h3>
+			<div
+				class="dynamic-content"
+				data-source="./include/ui/_ui_input.html"
+				data-id="sample_email"
+				data-placeholder="이메일을 입력해주세요."
+			></div>
+			<h3>입력 (오류 안내)</h3>
+			<div
+				class="dynamic-content"
+				data-source="./include/ui/_ui_input.html"
+				data-id="sample_birth"
+				data-value="1999"
+				data-modifier="is-error"
+				data-helper="생년월일 8자리를 입력해주세요."
+				data-helper-type="ui-helper--error"
+			></div>
+			<h3>수량 스테퍼</h3>
+			<div
+				class="dynamic-content"
+				data-source="./include/ui/_ui_stepper.html"
+				data-id="sample_count"
+				data-value="1"
+				data-min="1"
+				data-max="3"
+			></div>
+
+			<h3>탭 (파셜 없음 — 직접 마크업)</h3>
+			<div class="ui-tab">
+				<div class="ui-tab__list" role="tablist">
+					<button type="button" class="ui-tab__btn is-active" role="tab" data-tab="basic">기본 정보</button>
+					<button type="button" class="ui-tab__btn" role="tab" data-tab="detail">상세 정보</button>
+				</div>
+				<div class="ui-tab__panel" role="tabpanel" data-tab="basic">기본 정보 패널</div>
+				<div class="ui-tab__panel" role="tabpanel" data-tab="detail" hidden>상세 정보 패널</div>
+			</div>
+			<h3>아코디언</h3>
+			<div
+				class="dynamic-content"
+				data-source="./include/ui/_ui_accordion.html"
+				data-items="../data/ui/sample_accordion.json"
+			></div>
+			<h3>아코디언 (0건)</h3>
+			<div
+				class="dynamic-content"
+				data-source="./include/ui/_ui_accordion.html"
+				data-items="../data/ui/empty.json"
+			></div>
+			<h3>날짜</h3>
+			<div class="dynamic-content" data-source="./include/ui/_ui_date.html" data-id="sample_date"></div>
+			<h3>기간</h3>
+			<div class="dynamic-content" data-source="./include/ui/_ui_period.html" data-id="sample_period"></div>
+			<h3>토스트 · 확인창</h3>
+			<button type="button" data-toast="sample_toast">토스트 띄우기</button>
+			<button type="button" data-modal-open="sample_confirm">확인창 열기</button>
+
+			<!--@ 이메일 인증 전 회원에게만 노출 -->
+			<p>인증 대기 {{<em>3명</em>}}</p>
+		</main>
+
+		<!-- 파셜 : 기본값 사용 (data-page-title 을 넘기지 않음) -->
+		<div class="dynamic-content" data-source="./include/common/_header.html"></div>
+
+		<div
+			class="dynamic-content"
+			data-source="./include/ui/_ui_toast.html"
+			data-id="sample_toast"
+			data-text="저장되었습니다."
+		></div>
+		<div
+			class="dynamic-content"
+			data-source="./include/ui/_ui_modal_confirm.html"
+			data-id="sample_confirm"
+			data-title="이벤트를 삭제하시겠습니까?"
+			data-text="삭제한 이벤트는 복구할 수 없습니다."
+			data-confirm="삭제"
+		></div>
+
+		<!-- 목록 템플릿 (listRender.js 가 JSON 을 순회해 렌더) -->
+		<template id="tpl_sample_row">
+			<tr>
+				<td>{{@number}}</td>
+				<td>{{name}}</td>
+				<td>{{email}}</td>
+			</tr>
+		</template>
+		<template id="tpl_sample_row_none">
+			<tr>
+				<td colspan="3" class="tbl_empty">등록된 회원이 없습니다.</td>
+			</tr>
+		</template>
+		<!--// 목록 템플릿 -->
+	</body>
+</html>

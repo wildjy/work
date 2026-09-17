@@ -1,0 +1,179 @@
+<!doctype html>
+<html lang="ko">
+	<head>
+		<meta charset="utf-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>HTML LIST</title>
+		<script>
+			/* 작업 목록 — 검수자는 이 표의 날짜만 보고 이번 작업 범위를 판단한다.
+			 *
+			 *   viewlist('제목', 'create_date', './prerender/파일.html', '비고', 'update_date', '작성자');
+			 *
+			 *   신규 페이지      : create_date · update_date 둘 다 만든 날
+			 *   화면이 달라짐    : update_date 만 고친 날
+			 *   구조 정리만 함   : 손대지 않는다(렌더 결과가 같으므로)
+			 *
+			 * ⚠ 링크는 원본(./html/)이 아니라 산출물(./prerender/)이다 — npm run prerender 를 먼저 돌린다.
+			 */
+
+			// ▼ 이 날짜 이후 update_date 를 가진 행을 강조한다. 검수 차수가 바뀌면 이 한 줄만 고친다.
+			var HIGHLIGHT_FROM = '2026-09-17';
+
+			var no = 0;
+
+			function row(cls, title, date, url, dev, up, writer) {
+				no = no + 1;
+				document.write(
+					'<tr class="' +
+						cls +
+						'">' +
+						'<td class="c">' +
+						no +
+						'</td>' +
+						'<td><a href="' +
+						url +
+						'" target="_blank">' +
+						title +
+						'</a></td>' +
+						'<td class="url"><a href="' +
+						url +
+						'" target="_blank">' +
+						url +
+						'</a></td>' +
+						'<td class="c">' +
+						date +
+						'</td>' +
+						'<td class="c up">' +
+						up +
+						'</td>' +
+						'<td class="c">' +
+						dev +
+						'</td>' +
+						'<td class="c">' +
+						writer +
+						'</td>' +
+						'</tr>',
+				);
+			}
+
+			function viewlist(title, date, url, dev, up, writer) {
+				row(up && up >= HIGHLIGHT_FROM ? 'bg1' : '', title, date, url, dev, up, writer);
+			}
+
+			// 폐기·보류된 화면
+			function viewlistDisable(title, date, url, dev, up, writer) {
+				row('bg_disable', title, date, url, dev, up, writer);
+			}
+
+			function viewtitle(title) {
+				document.write(
+					'<tr><td colspan="7" class="linetitle" id="' +
+						title +
+						'"><a href="#top" class="top">top</a><strong>' +
+						title +
+						'</strong></td></tr>',
+				);
+			}
+		</script>
+		<style>
+			body {
+				margin: 0;
+				padding: 0 16px 50px;
+				background: #fff;
+				font-family: sans-serif;
+			}
+			h1 {
+				margin: 40px 0 16px;
+				text-align: center;
+				font-size: 22px;
+			}
+			a {
+				color: #333;
+				text-decoration: none;
+				font-size: 12px;
+			}
+			a:hover {
+				text-decoration: underline;
+			}
+			table {
+				width: 100%;
+				table-layout: fixed;
+				border-collapse: collapse;
+				border: 1px solid #d8d8d8;
+			}
+			th,
+			td {
+				padding: 4px 6px;
+				border: 1px solid #d8d8d8;
+				font-size: 12px;
+				color: #333;
+			}
+			th {
+				background: #efefef;
+				font-size: 11px;
+			}
+			td.c {
+				text-align: center;
+			}
+			td.up {
+				color: blue;
+			}
+			td.url {
+				white-space: nowrap;
+				overflow: hidden;
+				text-overflow: ellipsis;
+			}
+			tr:hover td {
+				background: #f5f8ff;
+			}
+			tr.bg1 td {
+				background: #ffe6f0;
+			}
+			tr.bg_disable td,
+			tr.bg_disable a {
+				color: #bbb;
+			}
+			.linetitle {
+				padding: 8px;
+				background: #555;
+			}
+			.linetitle strong {
+				color: #fff;
+				font-size: 13px;
+			}
+			.linetitle .top {
+				float: right;
+				color: #ddd;
+			}
+		</style>
+	</head>
+
+	<body>
+		<h1 id="top">HTML LIST</h1>
+		<table>
+			<colgroup>
+				<col style="width: 40px" />
+				<col style="width: 26%" />
+				<col />
+				<col style="width: 90px" />
+				<col style="width: 90px" />
+				<col style="width: 90px" />
+				<col style="width: 70px" />
+			</colgroup>
+			<tr>
+				<th>No</th>
+				<th>제목</th>
+				<th>URL</th>
+				<th>작성일</th>
+				<th>수정일</th>
+				<th>비고</th>
+				<th>작성자</th>
+			</tr>
+			<script>
+				viewtitle('개발 확인용');
+				// base 동작 확인용 — 실제 화면을 만들기 시작하면 이 줄과 Sample 파일들을 지운다
+				viewlist('[개발 확인용] 파셜 · 목록 · 0건 샘플', '2026-09-17', './prerender/Sample.html', '', '2026-09-17', '');
+			</script>
+		</table>
+	</body>
+</html>

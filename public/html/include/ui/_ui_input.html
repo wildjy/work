@@ -1,0 +1,9 @@
+<!-- 공통 입력 — 받는 값 : data-id(필수) · data-name · data-type · data-placeholder · data-value · data-modifier · data-helper · data-helper-type -->
+<div class="ui-field">
+	<div class="ui-input {{modifier|}}">
+		<input type="{{type|text}}" id="{{id}}" name="{{name|}}" placeholder="{{placeholder|}}" value="{{value|}}" />
+		<button type="button" class="ui-input__clear">지우기</button>
+	</div>
+	<!--@ 오류·성공일 때만 문구를 채운다. 비어 있으면 스타일에서 숨긴다 -->
+	<p class="ui-helper {{helperType|}}">{{helper|}}</p>
+</div>

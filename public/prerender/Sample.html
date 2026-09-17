@@ -1,0 +1,313 @@
+<!doctype html>
+<html lang="ko">
+	<head>
+		<meta charset="utf-8" />
+		<meta name="viewport" content="width=device-width,initial-scale=1.0" />
+		<title>[개발 확인용] 파셜 · 목록 · 0건 샘플</title>
+		<link rel="stylesheet" href="../css/common.css" />
+		<script src="../js/dynamicImport.js"></script>
+		<script src="../js/listRender.js"></script>
+		<script src="../js/common.js"></script>
+		<!-- 날짜 · 기간 달력용 -->
+		<script src="../js/jquery-3.7.1.min.js"></script>
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.13.2/jquery-ui.min.js"></script>
+	</head>
+
+	<body>
+		<!-- 공통 LNB -->
+		<!-- 현재 페이지 메뉴의 is-active 와 상위 메뉴의 is-open 은 common.js 의 lnbActive 가 붙인다 -->
+		<nav class="ui-lnb">
+			<div class="ui-lnb__menu">
+				<ul class="ui-lnb__group">
+					<li class="ui-lnb__item">
+						<a class="ui-lnb__link" href="../index.html">작업 목록</a>
+					</li>
+					<li class="ui-lnb__item">
+						<button type="button" class="ui-lnb__link ui-lnb__link--toggle" aria-expanded="false">개발 확인용</button>
+						<div class="ui-lnb__sub" hidden>
+							<ul class="ui-lnb__group">
+								<li class="ui-lnb__item">
+									<a class="ui-lnb__link" href="./Sample.html">샘플</a>
+								</li>
+							</ul>
+						</div>
+					</li>
+				</ul>
+			</div>
+		</nav>
+
+		<!-- 공통 헤더 -->
+		<header class="header">
+			<h1 class="title">파셜 · 목록 샘플</h1>
+		</header>
+
+		<main>
+			<!-- 목록 : 데이터 있음 -->
+			<h2>회원 목록</h2>
+			<table>
+				<thead>
+					<tr>
+						<th>No</th>
+						<th>이름</th>
+						<th>이메일</th>
+					</tr>
+				</thead>
+				<tbody>
+				  <tr>
+				  	<td>1</td>
+				  	<td>홍길동</td>
+				  	<td>hong@example.com</td>
+				  </tr>
+				  <tr>
+				  	<td>2</td>
+				  	<td>김철수</td>
+				  	<td>kim@example.com</td>
+				  </tr>
+				  <tr>
+				  	<td>3</td>
+				  	<td>R&amp;D 팀</td>
+				  	<td>rnd@example.com</td>
+				  </tr>
+				</tbody>
+			</table>
+
+			<!-- 목록 : 0건 (같은 템플릿 · 빈 JSON) -->
+			<h2>회원 목록 (0건)</h2>
+			<table>
+				<thead>
+					<tr>
+						<th>No</th>
+						<th>이름</th>
+						<th>이메일</th>
+					</tr>
+				</thead>
+				<tbody>
+				  <tr>
+				  	<td colspan="3" class="tbl_empty">등록된 회원이 없습니다.</td>
+				  </tr>
+				</tbody>
+			</table>
+
+			<!-- 공통 UI 파셜 -->
+			<h2>공통 UI 파셜</h2>
+			<h3>드롭다운</h3>
+			<!-- 공통 드롭다운 -->
+			<div class="ui-dropdown ">
+				<button type="button" class="ui-dropdown__btn is-placeholder" onclick="toggleMenu(this)">
+					정렬을 선택해주세요.
+				</button>
+				<div class="ui-dropdown__list" hidden>
+					<ul>
+					  <li>
+					  	<button type="button" class="ui-dropdown__item " data-value="latest" onclick="dropdownSelect(this)">
+					  		최신순
+					  	</button>
+					  </li>
+					  <li>
+					  	<button type="button" class="ui-dropdown__item " data-value="name" onclick="dropdownSelect(this)">
+					  		이름순
+					  	</button>
+					  </li>
+					  <li>
+					  	<button type="button" class="ui-dropdown__item ui-dropdown__item--action" data-value="" onclick="dropdownSelect(this)">
+					  		직접 입력하기
+					  	</button>
+					  </li>
+					</ul>
+				</div>
+			</div>
+			<h3>드롭다운 (0건)</h3>
+			<!-- 공통 드롭다운 -->
+			<div class="ui-dropdown ">
+				<button type="button" class="ui-dropdown__btn is-placeholder" onclick="toggleMenu(this)">
+					선택해주세요.
+				</button>
+				<div class="ui-dropdown__list" hidden>
+					<ul>
+					  <li class="ui-dropdown__empty">선택할 항목이 없습니다.</li>
+					</ul>
+				</div>
+			</div>
+			<h3>검색 드롭다운</h3>
+			<!-- 공통 검색 드롭다운 -->
+			<div class="ui-dropdown ui-dropdown--search">
+				<div class="ui-input ui-input--search">
+					<input type="text" name="" placeholder="회사명을 검색해주세요." />
+					<button type="button" class="ui-input__clear">지우기</button>
+					<!-- 검색 결과를 받아 목록을 채운 뒤 연다(개발 연동) -->
+					<button type="button" class="ui-input__search" onclick="toggleMenu(this)">검색</button>
+				</div>
+				<div class="ui-dropdown__list" hidden>
+					<ul>
+					  <li>
+					  	<button type="button" class="ui-dropdown__item " data-value="latest" onclick="dropdownSelect(this)">
+					  		최신순
+					  	</button>
+					  </li>
+					  <li>
+					  	<button type="button" class="ui-dropdown__item " data-value="name" onclick="dropdownSelect(this)">
+					  		이름순
+					  	</button>
+					  </li>
+					  <li>
+					  	<button type="button" class="ui-dropdown__item ui-dropdown__item--action" data-value="" onclick="dropdownSelect(this)">
+					  		직접 입력하기
+					  	</button>
+					  </li>
+					</ul>
+				</div>
+			</div>
+			<h3>입력</h3>
+			<!-- 공통 입력 -->
+			<div class="ui-field">
+				<div class="ui-input ">
+					<input type="text" id="sample_email" name="" placeholder="이메일을 입력해주세요." value="" />
+					<button type="button" class="ui-input__clear">지우기</button>
+				</div>
+				<!-- 오류·성공일 때만 문구를 채운다. 비어 있으면 스타일에서 숨긴다 -->
+				<p class="ui-helper "></p>
+			</div>
+			<h3>입력 (오류 안내)</h3>
+			<!-- 공통 입력 -->
+			<div class="ui-field">
+				<div class="ui-input is-error">
+					<input type="text" id="sample_birth" name="" placeholder="" value="1999" />
+					<button type="button" class="ui-input__clear">지우기</button>
+				</div>
+				<!-- 오류·성공일 때만 문구를 채운다. 비어 있으면 스타일에서 숨긴다 -->
+				<p class="ui-helper ui-helper--error">생년월일 8자리를 입력해주세요.</p>
+			</div>
+			<h3>수량 스테퍼</h3>
+			<!-- 공통 수량 스테퍼 -->
+			<div class="ui-stepper" data-min="1" data-max="3">
+				<button type="button" class="ui-stepper__btn ui-stepper__btn--minus" onclick="stepperChange(this, -1)">감소</button>
+				<input type="text" class="ui-stepper__input" inputmode="numeric" id="sample_count" name="" value="1" />
+				<button type="button" class="ui-stepper__btn ui-stepper__btn--plus" onclick="stepperChange(this, 1)">증가</button>
+			</div>
+
+			<h3>탭 (파셜 없음 — 직접 마크업)</h3>
+			<div class="ui-tab">
+				<div class="ui-tab__list" role="tablist">
+					<button type="button" class="ui-tab__btn is-active" role="tab" data-tab="basic">기본 정보</button>
+					<button type="button" class="ui-tab__btn" role="tab" data-tab="detail">상세 정보</button>
+				</div>
+				<div class="ui-tab__panel" role="tabpanel" data-tab="basic">기본 정보 패널</div>
+				<div class="ui-tab__panel" role="tabpanel" data-tab="detail" hidden>상세 정보 패널</div>
+			</div>
+			<h3>아코디언</h3>
+			<!-- 공통 아코디언 -->
+			<div class="ui-accordion" data-accordion="single">
+				<ul>
+				  <li class="ui-accordion__item is-open">
+				  	<button type="button" class="ui-accordion__head" aria-expanded="false">회원가입은 어떻게 하나요?</button>
+				  	<div class="ui-accordion__body" hidden>상단의 <b>회원가입</b> 버튼을 눌러 진행합니다.</div>
+				  </li>
+				  <li class="ui-accordion__item ">
+				  	<button type="button" class="ui-accordion__head" aria-expanded="false">비밀번호를 잊어버렸어요.</button>
+				  	<div class="ui-accordion__body" hidden>로그인 화면의 비밀번호 찾기를 이용해 주세요.</div>
+				  </li>
+				  <li class="ui-accordion__item ">
+				  	<button type="button" class="ui-accordion__head" aria-expanded="false">탈퇴하면 데이터는 어떻게 되나요?</button>
+				  	<div class="ui-accordion__body" hidden>탈퇴 즉시 모든 데이터가 삭제되며 복구할 수 없습니다.</div>
+				  </li>
+				</ul>
+			</div>
+
+			<h3>아코디언 (0건)</h3>
+			<!-- 공통 아코디언 -->
+			<div class="ui-accordion" data-accordion="single">
+				<ul>
+				  <li class="ui-accordion__empty">등록된 내용이 없습니다.</li>
+				</ul>
+			</div>
+
+			<h3>날짜</h3>
+			<!-- 공통 날짜 입력 -->
+			<!-- 달력은 jQuery UI 가 그린다 — 이 파셜을 쓰는 페이지는 jquery · jquery-ui 를 불러야 한다 -->
+			<div class="ui-field">
+				<div class="ui-input ui-input--date">
+					<input
+						type="text"
+						id="sample_date"
+						name=""
+						placeholder="날짜를 선택해주세요."
+						value=""
+						autocomplete="off"
+						data-datepicker-day
+					/>
+					<button type="button" class="ui-input__clear">지우기</button>
+				</div>
+			</div>
+			<h3>기간</h3>
+			<!-- 공통 기간 입력 -->
+			<!-- 달력은 jQuery UI 가 그린다 — 이 파셜을 쓰는 페이지는 jquery · jquery-ui 를 불러야 한다 -->
+			<div class="ui-field ui-field--period">
+				<div class="ui-input ui-input--date">
+					<input
+						type="text"
+						id="sample_period"
+						name=""
+						placeholder="기간을 선택해주세요."
+						autocomplete="off"
+					/>
+					<button type="button" class="ui-input__clear">지우기</button>
+				</div>
+				<div class="ui-period" id="sample_period_period" data-datepicker hidden>
+					<div class="ui-period__header">
+						<input type="text" class="ui-period__date" aria-label="시작일" readonly />
+						<span class="ui-period__sep">~</span>
+						<input type="text" class="ui-period__date" aria-label="종료일" readonly />
+					</div>
+					<div class="ui-period__calendar"></div>
+					<!-- 종료일 · 시간 포함 같은 옵션은 화면에 따라 이 자리에 넣는다 -->
+					<div class="ui-period__footer"></div>
+				</div>
+			</div>
+			<h3>토스트 · 확인창</h3>
+			<button type="button" data-toast="sample_toast">토스트 띄우기</button>
+			<button type="button" data-modal-open="sample_confirm">확인창 열기</button>
+
+			<!-- 이메일 인증 전 회원에게만 노출 -->
+			<p>인증 대기 {{<em>3명</em>}}</p>
+		</main>
+
+		<!-- 파셜 : 기본값 사용 (data-page-title 을 넘기지 않음) -->
+		<!-- 공통 헤더 -->
+		<header class="header">
+			<h1 class="title">페이지 제목</h1>
+		</header>
+
+		<!-- 공통 토스트 -->
+		<!-- 페이지 끝에 둔다. 띄우기 : data-toast="아이디" 버튼 또는 toastShow('아이디') -->
+		<div class="ui-toast ui-toast--success" id="sample_toast" role="status" aria-live="polite" hidden>
+			<span class="ui-toast__icon"></span>
+			<p class="ui-toast__text">저장되었습니다.</p>
+		</div>
+		<!-- 공통 확인창 -->
+		<!-- 열기 : data-modal-open="아이디" 버튼 또는 modalOpen('아이디') -->
+		<div
+			class="ui-modal ui-modal--sm"
+			id="sample_confirm"
+			role="dialog"
+			aria-modal="true"
+			aria-labelledby="sample_confirm_title"
+			hidden
+		>
+			<div class="ui-modal__dialog">
+				<div class="ui-modal__header">
+					<h2 class="ui-modal__title" id="sample_confirm_title">이벤트를 삭제하시겠습니까?</h2>
+				</div>
+				<div class="ui-modal__body">
+					<p class="ui-modal__text">삭제한 이벤트는 복구할 수 없습니다.</p>
+				</div>
+				<div class="ui-modal__footer">
+					<button type="button" class="ui-modal__cancel" data-modal-close>취소</button>
+					<!-- 확인 동작은 개발 연동 — 처리 후 닫는다 -->
+					<button type="button" class="ui-modal__confirm" data-modal-close>삭제</button>
+				</div>
+				<button type="button" class="ui-modal__close">닫기</button>
+			</div>
+		</div>
+
+	</body>
+</html>

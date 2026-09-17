@@ -1,0 +1,18 @@
+<!-- 공통 검색 드롭다운 — 받는 값 : data-items(JSON 경로 · 필수) · data-placeholder · data-name -->
+<div class="ui-dropdown ui-dropdown--search">
+	<div class="ui-input ui-input--search">
+		<input type="text" name="{{name|}}" placeholder="{{placeholder|검색어를 입력해주세요.}}" />
+		<button type="button" class="ui-input__clear">지우기</button>
+		<!--@ 검색 결과를 받아 목록을 채운 뒤 연다(개발 연동) -->
+		<button type="button" class="ui-input__search" onclick="toggleMenu(this)">검색</button>
+	</div>
+	<div class="ui-dropdown__list" hidden>
+		<ul
+			class="dynamic-list"
+			data-source="{{items}}"
+			data-template="#tpl_ui_dropdown_item"
+			data-empty="#tpl_ui_dropdown_empty"
+		></ul>
+	</div>
+</div>
+<div class="dynamic-content" data-source="./include/ui/_ui_dropdown_tpl.html"></div>

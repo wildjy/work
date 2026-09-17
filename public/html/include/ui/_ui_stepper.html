@@ -1,0 +1,6 @@
+<!-- 공통 수량 스테퍼 — 받는 값 : data-id(필수) · data-name · data-value · data-min · data-max -->
+<div class="ui-stepper" data-min="{{min|0}}" data-max="{{max|}}">
+	<button type="button" class="ui-stepper__btn ui-stepper__btn--minus" onclick="stepperChange(this, -1)">감소</button>
+	<input type="text" class="ui-stepper__input" inputmode="numeric" id="{{id}}" name="{{name|}}" value="{{value|0}}" />
+	<button type="button" class="ui-stepper__btn ui-stepper__btn--plus" onclick="stepperChange(this, 1)">증가</button>
+</div>

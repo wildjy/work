@@ -1,0 +1,46 @@
+{
+  "name": "pub-base",
+  "version": "1.0.0",
+  "private": true,
+  "description": "정적 퍼블리싱 base — 파셜 include · JSON 목록 렌더 · 프리렌더 · Claude 작업 규칙",
+  "scripts": {
+    "serve": "node scripts/serve.js",
+    "prerender": "node scripts/prerender.js",
+    "prerender:watch": "node scripts/prerender.js --watch",
+    "prerender:keep": "node scripts/prerender.js --keep-comments",
+    "lint": "eslint .",
+    "lint:fix": "eslint . --fix",
+    "format": "prettier --write .",
+    "format:check": "prettier --check .",
+    "validate": "html-validate public/prerender",
+    "prepare": "simple-git-hooks"
+  },
+  "engines": {
+    "node": ">=20"
+  },
+  "devDependencies": {
+    "@eslint/js": "^9.39.5",
+    "eslint": "^9.39.5",
+    "eslint-plugin-html": "^8.2.0",
+    "globals": "^16.5.0",
+    "html-validate": "^10.9.0",
+    "lint-staged": "^16.4.0",
+    "prettier": "^3.9.7",
+    "simple-git-hooks": "^2.14.0"
+  },
+  "simple-git-hooks": {
+    "pre-commit": "npx lint-staged && node scripts/precommit.js"
+  },
+  "lint-staged": {
+    "*.js": [
+      "eslint --fix --no-warn-ignored",
+      "prettier --write --ignore-unknown"
+    ],
+    "public/**/*.html": [
+      "eslint --fix --no-warn-ignored",
+      "prettier --write --ignore-unknown"
+    ],
+    "*.json": "prettier --write --ignore-unknown",
+    "*.scss": "prettier --write --ignore-unknown"
+  }
+}
