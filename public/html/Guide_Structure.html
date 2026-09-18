@@ -1,0 +1,355 @@
+<!doctype html>
+<html lang="ko">
+	<head>
+		<meta charset="utf-8" />
+		<meta name="viewport" content="width=device-width,initial-scale=1.0" />
+		<title>폴더 구조 — 어느 폴더에 두나</title>
+		<link rel="stylesheet" href="../css/common.css" />
+		<script src="../js/dynamicImport.js"></script>
+		<script src="../js/listRender.js"></script>
+		<script src="../js/common.js"></script>
+	</head>
+
+	<body>
+		<div class="layout">
+			<!-- 사이드 : 브랜드 + LNB -->
+			<aside class="layout__side">
+				<p class="layout__brand">pub-base</p>
+				<div class="dynamic-content" data-source="./include/ui/_ui_lnb.html"></div>
+			</aside>
+
+			<div class="layout__body">
+				<div
+					class="dynamic-content"
+					data-source="./include/common/_header.html"
+					data-page-title="폴더 구조 — 어느 폴더에 두나"
+				></div>
+
+				<main class="layout__main guide">
+					<!-- 구역 : 목차 -->
+					<section class="section">
+						<div class="section__head">
+							<h2 class="section__title">한눈에 보기</h2>
+							<p class="section__desc">
+								파셜이 늘어날 때 <strong>어느 폴더에 두나</strong>를 정한 페이지. 부르는 문법은 「파셜(include)
+								사용법」에 있고, 여기는 <strong>위치</strong>만 다룬다.
+							</p>
+						</div>
+						<div class="ui-card">
+							<div class="ui-card__body">
+								<ul class="guide__toc">
+									<li><a href="#structure_fsd">1. FSD 와 견주기</a></li>
+									<li><a href="#structure_segment">2. 세그먼트 둘 — section · body</a></li>
+									<li><a href="#structure_naming">3. 이름 셋을 한 규칙으로</a></li>
+									<li><a href="#structure_when">4. 언제 빼고, 언제 그대로 두나</a></li>
+									<li><a href="#structure_dep">5. 지켜야 할 의존 방향</a></li>
+									<li><a href="#structure_now">6. 지금 저장소에 적용된 것</a></li>
+									<li><a href="#structure_next">7. 더 나아가려면</a></li>
+								</ul>
+								<p class="guide__note guide__note--tip">
+									새 아키텍처를 들여오는 페이지가 아니다. 이 저장소가 <strong>이미 지키고 있는 원칙</strong>에 폴더
+									이름만 맞추는 것이다. 문서 판은 <code>docs/STRUCTURE.md</code>.
+								</p>
+							</div>
+						</div>
+						<div class="ui-card">
+							<div class="ui-card__header">
+								<h3 class="ui-card__title">30초 요약</h3>
+							</div>
+							<div class="ui-card__body">
+								<pre class="guide__code"><code>public/
+├─ html/
+│  ├─ Member.html                               ← 페이지
+│  └─ include/
+│     ├─ ui/       _ui_modal.html …             ← 공통 UI (프레임 · 아무도 참조하지 않는다)
+│     ├─ common/   _header.html …               ← 두 곳 이상이 쓰는 서비스 조각
+│     └─ member/                                ← 슬라이스 (data/member 와 같은 이름)
+│        ├─ section/ _member_list.html …        ← 화면을 이루는 덩어리
+│        ├─ body/    _member_invite_body.html   ← 슬롯 본문
+│        └─ _member_row.html                    ← 그 밖의 조각
+└─ data/
+   └─ member/*.json                             ← 그 슬라이스의 데이터</code></pre>
+								<ol class="guide__steps">
+									<li>
+										<code>data/&lt;슬라이스&gt;</code> 와 <code>include/&lt;슬라이스&gt;</code> 는
+										<strong>같은 이름</strong>을 쓴다.
+									</li>
+									<li>
+										슬라이스 안은 <strong>세그먼트</strong>로 나눈다 — <code>section/</code>(화면 덩어리) ·
+										<code>body/</code>(슬롯 본문).
+									</li>
+									<li>두 슬라이스가 같은 것을 쓰게 되면 <code>common/</code> 으로 올린다(기존 규칙 그대로).</li>
+									<li>
+										<code>ui/</code> 는 아무 슬라이스도 참조하지 않는다. 필요한 마크업은
+										<strong>슬롯으로 받는다.</strong>
+									</li>
+								</ol>
+							</div>
+						</div>
+					</section>
+					<!--// 구역 : 목차 -->
+
+					<!-- 구역 : FSD -->
+					<section class="section" id="structure_fsd">
+						<div class="section__head">
+							<h2 class="section__title">1. FSD 와 견주기</h2>
+							<p class="section__desc">레이어 이름을 들여오지는 않는다 — 대응만 알아 두면 읽기 쉬워진다</p>
+						</div>
+						<div class="ui-card">
+							<div class="ui-card__body ui-card__body--flush">
+								<table class="ui-table ui-table--wrap">
+									<caption class="guide__caption">
+										FSD 레이어 대응
+									</caption>
+									<thead>
+										<tr>
+											<th scope="col">FSD 레이어</th>
+											<th scope="col">이 저장소</th>
+										</tr>
+									</thead>
+									<tbody
+										class="dynamic-list"
+										data-source="../data/guide/structure.json"
+										data-template="#tpl_structure_row"
+										data-empty="#tpl_structure_row_none"
+										data-filter="group=layer"
+									></tbody>
+								</table>
+							</div>
+							<div class="ui-card__body">
+								<p class="guide__note guide__note--tip">
+									FSD 의 핵심은 폴더 이름이 아니라 <strong>의존 방향</strong>인데, 이 저장소는 이미 그것을 지키고 있다 —
+									모달 프레임(shared)이 본문(feature)을 직접 include 하지 않고 <strong>슬롯으로 받는다.</strong> 슬롯이
+									곧 의존 역전 장치이고, React 의 <code>children</code> 과 같은 역할이다.
+								</p>
+							</div>
+						</div>
+					</section>
+					<!--// 구역 : FSD -->
+
+					<!-- 구역 : 세그먼트 -->
+					<section class="section" id="structure_segment">
+						<div class="section__head">
+							<h2 class="section__title">2. 세그먼트 둘 — section · body</h2>
+							<p class="section__desc">슬라이스 안을 가르는 폴더는 이 둘뿐이다</p>
+						</div>
+						<div class="ui-card">
+							<div class="ui-card__header">
+								<h3 class="ui-card__title">section — 화면을 이루는 덩어리</h3>
+							</div>
+							<div class="ui-card__body">
+								<p class="guide__desc">
+									한 페이지가 길어지면 구역 단위로 가른다. 페이지에는 <strong>include 줄만</strong> 남는다.
+								</p>
+								<pre class="guide__code"><code>&lt;main class="layout__main"&gt;
+	&lt;div class="dynamic-content" data-source="./include/sample/section/_sample_list.html"&gt;&lt;/div&gt;
+	&lt;div class="dynamic-content" data-source="./include/sample/section/_sample_input.html"&gt;&lt;/div&gt;
+&lt;/main&gt;</code></pre>
+								<ul class="guide__list">
+									<li><strong>목록 템플릿은 컨테이너와 같은 파일에</strong> 둔다 — 파셜이 목록보다 먼저 주입된다.</li>
+									<li>
+										화면에 보이지 않는 덩어리(토스트 · 모달의 실체)도 여기 둔다 — <code>_sample_overlay.html</code>.
+									</li>
+								</ul>
+								<p class="guide__note guide__note--warn">
+									<strong>닫음 표시를 목록 템플릿 바로 아래 두지 않는다.</strong> 프리렌더가 템플릿의 닫음 표시로 보고
+									지운다 — 구역 닫는 태그 바로 뒤로 올린다.
+								</p>
+							</div>
+						</div>
+						<div class="ui-card">
+							<div class="ui-card__header">
+								<h3 class="ui-card__title">body — 슬롯 본문</h3>
+							</div>
+							<div class="ui-card__body">
+								<p class="guide__desc">
+									모달 프레임에 넘길 본문. <strong>template 은 include 를 적은 파일에 남기고 내용만</strong> 여기 둔다.
+								</p>
+								<pre class="guide__code"><code>&lt;template id="sample_invite_body"&gt;
+	&lt;div class="dynamic-content" data-source="./include/sample/body/_sample_invite_body.html"&gt;&lt;/div&gt;
+&lt;/template&gt;</code></pre>
+								<p class="guide__note guide__note--warn">
+									<strong>template 요소째</strong> 파셜로 빼면 include 순서에 묶이고, 어기면
+									<strong>조용히 빈 본문</strong>으로 나간다. 배치별 동작표는
+									<a href="./Guide_Partial.html#guide_slot">파셜(include) 사용법 6절</a>.
+								</p>
+							</div>
+						</div>
+					</section>
+					<!--// 구역 : 세그먼트 -->
+
+					<!-- 구역 : 이름 -->
+					<section class="section" id="structure_naming">
+						<div class="section__head">
+							<h2 class="section__title">3. 이름 셋을 한 규칙으로</h2>
+							<p class="section__desc">grep 한 번에 전부 잡히게 한다</p>
+						</div>
+						<div class="ui-card">
+							<div class="ui-card__body">
+								<pre class="guide__code"><code>$ grep -rn sample_invite public/
+
+파일        include/sample/body/_sample_invite_body.html
+template    id="sample_invite_body"
+모달        data-id="sample_invite"          (여는 버튼 data-modal-open="sample_invite")
+본문 안 id   sample_invite_name · sample_invite_email · sample_invite_count</code></pre>
+								<p class="guide__note guide__note--warn">
+									본문 파셜이 <strong>고정 id 를 가지면 한 페이지에 두 번 넣지 못한다.</strong> id 가 겹쳐 라벨과
+									개발단의 <code>getElementById</code> 가 먼저 나온 것만 가리킨다(<code>validate</code> 의
+									<code>no-dup-id</code> 가 막는다). 두 번 쓸 본문은 파셜이 id 를 <code>data-*</code> 로 받게 만든다 —
+									<code>id="{{prefix}}_name"</code>.
+								</p>
+							</div>
+						</div>
+					</section>
+					<!--// 구역 : 이름 -->
+
+					<!-- 구역 : 언제 빼나 -->
+					<section class="section" id="structure_when">
+						<div class="section__head">
+							<h2 class="section__title">4. 언제 빼고, 언제 그대로 두나</h2>
+							<p class="section__desc">처음부터 다 파일로 만들면 파일만 늘어난다</p>
+						</div>
+						<div class="ui-card">
+							<div class="ui-card__body ui-card__body--flush">
+								<table class="ui-table ui-table--wrap">
+									<caption class="guide__caption">
+										가르는 기준
+									</caption>
+									<thead>
+										<tr>
+											<th scope="col">이럴 때</th>
+											<th scope="col">이렇게</th>
+										</tr>
+									</thead>
+									<tbody
+										class="dynamic-list"
+										data-source="../data/guide/structure.json"
+										data-template="#tpl_structure_row"
+										data-empty="#tpl_structure_row_none"
+										data-filter="group=split"
+									></tbody>
+								</table>
+							</div>
+						</div>
+					</section>
+					<!--// 구역 : 언제 빼나 -->
+
+					<!-- 구역 : 의존 방향 -->
+					<section class="section" id="structure_dep">
+						<div class="section__head">
+							<h2 class="section__title">5. 지켜야 할 의존 방향</h2>
+							<p class="section__desc">폴더를 나누는 이유가 이것이다 — 이름이 아니라 방향</p>
+						</div>
+						<div class="ui-card">
+							<div class="ui-card__body ui-card__body--flush">
+								<table class="ui-table ui-table--wrap">
+									<caption class="guide__caption">
+										의존 방향
+									</caption>
+									<thead>
+										<tr>
+											<th scope="col">규칙</th>
+											<th scope="col">왜</th>
+										</tr>
+									</thead>
+									<tbody
+										class="dynamic-list"
+										data-source="../data/guide/structure.json"
+										data-template="#tpl_structure_row"
+										data-empty="#tpl_structure_row_none"
+										data-filter="group=dep"
+									></tbody>
+								</table>
+							</div>
+						</div>
+					</section>
+					<!--// 구역 : 의존 방향 -->
+
+					<!-- 구역 : 적용 실물 -->
+					<section class="section" id="structure_now">
+						<div class="section__head">
+							<h2 class="section__title">6. 지금 저장소에 적용된 것</h2>
+							<p class="section__desc">개발 확인용 샘플 페이지가 이 구조의 실물이다</p>
+						</div>
+						<div class="ui-card">
+							<div class="ui-card__body">
+								<pre class="guide__code"><code>include/sample/
+├─ section/  _sample_list · _sample_button · _sample_input · _sample_choice
+│            _sample_nav · _sample_feedback · _sample_var · _sample_overlay
+└─ body/     _sample_invite_body.html</code></pre>
+								<ul class="guide__check">
+									<li>페이지는 <strong>510줄 → 48줄</strong>. 본문에 남은 것은 include 8줄뿐이다.</li>
+									<li>
+										점검 상세 알림의 본문(문단 세 개)은 <strong>4번 기준에 따라</strong>
+										<code>_sample_overlay.html</code> 의 template 안에 직접 두었다 — 짧고 그 화면 전용이면 파일을 만들지
+										않는다.
+									</li>
+									<li>렌더 결과는 가르기 전과 <strong>같다.</strong> 구조 정리이므로 작업일자를 찍지 않았다.</li>
+								</ul>
+								<p class="guide__note">실제 화면은 <a href="./Sample.html">개발 확인용 샘플</a>에서 열어 볼 수 있다.</p>
+							</div>
+						</div>
+					</section>
+					<!--// 구역 : 적용 실물 -->
+
+					<!-- 구역 : 더 나아가려면 -->
+					<section class="section" id="structure_next">
+						<div class="section__head">
+							<h2 class="section__title">7. 더 나아가려면 (선택)</h2>
+							<p class="section__desc">지금 규모에서는 하지 않는다 — 슬롯 본문이 10개를 넘으면 검토한다</p>
+						</div>
+						<div class="ui-card">
+							<div class="ui-card__body">
+								<p class="guide__desc">
+									지금은 「template 요소째 파셜로 빼기」가 순서에 묶인다. 이것을 풀면 <code>body/</code> 에 template
+									파일 자체를 둘 수 있다.
+								</p>
+							</div>
+							<div class="ui-card__body ui-card__body--flush">
+								<table class="ui-table ui-table--wrap">
+									<caption class="guide__caption">
+										엔진 손질
+									</caption>
+									<thead>
+										<tr>
+											<th scope="col">고칠 곳</th>
+											<th scope="col">방법</th>
+										</tr>
+									</thead>
+									<tbody
+										class="dynamic-list"
+										data-source="../data/guide/structure.json"
+										data-template="#tpl_structure_row"
+										data-empty="#tpl_structure_row_none"
+										data-filter="group=next"
+									></tbody>
+								</table>
+							</div>
+							<div class="ui-card__body">
+								<p class="guide__note guide__note--warn">
+									<strong>두 구현을 반드시 같이 고친다</strong> — 한쪽만 고치면 화면과 산출물이 갈린다. 못 찾았을 때
+									조용히 비는 동작도 함께 손봐야 한다.
+								</p>
+							</div>
+						</div>
+					</section>
+					<!--// 구역 : 더 나아가려면 -->
+				</main>
+			</div>
+		</div>
+
+		<!-- 목록 템플릿 (listRender.js 가 JSON 을 순회해 렌더) -->
+		<template id="tpl_structure_row">
+			<tr>
+				<td class="guide__term">{{{term}}}</td>
+				<td>{{{desc}}}</td>
+			</tr>
+		</template>
+		<template id="tpl_structure_row_none">
+			<tr>
+				<td colspan="2" class="ui-table__empty">등록된 내용이 없습니다.</td>
+			</tr>
+		</template>
+		<!--// 목록 템플릿 -->
+	</body>
+</html>

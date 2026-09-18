@@ -1,0 +1,46 @@
+[
+  {
+    "group": "place",
+    "term": "10줄 안팎 · 그 화면 전용",
+    "desc": "부르는 파일의 <code>template</code> 안에 <strong>직접 적는다</strong> — 파일을 따로 만들 이유가 없다"
+  },
+  {
+    "group": "place",
+    "term": "입력 · 표가 들어가 30줄을 넘는다",
+    "desc": "<code>&lt;슬라이스&gt;/body/</code> 파셜로 빼고 <code>template</code> 은 그 파셜만 부른다"
+  },
+  {
+    "group": "place",
+    "term": "두 화면 이상이 같은 본문을 쓴다",
+    "desc": "<code>&lt;슬라이스&gt;/body/</code> 파셜 — <strong>두 곳이 되는 순간</strong> 옮긴다. 다만 id 를 고정으로 가진 본문은 <strong>한 페이지에 두 번 넣지 않는다</strong>(id 가 겹친다)"
+  },
+  {
+    "group": "place",
+    "term": "개발 인계에서 따로 떼어 봐야 한다",
+    "desc": "<code>&lt;슬라이스&gt;/body/</code> 파셜 — 파일 하나가 화면 하나의 본문이 된다"
+  },
+  {
+    "group": "order",
+    "term": "<code>template</code> 이 include 보다 <strong>뒤</strong> (같은 파일)",
+    "runtime": "✅",
+    "prerender": "✅"
+  },
+  {
+    "group": "order",
+    "term": "<code>template</code> 이 include 보다 <strong>앞</strong> (같은 파일)",
+    "runtime": "✅",
+    "prerender": "✅"
+  },
+  {
+    "group": "order",
+    "term": "<strong>template 째</strong> 파셜로 빼고 사용처보다 <strong>앞</strong>에서 include",
+    "runtime": "✅",
+    "prerender": "✅"
+  },
+  {
+    "group": "order",
+    "term": "<strong>template 째</strong> 파셜로 빼고 사용처보다 <strong>뒤</strong>에서 include",
+    "runtime": "❌ 본문이 <strong>빈 채로</strong> 렌더 (콘솔 경고만)",
+    "prerender": "❌ <code>! 슬롯 template 없음</code> 경고"
+  }
+]

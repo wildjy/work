@@ -120,6 +120,28 @@ description: >-
 > ⚠ **프리렌더와 `dynamicImport.js` 는 같은 규칙을 각각 구현한다 — 한쪽만 고치지 않는다.**
 > 산출물 들여쓰기 보정(줄 단위 삽입 · 빈 슬롯 줄 삭제)은 프리렌더에만 있다 — 브라우저는 산출물을 만들지 않는다.
 
+### 본문을 어디에 두나 — `<슬라이스>/body/` 세그먼트
+
+| 본문이 이렇다면 | 이렇게 |
+| --- | --- |
+| 10줄 안팎 · 그 화면 전용 | 부르는 파일의 `template` 안에 **직접** |
+| 30줄을 넘거나 두 화면 이상이 쓴다 | `include/<슬라이스>/body/_*.html` 파셜 |
+
+이름 셋을 한 규칙으로 묶는다 — `grep` 한 번에 잡힌다.
+
+```
+파일       include/sample/body/_sample_invite_body.html
+template   id="sample_invite_body"
+모달       data-id="sample_invite"
+```
+
+> ⚠ **`template` 요소째 파셜로 빼면 순서에 묶인다.** 파셜은 적힌 순서대로 전개되므로,
+> **사용처보다 뒤**에서 include 한 파셜의 `template` 은 슬롯을 채울 때 아직 없다 —
+> 브라우저는 **조용히 빈 본문**, 프리렌더는 `! 슬롯 template 없음` 경고. `template` 은 include 를 적은 파일에 두고 **내용만** 파셜로 뺀다.
+> (목록 template 은 다르다 — 파셜 주입이 다 끝난 뒤 쓰이므로 `_ui_dropdown_tpl.html` 처럼 파셜로 빼도 된다.)
+>
+> 폴더 규칙 전체는 **`docs/STRUCTURE.md`**, 작업자용 설명은 `docs/PARTIALS.md` §4.
+
 ---
 
 ## 3. **개발단이 채울 자리는 `{{ }}` 로 표시한다**

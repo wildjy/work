@@ -31,6 +31,9 @@
 								<div class="ui-lnb__sub" hidden>
 									<ul class="ui-lnb__group">
 										<li class="ui-lnb__item">
+											<a class="ui-lnb__link" href="./Guide_Structure.html">폴더 구조</a>
+										</li>
+										<li class="ui-lnb__item">
 											<a class="ui-lnb__link" href="./Guide_Partial.html">파셜(include)</a>
 										</li>
 									</ul>
@@ -58,7 +61,7 @@
 				</header>
 
 				<main class="layout__main">
-					<!-- 구역 : 목록 -->
+					<!-- 목록 구역 -->
 					<section class="section">
 						<div class="section__head">
 							<h2 class="section__title">목록</h2>
@@ -127,9 +130,9 @@
 							</div>
 						</div>
 					</section>
-					<!--// 구역 : 목록 -->
+					<!--// 목록 구역 -->
 
-					<!-- 구역 : 버튼 -->
+					<!-- 버튼 구역 -->
 					<section class="section">
 						<div class="section__head">
 							<h2 class="section__title">버튼</h2>
@@ -148,9 +151,9 @@
 							</div>
 						</div>
 					</section>
-					<!--// 구역 : 버튼 -->
+					<!--// 버튼 구역 -->
 
-					<!-- 구역 : 입력 -->
+					<!-- 입력 구역 -->
 					<section class="section">
 						<div class="section__head">
 							<h2 class="section__title">입력</h2>
@@ -323,9 +326,9 @@
 							</div>
 						</div>
 					</section>
-					<!--// 구역 : 입력 -->
+					<!--// 입력 구역 -->
 
-					<!-- 구역 : 선택 · 툴팁 -->
+					<!-- 선택 구역 -->
 					<section class="section">
 						<div class="section__head">
 							<h2 class="section__title">선택 · 툴팁</h2>
@@ -478,9 +481,9 @@
 							</div>
 						</div>
 					</section>
-					<!--// 구역 : 선택 · 툴팁 -->
+					<!--// 선택 구역 -->
 
-					<!-- 구역 : 탭 · 아코디언 -->
+					<!-- 탐색 구역 -->
 					<section class="section">
 						<div class="section__head">
 							<h2 class="section__title">탭 · 아코디언</h2>
@@ -528,9 +531,9 @@
 							</div>
 						</div>
 					</section>
-					<!--// 구역 : 탭 · 아코디언 -->
+					<!--// 탐색 구역 -->
 
-					<!-- 구역 : 피드백 -->
+					<!-- 피드백 구역 -->
 					<section class="section">
 						<div class="section__head">
 							<h2 class="section__title">토스트 · 모달</h2>
@@ -540,15 +543,9 @@
 							<div class="ui-card__body">
 								<div class="ui-btn-group">
 									<button type="button" class="ui-btn ui-btn--outlined" data-toast="sample_toast">토스트 띄우기</button>
-									<button type="button" class="ui-btn ui-btn--contained" data-modal-open="sample_confirm">
-										확인창 열기
-									</button>
-									<button type="button" class="ui-btn ui-btn--contained" data-modal-open="sample_modal">
-										모달 열기
-									</button>
-									<button type="button" class="ui-btn ui-btn--outlined" data-modal-open="sample_alert">
-										알림 모달 열기
-									</button>
+									<button type="button" class="ui-btn ui-btn--contained" data-modal-open="sample_confirm">확인창 열기</button>
+									<button type="button" class="ui-btn ui-btn--contained" data-modal-open="sample_invite">모달 열기</button>
+									<button type="button" class="ui-btn ui-btn--outlined" data-modal-open="sample_alert">알림 모달 열기</button>
 									<button type="button" class="ui-btn ui-btn--outlined" data-modal-open="sample_alert_detail">
 										알림 모달(본문 슬롯) 열기
 									</button>
@@ -556,9 +553,9 @@
 							</div>
 						</div>
 					</section>
-					<!--// 구역 : 피드백 -->
+					<!--// 피드백 구역 -->
 
-					<!-- 구역 : 파셜 기본값 · 개발단 표시 -->
+					<!-- 파셜 변수 구역 -->
 					<section class="section">
 						<div class="section__head">
 							<h2 class="section__title">파셜 기본값 · 개발단 표시</h2>
@@ -578,11 +575,12 @@
 							</div>
 						</div>
 					</section>
-					<!--// 구역 : 파셜 기본값 · 개발단 표시 -->
+					<!--// 파셜 변수 구역 -->
 				</main>
 			</div>
 		</div>
 
+		<!-- 오버레이 구역 -->
 		<!-- 공통 토스트 -->
 		<!-- 페이지 끝에 둔다. 띄우기 : data-toast="아이디" 버튼 또는 toastShow('아이디') -->
 		<div class="ui-toast ui-toast--success" id="sample_toast" role="status" aria-live="polite" hidden>
@@ -594,26 +592,26 @@
 		<!-- 머리 · 버튼 영역은 고정이고 본문만 스크롤된다(모달 최대 높이 90dvh) -->
 		<div
 			class="ui-modal ui-modal--md"
-			id="sample_modal"
+			id="sample_invite"
 			role="dialog"
 			aria-modal="true"
-			aria-labelledby="sample_modal_title"
+			aria-labelledby="sample_invite_title"
 			hidden
 		>
 			<div class="ui-modal__dialog">
 				<div class="ui-modal__header">
-					<h2 class="ui-modal__title" id="sample_modal_title">멤버 초대</h2>
+					<h2 class="ui-modal__title" id="sample_invite_title">멤버 초대</h2>
 					<p class="ui-modal__subtext">초대할 멤버의 정보를 입력해주세요.</p>
 				</div>
 				<div class="ui-modal__body">
-					<!-- 샘플 모달 본문 -->
+					<!-- 멤버 초대 모달 본문(슬롯) -->
 					<div class="grid">
 						<div>
-							<label class="ui-label" for="modal_sample_name">이름</label>
+							<label class="ui-label" for="sample_invite_name">이름</label>
 							<!-- 공통 입력 -->
 							<div class="ui-field">
 								<div class="ui-input ">
-									<input type="text" id="modal_sample_name" name="" placeholder="이름을 입력해주세요." value="" />
+									<input type="text" id="sample_invite_name" name="" placeholder="이름을 입력해주세요." value="" />
 									<button type="button" class="ui-input__clear">지우기</button>
 								</div>
 								<!-- 오류·성공일 때만 문구를 채운다. 비어 있으면 스타일에서 숨긴다 -->
@@ -621,11 +619,11 @@
 							</div>
 						</div>
 						<div>
-							<label class="ui-label" for="modal_sample_email">이메일</label>
+							<label class="ui-label" for="sample_invite_email">이메일</label>
 							<!-- 공통 입력 -->
 							<div class="ui-field">
 								<div class="ui-input ">
-									<input type="text" id="modal_sample_email" name="" placeholder="이메일을 입력해주세요." value="" />
+									<input type="text" id="sample_invite_email" name="" placeholder="이메일을 입력해주세요." value="" />
 									<button type="button" class="ui-input__clear">지우기</button>
 								</div>
 								<!-- 오류·성공일 때만 문구를 채운다. 비어 있으면 스타일에서 숨긴다 -->
@@ -633,11 +631,11 @@
 							</div>
 						</div>
 						<div>
-							<label class="ui-label" for="modal_sample_count">초대 인원</label>
+							<label class="ui-label" for="sample_invite_count">초대 인원</label>
 							<!-- 공통 수량 스테퍼 -->
 							<div class="ui-stepper" data-min="1" data-max="10">
 								<button type="button" class="ui-stepper__btn ui-stepper__btn--minus" onclick="stepperChange(this, -1)">감소</button>
-								<input type="text" class="ui-stepper__input" inputmode="numeric" id="modal_sample_count" name="" value="1" />
+								<input type="text" class="ui-stepper__input" inputmode="numeric" id="sample_invite_count" name="" value="1" />
 								<button type="button" class="ui-stepper__btn ui-stepper__btn--plus" onclick="stepperChange(this, 1)">증가</button>
 							</div>
 						</div>
@@ -743,5 +741,6 @@
 			</div>
 		</div>
 
+		<!--// 오버레이 구역 -->
 	</body>
 </html>

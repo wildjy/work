@@ -1,0 +1,34 @@
+<!-- 탐색 구역 — 탭 · 아코디언 -->
+<section class="section">
+	<div class="section__head">
+		<h2 class="section__title">탭 · 아코디언</h2>
+		<p class="section__desc">탭은 파셜 없이 직접 마크업 · 아코디언은 JSON</p>
+	</div>
+	<div class="grid">
+		<div class="ui-card">
+			<div class="ui-card__body">
+				<div class="ui-tab">
+					<div class="ui-tab__list" role="tablist">
+						<button type="button" class="ui-tab__btn is-active" role="tab" data-tab="basic">기본 정보</button>
+						<button type="button" class="ui-tab__btn" role="tab" data-tab="detail">상세 정보</button>
+					</div>
+					<div class="ui-tab__panel" role="tabpanel" data-tab="basic">기본 정보 패널</div>
+					<div class="ui-tab__panel" role="tabpanel" data-tab="detail" hidden>상세 정보 패널</div>
+				</div>
+			</div>
+		</div>
+		<div class="grid grid--2">
+			<div
+				class="dynamic-content"
+				data-source="./include/ui/_ui_accordion.html"
+				data-items="../data/ui/sample_accordion.json"
+			></div>
+			<div
+				class="dynamic-content"
+				data-source="./include/ui/_ui_accordion.html"
+				data-items="../data/ui/empty.json"
+			></div>
+		</div>
+	</div>
+</section>
+<!--// 탐색 구역 -->

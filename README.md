@@ -49,7 +49,7 @@ npm run validate          # html-validate — 산출물 마크업 검사(.htmlva
 public/
 ├─ index.html                  작업 목록 — 링크는 ./prerender/
 ├─ html/*.html                 페이지 원본
-├─ html/include/<폴더>/_*.html  파셜
+├─ html/include/<폴더>/_*.html  파셜 (슬라이스 · section/ · body/ → docs/STRUCTURE.md)
 ├─ data/<기능>/*.json          목록 데이터
 ├─ prerender/                  산출물 (커밋한다)
 ├─ scss/                       _variable · _mixin · _font · _reset · common.scss
@@ -58,12 +58,14 @@ public/
 └─ js/  dynamicImport.js · listRender.js · common.js · jquery-3.7.1.min.js
 scripts/prerender.js
 docs/PARTIALS.md               파셜(include) 사용법 · 주의점 · 예시 모음
+docs/STRUCTURE.md              폴더 구조 — 슬라이스 · 세그먼트 (어느 폴더에 두나 · 화면 판 Guide_Structure)
 docs/WORKLOG.md                신규 생성 항목 기록
 CLAUDE.md · .claude/           Claude Code 규칙 · 스킬 · 에이전트
 ```
 
 동작 예시 : `public/html/Sample.html` → http://localhost:3500/prerender/Sample
 사용법 화면 : `public/html/Guide_Partial.html` → http://localhost:3500/prerender/Guide_Partial
+폴더 구조 화면 : `public/html/Guide_Structure.html` → http://localhost:3500/prerender/Guide_Structure
 
 ## 4. 작업 순서
 

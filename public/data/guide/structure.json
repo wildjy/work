@@ -1,0 +1,87 @@
+[
+  {
+    "group": "layer",
+    "term": "<code>app</code>",
+    "desc": "<code>public/js/*.js</code> · <code>scss/common.scss</code> · <code>scripts/</code> · <code>index.html</code>"
+  },
+  {
+    "group": "layer",
+    "term": "<code>pages</code>",
+    "desc": "<code>public/html/*.html</code> — 루트에만 페이지를 둔다"
+  },
+  {
+    "group": "layer",
+    "term": "<code>widgets</code>",
+    "desc": "<code>include/&lt;슬라이스&gt;/section/</code> — 화면을 이루는 한 덩어리"
+  },
+  {
+    "group": "layer",
+    "term": "<code>features</code>",
+    "desc": "<code>include/&lt;슬라이스&gt;/</code> 의 행동 단위 — 초대 폼 · 필터"
+  },
+  {
+    "group": "layer",
+    "term": "<code>entities</code>",
+    "desc": "<code>include/&lt;슬라이스&gt;/</code> 의 도메인 조각 + <code>data/&lt;슬라이스&gt;/*.json</code>"
+  },
+  {
+    "group": "layer",
+    "term": "<code>shared</code>",
+    "desc": "<code>include/ui/_ui_*.html</code> · <code>scss/_ui_*.scss</code> · <code>data/ui/*.json</code> — <strong>이미 정확히 이것</strong>"
+  },
+  {
+    "group": "split",
+    "term": "구역이 30줄 안쪽이고 페이지가 200줄을 넘지 않는다",
+    "desc": "<strong>페이지에 그대로 둔다</strong> — 파일을 만들 이유가 없다"
+  },
+  {
+    "group": "split",
+    "term": "페이지가 길어져 구역을 찾기 어렵다",
+    "desc": "<code>section/</code> 으로 가른다 — 페이지에는 include 줄만 남는다"
+  },
+  {
+    "group": "split",
+    "term": "슬롯 본문이 10줄 안팎 · 그 화면 전용",
+    "desc": "부르는 파일의 <code>template</code> 안에 <strong>직접</strong>"
+  },
+  {
+    "group": "split",
+    "term": "슬롯 본문이 30줄을 넘거나 두 화면이 쓴다",
+    "desc": "<code>body/</code> 파셜 — <strong>두 곳이 되는 순간</strong> 옮긴다"
+  },
+  {
+    "group": "split",
+    "term": "두 슬라이스가 같은 것을 쓰게 됐다",
+    "desc": "<code>common/</code> 으로 올리고 <code>data-source</code> 를 전부 고친다"
+  },
+  {
+    "group": "dep",
+    "term": "<code>include/ui/</code> 는 슬라이스를 <strong>include 하지 않는다</strong>",
+    "desc": "프레임은 필요한 마크업을 <strong>슬롯으로 받는다</strong> — 이것이 의존 역전 장치이고, React 의 <code>children</code> 과 같은 역할이다"
+  },
+  {
+    "group": "dep",
+    "term": "<code>&lt;슬라이스&gt;/body/</code> 는 <code>include/ui/</code> 를 <strong>써도 된다</strong>",
+    "desc": "본문 안에서 입력 · 드롭다운 파셜을 부른다. 방향이 공통 UI 쪽으로만 향하면 된다"
+  },
+  {
+    "group": "dep",
+    "term": "다른 슬라이스의 <code>body/</code> 를 <strong>가져다 쓰지 않는다</strong>",
+    "desc": "두 곳이 쓰게 되면 <code>common/</code> 으로 올린다 — 기존 규칙 그대로다"
+  },
+  {
+    "group": "dep",
+    "term": "본문 마크업을 <strong>JSON 으로 옮기지 않는다</strong>",
+    "desc": "<code>&lt;</code> 와 <code>&#123;&#123; &#125;&#125;</code> 의 이중 escape 지옥이 된다(가이드 페이지 데이터에서 겪었다). <strong>JSON 은 반복되는 값, 파셜은 마크업</strong>"
+  },
+  {
+    "group": "next",
+    "term": "<code>scripts/prerender.js</code>",
+    "desc": "전개 전에 include 그래프를 한 번 훑어 <strong>모든 파셜의 template 을 먼저 수집</strong>한다 (2-pass)"
+  },
+  {
+    "group": "next",
+    "term": "<code>public/js/dynamicImport.js</code>",
+    "desc": "슬롯을 못 찾으면 비워 두지 말고 <strong>주입이 다 끝난 뒤 한 번 더</strong> 시도한다"
+  }
+]

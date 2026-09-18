@@ -447,6 +447,98 @@ function Header({ pageTitle = '페이지 제목' }) {
 						</div>
 						<div class="ui-card">
 							<div class="ui-card__header">
+								<h3 class="ui-card__title">본문을 어디에 두나</h3>
+							</div>
+							<div class="ui-card__body">
+								<p class="guide__desc">
+									본문은 <code>template</code> 안에 직접 적어도 되고, 파셜로 빼고 <code>template</code> 이 그 파셜만
+									부르게 해도 된다. 기준은 <strong>길이와 재사용</strong>이다 — 처음부터 다 파일로 만들면 파일만
+									늘어난다.
+								</p>
+							</div>
+							<div class="ui-card__body ui-card__body--flush">
+								<table class="ui-table ui-table--wrap">
+									<caption class="guide__caption">
+										본문을 어디에 두나
+									</caption>
+									<thead>
+										<tr>
+											<th scope="col">본문이 이렇다면</th>
+											<th scope="col">이렇게</th>
+										</tr>
+									</thead>
+									<tbody
+										class="dynamic-list"
+										data-source="../data/guide/partial_slot.json"
+										data-template="#tpl_guide_rule"
+										data-empty="#tpl_guide_rule_none"
+										data-filter="group=place"
+									></tbody>
+								</table>
+							</div>
+							<div class="ui-card__body">
+								<p class="guide__desc">
+									파셜로 뺄 때는 <strong>슬라이스 폴더 아래 <code>body/</code> 세그먼트</strong>에 모은다.
+									<code>data/&lt;슬라이스&gt;</code> 와 이름을 맞추면 데이터와 마크업이 대칭이 된다. 폴더 규칙 전체는
+									<a href="./Guide_Structure.html">폴더 구조 — 어느 폴더에 두나</a>.
+								</p>
+								<pre class="guide__code"><code>public/html/include/
+├─ ui/         _ui_modal.html …            ← 프레임 (본문을 직접 부르지 않고 슬롯으로 받는다)
+└─ sample/                                 ← 슬라이스 (data/sample 과 같은 이름)
+   ├─ section/ _sample_overlay.html …      ← 화면을 이루는 덩어리
+   └─ body/    _sample_invite_body.html    ← 슬롯 본문
+
+파일       include/sample/body/_sample_invite_body.html
+template   id="sample_invite_body"
+모달       data-id="sample_invite"</code></pre>
+								<p class="guide__note">
+									파일 이름 · <code>template</code> 아이디 · 모달 <code>data-id</code> 를 <strong>한 규칙</strong>으로
+									묶으면 <code>grep</code> 한 번에 다 잡힌다.
+								</p>
+							</div>
+						</div>
+						<div class="ui-card">
+							<div class="ui-card__header">
+								<h3 class="ui-card__title">template 째 파셜로 빼면 — 순서에 묶인다</h3>
+							</div>
+							<div class="ui-card__body">
+								<p class="guide__desc">
+									위는 <strong>본문 마크업만</strong> 파셜로 뺀 형태다. <code>template</code> 요소째 파셜로 빼는 것도
+									되지만, 파셜은 <strong>적힌 순서대로</strong> 전개되므로 뒤에 둔 파셜의 <code>template</code> 은
+									슬롯을 채울 때 아직 없다.
+								</p>
+							</div>
+							<div class="ui-card__body ui-card__body--flush">
+								<table class="ui-table ui-table--wrap">
+									<caption class="guide__caption">
+										template 배치별 동작
+									</caption>
+									<thead>
+										<tr>
+											<th scope="col">배치</th>
+											<th scope="col">브라우저</th>
+											<th scope="col">프리렌더</th>
+										</tr>
+									</thead>
+									<tbody
+										class="dynamic-list"
+										data-source="../data/guide/partial_slot.json"
+										data-template="#tpl_guide_order"
+										data-empty="#tpl_guide_order_none"
+										data-filter="group=order"
+									></tbody>
+								</table>
+							</div>
+							<div class="ui-card__body">
+								<p class="guide__note guide__note--warn">
+									못 찾으면 <strong>조용히 빈 본문</strong>으로 나간다. 그래서 <code>template</code> 은
+									<strong>include 를 적은 파일에</strong> 둔다. 굳이 한곳에 모아 두려면 모든 사용처보다 앞에서 include
+									한다.
+								</p>
+							</div>
+						</div>
+						<div class="ui-card">
+							<div class="ui-card__header">
 								<h3 class="ui-card__title">React 라면</h3>
 							</div>
 							<div class="ui-card__body">
@@ -792,6 +884,18 @@ function Modal({ title, children }) {
 		</template>
 		<template id="tpl_guide_sample_none">
 			<p class="guide__sample-none">등록된 예시가 없습니다.</p>
+		</template>
+		<template id="tpl_guide_order">
+			<tr>
+				<td class="guide__term">{{{term}}}</td>
+				<td>{{{runtime}}}</td>
+				<td>{{{prerender}}}</td>
+			</tr>
+		</template>
+		<template id="tpl_guide_order_none">
+			<tr>
+				<td colspan="3" class="ui-table__empty">등록된 배치가 없습니다.</td>
+			</tr>
 		</template>
 		<!--// 목록 템플릿 -->
 	</body>

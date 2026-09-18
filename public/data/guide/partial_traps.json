@@ -88,5 +88,10 @@
     "trap": "Live Server 로 열기",
     "what": "파셜 조각에 라이브리로드 스크립트가 주입돼 마크업이 깨진다",
     "how": "<code>npm run serve</code> (http://localhost:3500)"
+  },
+  {
+    "trap": "<code>template</code> 요소째 파셜로 빼서 사용처보다 <strong>뒤</strong>에서 include",
+    "what": "슬롯을 채울 때 <code>template</code> 이 아직 없어 <strong>본문이 빈 채로</strong> 나간다 — 프리렌더만 경고를 찍는다",
+    "how": "<code>template</code> 은 <strong>include 를 적은 파일에</strong> 두고, 내용만 <code>&lt;슬라이스&gt;/body/</code> 파셜로 뺀다"
   }
 ]

@@ -1,0 +1,75 @@
+<!-- 목록 구역 — 표 + JSON 목록 렌더(0건 상태 포함) · 목록 template 을 같은 파일에 둔다 -->
+<section class="section">
+	<div class="section__head">
+		<h2 class="section__title">목록</h2>
+		<p class="section__desc">JSON + 템플릿으로 그리는 표 · 0건 상태</p>
+	</div>
+	<div class="grid grid--2">
+		<div class="ui-card">
+			<div class="ui-card__header">
+				<h3 class="ui-card__title">회원 목록</h3>
+			</div>
+			<div class="ui-card__body ui-card__body--flush">
+				<table class="ui-table">
+					<caption>
+						회원 목록
+					</caption>
+					<thead>
+						<tr>
+							<th scope="col">No</th>
+							<th scope="col">이름</th>
+							<th scope="col">이메일</th>
+						</tr>
+					</thead>
+					<tbody
+						class="dynamic-list"
+						data-source="../data/common/sample_list.json"
+						data-template="#tpl_sample_row"
+						data-empty="#tpl_sample_row_none"
+					></tbody>
+				</table>
+			</div>
+		</div>
+		<div class="ui-card">
+			<div class="ui-card__header">
+				<h3 class="ui-card__title">회원 목록 (0건)</h3>
+			</div>
+			<div class="ui-card__body ui-card__body--flush">
+				<table class="ui-table">
+					<caption>
+						회원 목록 (0건)
+					</caption>
+					<thead>
+						<tr>
+							<th scope="col">No</th>
+							<th scope="col">이름</th>
+							<th scope="col">이메일</th>
+						</tr>
+					</thead>
+					<tbody
+						class="dynamic-list"
+						data-source="../data/common/sample_list_empty.json"
+						data-template="#tpl_sample_row"
+						data-empty="#tpl_sample_row_none"
+					></tbody>
+				</table>
+			</div>
+		</div>
+	</div>
+</section>
+<!--// 목록 구역 -->
+
+<!-- 목록 템플릿 (listRender.js 가 JSON 을 순회해 렌더) -->
+<template id="tpl_sample_row">
+	<tr>
+		<td>{{@number}}</td>
+		<td>{{name}}</td>
+		<td>{{email}}</td>
+	</tr>
+</template>
+<template id="tpl_sample_row_none">
+	<tr>
+		<td colspan="3" class="ui-table__empty">등록된 회원이 없습니다.</td>
+	</tr>
+</template>
+<!--// 목록 템플릿 -->

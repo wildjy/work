@@ -28,6 +28,9 @@
 								<div class="ui-lnb__sub" hidden>
 									<ul class="ui-lnb__group">
 										<li class="ui-lnb__item">
+											<a class="ui-lnb__link" href="./Guide_Structure.html">폴더 구조</a>
+										</li>
+										<li class="ui-lnb__item">
 											<a class="ui-lnb__link" href="./Guide_Partial.html">파셜(include)</a>
 										</li>
 									</ul>
@@ -585,6 +588,124 @@ function Header({ pageTitle = '페이지 제목' }) {
 						</div>
 						<div class="ui-card">
 							<div class="ui-card__header">
+								<h3 class="ui-card__title">본문을 어디에 두나</h3>
+							</div>
+							<div class="ui-card__body">
+								<p class="guide__desc">
+									본문은 <code>template</code> 안에 직접 적어도 되고, 파셜로 빼고 <code>template</code> 이 그 파셜만
+									부르게 해도 된다. 기준은 <strong>길이와 재사용</strong>이다 — 처음부터 다 파일로 만들면 파일만
+									늘어난다.
+								</p>
+							</div>
+							<div class="ui-card__body ui-card__body--flush">
+								<table class="ui-table ui-table--wrap">
+									<caption class="guide__caption">
+										본문을 어디에 두나
+									</caption>
+									<thead>
+										<tr>
+											<th scope="col">본문이 이렇다면</th>
+											<th scope="col">이렇게</th>
+										</tr>
+									</thead>
+									<tbody>
+									  <tr>
+									  	<td class="guide__term">10줄 안팎 · 그 화면 전용</td>
+									  	<td>부르는 파일의 <code>template</code> 안에 <strong>직접 적는다</strong> — 파일을 따로 만들 이유가 없다</td>
+									  </tr>
+									  <tr>
+									  	<td class="guide__term">입력 · 표가 들어가 30줄을 넘는다</td>
+									  	<td><code>&lt;슬라이스&gt;/body/</code> 파셜로 빼고 <code>template</code> 은 그 파셜만 부른다</td>
+									  </tr>
+									  <tr>
+									  	<td class="guide__term">두 화면 이상이 같은 본문을 쓴다</td>
+									  	<td><code>&lt;슬라이스&gt;/body/</code> 파셜 — <strong>두 곳이 되는 순간</strong> 옮긴다. 다만 id 를 고정으로 가진 본문은 <strong>한 페이지에 두 번 넣지 않는다</strong>(id 가 겹친다)</td>
+									  </tr>
+									  <tr>
+									  	<td class="guide__term">개발 인계에서 따로 떼어 봐야 한다</td>
+									  	<td><code>&lt;슬라이스&gt;/body/</code> 파셜 — 파일 하나가 화면 하나의 본문이 된다</td>
+									  </tr>
+									</tbody>
+								</table>
+							</div>
+							<div class="ui-card__body">
+								<p class="guide__desc">
+									파셜로 뺄 때는 <strong>슬라이스 폴더 아래 <code>body/</code> 세그먼트</strong>에 모은다.
+									<code>data/&lt;슬라이스&gt;</code> 와 이름을 맞추면 데이터와 마크업이 대칭이 된다. 폴더 규칙 전체는
+									<a href="./Guide_Structure.html">폴더 구조 — 어느 폴더에 두나</a>.
+								</p>
+								<pre class="guide__code"><code>public/html/include/
+├─ ui/         _ui_modal.html …            ← 프레임 (본문을 직접 부르지 않고 슬롯으로 받는다)
+└─ sample/                                 ← 슬라이스 (data/sample 과 같은 이름)
+   ├─ section/ _sample_overlay.html …      ← 화면을 이루는 덩어리
+   └─ body/    _sample_invite_body.html    ← 슬롯 본문
+
+파일       include/sample/body/_sample_invite_body.html
+template   id="sample_invite_body"
+모달       data-id="sample_invite"</code></pre>
+								<p class="guide__note">
+									파일 이름 · <code>template</code> 아이디 · 모달 <code>data-id</code> 를 <strong>한 규칙</strong>으로
+									묶으면 <code>grep</code> 한 번에 다 잡힌다.
+								</p>
+							</div>
+						</div>
+						<div class="ui-card">
+							<div class="ui-card__header">
+								<h3 class="ui-card__title">template 째 파셜로 빼면 — 순서에 묶인다</h3>
+							</div>
+							<div class="ui-card__body">
+								<p class="guide__desc">
+									위는 <strong>본문 마크업만</strong> 파셜로 뺀 형태다. <code>template</code> 요소째 파셜로 빼는 것도
+									되지만, 파셜은 <strong>적힌 순서대로</strong> 전개되므로 뒤에 둔 파셜의 <code>template</code> 은
+									슬롯을 채울 때 아직 없다.
+								</p>
+							</div>
+							<div class="ui-card__body ui-card__body--flush">
+								<table class="ui-table ui-table--wrap">
+									<caption class="guide__caption">
+										template 배치별 동작
+									</caption>
+									<thead>
+										<tr>
+											<th scope="col">배치</th>
+											<th scope="col">브라우저</th>
+											<th scope="col">프리렌더</th>
+										</tr>
+									</thead>
+									<tbody>
+									  <tr>
+									  	<td class="guide__term"><code>template</code> 이 include 보다 <strong>뒤</strong> (같은 파일)</td>
+									  	<td>✅</td>
+									  	<td>✅</td>
+									  </tr>
+									  <tr>
+									  	<td class="guide__term"><code>template</code> 이 include 보다 <strong>앞</strong> (같은 파일)</td>
+									  	<td>✅</td>
+									  	<td>✅</td>
+									  </tr>
+									  <tr>
+									  	<td class="guide__term"><strong>template 째</strong> 파셜로 빼고 사용처보다 <strong>앞</strong>에서 include</td>
+									  	<td>✅</td>
+									  	<td>✅</td>
+									  </tr>
+									  <tr>
+									  	<td class="guide__term"><strong>template 째</strong> 파셜로 빼고 사용처보다 <strong>뒤</strong>에서 include</td>
+									  	<td>❌ 본문이 <strong>빈 채로</strong> 렌더 (콘솔 경고만)</td>
+									  	<td>❌ <code>! 슬롯 template 없음</code> 경고</td>
+									  </tr>
+									</tbody>
+								</table>
+							</div>
+							<div class="ui-card__body">
+								<p class="guide__note guide__note--warn">
+									못 찾으면 <strong>조용히 빈 본문</strong>으로 나간다. 그래서 <code>template</code> 은
+									<strong>include 를 적은 파일에</strong> 둔다. 굳이 한곳에 모아 두려면 모든 사용처보다 앞에서 include
+									한다.
+								</p>
+							</div>
+						</div>
+						<div class="ui-card">
+							<div class="ui-card__header">
 								<h3 class="ui-card__title">React 라면</h3>
 							</div>
 							<div class="ui-card__body">
@@ -821,6 +942,11 @@ function Modal({ title, children }) {
 									  	<td class="guide__term">Live Server 로 열기</td>
 									  	<td>파셜 조각에 라이브리로드 스크립트가 주입돼 마크업이 깨진다</td>
 									  	<td><code>npm run serve</code> (http://localhost:3500)</td>
+									  </tr>
+									  <tr>
+									  	<td class="guide__term"><code>template</code> 요소째 파셜로 빼서 사용처보다 <strong>뒤</strong>에서 include</td>
+									  	<td>슬롯을 채울 때 <code>template</code> 이 아직 없어 <strong>본문이 빈 채로</strong> 나간다 — 프리렌더만 경고를 찍는다</td>
+									  	<td><code>template</code> 은 <strong>include 를 적은 파일에</strong> 두고, 내용만 <code>&lt;슬라이스&gt;/body/</code> 파셜로 뺀다</td>
 									  </tr>
 									</tbody>
 								</table>

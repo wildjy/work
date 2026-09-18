@@ -1,0 +1,89 @@
+<!-- 입력 구역 — 입력 · 드롭다운 · 스테퍼 · 날짜 · 기간 -->
+<section class="section">
+	<div class="section__head">
+		<h2 class="section__title">입력</h2>
+		<p class="section__desc">입력 · 드롭다운 · 스테퍼 · 날짜 · 기간</p>
+	</div>
+	<div class="ui-card">
+		<div class="ui-card__body">
+			<div class="grid grid--2">
+				<div>
+					<div class="ui-label">
+						<label for="sample_email">입력</label>
+						<div
+							class="dynamic-content"
+							data-source="./include/ui/_ui_tooltip.html"
+							data-id="tip_sample_email"
+							data-position="right"
+							data-text="로그인에 쓸 이메일입니다. 가입 후에는 바꿀 수 없습니다."
+						></div>
+					</div>
+					<div
+						class="dynamic-content"
+						data-source="./include/ui/_ui_input.html"
+						data-id="sample_email"
+						data-placeholder="이메일을 입력해주세요."
+					></div>
+				</div>
+				<div>
+					<label class="ui-label" for="sample_birth">입력 (오류 안내)</label>
+					<div
+						class="dynamic-content"
+						data-source="./include/ui/_ui_input.html"
+						data-id="sample_birth"
+						data-value="1999"
+						data-modifier="is-error"
+						data-helper="생년월일 8자리를 입력해주세요."
+						data-helper-type="ui-helper--error"
+					></div>
+				</div>
+				<div>
+					<p class="ui-label">드롭다운</p>
+					<div
+						class="dynamic-content"
+						data-source="./include/ui/_ui_dropdown.html"
+						data-items="../data/ui/sample_options.json"
+						data-placeholder="정렬을 선택해주세요."
+					></div>
+				</div>
+				<div>
+					<p class="ui-label">드롭다운 (0건)</p>
+					<div
+						class="dynamic-content"
+						data-source="./include/ui/_ui_dropdown.html"
+						data-items="../data/ui/empty.json"
+					></div>
+				</div>
+				<div>
+					<p class="ui-label">검색 드롭다운</p>
+					<div
+						class="dynamic-content"
+						data-source="./include/ui/_ui_dropdown_search.html"
+						data-items="../data/ui/sample_options.json"
+						data-placeholder="회사명을 검색해주세요."
+					></div>
+				</div>
+				<div>
+					<label class="ui-label" for="sample_count">수량 스테퍼</label>
+					<div
+						class="dynamic-content"
+						data-source="./include/ui/_ui_stepper.html"
+						data-id="sample_count"
+						data-value="1"
+						data-min="1"
+						data-max="3"
+					></div>
+				</div>
+				<div>
+					<label class="ui-label" for="sample_period">기간</label>
+					<div class="dynamic-content" data-source="./include/ui/_ui_period.html" data-id="sample_period"></div>
+				</div>
+				<div>
+					<label class="ui-label" for="sample_date">날짜</label>
+					<div class="dynamic-content" data-source="./include/ui/_ui_date.html" data-id="sample_date"></div>
+				</div>
+			</div>
+		</div>
+	</div>
+</section>
+<!--// 입력 구역 -->
