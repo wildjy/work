@@ -412,6 +412,9 @@
 									<button type="button" class="ui-btn ui-btn--outlined" data-modal-open="sample_alert">
 										알림 모달 열기
 									</button>
+									<button type="button" class="ui-btn ui-btn--outlined" data-modal-open="sample_alert_detail">
+										알림 모달(본문 슬롯) 열기
+									</button>
 								</div>
 							</div>
 						</div>
@@ -452,9 +455,13 @@
 			data-id="sample_modal"
 			data-title="멤버 초대"
 			data-subtext="초대할 멤버의 정보를 입력해주세요."
-			data-body="./include/sample/_modal_sample_body.html"
+			data-slot-body="#modal_sample_body"
 			data-confirm="초대하기"
 		></div>
+		<!-- 모달 본문(슬롯) — 본문을 여기 적어도 되고, 예시처럼 파셜을 include 해도 된다 -->
+		<template id="modal_sample_body">
+			<div class="dynamic-content" data-source="./include/sample/_modal_sample_body.html"></div>
+		</template>
 		<div
 			class="dynamic-content"
 			data-source="./include/ui/_ui_modal_alert.html"
@@ -463,6 +470,20 @@
 			data-subtext="2026.09.20 02:00 ~ 06:00"
 			data-text="서비스 점검 시간에는 로그인과 결제를 이용할 수 없습니다. 바깥 영역을 누르면 닫힙니다."
 		></div>
+		<div
+			class="dynamic-content"
+			data-source="./include/ui/_ui_modal_alert.html"
+			data-id="sample_alert_detail"
+			data-title="점검 상세"
+			data-subtext="2026.09.20 02:00 ~ 06:00"
+			data-slot-body="#modal_sample_alert_body"
+		></div>
+		<!-- 알림 본문(슬롯) — 문단이 여럿이라 data-text 대신 슬롯으로 넘긴다(둘을 함께 넘기지 않는다) -->
+		<template id="modal_sample_alert_body">
+			<p class="ui-modal__text">점검 시간에는 로그인 · 결제 · 알림 발송이 모두 멈춥니다.</p>
+			<p class="ui-modal__text">점검 중 작성하던 내용은 저장되지 않으니 미리 저장해 주세요.</p>
+			<p class="ui-modal__text">점검이 일찍 끝나면 공지사항으로 다시 안내합니다.</p>
+		</template>
 		<div
 			class="dynamic-content"
 			data-source="./include/ui/_ui_modal_confirm.html"

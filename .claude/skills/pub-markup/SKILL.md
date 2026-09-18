@@ -38,6 +38,7 @@ description: >-
 | **활성 상태를 파셜에 넣으면 모든 페이지가 같아진다** | 활성 메뉴·탭은 `common.js` 에서 **현재 파일명과 href 를 대조**하거나 각 페이지의 `dynamic-content-loaded` 에서 토글 |
 | **`<template>` 안에서는 include 가 동작하지 않는다** | 템플릿 자체를 파셜로 만든다 |
 | **경로는 「페이지」 기준이다** | 파셜 안의 `data-source` 도 페이지 기준으로 쓴다 |
+| **id 를 고정으로 쓴 파셜은 한 페이지에 두 번 못 넣는다** | 두 번 쓰면 **id 가 겹쳐** 라벨·`getElementById` 가 **먼저 나온 것만** 가리킨다(`validate` 의 `no-dup-id` 가 막는다). 재사용할 파셜은 **id 를 `data-*` 로 받는다** — `id="{{prefix}}_name"` |
 | **빈 파셜에 짧은 주석 한 줄** | 「구역 표시」로 판정돼 산출물에 그대로 남는다 — 넣지 않는다 |
 
 > 🤖 **AI 작업 규칙:** 새 화면을 만들 때 **다른 페이지에 같은 마크업이 있는지 먼저 찾는다.**
@@ -73,7 +74,51 @@ description: >-
 >
 > ⚠ **프리렌더와 `dynamicImport.js` 는 같은 규칙을 각각 구현한다 — 한쪽만 고치지 않는다.**
 >
-> ⚠ 값이 「문구」가 아니라 「데이터 여러 줄」이면 JSON + `template` 으로 간다(`pub-list-render`).
+> ⚠ 값이 「문구」가 아니라 **마크업 덩어리**면 슬롯(§2-1), **반복되는 데이터**면 JSON + `template`(`pub-list-render`) 으로 간다.
+
+---
+
+## 2-1. 파셜에 **마크업 덩어리를 넘긴다** — 슬롯(`data-slot-*`)
+
+> **원칙:** 값이 「문구」가 아니라 **여러 줄 마크업**이면 `data-*` 가 아니라 **슬롯**으로 넘긴다.
+
+```html
+<!-- 화면(부르는 쪽) — 컨테이너는 그대로 비워 두고, 내용은 template 에 적는다 -->
+<div class="dynamic-content" data-source="./include/ui/_ui_modal.html"
+     data-id="modal_invite" data-title="멤버 초대" data-slot-body="#modal_invite_body"></div>
+
+<template id="modal_invite_body">
+	<div class="grid">…</div>
+</template>
+
+<!-- 파셜(_ui_modal.html) -->
+<div class="ui-modal__body">{{{body}}}</div>
+```
+
+| | |
+| --- | --- |
+| 키 이름 | `data-slot-body` → 파셜 안 `{{{body}}}` (dataset 규칙, 케밥 → 카멜) |
+| 값 | **template 의 아이디 선택자**(`#아이디`) — 마크업을 속성에 직접 쓰지 않는다 |
+| template 위치 | include 를 적은 파일과 **같은 파일**(페이지든 파셜이든). 산출물에서는 걷힌다 |
+| 구현 | `prerender.js` 의 `resolveSlots()`/`fillSlots()` · `dynamicImport.js` 의 같은 블록 |
+
+- **여러 화면이 함께 쓰는 덩어리**는 template 안에서 그 파셜을 include 한다 — 슬롯과 파셜을 겹쳐 쓸 수 있다.
+  ⚠ 단, **같은 페이지의 슬롯 두 곳에 같은 파셜을 넣지 않는다** — 파셜이 id 를 고정으로 갖고 있으면 id 가 겹친다(위 표).
+  ```html
+  <template id="modal_invite_body">
+  	<div class="dynamic-content" data-source="./include/member/_modal_invite_body.html"></div>
+  </template>
+  ```
+- 슬롯은 **원문 그대로**(`{{{ }}}`) 들어간다. `{{body}}` 처럼 두 겹으로 적으면 태그가 글자로 보인다.
+- 넘기지 않으면 `{{{body}}}` 가 화면에 그대로 남는다(변수와 같은 규칙). 없어도 되는 자리는 파셜에 `{{{body|}}}` 로 적는다 — 프리렌더가 그 줄을 지운다.
+
+> ⚠ **슬롯 이름을 파셜 안 목록 `template` 의 필드명과 겹치지 않게** 정한다. 겹치면 목록 필드 자리까지 슬롯 내용으로 덮인다
+> (예 : 아코디언 파셜은 항목 필드로 `{{{body}}}` 를 쓴다 — 그 파셜에 `data-slot-body` 를 넘기면 안 된다).
+>
+> ⚠ **include 컨테이너는 여전히 비어 있어야 한다.** 내용을 컨테이너 안에 적지 않고 template 을 가리킨다 — 목록 컨테이너와 규칙을 같게 두려는 설계다.
+>
+> ⚠ **프리렌더와 `dynamicImport.js` 는 같은 규칙을 각각 구현한다 — 한쪽만 고치지 않는다.**
+> 산출물 들여쓰기 보정(줄 단위 삽입 · 빈 슬롯 줄 삭제)은 프리렌더에만 있다 — 브라우저는 산출물을 만들지 않는다.
 
 ---
 

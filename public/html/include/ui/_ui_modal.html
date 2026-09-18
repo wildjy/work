@@ -1,4 +1,5 @@
-<!-- 공통 모달 프레임 — 받는 값 : data-id(필수) · data-title(필수) · data-body(본문 파셜 경로 · 필수) · data-subtext · data-footer(버튼 파셜 경로) · data-cancel · data-confirm · data-modifier(크기 · 기본 ui-modal--md) -->
+<!-- 공통 모달 프레임 — 받는 값 : data-id(필수) · data-title(필수) · data-slot-body(본문 template 아이디 · 필수) · data-subtext · data-footer(버튼 파셜 경로) · data-cancel · data-confirm · data-modifier(크기 · 기본 ui-modal--md) -->
+<!-- 본문은 부르는 쪽에 template 으로 적어 data-slot-body="#아이디" 로 넘긴다. 여러 화면이 함께 쓰는 본문은 그 template 안에서 파셜을 include 한다 -->
 <!--@ 열기 : data-modal-open="아이디" 버튼 또는 modalOpen('아이디') -->
 <!--@ 머리 · 버튼 영역은 고정이고 본문만 스크롤된다(모달 최대 높이 90dvh) -->
 <div
@@ -14,9 +15,7 @@
 			<h2 class="ui-modal__title" id="{{id}}_title">{{title}}</h2>
 			<p class="ui-modal__subtext">{{subtext|}}</p>
 		</div>
-		<div class="ui-modal__body">
-			<div class="dynamic-content" data-source="{{body}}"></div>
-		</div>
+		<div class="ui-modal__body">{{{body}}}</div>
 		<div class="ui-modal__footer">
 			<div
 				class="dynamic-content"

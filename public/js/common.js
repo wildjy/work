@@ -33,6 +33,7 @@
  * 10. LNB                     lnbActive                     .ui-lnb__link--toggle
  * 11. 날짜 · 기간 달력          datePickerInit (jQuery UI)     [data-datepicker-day] · .ui-period[data-datepicker]
  * 12. 툴팁                    tooltipSet · tooltipCloseAll   .ui-tooltip__btn (hover · focus · 누르면 고정)
+ * 13. 문서 코드 색칠          codeHighlight                 .guide__code (사용법 문서 전용)
  */
 
 /* ── 0. 공통 헬퍼 ─────────────────────────────────────────── */
@@ -950,4 +951,69 @@ document.addEventListener('click', function (e) {
 });
 document.addEventListener('keydown', function (e) {
 	if (e.key === 'Escape') tooltipCloseAll(null);
+});
+
+/* ── 13. 사용법 문서 코드 색칠 ────────────────────────────
+   .guide__code 안의 코드 예시(마크업 조각과 비교용 JSX)에 색을 입힌다.
+
+   ⚠ **마크업·JSON 에는 span 을 적지 않는다.** 원본에는 코드만 적고 화면에서만 감싼다 —
+      예시가 JSON 에서 오기도 하고(목록 렌더 뒤 다시 돈다), 손으로 span 을 넣으면 고치기 어려워진다.
+   ⚠ 읽기 좋으라고 태그·속성·문자열·주석·치환 자리만 가른다. 파서가 아니다.
+   ⚠ 이미 칠한 블록은 건너뛴다(세 시점에 모두 걸리므로). */
+
+// 순서가 곧 우선순위다 : 마크업 주석 → 치환 자리 → 문자열 → 태그 이름 → 닫는 꺾쇠 → 속성 이름 → 스크립트 주석
+// ⚠ 문자열을 스크립트 주석보다 **먼저** 본다 — 'https://…' 안의 // 를 주석으로 삼지 않기 위해서다.
+// ⚠ 속성 이름은 앞에 . 이나 글자가 없고 뒤가 = 하나일 때만 — it.group === 'x' 의 group 을 속성으로 보지 않는다.
+var CODE_TOKEN_RE =
+	/(<!--[\s\S]*?-->)|(\{\{\{?[\s\S]*?\}?\}\})|("[^"]*"|'[^']*')|(<\/?[a-zA-Z][\w-]*)|(?<!=)(\/?>)|(?<![\w.$])([a-zA-Z][\w-]*)(?=\s*=(?!=))|(\/\/[^\r\n]*|\/\*[\s\S]*?\*\/)/g;
+var CODE_VAR_RE = /\{\{\{?[\s\S]*?\}?\}\}/g;
+
+function _codeEsc(s) {
+	return s.replace(/[&<>]/g, function (c) {
+		return c === '&' ? '&amp;' : c === '<' ? '&lt;' : '&gt;';
+	});
+}
+
+function _codeTok(kind, s) {
+	return '<span class="guide__tok--' + kind + '">' + _codeEsc(s) + '</span>';
+}
+
+// 문자열 안의 치환 자리는 따로 칠한다 — data-source="{{footer|…}}"
+function _codeStr(s) {
+	var inner = _codeEsc(s).replace(CODE_VAR_RE, function (m) {
+		return '<span class="guide__tok--var">' + m + '</span>';
+	});
+	return '<span class="guide__tok--str">' + inner + '</span>';
+}
+
+function codeHighlight(root) {
+	var blocks = (root || document).querySelectorAll('.guide__code code');
+
+	Array.prototype.forEach.call(blocks, function (code) {
+		if (code._codeDone) return;
+
+		var src = code.textContent;
+		var out = '';
+		var last = 0;
+		var m;
+
+		CODE_TOKEN_RE.lastIndex = 0;
+		while ((m = CODE_TOKEN_RE.exec(src)) !== null) {
+			out += _codeEsc(src.slice(last, m.index));
+			if (m[1]) out += _codeTok('cmt', m[1]);
+			else if (m[2]) out += _codeTok('var', m[2]);
+			else if (m[3]) out += _codeStr(m[3]);
+			else if (m[4] || m[5]) out += _codeTok('tag', m[4] || m[5]);
+			else if (m[6]) out += _codeTok('attr', m[6]);
+			else out += _codeTok('cmt', m[7]);
+			last = CODE_TOKEN_RE.lastIndex;
+		}
+		out += _codeEsc(src.slice(last));
+
+		code.innerHTML = out;
+		code._codeDone = true;
+	});
+}
+onRender(function () {
+	codeHighlight(document);
 });

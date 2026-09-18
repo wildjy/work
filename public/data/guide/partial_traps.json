@@ -1,0 +1,92 @@
+[
+  {
+    "trap": "<code>div</code> 가 아닌 태그로 include",
+    "what": "프리렌더가 전개하지 않아 <strong>산출물에만 빈 자리</strong>가 생긴다",
+    "how": "<code>div</code> 로 두고 레이아웃으로 위치를 맞춘다"
+  },
+  {
+    "trap": "컨테이너에 내용을 적음",
+    "what": "전개되지 않는다",
+    "how": "비운다. 마크업은 슬롯으로 넘긴다"
+  },
+  {
+    "trap": "래퍼 클래스가 사라진다",
+    "what": "include 한 <code>div</code> 에 준 class 가 없다",
+    "how": "형제 셀렉터 · <code>data-modifier</code>"
+  },
+  {
+    "trap": "넘기지 않은 키",
+    "what": "<code>&#123;&#123;key&#125;&#125;</code> 가 <strong>글자로 보인다</strong> — React 처럼 값이 없다고 빈칸이 되지 않는다",
+    "how": "파셜에 기본값을 준다(React 의 기본 props 와 같은 자리)"
+  },
+  {
+    "trap": "<code>data-*</code> 에 대문자",
+    "what": "브라우저만 치환 실패 → <strong>화면과 산출물이 다르다</strong>",
+    "how": "케밥으로 적는다 (<code>data-make-new</code>)"
+  },
+  {
+    "trap": "고정 <code>id</code> 파셜을 두 번 include",
+    "what": "id 중복 → 라벨·<code>getElementById</code> 가 <strong>먼저 것만</strong> 가리킨다",
+    "how": "id 를 <code>data-*</code> 로 받는다. <code>npm run validate</code> 의 <code>no-dup-id</code> 가 막아 준다"
+  },
+  {
+    "trap": "같은 본문 파셜을 슬롯 두 곳에",
+    "what": "위와 같은 id 중복",
+    "how": "본문 파셜도 id 를 받게 하거나 따로 만든다"
+  },
+  {
+    "trap": "슬롯 이름 ↔ 목록 필드명 충돌",
+    "what": "목록 템플릿 자리가 슬롯 내용으로 덮인다",
+    "how": "이름을 갈라 쓴다 (아코디언은 항목 필드로 <code>&#123;&#123;&#123;body&#125;&#125;&#125;</code> 를 쓴다)"
+  },
+  {
+    "trap": "<code>data-text</code> 와 <code>data-slot-body</code> 를 함께",
+    "what": "본문이 두 벌 나온다",
+    "how": "택일한다"
+  },
+  {
+    "trap": "목록 템플릿 안의 include",
+    "what": "<strong>브라우저에서는 전개되지 않고</strong>(목록은 파셜 주입이 끝난 뒤 문자열로 찍힌다) 프리렌더는 펴 버려 <strong>화면과 산출물이 갈린다</strong>",
+    "how": "반복 행 안에는 include 를 두지 않는다. <strong>슬롯 template 은 다르다</strong> — 실제 마크업이 되므로 동작한다"
+  },
+  {
+    "trap": "JSON 값 안의 <code>&#123;&#123; &#125;&#125;</code>",
+    "what": "치환이 두 번 돌아 <strong>마커가 지워진다</strong>",
+    "how": "중괄호를 엔티티(<code>&amp;#123;</code>)로 적는다 — 이 페이지의 표가 그렇게 만들어졌다"
+  },
+  {
+    "trap": "파셜 안 경로를 파셜 기준으로",
+    "what": "404 — 화면이 비어 있다",
+    "how": "페이지 기준 <code>./include/…</code>"
+  },
+  {
+    "trap": "빈 파셜에 짧은 주석 한 줄",
+    "what": "「구역 표시」로 판정돼 산출물에 주석만 남는다",
+    "how": "넣지 않는다"
+  },
+  {
+    "trap": "설명 주석에 태그를 그대로",
+    "what": "프리렌더가 실제 태그로 오인한다",
+    "how": "「template 요소」처럼 풀어 쓴다"
+  },
+  {
+    "trap": "개발단이 봐야 할 주석",
+    "what": "산출물에서 걷힌다",
+    "how": "<code>&lt;!--@ … --&gt;</code> 로 표시한다"
+  },
+  {
+    "trap": "jQuery 가 필요한 파셜",
+    "what": "날짜·기간 파셜은 jQuery UI 로 달력을 그린다",
+    "how": "그 페이지에 <code>jquery</code> · <code>jquery-ui</code> 를 넣는다"
+  },
+  {
+    "trap": "브라우저 캐시",
+    "what": "규칙을 고쳤는데 옛 <code>dynamicImport.js</code> 가 돌아 <code>&#123;&#123;&#123;body&#125;&#125;&#125;</code> 가 글자로 보인다",
+    "how": "<code>npm run serve</code>(no-store)로 띄우고 강력 새로고침"
+  },
+  {
+    "trap": "Live Server 로 열기",
+    "what": "파셜 조각에 라이브리로드 스크립트가 주입돼 마크업이 깨진다",
+    "how": "<code>npm run serve</code> (http://localhost:3500)"
+  }
+]

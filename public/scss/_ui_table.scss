@@ -36,6 +36,22 @@
 		}
 	}
 
+	// 긴 설명이 들어가는 표 — 줄바꿈을 허용하고 칸 높이를 내용에 맞춘다(사용법 문서 등)
+	&--wrap {
+		th,
+		td {
+			white-space: normal;
+			word-break: keep-all;
+		}
+		td {
+			height: auto;
+			padding-top: 14px;
+			padding-bottom: 14px;
+			vertical-align: top;
+			line-height: 1.6;
+		}
+	}
+
 	td.ui-table__empty {
 		height: 120px;
 		text-align: center;

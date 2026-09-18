@@ -10,6 +10,10 @@
  *
  * 포트를 바꾸려면 아래 PORT 한 줄을 고친다(README · pub-env 스킬의 주소도 함께).
  * serve 는 버전을 고정해 받는다 — 최신판이 cleanUrls 등 동작을 바꿔도 환경이 흔들리지 않는다.
+ *
+ * ⚠ **캐시를 끈다**(scripts/serve.json → Cache-Control: no-store).
+ *    serve 는 Cache-Control 을 붙이지 않아 브라우저가 스스로 캐시한다. 그러면 파셜·JSON·js 를 고쳐도
+ *    **옛 파일이 그려져** 「치환이 안 된다 · 마크업이 안 바뀐다」로 보인다(치환 규칙이 바뀐 직후가 특히 위험하다).
  */
 const net = require('net');
 const path = require('path');
@@ -37,7 +41,8 @@ function portFree(port) {
 		process.exit(1);
 	}
 
-	const child = spawn('npx', ['--yes', SERVE, 'public', '-l', String(PORT)], {
+	const CONFIG = path.join(__dirname, 'serve.json');
+	const child = spawn('npx', ['--yes', SERVE, 'public', '-l', String(PORT), '-c', CONFIG], {
 		cwd: ROOT,
 		stdio: 'inherit',
 		shell: process.platform === 'win32', // Windows 에서 npx.cmd 를 찾기 위해

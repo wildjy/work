@@ -22,6 +22,9 @@ npm run serve      # = node scripts/serve.js  →  http://localhost:3500 (고정
   ⚠ `serve` 의 `--no-port-switching` 옵션은 **동작하지 않는다**(14.2.6 은 도움말에만 있고 코드가 읽지 않아 49xxx 로 뜬다). 그래서 스크립트로 막았다.
   실패하면 떠 있는 서버를 먼저 끈다(`netstat -ano | findstr :3500` → `taskkill /PID <pid> /F`).
 - 다른 퍼블 저장소와 **포트를 겹치지 않게** 둔다(동시에 띄우면 뒤에 띄운 쪽이 실패한다). 바꾸려면 `scripts/serve.js` 의 `PORT` 를 고치고 이 문서·README 의 주소도 함께 고친다.
+- **브라우저 캐시를 끈다**(`scripts/serve.json` → `Cache-Control: no-store`). `serve` 는 이 헤더를 스스로 붙이지 않아 브라우저가 판단해 캐시하고, 그러면 파셜·JSON·`js/*.js` 를 고쳐도 **옛 파일이 그려진다.**
+  증상이 「치환이 안 된다 · 마크업이 안 바뀐다 · `{{{키}}}` 가 글자로 보인다」로 나타나 코드 문제로 보이기 쉽다. 치환 규칙(`dynamicImport.js`)을 고친 직후가 특히 위험하다.
+  ⚠ 서버를 이미 띄워 둔 상태라면 **서버를 껐다 켜고**(설정이 시작할 때 읽힌다) 브라우저를 강력 새로고침(Ctrl+F5)한다.
 - `serve` 는 **버전을 고정**해 받는다(`scripts/serve.js` 의 `SERVE`) — 최신판이 옵션·cleanUrls 동작을 바꿔도 환경이 흔들리지 않는다.
 
 ## 2. `public/` 소스는 **CRLF + 탭** · Prettier · ESLint

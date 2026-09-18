@@ -24,6 +24,9 @@
  *   1) <div class="dynamic-content" data-source="./_파셜.html"></div>   (재귀)
  *   2) <tbody class="dynamic-list" data-source="../data/…/x.json"
  *             data-template="#tpl" data-empty="#tpl_empty"></tbody>
+ *   3) 슬롯 — <div class="dynamic-content" data-source="./_파셜.html" data-slot-본문="#tpl_body"></div>
+ *             파셜 안의 {{{본문}}} 자리에 <template id="tpl_body"> 의 내용이 들어간다.
+ *             문자열 변수(data-*)로는 넘길 수 없는 **여러 줄 마크업**을 넘기는 방법이다(resolveSlots/fillSlots).
  *
  * ⚠ 목록 컨테이너는 반드시 **비어 있어야** 한다(`<tbody ...></tbody>`).
  *   listRender.js 와 동일한 규칙이며, 이 스크립트도 빈 컨테이너만 인식한다.
@@ -391,6 +394,50 @@ function fillVars(str, vars) {
 		.replace(VAR_ESC_RE, (m, k, d) => (k in vars ? escapeHtml(vars[k]) : d !== undefined ? d : m));
 }
 
+// 슬롯(React 의 children) : data-slot-이름="#template_id" → 파셜 안의 {{{이름}}}
+//   <div class="dynamic-content" data-source="…" data-slot-children="#body_x"></div>
+//   <template id="body_x"> … </template>      ← include 와 같은 파일에 둔다
+// ⚠ include 컨테이너는 **여전히 비어 있어야 한다.** 내용을 담지 않고 template 을 가리킨다 —
+//    「빈 컨테이너」 규약을 깨지 않으려는 설계다(목록 컨테이너와 규칙이 갈라지지 않는다).
+// ⚠ dynamicImport.js 의 같은 블록과 규칙이 같아야 한다 — 한쪽만 고치지 않는다.
+//    (들여쓰기만 다르다. 브라우저는 산출물을 만들지 않으므로 거기서는 맞출 것이 없다)
+function resolveSlots(vars, ctx) {
+	const slots = {};
+	Object.keys(vars).forEach((k) => {
+		const m = k.match(/^slot([A-Z]\w*)$/);
+		if (!m) {
+			return;
+		}
+		const name = m[1].charAt(0).toLowerCase() + m[1].slice(1);
+		const sel = String(vars[k]).trim();
+		const tpl = ctx.templates[sel];
+		if (tpl === undefined) {
+			console.warn('  ! 슬롯 template 없음:', sel);
+		}
+		slots[name] = tpl === undefined ? '' : tpl;
+		vars[name] = slots[name]; // 줄 가운데에 끼워 쓸 때는 fillVars 가 처리한다
+		delete vars[k];
+	});
+	return slots;
+}
+
+// 슬롯 자리는 **줄 단위로** 넣는다 — 그래야 산출물이 손으로 쓴 것과 같은 모양이 된다.
+//   ① 줄을 통째로 차지하면      그 줄의 들여쓰기에 맞춰 넣는다
+//   ② 태그와 같은 줄에 있으면   줄을 갈라 한 단계 더 들여 넣는다
+//      (<div class="ui-modal__body">{{{body}}}</div> — Prettier 가 짧은 줄을 이렇게 합쳐 놓는다)
+//   ③ 넘기지 않았고 **기본값이 비어 있으면** 그 줄을 지운다(빈 줄을 남기지 않는다)
+// ⚠ 여기는 산출물 모양을 다듬는 부분이라 dynamicImport.js 에는 대응물이 없다 — 규칙(어떤 자리에 무엇이 들어가나)만 같다.
+const SLOT_LINE_RE = /^([ \t]*)(.*?)\{\{\{\s*(\w+)\s*(?:\|[^}]*?)?\s*\}\}\}(.*)$/gm;
+const SLOT_EMPTY_LINE_RE = /^[ \t]*\{\{\{\s*(\w+)\s*\|\s*\}\}\}[ \t]*\r?\n/gm;
+function fillSlots(str, slots) {
+	const out = str.replace(SLOT_EMPTY_LINE_RE, (m, name) => (name in slots ? m : ''));
+	return out.replace(SLOT_LINE_RE, (m, ind, before, name, after) => {
+		if (!(name in slots)) return m;
+		if (!before.trim() && !after.trim()) return reindent(slots[name], ind);
+		return ind + before + '\r\n' + reindent(slots[name], ind + '\t') + '\r\n' + ind + after;
+	});
+}
+
 function expandPartials(html, baseDir, stack, ctx) {
 	return html.replace(PARTIAL_RE, (tag, offset, whole) => {
 		if (!IS_PARTIAL.test(tag)) return tag;
@@ -411,9 +458,13 @@ function expandPartials(html, baseDir, stack, ctx) {
 		}
 
 		let content = fs.readFileSync(file, 'utf8');
+		// 슬롯 template 은 include 와 같은 파일에 둘 수 있다 — 안쪽 include 가 쓰기 전에 거둔다
+		Object.assign(ctx.templates, collectTemplates(content));
 		const vars = partialVars(tag);
+		const slots = resolveSlots(vars, ctx);
 		// ⚠ vars 가 비어도 부른다 — {{key|기본값}} 을 채워야 하기 때문이다.
 		//    기본값이 없는 {{key}} 는 여전히 그대로 남으므로 목록 template 은 안전하다.
+		content = fillSlots(content, slots);
 		content = fillVars(content, vars);
 		// dynamicImport.js 는 fetch 를 문서(페이지) 기준으로 해석하므로,
 		// 파셜 안의 data-source 도 파셜 위치가 아니라 페이지 기준으로 푼다.
@@ -558,7 +609,9 @@ function build(fileName, quiet) {
 	}
 
 	let html = fs.readFileSync(srcPath, 'utf8');
-	const ctx = { partials: 0, lists: 0, rows: 0, deps: new Set() };
+	// ⚠ 슬롯(data-slot-*)이 가리키는 template 은 **파셜을 펴기 전에** 거둬야 한다 —
+	//    페이지에 둔 것은 여기서, 파셜에 둔 것은 expandPartials 가 읽으면서 더한다.
+	const ctx = { partials: 0, lists: 0, rows: 0, deps: new Set(), templates: collectTemplates(html) };
 
 	html = expandPartials(html, SRC_DIR, [srcPath], ctx);
 
@@ -570,6 +623,14 @@ function build(fileName, quiet) {
 		html = html
 			.replace(/[ \t]*<!--\s*목록 템플릿[\s\S]*?-->\r?\n?/g, '')
 			.replace(/[ \t]*<!--\/\/\s*목록 템플릿\s*-->\r?\n?/g, '')
+			// 템플릿 **바로 위**의 라벨 주석 · **바로 아래**의 닫음 표시도 함께 지운다.
+			// 템플릿만 사라지면 주석이 남아 엉뚱한 요소를 가리킨다(슬롯 template 처럼 문구가 제각각일 때).
+			// ⚠ 주석만 지운다 — 템플릿 자체는 아래 규칙이 맡는다(주석 안의 template 글자를 먹지 않게).
+			// ⚠ @ 표시한 개발단 지침은 남긴다.
+			.replace(/[ \t]*<!--(?!@)(?:(?!-->)[\s\S])*?-->[ \t]*\r?\n(?=[ \t]*<template\b)/gi, (m, offset, whole) =>
+				insideComment(whole, offset) ? m : '',
+			)
+			.replace(/(?<=<\/template>[ \t]*\r?\n)[ \t]*<!--\/\/(?:(?!-->)[\s\S])*?-->[ \t]*\r?\n/gi, '')
 			// ⚠ 주석 안의 template 글자에는 걸리지 않게 한다.
 			//    파셜 설명 주석에 template 태그를 예시로 적어 두면, 그 지점부터 실제 닫는 태그까지
 			//    통째로 지워져 주석의 닫는 표시가 사라지고 이후 문서 전체가 주석으로 먹힌다.

@@ -73,10 +73,9 @@ description: >-
 | `_ui_lnb.html` | — | 메뉴는 **파셜 안에서** 고친다 |
 | `_ui_accordion.html` | **`items`** · `mode`(`single` \| `multiple`) | 항목 JSON `title`·`body`(HTML)·`state` |
 | `_ui_toast.html` | **`id`** · `text` · `type`(`success` \| `error`) | 페이지 끝에 둔다 |
-| `_ui_modal.html` | **`id`** · **`title`** · **`body`**(본문 파셜 경로) · `subtext` · `footer`(버튼 파셜 경로) · `cancel`(취소) · `confirm`(확인) · `modifier`(`ui-modal--md`) | 공통 모달 프레임 |
+| `_ui_modal.html` | **`id`** · **`title`** · **`slot-body`**(본문 template 아이디) · `subtext` · `footer`(버튼 파셜 경로) · `cancel`(취소) · `confirm`(확인) · `modifier`(`ui-modal--md`) | 공통 모달 프레임 |
 | `_ui_modal_footer.html` | `cancel` · `confirm` | 프레임의 기본 버튼. **직접 쓰지 않는다** |
-| `_ui_modal_alert.html` | **`id`** · **`title`** · `subtext` · `text` · `body`(본문 파셜 경로) · `modifier`(`ui-modal--sm`) | 정보성 알림 — 버튼 없음 · **딤 클릭으로 닫힘** |
-| `_ui_modal_text.html` | `text` | 알림의 기본 본문(한 문단). **직접 쓰지 않는다** |
+| `_ui_modal_alert.html` | **`id`** · **`title`** · `subtext` · `text` · `slot-body`(본문 template 아이디) · `modifier`(`ui-modal--sm`) | 정보성 알림 — 버튼 없음 · **딤 클릭으로 닫힘** |
 | `_ui_modal_confirm.html` | **`id`** · **`title`** · `text` · `confirm`(확인) · `cancel`(취소) · `modifier`(추가 변형) | 확인창 전용(`ui-modal--confirm`) |
 | `_ui_checkbox.html` | **`id`** · **`label`** · `name` · `value` · `attrs`(`checked` · `disabled`) · `modifier` | |
 | `_ui_radio.html` | **`id`** · **`name`** · **`label`** · `value` · `attrs` · `modifier` | 같은 묶음은 같은 `name` |
@@ -87,7 +86,7 @@ description: >-
 
 > ⚠ **필수 값을 빼면 `{{id}}` · `{{items}}` 가 산출물에 글자 그대로 남는다.**
 > ⚠ `data-*` 는 **케밥**으로 적는다(`data-helper-type` → `{{helperType}}`). 대문자를 쓰면 브라우저만 치환에 실패한다.
-> ⚠ 파셜 변수는 문자열뿐이다. **여러 줄 데이터는 JSON 경로**로 넘긴다.
+> ⚠ 파셜 변수는 문자열뿐이다. **마크업 덩어리는 슬롯**(`data-slot-이름="#template"` → `{{{이름}}}`), **반복 데이터는 JSON 경로**로 넘긴다(`pub-markup` §2-1).
 > ⚠ **`id` 를 받는 파셜은 한 페이지에서 id 를 겹치지 않게** 넘긴다(모달·토스트·달력이 id 로 찾는다).
 
 ---
@@ -218,10 +217,16 @@ description: >-
 
 <div class="dynamic-content" data-source="./include/ui/_ui_modal.html"
      data-id="modal_member_invite" data-title="멤버 초대" data-subtext="초대할 멤버의 정보를 입력해주세요."
-     data-body="./include/member/_modal_invite_body.html" data-confirm="초대하기"></div>
+     data-slot-body="#modal_member_invite_body" data-confirm="초대하기"></div>
+
+<template id="modal_member_invite_body">
+	…본문 마크업(공통 입력·스테퍼 파셜을 include 해도 된다)…
+</template>
 ```
 
-- **본문**은 `include/<폴더>/_modal_이름_body.html` 로 만들어 `data-body` 에 넘긴다(경로는 페이지 기준). 본문 안에서 입력·스테퍼 파셜을 include 해도 된다. 문단은 `p.ui-modal__text`.
+- **본문은 슬롯으로 넘긴다** — 같은 파일에 `template` 을 두고 `data-slot-body="#아이디"`(→ 파셜 안 `{{{body}}}`). 문단은 `p.ui-modal__text`.
+  여러 화면이 함께 쓰는 본문은 `include/<폴더>/_modal_이름_body.html` 로 만들어 **그 template 안에서 include** 한다.
+  ⚠ **한 페이지의 모달 두 개에 같은 본문 파셜을 넣지 않는다** — 본문 파셜이 입력 id 를 고정으로 갖고 있어 **id 가 겹치고**(`validate` 가 막는다) 라벨·`getElementById` 가 먼저 나온 모달만 가리킨다. 두 곳에 써야 하면 본문 파셜이 id 를 `data-*` 로 받게 고친다.
 - **버튼**은 기본이 「취소(outlined · 닫기) + 확인(contained)」 — 문구만 `data-cancel` · `data-confirm`. 확인은 닫지 않는다(개발 연동이 처리 후 닫는다).
   구성이 다르면(버튼 1개 · 3개 · 삭제 버튼 추가) **버튼 파셜을 만들어 `data-footer` 로** 넘긴다 — 버튼은 `ui-btn` 을 쓴다.
 - `subtext` 를 넘기지 않으면 보조 문구 줄이 사라진다(`:empty`).
@@ -237,7 +242,9 @@ description: >-
      data-text="서비스 점검 시간에는 로그인과 결제를 이용할 수 없습니다."></div>
 ```
 
-- 본문은 `data-text` 한 문단이 기본이다. 내용이 많으면 본문 파셜을 만들어 `data-body` 로 넘긴다(그때 `text` 는 쓰지 않는다).
+- 본문은 `data-text` 한 문단이 기본이다. 내용이 많으면 `template` 에 적어 `data-slot-body="#아이디"` 로 넘긴다.
+  ⚠ **`text` 와 `slot-body` 는 택일**이다 — 둘 다 넘기면 본문이 두 벌 나온다.
+  ⚠ 알림은 폭 360 의 **정보성** 모달이다. 입력 폼 본문은 프레임(`_ui_modal`)에 넣는다.
 - 고를 것이 없으니 **딤을 누르면 닫힌다**. 닫기(X)도 있다.
 
 ### 확인창 — 전용

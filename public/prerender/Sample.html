@@ -27,6 +27,16 @@
 								<a class="ui-lnb__link" href="../index.html">작업 목록</a>
 							</li>
 							<li class="ui-lnb__item">
+								<button type="button" class="ui-lnb__link ui-lnb__link--toggle" aria-expanded="false">사용법</button>
+								<div class="ui-lnb__sub" hidden>
+									<ul class="ui-lnb__group">
+										<li class="ui-lnb__item">
+											<a class="ui-lnb__link" href="./Guide_Partial.html">파셜(include)</a>
+										</li>
+									</ul>
+								</div>
+							</li>
+							<li class="ui-lnb__item">
 								<button type="button" class="ui-lnb__link ui-lnb__link--toggle" aria-expanded="false">개발 확인용</button>
 								<div class="ui-lnb__sub" hidden>
 									<ul class="ui-lnb__group">
@@ -389,7 +399,6 @@
 													id="sample_toggle1"
 													name=""
 													value=""
-
 												/>
 												<span class="ui-toggle__track"></span>
 												<span class="ui-toggle__label">알림 받기</span>
@@ -404,7 +413,6 @@
 													id="sample_toggle2"
 													name=""
 													value=""
-													checked
 												/>
 												<span class="ui-toggle__track"></span>
 												<span class="ui-toggle__label">자동 저장</span>
@@ -419,7 +427,6 @@
 													id="sample_toggle3"
 													name=""
 													value=""
-													disabled
 												/>
 												<span class="ui-toggle__track"></span>
 												<span class="ui-toggle__label">베타 기능 (비활성)</span>
@@ -541,6 +548,9 @@
 									</button>
 									<button type="button" class="ui-btn ui-btn--outlined" data-modal-open="sample_alert">
 										알림 모달 열기
+									</button>
+									<button type="button" class="ui-btn ui-btn--outlined" data-modal-open="sample_alert_detail">
+										알림 모달(본문 슬롯) 열기
 									</button>
 								</div>
 							</div>
@@ -677,8 +687,32 @@
 					<p class="ui-modal__subtext">2026.09.20 02:00 ~ 06:00</p>
 				</div>
 				<div class="ui-modal__body">
-					<!-- 공통 모달 기본 본문(한 문단) -->
 					<p class="ui-modal__text">서비스 점검 시간에는 로그인과 결제를 이용할 수 없습니다. 바깥 영역을 누르면 닫힙니다.</p>
+				</div>
+				<button type="button" class="ui-modal__close">닫기</button>
+			</div>
+		</div>
+		<!-- 공통 알림 모달(정보성 · 버튼 없음) -->
+		<!-- 열기 : data-modal-open="아이디" 버튼 또는 modalOpen('아이디') -->
+		<!-- 버튼이 없는 모달이라 딤을 누르거나 닫기(X)로 닫는다(common.js) -->
+		<div
+			class="ui-modal ui-modal--alert ui-modal--sm"
+			id="sample_alert_detail"
+			role="dialog"
+			aria-modal="true"
+			aria-labelledby="sample_alert_detail_title"
+			hidden
+		>
+			<div class="ui-modal__dialog">
+				<div class="ui-modal__header">
+					<h2 class="ui-modal__title" id="sample_alert_detail_title">점검 상세</h2>
+					<p class="ui-modal__subtext">2026.09.20 02:00 ~ 06:00</p>
+				</div>
+				<div class="ui-modal__body">
+					<p class="ui-modal__text">점검 시간에는 로그인 · 결제 · 알림 발송이 모두 멈춥니다.</p>
+					<p class="ui-modal__text">점검 중 작성하던 내용은 저장되지 않으니 미리 저장해 주세요.</p>
+					<p class="ui-modal__text">점검이 일찍 끝나면 공지사항으로 다시 안내합니다.</p>
+					<p class="ui-modal__text"></p>
 				</div>
 				<button type="button" class="ui-modal__close">닫기</button>
 			</div>

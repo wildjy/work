@@ -1,0 +1,62 @@
+[
+  {
+    "group": "summary",
+    "term": "컨테이너",
+    "desc": "<strong><code>div</code> 태그 · <code>class=&quot;dynamic-content&quot;</code> · 내용은 비운다</strong> — 다른 태그로는 전개되지 않는다"
+  },
+  {
+    "group": "summary",
+    "term": "경로",
+    "desc": "<code>data-source</code> 는 <strong>언제나 「페이지」 기준</strong>(<code>./include/…</code>). 파셜 안에서도 같다"
+  },
+  {
+    "group": "summary",
+    "term": "값",
+    "desc": "<code>data-page-title=&quot;…&quot;</code> → 파셜 안 <code>&#123;&#123;pageTitle&#125;&#125;</code> · 기본값은 <code>&#123;&#123;pageTitle|페이지 제목&#125;&#125;</code> — <strong>React 의 props 자리</strong>"
+  },
+  {
+    "group": "summary",
+    "term": "마크업 덩어리",
+    "desc": "<code>data-slot-body=&quot;#tpl_id&quot;</code> → 파셜 안 <code>&#123;&#123;&#123;body&#125;&#125;&#125;</code> — <strong>React 의 children 자리</strong>(같은 파일의 template 요소를 가리킨다)"
+  },
+  {
+    "group": "summary",
+    "term": "결과",
+    "desc": "include 한 <code>div</code> 는 <strong>사라지고</strong>(<code>replaceWith</code>) 파셜 내용이 그 자리에 들어간다 — React 의 Fragment 처럼 래퍼가 남지 않는다"
+  },
+  {
+    "group": "summary",
+    "term": "마무리",
+    "desc": "고쳤으면 <strong><code>npm run prerender</code></strong> → <code>public/index.html</code> 작업일자 → <code>docs/WORKLOG.md</code>"
+  },
+  {
+    "group": "call",
+    "term": "태그는 <code>div</code>",
+    "desc": "프리렌더가 <code>div</code> 만 잡는다(<code>PARTIAL_RE</code>). <code>span</code>·<code>li</code>·<code>td</code> 자리에는 파셜을 못 넣는다 — 문장 한가운데 툴팁을 넣지 못하는 이유다(<code>.ui-label</code> 을 flex 로 두고 옆에 둔다)"
+  },
+  {
+    "group": "call",
+    "term": "컨테이너는 비운다",
+    "desc": "<code>&lt;div …&gt;&lt;/div&gt;</code>. 안에 내용을 적으면 전개 대상이 아니다. 슬롯도 내용을 넣지 않고 template 요소를 가리킨다"
+  },
+  {
+    "group": "call",
+    "term": "경로는 페이지 기준",
+    "desc": "<code>fetch</code> 가 문서 기준이라 파셜 안에서도 <code>./include/…</code> 로 적는다. 파셜 위치 기준(<code>./_x.html</code>)으로 적으면 404"
+  },
+  {
+    "group": "call",
+    "term": "class 를 더 줘도 사라진다",
+    "desc": "<code>replaceWith</code> 라 래퍼가 남지 않는다. 위치 보정은 <strong>형제 셀렉터</strong>나 파셜이 받는 <code>data-modifier</code> 로 한다"
+  },
+  {
+    "group": "call",
+    "term": "주석 처리하면 전개되지 않는다",
+    "desc": "런타임·프리렌더 모두 주석 안은 건너뛴다. 잠깐 끄고 싶을 때 안전하게 쓸 수 있다"
+  },
+  {
+    "group": "call",
+    "term": "순환 include 를 만들지 않는다",
+    "desc": "프리렌더는 경고하고 건너뛰지만 <strong>브라우저에는 방어가 없다</strong> — 요청이 멈추지 않는다"
+  }
+]

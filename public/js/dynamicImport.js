@@ -63,6 +63,20 @@ document.addEventListener('DOMContentLoaded', () => {
 				const esc = (v) => String(v).replace(/[&<>"']/g, (c) => escMap[c]);
 				const vars = Object.assign({}, el.dataset);
 				delete vars.source;
+				// 슬롯(React 의 children) : data-slot-이름="#template_id" → 파셜 안의 {{{이름}}}
+				//   template 은 include 와 같은 파일에 둔다. 파셜 안에 있으면 아직 문서에 없으므로
+				//   **지금 훑고 있는 조각(context)** 에서 먼저 찾고, 없으면 문서에서 찾는다.
+				//   ⚠ prerender.js 의 resolveSlots/fillSlots 와 규칙이 같아야 한다 — 한쪽만 고치지 않는다.
+				Object.keys(vars).forEach(function (k) {
+					const m = k.match(/^slot([A-Z]\w*)$/);
+					if (!m) return;
+					const name = m[1].charAt(0).toLowerCase() + m[1].slice(1);
+					const sel = String(vars[k]).trim();
+					const tpl = (context.querySelector && context.querySelector(sel)) || document.querySelector(sel);
+					if (!tpl) console.warn('[include] 슬롯 template 없음: ' + sel);
+					vars[name] = tpl ? tpl.innerHTML : '';
+					delete vars[k];
+				});
 				//   ⚠ {{key|기본값}} 은 넘기지 않으면 기본값으로 채운다(기본값은 이스케이프하지 않는다).
 				//      그래서 vars 가 비어도 치환을 돌린다 — 기본값 없는 {{key}} 는 그대로 남는다.
 				const RAW_RE = /\{\{\{\s*([\w@.-]+)\s*(?:\|([^}]*?))?\s*\}\}\}/g;

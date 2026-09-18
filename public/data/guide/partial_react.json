@@ -1,0 +1,77 @@
+[
+  {
+    "concept": "조각 재사용",
+    "pub": "<code>&lt;div class=&quot;dynamic-content&quot; data-source=&quot;…/_header.html&quot;&gt;&lt;/div&gt;</code>",
+    "react": "<code>import Header</code> 뒤 <code>&lt;Header /&gt;</code>"
+  },
+  {
+    "concept": "값 넘기기",
+    "pub": "<code>data-page-title=&quot;회원 관리&quot;</code> (문자열만)",
+    "react": "props — <code>&lt;Header pageTitle=&quot;회원 관리&quot; /&gt;</code>"
+  },
+  {
+    "concept": "값 받기",
+    "pub": "<code>&#123;&#123;pageTitle&#125;&#125;</code>",
+    "react": "<code>&#123;pageTitle&#125;</code>"
+  },
+  {
+    "concept": "기본값",
+    "pub": "<code>&#123;&#123;pageTitle|페이지 제목&#125;&#125;</code>",
+    "react": "매개변수 기본값 — <code>function Header(&#123; pageTitle = &quot;페이지 제목&quot; &#125;)</code>"
+  },
+  {
+    "concept": "원문(HTML) 넣기",
+    "pub": "<code>&#123;&#123;&#123;body&#125;&#125;&#125;</code>",
+    "react": "<code>dangerouslySetInnerHTML=&#123;&#123; __html: body &#125;&#125;</code>"
+  },
+  {
+    "concept": "마크업 덩어리 넘기기",
+    "pub": "슬롯 — <code>data-slot-body=&quot;#tpl_id&quot;</code> + template 요소",
+    "react": "<code>children</code> — <code>&lt;Modal&gt;&#123;본문&#125;&lt;/Modal&gt;</code>"
+  },
+  {
+    "concept": "반복 렌더",
+    "pub": "JSON + template + <code>data-template</code>",
+    "react": "<code>items.map((it) =&gt; &lt;Row key=&#123;it.id&#125; &#123;...it&#125; /&gt;)</code>"
+  },
+  {
+    "concept": "걸러내기",
+    "pub": "<code>data-filter=&quot;group=input&quot;</code>",
+    "react": "<code>items.filter((it) =&gt; it.group === &quot;input&quot;)</code>"
+  },
+  {
+    "concept": "0건 상태",
+    "pub": "<code>data-empty=&quot;#tpl_none&quot;</code>",
+    "react": "<code>items.length ? … : &lt;Empty /&gt;</code>"
+  },
+  {
+    "concept": "감싸는 요소",
+    "pub": "<code>replaceWith</code> 라 래퍼가 남지 않는다",
+    "react": "<code>&lt;&gt;&lt;/&gt;</code> (Fragment)"
+  },
+  {
+    "concept": "조건부 노출",
+    "pub": "마크업에 두고 <code>&lt;!--@ 조건 --&gt;</code> 로 개발단에 넘긴다",
+    "react": "<code>&#123;cond &amp;&amp; &lt;A /&gt;&#125;</code>"
+  },
+  {
+    "concept": "상태 전환",
+    "pub": "상태 클래스 + <code>hidden</code> (동작은 <code>common.js</code> 위임)",
+    "react": "<code>useState</code> → 조건부 class · 조건부 렌더"
+  },
+  {
+    "concept": "미리 그려 두기",
+    "pub": "<code>npm run prerender</code> → <code>public/prerender/*.html</code>",
+    "react": "SSG — <code>next build</code> 가 만드는 정적 HTML"
+  },
+  {
+    "concept": "주입이 끝나는 시점",
+    "pub": "<code>dynamic-content-loaded</code> 이벤트 뒤에 DOM 에 있다",
+    "react": "마운트 뒤(<code>useEffect</code>)와 같은 자리"
+  },
+  {
+    "concept": "이름 규칙",
+    "pub": "BEM — <code>ui-블록__요소--변형</code> · 상태 <code>is-*</code>",
+    "react": "CSS Module · styled-components 대신 전역 CSS"
+  }
+]

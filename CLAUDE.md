@@ -82,6 +82,10 @@ public/
 ```html
 <div class="dynamic-content" data-source="./include/common/_header.html" data-page-title="제목"></div>
 <tbody class="dynamic-list" data-source="../data/common/rows.json" data-template="#tpl_row" data-empty="#tpl_row_none"></tbody>
+
+<!-- 마크업 덩어리는 슬롯으로 넘긴다 : data-slot-본문 → 파셜 안 {{{본문}}} -->
+<div class="dynamic-content" data-source="./include/ui/_ui_modal.html" data-id="modal_x" data-title="제목" data-slot-body="#modal_x_body"></div>
+<template id="modal_x_body">…본문…</template>
 ```
 
 > ⚠ **경로 기준은 「페이지」다.** 파셜 안에서 다른 파셜을 include 할 때도 `./include/<폴더>/_x.html` 로 적는다.

@@ -1,0 +1,30 @@
+[
+  {
+    "symptom": "<code>&#123;&#123;key&#125;&#125;</code> 가 글자로 보인다",
+    "cause": "키를 안 넘겼다 / 파셜에 기본값이 없다 / <code>data-*</code> 에 대문자를 썼다 / 브라우저가 옛 JS 를 캐시했다"
+  },
+  {
+    "symptom": "<code>&#123;&#123;&#123;body&#125;&#125;&#125;</code> 가 글자로 보인다",
+    "cause": "슬롯을 안 넘겼다 / template 아이디가 다르다 / 옛 <code>dynamicImport.js</code>"
+  },
+  {
+    "symptom": "파셜 자리가 통째로 비어 있다",
+    "cause": "경로가 파셜 기준이다 / 파일명 오타 — 콘솔과 프리렌더 경고(<code>! 파셜 없음</code>)를 본다"
+  },
+  {
+    "symptom": "화면은 되는데 <strong>산출물만</strong> 다르다",
+    "cause": "include 태그가 <code>div</code> 가 아니다 / 컨테이너에 내용을 적었다 / 두 구현 중 한쪽만 고쳤다"
+  },
+  {
+    "symptom": "index 에서 열면 옛 화면이다",
+    "cause": "<code>npm run prerender</code> 를 돌리지 않았다 (index 링크는 전부 <code>./prerender/</code>)"
+  },
+  {
+    "symptom": "라벨을 눌렀는데 다른 입력이 반응한다",
+    "cause": "고정 id 파셜을 두 번 넣었다 → <code>npm run validate</code> 의 <code>no-dup-id</code>"
+  },
+  {
+    "symptom": "마크업이 깨져 보인다",
+    "cause": "Live Server 로 열었다 → <code>npm run serve</code>"
+  }
+]

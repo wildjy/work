@@ -1,0 +1,798 @@
+<!doctype html>
+<html lang="ko">
+	<head>
+		<meta charset="utf-8" />
+		<meta name="viewport" content="width=device-width,initial-scale=1.0" />
+		<title>파셜(include) 사용법</title>
+		<link rel="stylesheet" href="../css/common.css" />
+		<script src="../js/dynamicImport.js"></script>
+		<script src="../js/listRender.js"></script>
+		<script src="../js/common.js"></script>
+	</head>
+
+	<body>
+		<div class="layout">
+			<!-- 사이드 : 브랜드 + LNB -->
+			<aside class="layout__side">
+				<p class="layout__brand">pub-base</p>
+				<div class="dynamic-content" data-source="./include/ui/_ui_lnb.html"></div>
+			</aside>
+
+			<div class="layout__body">
+				<div
+					class="dynamic-content"
+					data-source="./include/common/_header.html"
+					data-page-title="파셜(include) 사용법"
+				></div>
+
+				<main class="layout__main guide">
+					<!-- 구역 : 목차 -->
+					<section class="section">
+						<div class="section__head">
+							<h2 class="section__title">한눈에 보기</h2>
+							<p class="section__desc">
+								같은 마크업을 페이지마다 복사하지 않고 <code>public/html/include/</code> 파일 하나로 두는 방법. 규칙의
+								근거는 두 파일이다 — 브라우저 <code>public/js/dynamicImport.js</code> · 산출물
+								<code>scripts/prerender.js</code>.
+							</p>
+						</div>
+						<div class="ui-card">
+							<div class="ui-card__body">
+								<ul class="guide__toc">
+									<li><a href="#guide_basic">1. 기본형</a></li>
+									<li><a href="#guide_react">2. React 와 견주기</a></li>
+									<li><a href="#guide_flow">3. 어떻게 도는가</a></li>
+									<li><a href="#guide_call">4. 부르는 쪽 규칙</a></li>
+									<li><a href="#guide_vars">5. 값 넘기기</a></li>
+									<li><a href="#guide_slot">6. 마크업 덩어리 넘기기</a></li>
+									<li><a href="#guide_list">7. 파셜 안에서 목록 쓰기</a></li>
+									<li><a href="#guide_new">8. 새로 만들 때</a></li>
+									<li><a href="#guide_trap">9. 함정</a></li>
+									<li><a href="#guide_sample">10. 예시 모음</a></li>
+									<li><a href="#guide_symptom">11. 증상 → 원인</a></li>
+									<li><a href="#guide_finish">12. 고친 뒤</a></li>
+								</ul>
+								<p class="guide__note guide__note--tip">
+									이 페이지의 <strong>헤더와 왼쪽 메뉴도 파셜</strong>이고, 아래 표와 예시 카드는
+									<strong>JSON + 템플릿</strong>으로 그린다. 문서 판은 <code>docs/PARTIALS.md</code>.
+								</p>
+							</div>
+						</div>
+					</section>
+					<!--// 구역 : 목차 -->
+
+					<!-- 구역 : 기본형 -->
+					<section class="section" id="guide_basic">
+						<div class="section__head">
+							<h2 class="section__title">1. 기본형</h2>
+							<p class="section__desc">부르는 쪽은 빈 div 하나, 받는 쪽은 조각 마크업</p>
+						</div>
+						<div class="grid grid--2">
+							<div class="ui-card">
+								<div class="ui-card__header">
+									<h3 class="ui-card__title">부르는 쪽 — 페이지</h3>
+								</div>
+								<div class="ui-card__body">
+									<pre class="guide__code"><code>&lt;div
+	class="dynamic-content"
+	data-source="./include/common/_header.html"
+	data-page-title="회원 관리"
+&gt;&lt;/div&gt;</code></pre>
+								</div>
+							</div>
+							<div class="ui-card">
+								<div class="ui-card__header">
+									<h3 class="ui-card__title">받는 쪽 — _header.html</h3>
+								</div>
+								<div class="ui-card__body">
+									<pre class="guide__code"><code>&lt;header class="app-header"&gt;
+	&lt;h1 class="app-header__title"&gt;{{pageTitle|페이지 제목}}&lt;/h1&gt;
+&lt;/header&gt;</code></pre>
+								</div>
+							</div>
+						</div>
+						<div class="ui-card">
+							<div class="ui-card__body ui-card__body--flush">
+								<table class="ui-table ui-table--wrap">
+									<caption class="guide__caption">
+										파셜 기본 규칙
+									</caption>
+									<thead>
+										<tr>
+											<th scope="col">항목</th>
+											<th scope="col">규칙</th>
+										</tr>
+									</thead>
+									<tbody
+										class="dynamic-list"
+										data-source="../data/guide/partial_rules.json"
+										data-template="#tpl_guide_rule"
+										data-empty="#tpl_guide_rule_none"
+										data-filter="group=summary"
+									></tbody>
+								</table>
+							</div>
+						</div>
+					</section>
+					<!--// 구역 : 기본형 -->
+
+					<!-- 구역 : React 대응 -->
+					<section class="section" id="guide_react">
+						<div class="section__head">
+							<h2 class="section__title">2. React 와 견주기</h2>
+							<p class="section__desc">이름만 다르고 하는 일은 같다. React 를 써 봤다면 이 표가 가장 빠르다</p>
+						</div>
+						<div class="ui-card">
+							<div class="ui-card__body ui-card__body--flush">
+								<table class="ui-table ui-table--wrap">
+									<caption class="guide__caption">
+										React 대응
+									</caption>
+									<colgroup>
+										<col style="width: 15%" />
+										<col />
+										<col style="width: 38%" />
+									</colgroup>
+									<thead>
+										<tr>
+											<th scope="col">하려는 일</th>
+											<th scope="col">이 저장소</th>
+											<th scope="col">React</th>
+										</tr>
+									</thead>
+									<tbody
+										class="dynamic-list"
+										data-source="../data/guide/partial_react.json"
+										data-template="#tpl_guide_react"
+										data-empty="#tpl_guide_react_none"
+									></tbody>
+								</table>
+							</div>
+							<div class="ui-card__body">
+								<p class="guide__note guide__note--warn">
+									<strong>컴포넌트가 아니라 문자열 치환이다.</strong> 상태(<code>useState</code>)도 생명주기도 없고,
+									props 로는 <strong>문자열만</strong> 넘어간다 — 객체·함수·JSX 는 못 넘긴다. 목록은
+									<strong>JSON 경로</strong>로, 마크업 덩어리는 <strong>슬롯</strong>으로 넘긴다.
+								</p>
+								<p class="guide__note guide__note--warn">
+									값을 안 넘기면 <strong>빈칸이 되는 것이 아니라</strong> <code>{{key}}</code> 가 화면에 그대로 남는다.
+									파셜에 기본값(<code>{{key|기본값}}</code>)을 적어 둔다.
+								</p>
+								<p class="guide__note guide__note--tip">
+									<code>key</code> 가 없다. 대신 같은 파셜을 한 화면에 두 번 넣을 때는
+									<strong>id 가 겹치지 않도록</strong> 파셜이 <code>data-id</code> 를 받는다.
+								</p>
+							</div>
+						</div>
+					</section>
+					<!--// 구역 : React 대응 -->
+
+					<!-- 구역 : 동작 -->
+					<section class="section" id="guide_flow">
+						<div class="section__head">
+							<h2 class="section__title">3. 어떻게 도는가 — 같은 규칙, 두 벌의 구현</h2>
+							<p class="section__desc">
+								브라우저는 실시간으로 끼우고(마운트 뒤), 프리렌더는 같은 결과를 파일로 만든다(SSG 빌드)
+							</p>
+						</div>
+						<div class="ui-card">
+							<div class="ui-card__body ui-card__body--flush">
+								<table class="ui-table ui-table--wrap">
+									<caption class="guide__caption">
+										런타임과 프리렌더 대응
+									</caption>
+									<thead>
+										<tr>
+											<th scope="col">기능</th>
+											<th scope="col">브라우저 (실시간)</th>
+											<th scope="col">산출물 (개발 인계)</th>
+										</tr>
+									</thead>
+									<tbody>
+										<tr>
+											<td>구현 파일</td>
+											<td><code>public/js/dynamicImport.js</code></td>
+											<td><code>scripts/prerender.js</code></td>
+										</tr>
+										<tr>
+											<td>방식</td>
+											<td>fetch 로 가져와 치환 후 <code>replaceWith</code> (중첩은 재귀)</td>
+											<td>같은 규칙으로 문자열 전개 → <code>public/prerender/*.html</code></td>
+										</tr>
+										<tr>
+											<td>변수</td>
+											<td><code>RAW_RE</code> / <code>ESC_RE</code> 블록</td>
+											<td><code>partialVars()</code> / <code>fillVars()</code></td>
+										</tr>
+										<tr>
+											<td>슬롯</td>
+											<td><code>data-slot-*</code> 처리 블록</td>
+											<td><code>resolveSlots()</code> / <code>fillSlots()</code></td>
+										</tr>
+									</tbody>
+								</table>
+							</div>
+						</div>
+						<div class="ui-card">
+							<div class="ui-card__body">
+								<pre class="guide__flow"><code>DOMContentLoaded
+  → 파셜 주입 (재귀)                 dynamicImport.js
+  → 'dynamic-content-loaded' 발생
+  → JSON 목록 렌더                   listRender.js  (파셜이 있으면 이 이벤트를 기다린다)
+  → 'dynamic-list-loaded' 발생</code></pre>
+								<ul class="guide__list">
+									<li><strong>파셜이 먼저, 목록이 나중이다.</strong> 그래서 파셜 안에 목록 컨테이너를 넣어도 된다.</li>
+									<li>
+										파셜이 들어온 뒤에 잡아야 하는 스크립트는 <code>dynamic-content-loaded</code> 에 건다. 공통
+										UI(<code>common.js</code>)는 문서 위임이라 나중에 주입된 파셜에서도 그냥 동작한다 — 페이지에 전용
+										스크립트를 두지 않는다.
+									</li>
+								</ul>
+								<p class="guide__note guide__note--warn">
+									두 구현 중 <strong>한쪽만 고치지 않는다.</strong> 규칙이 갈리면 「화면은 되는데 산출물이 다르다」가
+									된다.
+								</p>
+							</div>
+						</div>
+					</section>
+					<!--// 구역 : 동작 -->
+
+					<!-- 구역 : 부르는 쪽 규칙 -->
+					<section class="section" id="guide_call">
+						<div class="section__head">
+							<h2 class="section__title">4. 부르는 쪽 규칙</h2>
+							<p class="section__desc">이 여섯 가지를 지키면 브라우저와 산출물이 같아진다</p>
+						</div>
+						<div class="ui-card">
+							<div class="ui-card__body ui-card__body--flush">
+								<table class="ui-table ui-table--wrap">
+									<caption class="guide__caption">
+										부르는 쪽 규칙
+									</caption>
+									<thead>
+										<tr>
+											<th scope="col">규칙</th>
+											<th scope="col">이유 · 어기면</th>
+										</tr>
+									</thead>
+									<tbody
+										class="dynamic-list"
+										data-source="../data/guide/partial_rules.json"
+										data-template="#tpl_guide_rule"
+										data-empty="#tpl_guide_rule_none"
+										data-filter="group=call"
+									></tbody>
+								</table>
+							</div>
+						</div>
+					</section>
+					<!--// 구역 : 부르는 쪽 규칙 -->
+
+					<!-- 구역 : 값 넘기기 -->
+					<section class="section" id="guide_vars">
+						<div class="section__head">
+							<h2 class="section__title">5. 값 넘기기 — data-* 를 {{key}} 로 받는다</h2>
+							<p class="section__desc">
+								React 의 props 와 같은 자리다 — 문구 한 줄이 다르다고 파셜을 두 벌 만들지 않는다
+							</p>
+						</div>
+						<div class="ui-card">
+							<div class="ui-card__body ui-card__body--flush">
+								<table class="ui-table ui-table--wrap">
+									<caption class="guide__caption">
+										변수 문법
+									</caption>
+									<thead>
+										<tr>
+											<th scope="col">문법</th>
+											<th scope="col">뜻</th>
+										</tr>
+									</thead>
+									<tbody>
+										<tr>
+											<td>키 이름</td>
+											<td><code>data-page-title</code> → <code>{{pageTitle}}</code> (케밥 → 카멜)</td>
+										</tr>
+										<tr>
+											<td><code>{{key}}</code></td>
+											<td>HTML 이스케이프해서 넣는다</td>
+										</tr>
+										<tr>
+											<td><code>{{{key}}}</code></td>
+											<td>원문 그대로 넣는다 — 태그를 넘길 때</td>
+										</tr>
+										<tr>
+											<td><code>{{key|기본값}}</code></td>
+											<td>넘기지 않으면 기본값. 빈 기본값은 <code>{{name|}}</code></td>
+										</tr>
+									</tbody>
+								</table>
+							</div>
+							<div class="ui-card__body">
+								<p class="guide__note guide__note--warn">
+									기본값이 없는 키를 넘기지 않으면 <code>{{key}}</code> 가 <strong>화면에 글자로 남는다.</strong> 여러
+									화면이 쓰는 파셜은 필수 값 외에는 전부 기본값을 준다.
+								</p>
+								<p class="guide__note guide__note--warn">
+									<code>data-*</code> 키에 <strong>대문자를 쓰지 않는다.</strong> <code>data-makeNew</code> 는
+									브라우저에서 <code>dataset.makenew</code> 가 돼 브라우저만 치환에 실패한다(프리렌더는 성공).
+								</p>
+							</div>
+						</div>
+						<div class="grid grid--2">
+							<div class="ui-card">
+								<div class="ui-card__header">
+									<h3 class="ui-card__title">조건부 속성은 {{{attrs|}}} 로</h3>
+								</div>
+								<div class="ui-card__body">
+									<p class="guide__desc">
+										문자열 변수로는 <code>checked</code> 같은 속성을 조건부로 넣을 수 없다. 파셜이 원문 자리를 열어
+										둔다.
+									</p>
+									<pre class="guide__code"><code>&lt;!-- 파셜 --&gt;
+&lt;input type="checkbox" id="{{id}}" {{{attrs|}}} /&gt;
+
+&lt;!-- 부르는 쪽 --&gt;
+&lt;div class="dynamic-content" … data-attrs="checked disabled"&gt;&lt;/div&gt;</code></pre>
+								</div>
+							</div>
+							<div class="ui-card">
+								<div class="ui-card__header">
+									<h3 class="ui-card__title">중첩 include 의 경로도 변수로</h3>
+								</div>
+								<div class="ui-card__body">
+									<p class="guide__desc">모달 프레임이 버튼 영역 파셜을 갈아 끼우는 방식이다.</p>
+									<pre class="guide__code"><code>&lt;!-- _ui_modal.html 안 --&gt;
+&lt;div
+	class="dynamic-content"
+	data-source="{{footer|./include/ui/_ui_modal_footer.html}}"
+	data-cancel="{{cancel|취소}}"
+	data-confirm="{{confirm|확인}}"
+&gt;&lt;/div&gt;</code></pre>
+								</div>
+							</div>
+						</div>
+						<div class="ui-card">
+							<div class="ui-card__header">
+								<h3 class="ui-card__title">React 라면</h3>
+							</div>
+							<div class="ui-card__body">
+								<p class="guide__desc">
+									파셜은 <code>data-page-title="회원 관리"</code> 로 넘기고 <code>{{pageTitle|페이지 제목}}</code> 로
+									받는다. 같은 일을 React 는 이렇게 한다.
+								</p>
+								<pre class="guide__code"><code>// props 로 넘기고, 기본값은 매개변수 기본값으로 둔다
+function Header({ pageTitle = '페이지 제목' }) {
+	return &lt;h1 className="app-header__title"&gt;{pageTitle}&lt;/h1&gt;;
+}
+
+&lt;Header pageTitle="회원 관리" /&gt;</code></pre>
+							</div>
+						</div>
+					</section>
+					<!--// 구역 : 값 넘기기 -->
+
+					<!-- 구역 : 슬롯 -->
+					<section class="section" id="guide_slot">
+						<div class="section__head">
+							<h2 class="section__title">6. 마크업 덩어리 넘기기 — 슬롯</h2>
+							<p class="section__desc">
+								React 의 children 자리 — 값이 문구가 아니라 여러 줄 마크업이면 data-slot-* 로 넘긴다
+							</p>
+						</div>
+						<div class="ui-card">
+							<div class="ui-card__body">
+								<pre
+									class="guide__code"
+								><code>&lt;!-- 부르는 쪽 : 컨테이너는 비우고, 내용은 같은 파일의 template 에 적는다 --&gt;
+&lt;div
+	class="dynamic-content"
+	data-source="./include/ui/_ui_modal.html"
+	data-id="modal_invite"
+	data-title="멤버 초대"
+	data-slot-body="#modal_invite_body"
+&gt;&lt;/div&gt;
+
+&lt;template id="modal_invite_body"&gt;
+	&lt;div class="grid"&gt;…&lt;/div&gt;
+&lt;/template&gt;
+
+&lt;!-- 받는 쪽(_ui_modal.html) --&gt;
+&lt;div class="ui-modal__body"&gt;{{{body}}}&lt;/div&gt;</code></pre>
+							</div>
+							<div class="ui-card__body ui-card__body--flush">
+								<table class="ui-table ui-table--wrap">
+									<caption class="guide__caption">
+										슬롯 문법
+									</caption>
+									<thead>
+										<tr>
+											<th scope="col">항목</th>
+											<th scope="col">규칙</th>
+										</tr>
+									</thead>
+									<tbody>
+										<tr>
+											<td>키 이름</td>
+											<td><code>data-slot-body</code> → 파셜 안 <code>{{{body}}}</code></td>
+										</tr>
+										<tr>
+											<td>값</td>
+											<td>template 요소의 아이디 선택자(<code>#아이디</code>) — 마크업을 속성에 직접 적지 않는다</td>
+										</tr>
+										<tr>
+											<td>template 위치</td>
+											<td>include 를 적은 같은 파일(페이지든 파셜이든). 산출물에서는 정의가 걷힌다</td>
+										</tr>
+										<tr>
+											<td>없어도 되는 슬롯</td>
+											<td>파셜에 <code>{{{body|}}}</code> — 넘기지 않으면 프리렌더가 그 줄을 지운다</td>
+										</tr>
+									</tbody>
+								</table>
+							</div>
+							<div class="ui-card__body">
+								<ul class="guide__list">
+									<li>
+										<strong>슬롯 안에서 파셜을 include 할 수 있다.</strong> 여러 화면이 함께 쓰는 본문은 template 안에서
+										그 파셜을 부른다.
+									</li>
+									<li>슬롯은 항상 세 겹이다. 두 겹으로 적으면 태그가 글자로 보인다.</li>
+								</ul>
+								<p class="guide__note guide__note--warn">
+									슬롯 이름을 <strong>파셜 안 목록 템플릿의 필드명과 겹치지 않게</strong> 짓는다. 겹치면 목록 필드
+									자리까지 슬롯 내용으로 덮인다(아코디언은 항목 필드로 <code>{{{body}}}</code> 를 쓴다).
+								</p>
+							</div>
+						</div>
+						<div class="ui-card">
+							<div class="ui-card__header">
+								<h3 class="ui-card__title">React 라면</h3>
+							</div>
+							<div class="ui-card__body">
+								<p class="guide__desc">
+									파셜은 <code>data-slot-body="#modal_invite_body"</code> 로 넘기고 <code>{{{body}}}</code> 자리에
+									꽂는다. React 의 children 과 같다.
+								</p>
+								<pre class="guide__code"><code>// 여러 줄 마크업은 children 으로 넘긴다
+function Modal({ title, children }) {
+	return (
+		&lt;div className="ui-modal"&gt;
+			&lt;h2 className="ui-modal__title"&gt;{title}&lt;/h2&gt;
+			&lt;div className="ui-modal__body"&gt;{children}&lt;/div&gt;
+		&lt;/div&gt;
+	);
+}
+
+&lt;Modal title="멤버 초대"&gt;
+	&lt;div className="grid"&gt;…&lt;/div&gt;
+&lt;/Modal&gt;</code></pre>
+							</div>
+						</div>
+					</section>
+					<!--// 구역 : 슬롯 -->
+
+					<!-- 구역 : 파셜 안 목록 -->
+					<section class="section" id="guide_list">
+						<div class="section__head">
+							<h2 class="section__title">7. 파셜 안에서 목록(JSON) 쓰기</h2>
+							<p class="section__desc">
+								React 의 map 자리 — 파셜이 먼저 주입되므로 파셜 안에 목록 컨테이너와 템플릿을 함께 둘 수 있다
+							</p>
+						</div>
+						<div class="ui-card">
+							<div class="ui-card__body">
+								<pre class="guide__code"><code>&lt;!-- 부르는 쪽 --&gt;
+&lt;div
+	class="dynamic-content"
+	data-source="./include/ui/_ui_dropdown.html"
+	data-items="../data/ui/sample_options.json"
+&gt;&lt;/div&gt;
+
+&lt;!-- 받는 쪽(_ui_dropdown.html) --&gt;
+&lt;ul
+	class="dynamic-list"
+	data-source="{{items}}"
+	data-template="#tpl_ui_dropdown_item"
+	data-empty="#tpl_ui_dropdown_empty"
+&gt;&lt;/ul&gt;
+&lt;div class="dynamic-content" data-source="./include/ui/_ui_dropdown_tpl.html"&gt;&lt;/div&gt;</code></pre>
+								<ul class="guide__list">
+									<li>목록 경로(<code>data-items</code>)는 <code>../data/…</code> — 목록도 페이지 기준이다.</li>
+									<li>
+										템플릿만 담은 파셜(<code>_ui_dropdown_tpl.html</code>)을 따로 두면 여러 파셜이 템플릿을 함께
+										쓴다(드롭다운 · 검색 드롭다운).
+									</li>
+								</ul>
+								<p class="guide__note guide__note--warn">
+									파셜 안 목록 템플릿의 <code>{{name}}</code> 은 파셜 변수와 같은 괄호다. 파셜에 같은 이름을 넘기면
+									<strong>파셜 변수가 먼저 먹는다</strong> — 이름을 갈라 쓴다.
+								</p>
+							</div>
+						</div>
+						<div class="ui-card">
+							<div class="ui-card__header">
+								<h3 class="ui-card__title">React 라면</h3>
+							</div>
+							<div class="ui-card__body">
+								<p class="guide__desc">
+									파셜은 속성 네 개가 이 일을 한다 — <code>data-source</code>(데이터) · <code>data-template</code>(행
+									모양) · <code>data-filter</code>(거르기) · <code>data-empty</code>(0건).
+								</p>
+								<pre class="guide__code"><code>// 거르고 · 돌리고 · 0건이면 다른 것을 그린다
+{items.length === 0 ? (
+	&lt;Empty /&gt;
+) : (
+	items.filter((it) =&gt; it.group === 'input').map((it) =&gt; &lt;Row key={it.name} {...it} /&gt;)
+)}</code></pre>
+							</div>
+						</div>
+					</section>
+					<!--// 구역 : 파셜 안 목록 -->
+
+					<!-- 구역 : 새로 만들 때 -->
+					<section class="section" id="guide_new">
+						<div class="section__head">
+							<h2 class="section__title">8. 파셜을 새로 만들 때</h2>
+							<p class="section__desc">같은 마크업이 두 곳 이상에 생기면 그 자리에서 파셜로 뺀다</p>
+						</div>
+						<div class="ui-card">
+							<div class="ui-card__body">
+								<ol class="guide__steps">
+									<li>
+										<strong>폴더</strong> — 한 기능만 쓰면 <code>include/&lt;기능&gt;/</code>, 두 곳 이상이 쓰게 되면
+										<code>common/</code> 으로 옮긴다(옮길 때 <code>data-source</code> 를 전부 고친다). 공통 UI 는
+										<code>include/ui/_ui_*.html</code>.
+									</li>
+									<li>
+										<strong>파일명은 저장소 안에서 고유하게.</strong> <code>_</code> 로 시작한다(프리렌더가 페이지로
+										오인하지 않는다).
+									</li>
+									<li>
+										<strong>머리 주석에 「받는 값」을 적는다.</strong> 이 저장소의 모든 파셜이 같은 형식이다 —
+										<code>&lt;!-- 공통 입력 — 받는 값 : data-id(필수) · data-placeholder --&gt;</code>
+									</li>
+									<li>
+										<strong>재사용할 파셜은 id 를 data-* 로 받는다</strong> — <code>id="{{id}}"</code> ·
+										<code>id="{{id}}_title"</code>. 고정 id 를 박으면 한 페이지에 두 번 못 넣는다.
+									</li>
+									<li>
+										<strong>활성 상태를 파셜에 박지 않는다.</strong> 현재 메뉴·현재 탭은 <code>common.js</code> 가
+										붙인다.
+									</li>
+									<li>
+										<strong>새 이름은 grep 으로 충돌 검사</strong>하고, 만들었으면 <code>docs/WORKLOG.md</code> 에 한
+										줄.
+									</li>
+									<li>
+										<code>npm run prerender</code> 로 파셜 개수가 늘었는지 확인한다 — 페이지마다
+										<code>✓ 파일명 (파셜 n / 목록 n · n행)</code> 이 찍힌다.
+									</li>
+								</ol>
+							</div>
+						</div>
+					</section>
+					<!--// 구역 : 새로 만들 때 -->
+
+					<!-- 구역 : 함정 -->
+					<section class="section" id="guide_trap">
+						<div class="section__head">
+							<h2 class="section__title">9. 함정 — 여기서 실수한다</h2>
+							<p class="section__desc">겪은 것만 모았다. 증상이 조용해서 늦게 발견되는 순서로</p>
+						</div>
+						<div class="ui-card">
+							<div class="ui-card__body ui-card__body--flush">
+								<table class="ui-table ui-table--wrap">
+									<caption class="guide__caption">
+										파셜 함정
+									</caption>
+									<thead>
+										<tr>
+											<th scope="col">함정</th>
+											<th scope="col">무슨 일이 나나</th>
+											<th scope="col">어떻게</th>
+										</tr>
+									</thead>
+									<tbody
+										class="dynamic-list"
+										data-source="../data/guide/partial_traps.json"
+										data-template="#tpl_guide_trap"
+										data-empty="#tpl_guide_trap_none"
+									></tbody>
+								</table>
+							</div>
+						</div>
+					</section>
+					<!--// 구역 : 함정 -->
+
+					<!-- 구역 : 예시 모음 -->
+					<section class="section" id="guide_sample">
+						<div class="section__head">
+							<h2 class="section__title">10. 예시 모음</h2>
+							<p class="section__desc">
+								저장소에 있는 파셜과 받는 값. 동작하는 화면은
+								<a href="./Sample.html">공통 UI · 파셜 · 목록 샘플</a>
+							</p>
+						</div>
+						<div class="ui-card">
+							<div class="ui-card__header">
+								<h3 class="ui-card__title">공통</h3>
+							</div>
+							<div class="ui-card__body">
+								<div
+									class="dynamic-list guide__samples"
+									data-source="../data/guide/partial_samples.json"
+									data-template="#tpl_guide_sample"
+									data-empty="#tpl_guide_sample_none"
+									data-filter="group=common"
+								></div>
+							</div>
+						</div>
+						<div class="ui-card">
+							<div class="ui-card__header">
+								<h3 class="ui-card__title">입력</h3>
+							</div>
+							<div class="ui-card__body">
+								<div
+									class="dynamic-list guide__samples"
+									data-source="../data/guide/partial_samples.json"
+									data-template="#tpl_guide_sample"
+									data-empty="#tpl_guide_sample_none"
+									data-filter="group=input"
+								></div>
+							</div>
+						</div>
+						<div class="ui-card">
+							<div class="ui-card__header">
+								<h3 class="ui-card__title">선택 · 안내</h3>
+							</div>
+							<div class="ui-card__body">
+								<div
+									class="dynamic-list guide__samples"
+									data-source="../data/guide/partial_samples.json"
+									data-template="#tpl_guide_sample"
+									data-empty="#tpl_guide_sample_none"
+									data-filter="group=choice"
+								></div>
+							</div>
+						</div>
+						<div class="ui-card">
+							<div class="ui-card__header">
+								<h3 class="ui-card__title">알림 · 모달</h3>
+							</div>
+							<div class="ui-card__body">
+								<div
+									class="dynamic-list guide__samples"
+									data-source="../data/guide/partial_samples.json"
+									data-template="#tpl_guide_sample"
+									data-empty="#tpl_guide_sample_none"
+									data-filter="group=modal"
+								></div>
+								<p class="guide__note guide__note--tip">
+									여는 방법은 <code>data-modal-open="아이디"</code> · <code>data-toast="아이디"</code> — 페이지에 전용
+									스크립트를 두지 않는다.
+								</p>
+							</div>
+						</div>
+					</section>
+					<!--// 구역 : 예시 모음 -->
+
+					<!-- 구역 : 증상 -->
+					<section class="section" id="guide_symptom">
+						<div class="section__head">
+							<h2 class="section__title">11. 증상 → 원인</h2>
+							<p class="section__desc">화면이 이상할 때 먼저 볼 곳</p>
+						</div>
+						<div class="ui-card">
+							<div class="ui-card__body ui-card__body--flush">
+								<table class="ui-table ui-table--wrap">
+									<caption class="guide__caption">
+										증상과 원인
+									</caption>
+									<thead>
+										<tr>
+											<th scope="col">화면에서 본 것</th>
+											<th scope="col">먼저 볼 것</th>
+										</tr>
+									</thead>
+									<tbody
+										class="dynamic-list"
+										data-source="../data/guide/partial_symptoms.json"
+										data-template="#tpl_guide_symptom"
+										data-empty="#tpl_guide_symptom_none"
+									></tbody>
+								</table>
+							</div>
+						</div>
+					</section>
+					<!--// 구역 : 증상 -->
+
+					<!-- 구역 : 마무리 -->
+					<section class="section" id="guide_finish">
+						<div class="section__head">
+							<h2 class="section__title">12. 파셜을 고친 뒤</h2>
+							<p class="section__desc">이 순서를 지키지 않으면 index 에서 열어본 화면이 옛것이다</p>
+						</div>
+						<div class="ui-card">
+							<div class="ui-card__body">
+								<ul class="guide__check">
+									<li><code>npm run prerender</code> — 전체를 돌린다(특정 파일만 돌리면 페이지 간 링크가 404).</li>
+									<li>
+										<code>public/index.html</code> — 그 파셜을 include 한 페이지의 수정일 갱신.
+										<strong>화면·동작이 달라진 페이지에만</strong> 찍는다.
+									</li>
+									<li>신규 파셜이면 <code>docs/WORKLOG.md</code> 에 한 줄(날짜 · 항목 · 위치 · 사유 · 작성자).</li>
+									<li>
+										<code>npm run validate</code> 에 error 가 없다 · 고친 파일은 <code>npx prettier --write</code> 로
+										정렬.
+									</li>
+									<li>커밋에 <strong>원본과 산출물을 함께</strong> 넣는다(커밋 직전 검사가 확인한다).</li>
+								</ul>
+							</div>
+						</div>
+					</section>
+					<!--// 구역 : 마무리 -->
+				</main>
+			</div>
+		</div>
+
+		<!-- 목록 템플릿 (listRender.js 가 JSON 을 순회해 렌더) -->
+		<template id="tpl_guide_rule">
+			<tr>
+				<td class="guide__term">{{{term}}}</td>
+				<td>{{{desc}}}</td>
+			</tr>
+		</template>
+		<template id="tpl_guide_rule_none">
+			<tr>
+				<td colspan="2" class="ui-table__empty">등록된 규칙이 없습니다.</td>
+			</tr>
+		</template>
+		<template id="tpl_guide_react">
+			<tr>
+				<td class="guide__term">{{{concept}}}</td>
+				<td>{{{pub}}}</td>
+				<td>{{{react}}}</td>
+			</tr>
+		</template>
+		<template id="tpl_guide_react_none">
+			<tr>
+				<td colspan="3" class="ui-table__empty">등록된 대응이 없습니다.</td>
+			</tr>
+		</template>
+		<template id="tpl_guide_trap">
+			<tr>
+				<td class="guide__term">{{{trap}}}</td>
+				<td>{{{what}}}</td>
+				<td>{{{how}}}</td>
+			</tr>
+		</template>
+		<template id="tpl_guide_trap_none">
+			<tr>
+				<td colspan="3" class="ui-table__empty">등록된 함정이 없습니다.</td>
+			</tr>
+		</template>
+		<template id="tpl_guide_symptom">
+			<tr>
+				<td class="guide__term">{{{symptom}}}</td>
+				<td>{{{cause}}}</td>
+			</tr>
+		</template>
+		<template id="tpl_guide_symptom_none">
+			<tr>
+				<td colspan="2" class="ui-table__empty">등록된 증상이 없습니다.</td>
+			</tr>
+		</template>
+		<template id="tpl_guide_sample">
+			<div class="guide__sample">
+				<h4 class="guide__sample-name">{{name}}</h4>
+				<p class="guide__sample-args">{{{args}}}</p>
+				<pre class="guide__code"><code>{{{code}}}</code></pre>
+			</div>
+		</template>
+		<template id="tpl_guide_sample_none">
+			<p class="guide__sample-none">등록된 예시가 없습니다.</p>
+		</template>
+		<!--// 목록 템플릿 -->
+	</body>
+</html>

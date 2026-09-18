@@ -57,11 +57,13 @@ public/
 ├─ font/Pretendard/            woff2
 └─ js/  dynamicImport.js · listRender.js · common.js · jquery-3.7.1.min.js
 scripts/prerender.js
+docs/PARTIALS.md               파셜(include) 사용법 · 주의점 · 예시 모음
 docs/WORKLOG.md                신규 생성 항목 기록
 CLAUDE.md · .claude/           Claude Code 규칙 · 스킬 · 에이전트
 ```
 
 동작 예시 : `public/html/Sample.html` → http://localhost:3500/prerender/Sample
+사용법 화면 : `public/html/Guide_Partial.html` → http://localhost:3500/prerender/Guide_Partial
 
 ## 4. 작업 순서
 
