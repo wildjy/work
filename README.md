@@ -59,6 +59,7 @@ public/
 scripts/prerender.js
 docs/PARTIALS.md               파셜(include) 사용법 · 주의점 · 예시 모음
 docs/STRUCTURE.md              폴더 구조 — 슬라이스 · 세그먼트 (어느 폴더에 두나 · 화면 판 Guide_Structure)
+docs/DEPLOY.md                 GitHub Pages 배포 방법 · 실패 원인
 docs/WORKLOG.md                신규 생성 항목 기록
 CLAUDE.md · .claude/           Claude Code 규칙 · 스킬 · 에이전트
 ```
@@ -66,6 +67,8 @@ CLAUDE.md · .claude/           Claude Code 규칙 · 스킬 · 에이전트
 동작 예시 : `public/html/Sample.html` → http://localhost:3500/prerender/Sample
 사용법 화면 : `public/html/Guide_Partial.html` → http://localhost:3500/prerender/Guide_Partial
 폴더 구조 화면 : `public/html/Guide_Structure.html` → http://localhost:3500/prerender/Guide_Structure
+
+배포된 화면 : https://wildjy.github.io/work/ (GitHub Pages · `docs/DEPLOY.md`)
 
 ## 4. 작업 순서
 
