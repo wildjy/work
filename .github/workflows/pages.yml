@@ -24,17 +24,17 @@ jobs:
       name: github-pages
       url: ${{ steps.deploy.outputs.page_url }}
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
 
       # 산출물이 원본과 어긋난 채 배포되는 것을 막는다 (커밋 훅과 같은 검사)
-      - uses: actions/setup-node@v4
+      - uses: actions/setup-node@v5
         with:
           node-version: 20
           cache: npm
       - run: npm ci
       - run: npm run prerender
       - name: 프리렌더 산출물이 최신인지 확인
-        run: git diff --exit-code public/prerender
+        run: git diff --exit-code --ignore-cr-at-eol public/prerender
       - run: npm run validate
 
       - uses: actions/configure-pages@v5

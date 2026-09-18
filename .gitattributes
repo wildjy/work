@@ -1,0 +1,18 @@
+# 줄바꿈 — 저장소에는 LF 로 저장하고, 작업 트리 줄바꿈은 여기서 정한다.
+* text=auto
+
+# public/ 소스는 CRLF 다(.editorconfig 와 같은 규칙).
+# ⚠ 리눅스 CI 러너에서도 CRLF 로 체크아웃되어야 prerender.js 가 만든 산출물이
+#    커밋된 산출물과 일치한다 — 아니면 배포 워크플로의 최신성 검사가 항상 실패한다.
+public/** text eol=crlf
+
+# 바이너리는 변환하지 않는다
+*.woff2 binary
+*.woff binary
+*.ttf binary
+*.otf binary
+*.png binary
+*.jpg binary
+*.jpeg binary
+*.gif binary
+*.ico binary
