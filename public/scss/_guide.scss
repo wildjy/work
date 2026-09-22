@@ -191,6 +191,71 @@
 		}
 	}
 
+	//**** 치환 데모 ****/ — 값이 class · 속성 · style 자리에 들어가는 것을 눈으로 보이는 조각
+	// 문서에서만 쓴다. 공통 UI 로 보일 수 있는 것(버튼 · 체크박스)은 .ui-* 를 그대로 쓰고,
+	// 여기에는 **다른 데 쓸 일이 없는 시연용 두 개**만 둔다.
+	&__bar {
+		display: block;
+		overflow: hidden;
+		width: 100%;
+		min-width: 120px;
+		height: 10px;
+		border-radius: variable.$radius-full;
+		background-color: variable.$color-divider;
+
+		i {
+			display: block;
+			height: 100%;
+			background-color: variable.$color-primary;
+		}
+	}
+	&__flag {
+		display: inline-block;
+		padding: 3px 10px;
+		border-radius: variable.$radius-sm;
+		background-color: variable.$green-50;
+		@include mixin.font-set(0.8125rem, 600, variable.$color-success-text);
+	}
+
+	//**** 운영 컴포넌트 데모 ****/ — 틀은 파셜 · 내용은 JSON · type 이 그대로 class
+	// ⚠ 변종이 늘면 아래 --type 블록만 하나 더한다. 템플릿도 파셜도 고치지 않는다.
+	&__ops {
+		display: flex;
+		flex-direction: column;
+		gap: 8px;
+	}
+	&__op {
+		display: flex;
+		flex-wrap: wrap;
+		align-items: center;
+		gap: 10px;
+		padding: 12px 14px;
+		border-radius: variable.$radius-sm;
+		background-color: variable.$color-hover;
+
+		&-badge {
+			flex: none;
+			padding: 2px 8px;
+			border-radius: variable.$radius-full;
+			background-color: variable.$color-surface;
+			@include mixin.font-set(0.75rem, 600, variable.$color-text-sub);
+		}
+		&-txt {
+			flex: 1;
+			min-width: 0;
+			@include mixin.font-set(0.875rem, 400, variable.$color-text);
+			line-height: 1.6;
+		}
+		&--notice {
+			background-color: variable.$blue-10;
+		}
+		&--plus {
+			background-color: variable.$green-10;
+		}
+		&--coming {
+			background-color: variable.$yellow-10;
+		}
+	}
 	//**** 표 안 첫 칸 ****/ — 무엇에 대한 줄인지
 	&__term {
 		font-weight: 600;

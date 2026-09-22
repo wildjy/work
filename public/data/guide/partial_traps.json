@@ -47,7 +47,7 @@
   {
     "trap": "목록 템플릿 안의 include",
     "what": "<strong>브라우저에서는 전개되지 않고</strong>(목록은 파셜 주입이 끝난 뒤 문자열로 찍힌다) 프리렌더는 펴 버려 <strong>화면과 산출물이 갈린다</strong>",
-    "how": "반복 행 안에는 include 를 두지 않는다. <strong>슬롯 template 은 다르다</strong> — 실제 마크업이 되므로 동작한다"
+    "how": "반복 행 안에는 include 를 두지 않는다 — <strong>템플릿 자체를 파셜로</strong> 만든다. <strong>슬롯 template 은 다르다</strong> — 실제 마크업이 되므로 동작한다"
   },
   {
     "trap": "JSON 값 안의 <code>&#123;&#123; &#125;&#125;</code>",
@@ -87,11 +87,36 @@
   {
     "trap": "Live Server 로 열기",
     "what": "파셜 조각에 라이브리로드 스크립트가 주입돼 마크업이 깨진다",
-    "how": "<code>npm run serve</code> (http://localhost:3500)"
+    "how": "<code>npm run serve</code> (http://localhost:3500) (http://localhost:3500)"
   },
   {
     "trap": "<code>template</code> 요소째 파셜로 빼서 사용처보다 <strong>뒤</strong>에서 include",
     "what": "슬롯을 채울 때 <code>template</code> 이 아직 없어 <strong>본문이 빈 채로</strong> 나간다 — 프리렌더만 경고를 찍는다",
     "how": "<code>template</code> 은 <strong>include 를 적은 파일에</strong> 두고, 내용만 <code>&lt;슬라이스&gt;/body/</code> 파셜로 뺀다"
+  },
+  {
+    "trap": "<code>data-*</code> 를 <strong>작은따옴표</strong>로",
+    "what": "<strong>브라우저는 읽고 프리렌더는 못 읽는다</strong> — <code>partialVars()</code> 의 정규식이 큰따옴표만 본다. 값이 조용히 기본값으로 떨어진다",
+    "how": "큰따옴표로 적는다. <code>npx prettier --write</code> 가 자동으로 맞춘다"
+  },
+  {
+    "trap": "<strong>빈 값</strong>을 넘김 — <code>data-tone=\"\"</code>",
+    "what": "「넘긴 것」이라 <strong>기본값을 이긴다</strong>. 안 넘긴 것과 결과가 다르다",
+    "how": "기본값을 쓰려면 <strong>속성을 아예 적지 않는다</strong>"
+  },
+  {
+    "trap": "참 · 거짓을 문자열로 — <code>data-checked=\"false\"</code>",
+    "what": "치환은 <strong>글자 바꿔치기</strong>라 참/거짓을 모른다. <code>&lt;input false&gt;</code> 가 되고 class 자리면 <code>class=\"ui-tag false\"</code> 가 된다",
+    "how": "<strong>끄는 방법은 「안 넘기는 것」 하나뿐이다</strong>"
+  },
+  {
+    "trap": "기본값 안에 <code>}</code>",
+    "what": "정규식이 <code>[^}]*?</code> 라 <strong>거기서 끊긴다</strong> — 기본값이 잘린 채 나온다",
+    "how": "중괄호가 필요한 값은 기본값에 두지 않고 <strong>넘겨서</strong> 채운다"
+  },
+  {
+    "trap": "파셜을 <strong>「상태 예시」</strong>인 채로 복사",
+    "what": "파셜은 <code>is-active</code> · <code>is-error</code> 같은 상태를 보여주려 만들어 둔 것이 많다 — 복사하면 <strong>그 상태가 따라온다</strong>",
+    "how": "기준 마크업은 <strong>실제 화면</strong>에서 가져온다"
   }
 ]

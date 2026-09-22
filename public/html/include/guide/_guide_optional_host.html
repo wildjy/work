@@ -1,0 +1,12 @@
+<!-- 사용법 문서 전용 데모 — 덩어리가 통째로 있다 / 없다 를 경로 변수로 가른다.
+     받는 값 : data-extra(넣을 조각의 경로 · 안 넘기면 빈 파셜이 들어와 아무것도 안 나간다)
+     쓰는 곳 : Guide_Partial.html 전용. -->
+<div class="ui-card">
+	<div class="ui-card__header">
+		<h4 class="ui-card__title">틀 — 어느 화면에서나 나온다</h4>
+	</div>
+	<div class="ui-card__body">
+		<p class="guide__desc">이 문단은 틀에 있으므로 두 경우 모두 나온다.</p>
+		<div class="dynamic-content" data-source="{{extra|./include/common/_none.html}}"></div>
+	</div>
+</div>

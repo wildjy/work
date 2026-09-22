@@ -1,0 +1,69 @@
+<!-- 사용법 문서 전용 데모 — 값이 「문구」가 아니라 class · 속성 · style 자리에 들어가는 예.
+     받는 값 : data-title · data-variant · data-attrs · data-chk-id(한 화면에 두 번 넣을 때 필수) · data-disabled · data-width · data-flag-attrs · data-btn
+     쓰는 곳 : Guide_Partial.html 전용 — 실제 화면에 include 하지 않는다.
+     ⚠ 이 파셜은 조건을 판단하지 않는다. 어느 쪽인지는 부르는 화면이 정하고,
+        파셜은 결과(class 이름 · 속성 문자열 · 길이)만 받는다. -->
+<div class="ui-card">
+	<div class="ui-card__header">
+		<h4 class="ui-card__title">{{title|이름 없는 예}}</h4>
+	</div>
+	<div class="ui-card__body ui-card__body--flush">
+		<table class="ui-table ui-table--wrap">
+			<caption class="guide__caption">
+				class · 속성 · style 치환 결과
+			</caption>
+			<thead>
+				<tr>
+					<th scope="col">파셜에 적은 것</th>
+					<th scope="col">화면에 나온 것</th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr>
+					<td class="guide__term">
+						G · class 자리<br /><code>class="ui-btn &#123;&#123;variant|ui-btn--outlined&#125;&#125;"</code>
+					</td>
+					<td>
+						<button type="button" class="ui-btn ui-btn--sm {{variant|ui-btn--outlined}}">모양만 다르다</button>
+					</td>
+				</tr>
+				<tr>
+					<td class="guide__term">
+						H · 속성이 있다 / 없다<br /><code>&#123;&#123;&#123;attrs|&#125;&#125;&#125;</code> — 공통 체크박스 파셜에
+						그대로 이어 넘긴다
+					</td>
+					<td>
+						<div
+							class="dynamic-content"
+							data-source="./include/ui/_ui_checkbox.html"
+							data-id="{{chkId|guide_flags_chk}}"
+							data-label="체크 상태"
+							data-attrs="{{attrs|}}"
+						></div>
+						<button type="button" class="ui-btn ui-btn--sm ui-btn--contained" {{disabled|}}>버튼</button>
+					</td>
+				</tr>
+				<tr>
+					<td class="guide__term">
+						I · style 자리 — 값<br /><code>style="width: &#123;&#123;width|10&#125;&#125;%"</code>
+					</td>
+					<td>
+						<span class="guide__bar"><i style="width: {{width|10}}%"></i></span>
+					</td>
+				</tr>
+				<tr>
+					<td class="guide__term">
+						J · 보였다 / 숨었다<br /><code>&#123;&#123;&#123;flagAttrs|hidden&#125;&#125;&#125;</code>
+					</td>
+					<td>
+						<span class="guide__flag" {{{flagAttrs|hidden}}}>넘긴 화면에서만 보인다</span>
+					</td>
+				</tr>
+				<tr>
+					<td class="guide__term">K · 기본값이 곧 else 가지<br /><code>&#123;&#123;btn|저장하기&#125;&#125;</code></td>
+					<td>{{btn|저장하기}}</td>
+				</tr>
+			</tbody>
+		</table>
+	</div>
+</div>

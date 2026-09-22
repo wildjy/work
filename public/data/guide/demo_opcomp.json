@@ -1,0 +1,33 @@
+[
+  {
+    "use": true,
+    "type": "notice",
+    "badge": "공지",
+    "txt": "이 줄은 <strong>JSON 한 줄</strong>이다. 다음 것을 올릴 때 마크업을 고치지 않는다.",
+    "href": "#guide_list",
+    "btn": "자세히"
+  },
+  {
+    "use": true,
+    "type": "plus",
+    "badge": "신규",
+    "txt": "<code>type</code> 이 그대로 class 가 된다 — 변종이 늘어도 템플릿은 하나다.",
+    "href": "#guide_ladder",
+    "btn": "사다리 보기"
+  },
+  {
+    "use": false,
+    "type": "coming",
+    "badge": "준비중",
+    "txt": "<strong>내려둔 줄이다.</strong> 지우지 않고 <code>use</code> 를 거짓으로 둔다 — 다시 올릴 때 한 글자만 고친다.",
+    "href": "#",
+    "btn": "켜기"
+  },
+  {
+    "use": true,
+    "_tpl": "#tpl_guide_op_text",
+    "type": "notice",
+    "badge": "안내",
+    "txt": "이 줄만 <code>_tpl</code> 로 <strong>다른 틀</strong>을 골랐다 — 버튼이 없다."
+  }
+]

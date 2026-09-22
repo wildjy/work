@@ -1,0 +1,36 @@
+<!-- 사용법 문서 전용 데모 — 운영하며 갈아 끼우는 컴포넌트의 틀.
+     받는 값 : data-show(무엇을 띄울지 · 안 넘기면 use 가 참인 것을 전부)
+     받는 필드 : type(그대로 class 가 된다) · badge · txt · btn · href · _tpl
+     쓰는 곳 : Guide_Partial.html 전용. 실물은 배너 · 팝업 · 공지가 같은 모양이다. -->
+<div
+	class="dynamic-list guide__ops"
+	data-source="../data/guide/demo_opcomp.json"
+	data-template="#tpl_guide_op"
+	data-empty="#tpl_guide_op_none"
+	data-filter="{{show|use}}"
+></div>
+
+<!-- 목록 템플릿 (listRender.js 가 JSON 을 순회해 렌더) -->
+<template id="tpl_guide_op">
+	<div class="guide__op guide__op--{{type}}">
+		<span class="guide__op-badge">{{badge}}</span>
+		<span class="guide__op-txt">{{{txt}}}</span>
+		<a class="ui-btn ui-btn--sm ui-btn--outlined" href="{{href}}">{{btn}}</a>
+	</div>
+</template>
+<!--// 목록 템플릿 -->
+
+<!-- 목록 템플릿 : 항목의 _tpl 이 고르는 둘째 틀 — 버튼이 없는 줄 -->
+<template id="tpl_guide_op_text">
+	<div class="guide__op guide__op--{{type}}">
+		<span class="guide__op-badge">{{badge}}</span>
+		<span class="guide__op-txt">{{{txt}}}</span>
+	</div>
+</template>
+<!--// 목록 템플릿 -->
+
+<!-- 목록 템플릿 : 0건 -->
+<template id="tpl_guide_op_none">
+	<p class="guide__sample-none">켜져 있는 것이 없습니다.</p>
+</template>
+<!--// 목록 템플릿 -->

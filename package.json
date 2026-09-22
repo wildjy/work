@@ -13,7 +13,9 @@
     "format": "prettier --write .",
     "format:check": "prettier --check .",
     "validate": "html-validate public/prerender",
-    "prepare": "simple-git-hooks"
+    "prepare": "simple-git-hooks",
+    "docs": "node scripts/docs_from_json.js",
+    "docs:check": "node scripts/docs_from_json.js --check"
   },
   "engines": {
     "node": ">=20"

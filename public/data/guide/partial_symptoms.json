@@ -5,11 +5,11 @@
   },
   {
     "symptom": "<code>&#123;&#123;&#123;body&#125;&#125;&#125;</code> 가 글자로 보인다",
-    "cause": "슬롯을 안 넘겼다 / template 아이디가 다르다 / 옛 <code>dynamicImport.js</code>"
+    "cause": "슬롯을 안 넘겼다 / template 아이디가 다르다 / 옛 <code>dynamicImport.js</code>(강력 새로고침)"
   },
   {
     "symptom": "파셜 자리가 통째로 비어 있다",
-    "cause": "경로가 파셜 기준이다 / 파일명 오타 — 콘솔과 프리렌더 경고(<code>! 파셜 없음</code>)를 본다"
+    "cause": "경로가 파셜 기준이다(페이지 기준으로 적는다) / 파일명 오타 — 콘솔과 프리렌더 경고(<code>! 파셜 없음</code>)를 본다"
   },
   {
     "symptom": "화면은 되는데 <strong>산출물만</strong> 다르다",
@@ -25,6 +25,18 @@
   },
   {
     "symptom": "마크업이 깨져 보인다",
-    "cause": "Live Server 로 열었다 → <code>npm run serve</code>"
+    "cause": "Live Server 로 열었다 → <code>npm run serve</code> (http://localhost:3500)"
+  },
+  {
+    "symptom": "class 가 하나 모자라거나 <code>false</code> 가 붙어 있다",
+    "cause": "빈 값을 넘겨 기본값이 밀렸다 / 참·거짓을 문자열로 넘겼다 — 끄려면 <strong>안 넘긴다</strong>"
+  },
+  {
+    "symptom": "기본값이 <strong>잘린 채</strong> 나온다",
+    "cause": "기본값 안에 <code>}</code> 를 썼다 — 정규식이 거기서 끊는다"
+  },
+  {
+    "symptom": "<strong>산출물에서만</strong> 값이 기본값이다",
+    "cause": "<code>data-*</code> 를 작은따옴표로 적었다 / <code>data-*</code> 에 대문자를 썼다(이쪽은 반대로 브라우저만 실패)"
   }
 ]

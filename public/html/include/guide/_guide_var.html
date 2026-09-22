@@ -1,0 +1,52 @@
+<!-- 사용법 문서 전용 데모 — 치환이 실제로 어떻게 나오는지 눈으로 보려고 만든 것.
+     받는 값 : data-title · data-msg · data-msg-raw · data-modal-id · data-max-size · data-with-default
+     쓰는 곳 : Guide_Partial.html 전용 — 실제 화면에 include 하지 않는다.
+     같은 파셜을 값만 바꿔 여러 번 include 한다 — 「파셜은 한 벌, 값은 화면이 정한다」를 보이는 구성이다. -->
+<div class="ui-card">
+	<div class="ui-card__header">
+		<h4 class="ui-card__title">{{title|이름 없는 예}}</h4>
+	</div>
+	<div class="ui-card__body ui-card__body--flush">
+		<table class="ui-table ui-table--wrap">
+			<caption class="guide__caption">
+				치환 결과
+			</caption>
+			<thead>
+				<tr>
+					<th scope="col">파셜에 적은 것</th>
+					<th scope="col">화면에 나온 것</th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr>
+					<td class="guide__term">A · 이스케이프 <code>&#123;&#123;msg&#125;&#125;</code></td>
+					<td>{{msg}}</td>
+				</tr>
+				<tr>
+					<td class="guide__term">B · 원문 <code>&#123;&#123;&#123;msgRaw&#125;&#125;&#125;</code></td>
+					<td>{{{msgRaw}}}</td>
+				</tr>
+				<tr>
+					<td class="guide__term">C · 안 넘긴 키 <code>&#123;&#123;notPassed&#125;&#125;</code> (기본값 없음)</td>
+					<td>{{notPassed}}</td>
+				</tr>
+				<tr>
+					<td class="guide__term">D · 속성값 자리 <code>data-id="&#123;&#123;modalId&#125;&#125;"</code></td>
+					<td>
+						<button type="button" class="ui-btn ui-btn--sm ui-btn--outlined" data-id="{{modalId}}">{{modalId}}</button>
+					</td>
+				</tr>
+				<tr>
+					<td class="guide__term">
+						E · 케밥 → 카멜 <code>data-max-size</code> → <code>&#123;&#123;maxSize&#125;&#125;</code>
+					</td>
+					<td>{{maxSize}}</td>
+				</tr>
+				<tr>
+					<td class="guide__term">F · 기본값 <code>&#123;&#123;withDefault|…&#125;&#125;</code></td>
+					<td>{{withDefault|넘기지 않으면 이 문구가 들어온다}}</td>
+				</tr>
+			</tbody>
+		</table>
+	</div>
+</div>

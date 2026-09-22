@@ -1,0 +1,10 @@
+<!-- 사용법 문서 전용 데모 — 껍데기는 이 파셜이 갖고 본문은 부르는 쪽이 정한다.
+     받는 값 : data-title · data-slot-body(본문 template 아이디 · 필수)
+     쓰는 곳 : Guide_Partial.html 전용.
+     ⚠ 설명에 치환 토큰을 그대로 적지 않는다 — 치환은 주석 안도 가리지 않아 본문이 주석에 박힌다. -->
+<div class="ui-card">
+	<div class="ui-card__header">
+		<h4 class="ui-card__title">{{title|이름 없는 틀}}</h4>
+	</div>
+	<div class="ui-card__body">{{{body}}}</div>
+</div>
