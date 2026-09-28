@@ -2123,11 +2123,20 @@ html.has-modal {
 .guide__flow code {
   color: #5a5b6a;
 }
+.guide__tok--punct {
+  color: #787885;
+}
 .guide__tok--tag {
   color: #2264d1;
 }
 .guide__tok--attr {
   color: #057b7c;
+}
+.guide__tok--data {
+  color: #5c6bc0;
+}
+.guide__tok--bool {
+  color: #ce6b00;
 }
 .guide__tok--str {
   color: #37833b;
@@ -2136,8 +2145,22 @@ html.has-modal {
   font-weight: 600;
   color: #c23564;
 }
+.guide__tok--expr {
+  color: #133774;
+}
+.guide__tok--kw {
+  color: #3b457b;
+}
+.guide__tok--ent {
+  color: #f44336;
+}
 .guide__tok--cmt {
   color: #787885;
+}
+.guide__tok--dev {
+  border-radius: 4px;
+  background-color: #fef3e7;
+  color: #733c00;
 }
 .guide__toc {
   display: -webkit-box;
@@ -2351,6 +2374,36 @@ html.has-modal {
 }
 .guide__term {
   font-weight: 600;
+}
+.guide__src-fold {
+  overflow: hidden;
+  margin-bottom: 16px;
+}
+.guide__src-fold > summary {
+  padding-right: 52px;
+  border-bottom-color: transparent;
+  background-image: url("data:image/svg+xml;charset=utf8,%3Csvg width='10' height='6' viewBox='0 0 10 6' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M1 1L5 5L9 1' stroke='%235a5b6a' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E%0A");
+  background-repeat: no-repeat;
+  background-position: right 26px center;
+  background-size: 10px 6px;
+  list-style: none;
+  cursor: pointer;
+  -webkit-transition: background-color 150ms cubic-bezier(0.4, 0, 0.2, 1);
+  transition: background-color 150ms cubic-bezier(0.4, 0, 0.2, 1);
+}
+.guide__src-fold > summary::-webkit-details-marker {
+  display: none;
+}
+.guide__src-fold > summary:hover {
+  background-color: #f9f9fa;
+}
+.guide__src-fold > summary:focus-visible {
+  outline: 2px solid #2264d1;
+  outline-offset: -2px;
+}
+.guide__src-fold[open] > summary {
+  border-bottom-color: #e1e1e3;
+  background-image: url("data:image/svg+xml;charset=utf8,%3Csvg width='10' height='6' viewBox='0 0 10 6' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M1 5L5 1L9 5' stroke='%232264d1' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E%0A");
 }
 .guide__caption {
   position: absolute;

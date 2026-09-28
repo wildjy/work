@@ -960,15 +960,34 @@ document.addEventListener('keydown', function (e) {
 
    ⚠ **마크업·JSON 에는 span 을 적지 않는다.** 원본에는 코드만 적고 화면에서만 감싼다 —
       예시가 JSON 에서 오기도 하고(목록 렌더 뒤 다시 돈다), 손으로 span 을 넣으면 고치기 어려워진다.
-   ⚠ 읽기 좋으라고 태그·속성·문자열·주석·치환 자리만 가른다. 파서가 아니다.
+   ⚠ 읽기 좋으라고 가를 뿐 파서가 아니다 — 토큰 목록은 CODE_TOKEN_RE 위 주석.
    ⚠ 이미 칠한 블록은 건너뛴다(세 시점에 모두 걸리므로). */
 
-// 순서가 곧 우선순위다 : 마크업 주석 → 치환 자리 → 문자열 → 태그 이름 → 닫는 꺾쇠 → 속성 이름 → 스크립트 주석
-// ⚠ 문자열을 스크립트 주석보다 **먼저** 본다 — 'https://…' 안의 // 를 주석으로 삼지 않기 위해서다.
-// ⚠ 속성 이름은 앞에 . 이나 글자가 없고 뒤가 = 하나일 때만 — it.group === 'x' 의 group 을 속성으로 보지 않는다.
-var CODE_TOKEN_RE =
-	/(<!--[\s\S]*?-->)|(\{\{\{?[\s\S]*?\}?\}\})|("[^"]*"|'[^']*')|(<\/?[a-zA-Z][\w-]*)|(?<!=)(\/?>)|(?<![\w.$])([a-zA-Z][\w-]*)(?=\s*=(?!=))|(\/\/[^\r\n]*|\/\*[\s\S]*?\*\/)/g;
+// 두 단계로 칠한다 — 1) 큰 덩어리를 가르고  2) 태그 안은 _codeTag 가 다시 가른다.
+//   1) 마크업 주석 → 치환 자리 → 태그 통째 → (못 닫은) 태그 머리 → 스크립트 주석 → 문자열 → 문자 참조 → 키워드
+//   2) 꺾쇠 · 태그 이름 · 속성 이름(일반 / data-* / 값 없는 것) · = · 속성값(문자열 / 치환 자리 / JSX 값)
+// ⚠ 같은 자리에서 시작하는 덩어리만 순서가 가른다. 'https://…' 는 따옴표가 먼저 시작해 문자열이 된다.
+// ⚠ 태그 통째는 여러 줄에 걸쳐도 잡는다 — 속성을 한 줄에 하나씩 쓴 include 가 대부분이다.
+// ⚠ 키워드는 앞뒤가 글자가 아닐 때만 — it.default · returnValue 를 키워드로 보지 않는다.
+// 토큰 : punct · tag · attr · data · bool · str · var · expr · cmt · dev · ent · kw   (스타일 .guide__tok--*)
+var CODE_TOKEN_RE = new RegExp(
+	[
+		/(<!--[\s\S]*?-->)/.source,
+		/(\{\{\{?[\s\S]*?\}?\}\})/.source,
+		/(<\/?[a-zA-Z][\w.:-]*(?:\s(?:"[^"]*"|'[^']*'|\{\{\{?[^{}]*\}?\}\}|\{[^{}]*\}|[^'"<>{}])*)?\/?>)/.source,
+		/(<\/?[a-zA-Z][\w.:-]*)/.source,
+		/(\/\/[^\r\n]*|\/\*[\s\S]*?\*\/)/.source,
+		/("[^"]*"|'[^']*'|`[^`]*`)/.source,
+		/(&(?:#\d+|#x[0-9a-fA-F]+|[a-zA-Z]+);)/.source,
+		/(?<![\w.$])(const|let|var|function|return|if|else|import|export|from|default|new|true|false|null|undefined)(?![\w$])|(=>)/
+			.source,
+	].join('|'),
+	'g',
+);
 var CODE_VAR_RE = /\{\{\{?[\s\S]*?\}?\}\}/g;
+// 태그 안 : 공백 · 치환 자리 · 속성(이름 [= 값])
+var CODE_ATTR_RE =
+	/(\s+)|(\{\{\{?[^{}]*\}?\}\})|([^\s=]+)(?:(\s*=\s*)("[^"]*"|'[^']*'|\{\{\{?[^{}]*\}?\}\}|\{[^{}]*\}|[^\s"'=]+))?/g;
 
 function _codeEsc(s) {
 	return s.replace(/[&<>]/g, function (c) {
@@ -986,6 +1005,60 @@ function _codeStr(s) {
 		return '<span class="guide__tok--var">' + m + '</span>';
 	});
 	return '<span class="guide__tok--str">' + inner + '</span>';
+}
+
+// 속성값 — 치환 자리 · JSX 값({…}) · 문자열
+function _codeVal(v) {
+	if (/^\{\{/.test(v)) return _codeTok('var', v);
+	if (/^\{/.test(v)) return _codeTok('expr', v);
+	return _codeStr(v);
+}
+
+// 태그 하나(<div class="…" data-x hidden>)를 꺾쇠 · 이름 · 속성으로 가른다.
+// ⚠ 어느 규칙에도 걸리지 않은 글자도 그대로 옮긴다(빠뜨리면 화면에서 코드가 사라진다).
+function _codeTag(t) {
+	var head = t.match(/^<\/?/)[0];
+	var name = t.slice(head.length).match(/^[\w.:-]+/)[0];
+	var rest = t.slice(head.length + name.length);
+	var close = (rest.match(/\/?>$/) || [''])[0];
+	var body = rest.slice(0, rest.length - close.length);
+	var out = _codeTok('punct', head) + _codeTok('tag', name);
+	var last = 0;
+	var m;
+	CODE_ATTR_RE.lastIndex = 0;
+	while ((m = CODE_ATTR_RE.exec(body)) !== null) {
+		out += _codeEsc(body.slice(last, m.index));
+		if (m[1]) out += m[1];
+		else if (m[2]) out += _codeTok('var', m[2]);
+		else {
+			out += _codeTok(!m[4] ? 'bool' : /^data-/.test(m[3]) ? 'data' : 'attr', m[3]);
+			if (m[4]) out += _codeTok('punct', m[4]) + _codeVal(m[5]);
+		}
+		last = CODE_ATTR_RE.lastIndex;
+	}
+	out += _codeEsc(body.slice(last));
+	return out + (close ? _codeTok('punct', close) : '');
+}
+
+// 코드 한 덩어리 → 칠한 HTML
+function _codeHtml(src) {
+	var out = '';
+	var last = 0;
+	var m;
+	CODE_TOKEN_RE.lastIndex = 0;
+	while ((m = CODE_TOKEN_RE.exec(src)) !== null) {
+		out += _codeEsc(src.slice(last, m.index));
+		if (m[1]) out += _codeTok(/^<!--\s*@/.test(m[1]) ? 'dev' : 'cmt', m[1]);
+		else if (m[2]) out += _codeTok('var', m[2]);
+		else if (m[3]) out += _codeTag(m[3]);
+		else if (m[4]) out += _codeTok('punct', m[4].match(/^<\/?/)[0]) + _codeTok('tag', m[4].replace(/^<\/?/, ''));
+		else if (m[5]) out += _codeTok(/^\/[/*]\s*@/.test(m[5]) ? 'dev' : 'cmt', m[5]);
+		else if (m[6]) out += _codeStr(m[6]);
+		else if (m[7]) out += _codeTok('ent', m[7]);
+		else out += _codeTok('kw', m[8] || m[9]);
+		last = CODE_TOKEN_RE.lastIndex;
+	}
+	return out + _codeEsc(src.slice(last));
 }
 
 // 원문 코드(textarea.guide__src)를 pre.guide__code > code 로 바꿔 그린다 — codeHighlight 가 칠하기 전에 돈다.
@@ -1026,25 +1099,7 @@ function codeHighlight(root) {
 	Array.prototype.forEach.call(blocks, function (code) {
 		if (code._codeDone) return;
 
-		var src = code.textContent;
-		var out = '';
-		var last = 0;
-		var m;
-
-		CODE_TOKEN_RE.lastIndex = 0;
-		while ((m = CODE_TOKEN_RE.exec(src)) !== null) {
-			out += _codeEsc(src.slice(last, m.index));
-			if (m[1]) out += _codeTok('cmt', m[1]);
-			else if (m[2]) out += _codeTok('var', m[2]);
-			else if (m[3]) out += _codeStr(m[3]);
-			else if (m[4] || m[5]) out += _codeTok('tag', m[4] || m[5]);
-			else if (m[6]) out += _codeTok('attr', m[6]);
-			else out += _codeTok('cmt', m[7]);
-			last = CODE_TOKEN_RE.lastIndex;
-		}
-		out += _codeEsc(src.slice(last));
-
-		code.innerHTML = out;
+		code.innerHTML = _codeHtml(code.textContent);
 		code._codeDone = true;
 	});
 }

@@ -111,6 +111,41 @@
 							<h2 class="section__title">드롭다운</h2>
 							<p class="section__desc">항목은 JSON · 0건이면 빈 안내 · 검색 드롭다운</p>
 						</div>
+						<details class="ui-card guide__src-fold">
+							<summary class="ui-card__header"><h3 class="ui-card__title">소스 코드</h3></summary>
+							<div class="ui-card__body">
+								<textarea class="guide__src" data-raw readonly aria-label="소스 코드">
+				&lt;div class="grid grid--2"&gt;
+					&lt;div&gt;
+						&lt;p class="ui-label"&gt;드롭다운&lt;/p&gt;
+						&lt;div
+							class="dynamic-content"
+							data-source="/html/include/ui/_ui_dropdown.html"
+							data-items="/data/ui/sample_options.json"
+							data-placeholder="정렬을 선택해주세요."
+						&gt;&lt;/div&gt;
+					&lt;/div&gt;
+					&lt;div&gt;
+						&lt;p class="ui-label"&gt;드롭다운 (0건)&lt;/p&gt;
+						&lt;div
+							class="dynamic-content"
+							data-source="/html/include/ui/_ui_dropdown.html"
+							data-items="/data/ui/empty.json"
+						&gt;&lt;/div&gt;
+					&lt;/div&gt;
+					&lt;div&gt;
+						&lt;p class="ui-label"&gt;검색 드롭다운&lt;/p&gt;
+						&lt;div
+							class="dynamic-content"
+							data-source="/html/include/ui/_ui_dropdown_search.html"
+							data-items="/data/ui/sample_options.json"
+							data-placeholder="회사명을 검색해주세요."
+						&gt;&lt;/div&gt;
+					&lt;/div&gt;
+				&lt;/div&gt;
+			</textarea>
+							</div>
+						</details>
 						<div class="ui-card">
 							<div class="ui-card__body">
 								<div class="grid grid--2">

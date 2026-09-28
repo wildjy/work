@@ -4,6 +4,21 @@
 		<h2 class="section__title">탭</h2>
 		<p class="section__desc">파셜 없이 직접 마크업 — 같은 data-tab 의 패널만 보인다</p>
 	</div>
+	<details class="ui-card guide__src-fold">
+		<summary class="ui-card__header"><h3 class="ui-card__title">소스 코드</h3></summary>
+		<div class="ui-card__body">
+			<textarea class="guide__src" data-raw readonly aria-label="소스 코드">
+				<div class="ui-tab">
+					<div class="ui-tab__list" role="tablist">
+						<button type="button" class="ui-tab__btn is-active" role="tab" data-tab="basic">기본 정보</button>
+						<button type="button" class="ui-tab__btn" role="tab" data-tab="detail">상세 정보</button>
+					</div>
+					<div class="ui-tab__panel" role="tabpanel" data-tab="basic">기본 정보 패널</div>
+					<div class="ui-tab__panel" role="tabpanel" data-tab="detail" hidden>상세 정보 패널</div>
+				</div>
+			</textarea>
+		</div>
+	</details>
 	<div class="ui-card">
 		<div class="ui-card__body">
 			<div class="ui-tab">

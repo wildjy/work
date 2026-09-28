@@ -4,7 +4,8 @@
 // ─────────────────────────────────────────────────────────────
 // _guide.scss — 사용법 문서 페이지 (Guide_*.html) 전용
 //
-// <main class="layout__main guide"> 안에서만 쓴다.
+// <main class="layout__main guide"> 안에서만 쓴다. 단 코드 블록(__code · __src) · 접는 소스 코드(__src-fold)는
+// 개발 확인용 샘플 구역(include/sample/section)에서도 쓴다 — 셀렉터가 .guide 밖(BEM 이어 붙이기)이라 어디서든 걸린다.
 // 코드 블록 · 주의 상자 · 목차 · 예시 카드처럼 **문서에만 필요한 것**을 모은다.
 // ⚠ 공통 UI(.ui-*)는 여기서 고치지 않는다 — 표는 ui-table, 상자는 ui-card 를 그대로 쓴다.
 // ─────────────────────────────────────────────────────────────
@@ -54,22 +55,48 @@
 
 	//**** 코드 색칠 ****/ — common.js 의 codeHighlight 가 화면에서 감싼다(마크업·JSON 에는 없다)
 	// 태그 · 속성 이름 · 문자열 · 치환 자리({{ }}) · 주석만 가른다
+	//**** 코드 색칠 토큰 ****/ — common.js §13 codeHighlight 가 붙인다(원본 마크업에는 적지 않는다)
+	//   구조(꺾쇠 · =)는 흐리게, 이름은 종류별로, 값은 초록 — 눈이 이름과 값으로 먼저 간다.
+	//   개발단 주석(<!--@ · //@)만 바탕을 깔아 일반 주석과 가른다 — 산출물에 남는 지침이다.
 	&__tok {
+		&--punct {
+			color: variable.$gray-500; // < </ > /> =
+		}
 		&--tag {
-			color: variable.$blue-700;
+			color: variable.$blue-700; // 태그 이름
 		}
 		&--attr {
-			color: variable.$teal-700;
+			color: variable.$teal-700; // 일반 속성 class · type · id · aria-*
+		}
+		&--data {
+			color: variable.$indigo-600; // data-* — 파셜 변수 · 동작 연결 자리
+		}
+		&--bool {
+			color: variable.$orange-700; // 값 없는 속성 disabled · hidden · open · data-raw
 		}
 		&--str {
-			color: variable.$green-700;
+			color: variable.$green-700; // 속성값 · 문자열
 		}
 		&--var {
 			font-weight: 600;
-			color: variable.$pink-700;
+			color: variable.$pink-700; // {{ }} 치환 자리
+		}
+		&--expr {
+			color: variable.$blue-900; // JSX 값 {title}
+		}
+		&--kw {
+			color: variable.$indigo-800; // const · return · => · true · null
+		}
+		&--ent {
+			color: variable.$red-600; // 문자 참조 &amp; · &lt;
 		}
 		&--cmt {
 			color: variable.$gray-500;
+		}
+		&--dev {
+			border-radius: variable.$radius-sm;
+			background-color: variable.$orange-50;
+			color: variable.$orange-900; // 개발단 주석 <!--@ … -->
 		}
 	}
 
@@ -259,6 +286,42 @@
 	//**** 표 안 첫 칸 ****/ — 무엇에 대한 줄인지
 	&__term {
 		font-weight: 600;
+	}
+
+	//**** 접는 소스 코드 ****/ — 개발 확인용 샘플 구역의 「소스 코드」 (details · summary)
+	//   <details class="ui-card guide__src-fold">
+	//     <summary class="ui-card__header"><h3 class="ui-card__title">소스 코드</h3></summary>
+	//     <div class="ui-card__body"><textarea class="guide__src" data-raw …>…</textarea></div>
+	//   </details>
+	// - 여닫기는 **브라우저가 한다**(JS 없음). 기본은 접힘 · 펼친 채 시작하려면 open 속성.
+	// - 닫힌 동안에는 머리 아래 선을 지운다(아래에 본문이 없다). 모서리 밖으로 hover 바탕이 새지 않게 overflow 를 막는다.
+	&__src-fold {
+		overflow: hidden;
+		margin-bottom: 16px;
+
+		> summary {
+			padding-right: 52px;
+			border-bottom-color: transparent;
+			@include mixin.background-data('arr3-down', variable.$color-text-sub, null, right 26px center, 10px 6px);
+			list-style: none; // 기본 삼각형(▶) 표식을 지운다
+			cursor: pointer;
+			transition: background-color variable.$duration-short variable.$easing-standard;
+
+			&::-webkit-details-marker {
+				display: none; // Safari 는 list-style 로 지워지지 않는다
+			}
+			&:hover {
+				background-color: variable.$color-hover;
+			}
+			&:focus-visible {
+				outline: 2px solid variable.$color-primary;
+				outline-offset: -2px;
+			}
+		}
+		&[open] > summary {
+			border-bottom-color: variable.$color-divider;
+			background-image: mixin.icon('arr3-up', variable.$color-primary);
+		}
 	}
 
 	//**** 표 제목 ****/ — 카드 제목과 겹쳐 화면에서는 감추고 보조기기에만 읽힌다

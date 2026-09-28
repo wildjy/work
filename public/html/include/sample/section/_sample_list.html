@@ -4,6 +4,63 @@
 		<h2 class="section__title">목록</h2>
 		<p class="section__desc">JSON + 템플릿으로 그리는 표 · 0건 상태</p>
 	</div>
+	<details class="ui-card guide__src-fold">
+		<summary class="ui-card__header"><h3 class="ui-card__title">소스 코드</h3></summary>
+		<div class="ui-card__body">
+			<textarea class="guide__src" data-raw readonly aria-label="소스 코드">
+				<table class="ui-table">
+					<caption>
+						회원 목록
+					</caption>
+					<thead>
+						<tr>
+							<th scope="col">No</th>
+							<th scope="col">이름</th>
+							<th scope="col">이메일</th>
+						</tr>
+					</thead>
+					<tbody
+						class="dynamic-list"
+						data-source="/data/common/sample_list.json"
+						data-template="#tpl_sample_row"
+						data-empty="#tpl_sample_row_none"
+					></tbody>
+				</table>
+
+				<table class="ui-table">
+					<caption>
+						회원 목록 (0건)
+					</caption>
+					<thead>
+						<tr>
+							<th scope="col">No</th>
+							<th scope="col">이름</th>
+							<th scope="col">이메일</th>
+						</tr>
+					</thead>
+					<tbody
+						class="dynamic-list"
+						data-source="/data/common/sample_list_empty.json"
+						data-template="#tpl_sample_row"
+						data-empty="#tpl_sample_row_none"
+					></tbody>
+				</table>
+
+				<template id="tpl_sample_row">
+					<tr>
+						<td>{{@number}}</td>
+						<td>{{name}}</td>
+						<td>{{email}}</td>
+					</tr>
+				</template>
+				<template id="tpl_sample_row_none">
+					<tr>
+						<td colspan="3" class="ui-table__empty">등록된 회원이 없습니다.</td>
+					</tr>
+				</template>
+			</textarea>
+		</div>
+	</details>
 	<div class="grid grid--2">
 		<div class="ui-card">
 			<div class="ui-card__header">

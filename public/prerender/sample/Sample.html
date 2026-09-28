@@ -115,6 +115,63 @@
 							<h2 class="section__title">목록</h2>
 							<p class="section__desc">JSON + 템플릿으로 그리는 표 · 0건 상태</p>
 						</div>
+						<details class="ui-card guide__src-fold">
+							<summary class="ui-card__header"><h3 class="ui-card__title">소스 코드</h3></summary>
+							<div class="ui-card__body">
+								<textarea class="guide__src" data-raw readonly aria-label="소스 코드">
+				&lt;table class="ui-table"&gt;
+					&lt;caption&gt;
+						회원 목록
+					&lt;/caption&gt;
+					&lt;thead&gt;
+						&lt;tr&gt;
+							&lt;th scope="col"&gt;No&lt;/th&gt;
+							&lt;th scope="col"&gt;이름&lt;/th&gt;
+							&lt;th scope="col"&gt;이메일&lt;/th&gt;
+						&lt;/tr&gt;
+					&lt;/thead&gt;
+					&lt;tbody
+						class="dynamic-list"
+						data-source="/data/common/sample_list.json"
+						data-template="#tpl_sample_row"
+						data-empty="#tpl_sample_row_none"
+					&gt;&lt;/tbody&gt;
+				&lt;/table&gt;
+
+				&lt;table class="ui-table"&gt;
+					&lt;caption&gt;
+						회원 목록 (0건)
+					&lt;/caption&gt;
+					&lt;thead&gt;
+						&lt;tr&gt;
+							&lt;th scope="col"&gt;No&lt;/th&gt;
+							&lt;th scope="col"&gt;이름&lt;/th&gt;
+							&lt;th scope="col"&gt;이메일&lt;/th&gt;
+						&lt;/tr&gt;
+					&lt;/thead&gt;
+					&lt;tbody
+						class="dynamic-list"
+						data-source="/data/common/sample_list_empty.json"
+						data-template="#tpl_sample_row"
+						data-empty="#tpl_sample_row_none"
+					&gt;&lt;/tbody&gt;
+				&lt;/table&gt;
+
+				&lt;template id="tpl_sample_row"&gt;
+					&lt;tr&gt;
+						&lt;td&gt;{{@number}}&lt;/td&gt;
+						&lt;td&gt;{{name}}&lt;/td&gt;
+						&lt;td&gt;{{email}}&lt;/td&gt;
+					&lt;/tr&gt;
+				&lt;/template&gt;
+				&lt;template id="tpl_sample_row_none"&gt;
+					&lt;tr&gt;
+						&lt;td colspan="3" class="ui-table__empty"&gt;등록된 회원이 없습니다.&lt;/td&gt;
+					&lt;/tr&gt;
+				&lt;/template&gt;
+			</textarea>
+							</div>
+						</details>
 						<div class="grid grid--2">
 							<div class="ui-card">
 								<div class="ui-card__header">
@@ -186,6 +243,21 @@
 							<h2 class="section__title">버튼</h2>
 							<p class="section__desc">contained · outlined · text · 작은 크기 · 비활성</p>
 						</div>
+						<details class="ui-card guide__src-fold">
+							<summary class="ui-card__header"><h3 class="ui-card__title">소스 코드</h3></summary>
+							<div class="ui-card__body">
+								<textarea class="guide__src" data-raw readonly aria-label="소스 코드">
+				&lt;div class="ui-btn-group"&gt;
+					&lt;button type="button" class="ui-btn ui-btn--contained"&gt;저장&lt;/button&gt;
+					&lt;button type="button" class="ui-btn ui-btn--outlined"&gt;임시 저장&lt;/button&gt;
+					&lt;button type="button" class="ui-btn"&gt;취소&lt;/button&gt;
+					&lt;button type="button" class="ui-btn ui-btn--contained ui-btn--sm"&gt;작은 버튼&lt;/button&gt;
+					&lt;button type="button" class="ui-btn ui-btn--contained" disabled&gt;비활성&lt;/button&gt;
+					&lt;button type="button" class="ui-btn ui-btn--outlined" disabled&gt;비활성&lt;/button&gt;
+				&lt;/div&gt;
+			</textarea>
+							</div>
+						</details>
 						<div class="ui-card">
 							<div class="ui-card__body">
 								<div class="ui-btn-group">
@@ -207,6 +279,45 @@
 							<h2 class="section__title">입력</h2>
 							<p class="section__desc">값을 넣으면 지우기 버튼 · 오류 안내문(helper)</p>
 						</div>
+						<details class="ui-card guide__src-fold">
+							<summary class="ui-card__header"><h3 class="ui-card__title">소스 코드</h3></summary>
+							<div class="ui-card__body">
+								<textarea class="guide__src" data-raw readonly aria-label="소스 코드">
+				&lt;div class="grid grid--2"&gt;
+					&lt;div&gt;
+						&lt;div class="ui-label"&gt;
+							&lt;label for="sample_email"&gt;입력&lt;/label&gt;
+							&lt;div
+								class="dynamic-content"
+								data-source="/html/include/ui/_ui_tooltip.html"
+								data-id="tip_sample_email"
+								data-position="right"
+								data-text="로그인에 쓸 이메일입니다. 가입 후에는 바꿀 수 없습니다."
+							&gt;&lt;/div&gt;
+						&lt;/div&gt;
+						&lt;div
+							class="dynamic-content"
+							data-source="/html/include/ui/_ui_input.html"
+							data-id="sample_email"
+							data-placeholder="이메일을 입력해주세요."
+						&gt;&lt;/div&gt;
+					&lt;/div&gt;
+					&lt;div&gt;
+						&lt;label class="ui-label" for="sample_birth"&gt;입력 (오류 안내)&lt;/label&gt;
+						&lt;div
+							class="dynamic-content"
+							data-source="/html/include/ui/_ui_input.html"
+							data-id="sample_birth"
+							data-value="1999"
+							data-modifier="is-error"
+							data-helper="생년월일 8자리를 입력해주세요."
+							data-helper-type="ui-helper--error"
+						&gt;&lt;/div&gt;
+					&lt;/div&gt;
+				&lt;/div&gt;
+			</textarea>
+							</div>
+						</details>
 						<div class="ui-card">
 							<div class="ui-card__body">
 								<div class="grid grid--2">
@@ -254,6 +365,41 @@
 							<h2 class="section__title">드롭다운</h2>
 							<p class="section__desc">항목은 JSON · 0건이면 빈 안내 · 검색 드롭다운</p>
 						</div>
+						<details class="ui-card guide__src-fold">
+							<summary class="ui-card__header"><h3 class="ui-card__title">소스 코드</h3></summary>
+							<div class="ui-card__body">
+								<textarea class="guide__src" data-raw readonly aria-label="소스 코드">
+				&lt;div class="grid grid--2"&gt;
+					&lt;div&gt;
+						&lt;p class="ui-label"&gt;드롭다운&lt;/p&gt;
+						&lt;div
+							class="dynamic-content"
+							data-source="/html/include/ui/_ui_dropdown.html"
+							data-items="/data/ui/sample_options.json"
+							data-placeholder="정렬을 선택해주세요."
+						&gt;&lt;/div&gt;
+					&lt;/div&gt;
+					&lt;div&gt;
+						&lt;p class="ui-label"&gt;드롭다운 (0건)&lt;/p&gt;
+						&lt;div
+							class="dynamic-content"
+							data-source="/html/include/ui/_ui_dropdown.html"
+							data-items="/data/ui/empty.json"
+						&gt;&lt;/div&gt;
+					&lt;/div&gt;
+					&lt;div&gt;
+						&lt;p class="ui-label"&gt;검색 드롭다운&lt;/p&gt;
+						&lt;div
+							class="dynamic-content"
+							data-source="/html/include/ui/_ui_dropdown_search.html"
+							data-items="/data/ui/sample_options.json"
+							data-placeholder="회사명을 검색해주세요."
+						&gt;&lt;/div&gt;
+					&lt;/div&gt;
+				&lt;/div&gt;
+			</textarea>
+							</div>
+						</details>
 						<div class="ui-card">
 							<div class="ui-card__body">
 								<div class="grid grid--2">
@@ -342,6 +488,26 @@
 							<h2 class="section__title">수량 스테퍼</h2>
 							<p class="section__desc">최소 1 · 최대 3 — 경계에 닿으면 버튼이 비활성</p>
 						</div>
+						<details class="ui-card guide__src-fold">
+							<summary class="ui-card__header"><h3 class="ui-card__title">소스 코드</h3></summary>
+							<div class="ui-card__body">
+								<textarea class="guide__src" data-raw readonly aria-label="소스 코드">
+				&lt;div class="grid grid--2"&gt;
+					&lt;div&gt;
+						&lt;label class="ui-label" for="sample_count"&gt;수량 스테퍼&lt;/label&gt;
+						&lt;div
+							class="dynamic-content"
+							data-source="/html/include/ui/_ui_stepper.html"
+							data-id="sample_count"
+							data-value="1"
+							data-min="1"
+							data-max="3"
+						&gt;&lt;/div&gt;
+					&lt;/div&gt;
+				&lt;/div&gt;
+			</textarea>
+							</div>
+						</details>
 						<div class="ui-card">
 							<div class="ui-card__body">
 								<div class="grid grid--2">
@@ -366,6 +532,23 @@
 							<h2 class="section__title">날짜 · 기간</h2>
 							<p class="section__desc">jQuery UI datepicker — 입력을 누르면 달력이 열린다</p>
 						</div>
+						<details class="ui-card guide__src-fold">
+							<summary class="ui-card__header"><h3 class="ui-card__title">소스 코드</h3></summary>
+							<div class="ui-card__body">
+								<textarea class="guide__src" data-raw readonly aria-label="소스 코드">
+				&lt;div class="grid grid--2"&gt;
+					&lt;div&gt;
+						&lt;label class="ui-label" for="sample_period"&gt;기간&lt;/label&gt;
+						&lt;div class="dynamic-content" data-source="/html/include/ui/_ui_period.html" data-id="sample_period"&gt;&lt;/div&gt;
+					&lt;/div&gt;
+					&lt;div&gt;
+						&lt;label class="ui-label" for="sample_date"&gt;날짜&lt;/label&gt;
+						&lt;div class="dynamic-content" data-source="/html/include/ui/_ui_date.html" data-id="sample_date"&gt;&lt;/div&gt;
+					&lt;/div&gt;
+				&lt;/div&gt;
+			</textarea>
+							</div>
+						</details>
 						<div class="ui-card">
 							<div class="ui-card__body">
 								<div class="grid grid--2">
@@ -427,6 +610,50 @@
 							<h2 class="section__title">체크박스</h2>
 							<p class="section__desc">처음 상태는 data-attrs 로 넘긴다(checked · disabled)</p>
 						</div>
+						<details class="ui-card guide__src-fold">
+							<summary class="ui-card__header"><h3 class="ui-card__title">소스 코드</h3></summary>
+							<div class="ui-card__body">
+								<textarea class="guide__src" data-raw readonly aria-label="소스 코드">
+				&lt;div class="ui-choice-group ui-choice-group--column" role="group" aria-label="체크박스 예시"&gt;
+					&lt;div
+						class="dynamic-content"
+						data-source="/html/include/ui/_ui_checkbox.html"
+						data-id="sample_check1"
+						data-name="agree_email"
+						data-value="Y"
+						data-label="이메일 수신"
+					&gt;&lt;/div&gt;
+					&lt;div
+						class="dynamic-content"
+						data-source="/html/include/ui/_ui_checkbox.html"
+						data-id="sample_check2"
+						data-name="agree_sms"
+						data-value="Y"
+						data-label="문자 수신"
+						data-attrs="checked"
+					&gt;&lt;/div&gt;
+					&lt;div
+						class="dynamic-content"
+						data-source="/html/include/ui/_ui_checkbox.html"
+						data-id="sample_check3"
+						data-name="agree_push"
+						data-value="Y"
+						data-label="앱 알림 (비활성)"
+						data-attrs="disabled"
+					&gt;&lt;/div&gt;
+					&lt;div
+						class="dynamic-content"
+						data-source="/html/include/ui/_ui_checkbox.html"
+						data-id="sample_check4"
+						data-name="agree_terms"
+						data-value="Y"
+						data-label="필수 약관 (선택 · 비활성)"
+						data-attrs="checked disabled"
+					&gt;&lt;/div&gt;
+				&lt;/div&gt;
+			</textarea>
+							</div>
+						</details>
 						<div class="ui-card">
 							<div class="ui-card__body">
 								<div class="ui-choice-group ui-choice-group--column" role="group" aria-label="체크박스 예시">
@@ -466,6 +693,41 @@
 							<h2 class="section__title">라디오</h2>
 							<p class="section__desc">같은 묶음은 같은 name · 처음 선택은 data-attrs="checked"</p>
 						</div>
+						<details class="ui-card guide__src-fold">
+							<summary class="ui-card__header"><h3 class="ui-card__title">소스 코드</h3></summary>
+							<div class="ui-card__body">
+								<textarea class="guide__src" data-raw readonly aria-label="소스 코드">
+				&lt;div class="ui-choice-group ui-choice-group--column" role="radiogroup" aria-label="라디오 예시"&gt;
+					&lt;div
+						class="dynamic-content"
+						data-source="/html/include/ui/_ui_radio.html"
+						data-id="sample_radio1"
+						data-name="sample_radio"
+						data-value="all"
+						data-label="전체 공개"
+						data-attrs="checked"
+					&gt;&lt;/div&gt;
+					&lt;div
+						class="dynamic-content"
+						data-source="/html/include/ui/_ui_radio.html"
+						data-id="sample_radio2"
+						data-name="sample_radio"
+						data-value="member"
+						data-label="멤버 공개"
+					&gt;&lt;/div&gt;
+					&lt;div
+						class="dynamic-content"
+						data-source="/html/include/ui/_ui_radio.html"
+						data-id="sample_radio3"
+						data-name="sample_radio"
+						data-value="private"
+						data-label="비공개 (비활성)"
+						data-attrs="disabled"
+					&gt;&lt;/div&gt;
+				&lt;/div&gt;
+			</textarea>
+							</div>
+						</details>
 						<div class="ui-card">
 							<div class="ui-card__body">
 								<div class="ui-choice-group ui-choice-group--column" role="radiogroup" aria-label="라디오 예시">
@@ -499,6 +761,35 @@
 							<h2 class="section__title">토글</h2>
 							<p class="section__desc">누르는 즉시 반영되는 설정에 쓴다 — 저장 버튼이 있으면 체크박스</p>
 						</div>
+						<details class="ui-card guide__src-fold">
+							<summary class="ui-card__header"><h3 class="ui-card__title">소스 코드</h3></summary>
+							<div class="ui-card__body">
+								<textarea class="guide__src" data-raw readonly aria-label="소스 코드">
+				&lt;div class="ui-choice-group ui-choice-group--column" role="group" aria-label="토글 예시"&gt;
+					&lt;div
+						class="dynamic-content"
+						data-source="/html/include/ui/_ui_toggle.html"
+						data-id="sample_toggle1"
+						data-label="알림 받기"
+					&gt;&lt;/div&gt;
+					&lt;div
+						class="dynamic-content"
+						data-source="/html/include/ui/_ui_toggle.html"
+						data-id="sample_toggle2"
+						data-label="자동 저장"
+						data-attrs="checked"
+					&gt;&lt;/div&gt;
+					&lt;div
+						class="dynamic-content"
+						data-source="/html/include/ui/_ui_toggle.html"
+						data-id="sample_toggle3"
+						data-label="베타 기능 (비활성)"
+						data-attrs="disabled"
+					&gt;&lt;/div&gt;
+				&lt;/div&gt;
+			</textarea>
+							</div>
+						</details>
 						<div class="ui-card">
 							<div class="ui-card__body">
 								<div class="ui-choice-group ui-choice-group--column" role="group" aria-label="토글 예시">
@@ -558,6 +849,55 @@
 							<h2 class="section__title">툴팁</h2>
 							<p class="section__desc">4방향 — 아이콘에 올리면 열리고, 누르면 고정된다</p>
 						</div>
+						<details class="ui-card guide__src-fold">
+							<summary class="ui-card__header"><h3 class="ui-card__title">소스 코드</h3></summary>
+							<div class="ui-card__body">
+								<textarea class="guide__src" data-raw readonly aria-label="소스 코드">
+				&lt;div class="ui-choice-group"&gt;
+					&lt;div class="ui-label"&gt;
+						&lt;span&gt;위&lt;/span&gt;
+						&lt;div
+							class="dynamic-content"
+							data-source="/html/include/ui/_ui_tooltip.html"
+							data-id="tip_sample_top"
+							data-position="top"
+							data-text="아이콘 위에 뜨는 툴팁입니다."
+						&gt;&lt;/div&gt;
+					&lt;/div&gt;
+					&lt;div class="ui-label"&gt;
+						&lt;span&gt;오른쪽&lt;/span&gt;
+						&lt;div
+							class="dynamic-content"
+							data-source="/html/include/ui/_ui_tooltip.html"
+							data-id="tip_sample_right"
+							data-position="right"
+							data-text="아이콘 오른쪽에 뜨는 툴팁입니다."
+						&gt;&lt;/div&gt;
+					&lt;/div&gt;
+					&lt;div class="ui-label"&gt;
+						&lt;span&gt;아래&lt;/span&gt;
+						&lt;div
+							class="dynamic-content"
+							data-source="/html/include/ui/_ui_tooltip.html"
+							data-id="tip_sample_bottom"
+							data-position="bottom"
+							data-text="아이콘 아래에 뜨는 툴팁입니다. 문구가 길면 240px 에서 줄이 바뀝니다."
+						&gt;&lt;/div&gt;
+					&lt;/div&gt;
+					&lt;div class="ui-label"&gt;
+						&lt;span&gt;왼쪽&lt;/span&gt;
+						&lt;div
+							class="dynamic-content"
+							data-source="/html/include/ui/_ui_tooltip.html"
+							data-id="tip_sample_left"
+							data-position="left"
+							data-text="아이콘 왼쪽에 뜨는 툴팁입니다."
+						&gt;&lt;/div&gt;
+					&lt;/div&gt;
+				&lt;/div&gt;
+			</textarea>
+							</div>
+						</details>
 						<div class="ui-card">
 							<div class="ui-card__body">
 								<div class="ui-choice-group">
@@ -609,6 +949,21 @@
 							<h2 class="section__title">탭</h2>
 							<p class="section__desc">파셜 없이 직접 마크업 — 같은 data-tab 의 패널만 보인다</p>
 						</div>
+						<details class="ui-card guide__src-fold">
+							<summary class="ui-card__header"><h3 class="ui-card__title">소스 코드</h3></summary>
+							<div class="ui-card__body">
+								<textarea class="guide__src" data-raw readonly aria-label="소스 코드">
+				&lt;div class="ui-tab"&gt;
+					&lt;div class="ui-tab__list" role="tablist"&gt;
+						&lt;button type="button" class="ui-tab__btn is-active" role="tab" data-tab="basic"&gt;기본 정보&lt;/button&gt;
+						&lt;button type="button" class="ui-tab__btn" role="tab" data-tab="detail"&gt;상세 정보&lt;/button&gt;
+					&lt;/div&gt;
+					&lt;div class="ui-tab__panel" role="tabpanel" data-tab="basic"&gt;기본 정보 패널&lt;/div&gt;
+					&lt;div class="ui-tab__panel" role="tabpanel" data-tab="detail" hidden&gt;상세 정보 패널&lt;/div&gt;
+				&lt;/div&gt;
+			</textarea>
+							</div>
+						</details>
 						<div class="ui-card">
 							<div class="ui-card__body">
 								<div class="ui-tab">
@@ -630,6 +985,25 @@
 							<h2 class="section__title">아코디언</h2>
 							<p class="section__desc">항목은 JSON · 하나를 열면 나머지가 닫힌다(single) · 0건</p>
 						</div>
+						<details class="ui-card guide__src-fold">
+							<summary class="ui-card__header"><h3 class="ui-card__title">소스 코드</h3></summary>
+							<div class="ui-card__body">
+								<textarea class="guide__src" data-raw readonly aria-label="소스 코드">
+				&lt;div class="grid grid--2"&gt;
+					&lt;div
+						class="dynamic-content"
+						data-source="/html/include/ui/_ui_accordion.html"
+						data-items="/data/ui/sample_accordion.json"
+					&gt;&lt;/div&gt;
+					&lt;div
+						class="dynamic-content"
+						data-source="/html/include/ui/_ui_accordion.html"
+						data-items="/data/ui/empty.json"
+					&gt;&lt;/div&gt;
+				&lt;/div&gt;
+			</textarea>
+							</div>
+						</details>
 						<div class="grid grid--2">
 							<!-- 공통 아코디언 -->
 							<div class="ui-accordion" data-accordion="single">
@@ -666,6 +1040,23 @@
 							<h2 class="section__title">토스트</h2>
 							<p class="section__desc">data-toast 로 띄운다 — 2.5초 뒤 저절로 숨는다</p>
 						</div>
+						<details class="ui-card guide__src-fold">
+							<summary class="ui-card__header"><h3 class="ui-card__title">소스 코드</h3></summary>
+							<div class="ui-card__body">
+								<textarea class="guide__src" data-raw readonly aria-label="소스 코드">
+				&lt;div class="ui-btn-group"&gt;
+					&lt;button type="button" class="ui-btn ui-btn--outlined" data-toast="sample_toast"&gt;토스트 띄우기&lt;/button&gt;
+				&lt;/div&gt;
+
+				&lt;div
+					class="dynamic-content"
+					data-source="/html/include/ui/_ui_toast.html"
+					data-id="sample_toast"
+					data-text="저장되었습니다."
+				&gt;&lt;/div&gt;
+			</textarea>
+							</div>
+						</details>
 						<div class="ui-card">
 							<div class="ui-card__body">
 								<div class="ui-btn-group">
@@ -688,6 +1079,64 @@
 							<h2 class="section__title">모달</h2>
 							<p class="section__desc">모달 프레임은 본문만 스크롤 · 확인창 · 버튼 없는 알림은 딤을 누르면 닫힘</p>
 						</div>
+						<details class="ui-card guide__src-fold">
+							<summary class="ui-card__header"><h3 class="ui-card__title">소스 코드</h3></summary>
+							<div class="ui-card__body">
+								<textarea class="guide__src" data-raw readonly aria-label="소스 코드">
+				&lt;div class="ui-btn-group"&gt;
+					&lt;button type="button" class="ui-btn ui-btn--contained" data-modal-open="sample_confirm"&gt;확인창 열기&lt;/button&gt;
+					&lt;button type="button" class="ui-btn ui-btn--contained" data-modal-open="sample_invite"&gt;모달 열기&lt;/button&gt;
+					&lt;button type="button" class="ui-btn ui-btn--outlined" data-modal-open="sample_alert"&gt;알림 모달 열기&lt;/button&gt;
+					&lt;button type="button" class="ui-btn ui-btn--outlined" data-modal-open="sample_alert_detail"&gt;
+						알림 모달(본문 슬롯) 열기
+					&lt;/button&gt;
+				&lt;/div&gt;
+
+				&lt;div
+					class="dynamic-content"
+					data-source="/html/include/ui/_ui_modal.html"
+					data-id="sample_invite"
+					data-title="멤버 초대"
+					data-subtext="초대할 멤버의 정보를 입력해주세요."
+					data-slot-body="#sample_invite_body"
+					data-confirm="초대하기"
+				&gt;&lt;/div&gt;
+				&lt;div
+					class="dynamic-content"
+					data-source="/html/include/ui/_ui_modal_alert.html"
+					data-id="sample_alert"
+					data-title="점검 안내"
+					data-subtext="2026.09.20 02:00 ~ 06:00"
+					data-text="서비스 점검 시간에는 로그인과 결제를 이용할 수 없습니다. 바깥 영역을 누르면 닫힙니다."
+				&gt;&lt;/div&gt;
+				&lt;div
+					class="dynamic-content"
+					data-source="/html/include/ui/_ui_modal_alert.html"
+					data-id="sample_alert_detail"
+					data-title="점검 상세"
+					data-subtext="2026.09.20 02:00 ~ 06:00"
+					data-slot-body="#sample_alert_detail_body"
+				&gt;&lt;/div&gt;
+				&lt;div
+					class="dynamic-content"
+					data-source="/html/include/ui/_ui_modal_confirm.html"
+					data-id="sample_confirm"
+					data-title="이벤트를 삭제하시겠습니까?"
+					data-text="삭제한 이벤트는 복구할 수 없습니다."
+					data-confirm="삭제"
+				&gt;&lt;/div&gt;
+
+				&lt;template id="sample_invite_body"&gt;
+					&lt;div class="dynamic-content" data-source="/html/include/sample/body/_sample_invite_body.html"&gt;&lt;/div&gt;
+				&lt;/template&gt;
+				&lt;template id="sample_alert_detail_body"&gt;
+					&lt;p class="ui-modal__text"&gt;점검 시간에는 로그인 · 결제 · 알림 발송이 모두 멈춥니다.&lt;/p&gt;
+					&lt;p class="ui-modal__text"&gt;점검 중 작성하던 내용은 저장되지 않으니 미리 저장해 주세요.&lt;/p&gt;
+					&lt;p class="ui-modal__text"&gt;점검이 일찍 끝나면 공지사항으로 다시 안내합니다.&lt;/p&gt;
+				&lt;/template&gt;
+			</textarea>
+							</div>
+						</details>
 						<div class="ui-card">
 							<div class="ui-card__body">
 								<div class="ui-btn-group">
@@ -862,6 +1311,18 @@
 							<h2 class="section__title">파셜 기본값 · 개발단 표시</h2>
 							<p class="section__desc">data-page-title 을 넘기지 않은 헤더 · 개발단이 채울 값</p>
 						</div>
+						<details class="ui-card guide__src-fold">
+							<summary class="ui-card__header"><h3 class="ui-card__title">소스 코드</h3></summary>
+							<div class="ui-card__body">
+								<textarea class="guide__src" data-raw readonly aria-label="소스 코드">
+				&lt;!-- 파셜 : 기본값 사용 (data-page-title 을 넘기지 않음) --&gt;
+				&lt;div class="dynamic-content" data-source="/html/include/common/_header.html"&gt;&lt;/div&gt;
+
+				&lt;!--@ 이메일 인증 전 회원에게만 노출 --&gt;
+				&lt;p&gt;인증 대기 {{&lt;em&gt;3명&lt;/em&gt;}}&lt;/p&gt;
+			</textarea>
+							</div>
+						</details>
 						<div class="ui-card">
 							<div class="ui-card__body ui-card__body--flush">
 								<!-- 파셜 : 기본값 사용 (data-page-title 을 넘기지 않음) -->

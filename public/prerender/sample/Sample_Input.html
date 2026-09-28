@@ -111,6 +111,45 @@
 							<h2 class="section__title">입력</h2>
 							<p class="section__desc">값을 넣으면 지우기 버튼 · 오류 안내문(helper)</p>
 						</div>
+						<details class="ui-card guide__src-fold">
+							<summary class="ui-card__header"><h3 class="ui-card__title">소스 코드</h3></summary>
+							<div class="ui-card__body">
+								<textarea class="guide__src" data-raw readonly aria-label="소스 코드">
+				&lt;div class="grid grid--2"&gt;
+					&lt;div&gt;
+						&lt;div class="ui-label"&gt;
+							&lt;label for="sample_email"&gt;입력&lt;/label&gt;
+							&lt;div
+								class="dynamic-content"
+								data-source="/html/include/ui/_ui_tooltip.html"
+								data-id="tip_sample_email"
+								data-position="right"
+								data-text="로그인에 쓸 이메일입니다. 가입 후에는 바꿀 수 없습니다."
+							&gt;&lt;/div&gt;
+						&lt;/div&gt;
+						&lt;div
+							class="dynamic-content"
+							data-source="/html/include/ui/_ui_input.html"
+							data-id="sample_email"
+							data-placeholder="이메일을 입력해주세요."
+						&gt;&lt;/div&gt;
+					&lt;/div&gt;
+					&lt;div&gt;
+						&lt;label class="ui-label" for="sample_birth"&gt;입력 (오류 안내)&lt;/label&gt;
+						&lt;div
+							class="dynamic-content"
+							data-source="/html/include/ui/_ui_input.html"
+							data-id="sample_birth"
+							data-value="1999"
+							data-modifier="is-error"
+							data-helper="생년월일 8자리를 입력해주세요."
+							data-helper-type="ui-helper--error"
+						&gt;&lt;/div&gt;
+					&lt;/div&gt;
+				&lt;/div&gt;
+			</textarea>
+							</div>
+						</details>
 						<div class="ui-card">
 							<div class="ui-card__body">
 								<div class="grid grid--2">
