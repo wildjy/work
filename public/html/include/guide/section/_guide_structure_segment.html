@@ -1,0 +1,53 @@
+<!-- 구역 : 세그먼트 -->
+<section class="section" id="structure_segment">
+	<div class="section__head">
+		<h2 class="section__title">2. 세그먼트 둘 — section · body</h2>
+		<p class="section__desc">슬라이스 안을 가르는 폴더는 이 둘뿐이다</p>
+	</div>
+	<div class="ui-card">
+		<div class="ui-card__header">
+			<h3 class="ui-card__title">section — 화면을 이루는 덩어리</h3>
+		</div>
+		<div class="ui-card__body">
+			<p class="guide__desc">
+				한 페이지가 길어지면 구역 단위로 가른다. 페이지에는 <strong>include 줄만</strong> 남는다.
+			</p>
+			<textarea class="guide__src" data-raw readonly aria-label="코드 예시">
+				<main class="layout__main">
+					<div class="dynamic-content" data-source="/html/include/sample/section/_sample_list.html"></div>
+					<div class="dynamic-content" data-source="/html/include/sample/section/_sample_input.html"></div>
+				</main>
+			</textarea>
+			<ul class="guide__list">
+				<li><strong>목록 템플릿은 컨테이너와 같은 파일에</strong> 둔다 — 파셜이 목록보다 먼저 주입된다.</li>
+				<li>
+					화면에 보이지 않는 덩어리(토스트 · 모달의 실체)도 여는 버튼과 같은 파일에 둔다 —
+					<code>_sample_modal.html</code> · <code>_sample_toast.html</code>.
+				</li>
+			</ul>
+			<p class="guide__note guide__note--warn">
+				<strong>닫음 표시를 목록 템플릿 바로 아래 두지 않는다.</strong> 프리렌더가 템플릿의 닫음 표시로 보고 지운다 —
+				구역 닫는 태그 바로 뒤로 올린다.
+			</p>
+		</div>
+	</div>
+	<div class="ui-card">
+		<div class="ui-card__header">
+			<h3 class="ui-card__title">body — 슬롯 본문</h3>
+		</div>
+		<div class="ui-card__body">
+			<p class="guide__desc">
+				모달 프레임에 넘길 본문. <strong>template 은 include 를 적은 파일에 남기고 내용만</strong> 여기 둔다.
+			</p>
+			<textarea class="guide__src" data-raw readonly aria-label="코드 예시">
+				<template id="sample_invite_body">
+					<div class="dynamic-content" data-source="/html/include/sample/body/_sample_invite_body.html"></div>
+				</template>
+			</textarea>
+			<p class="guide__note guide__note--warn">
+				<strong>template 요소째</strong> 파셜로 빼면 include 순서에 묶이고, 어기면 <strong>조용히 빈 본문</strong>으로
+				나간다. 배치별 동작표는 <a href="/html/guide/Guide_Partial.html#guide_slot">파셜(include) 사용법 6절</a>.
+			</p>
+		</div>
+	</div>
+</section>

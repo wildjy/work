@@ -1,0 +1,25 @@
+<!-- 구역 : 이름 -->
+<section class="section" id="structure_naming">
+	<div class="section__head">
+		<h2 class="section__title">3. 이름 셋을 한 규칙으로</h2>
+		<p class="section__desc">grep 한 번에 전부 잡히게 한다</p>
+	</div>
+	<div class="ui-card">
+		<div class="ui-card__body">
+			<textarea class="guide__src" data-raw readonly aria-label="코드 예시">
+				$ grep -rn sample_invite public/
+
+				파일        include/sample/body/_sample_invite_body.html
+				template    id="sample_invite_body"
+				모달        data-id="sample_invite"          (여는 버튼 data-modal-open="sample_invite")
+				본문 안 id   sample_invite_name · sample_invite_email · sample_invite_count
+			</textarea>
+			<p class="guide__note guide__note--warn">
+				본문 파셜이 <strong>고정 id 를 가지면 한 페이지에 두 번 넣지 못한다.</strong> id 가 겹쳐 라벨과 개발단의
+				<code>getElementById</code> 가 먼저 나온 것만 가리킨다(<code>validate</code> 의 <code>no-dup-id</code> 가
+				막는다). 두 번 쓸 본문은 파셜이 id 를 <code>data-*</code> 로 받게 만든다 —
+				<code>id="&#123;&#123;prefix&#125;&#125;_name"</code>.
+			</p>
+		</div>
+	</div>
+</section>

@@ -1,0 +1,29 @@
+<!-- 구역 : 언제 빼나 -->
+<section class="section" id="structure_when">
+	<div class="section__head">
+		<h2 class="section__title">4. 언제 빼고, 언제 그대로 두나</h2>
+		<p class="section__desc">처음부터 다 파일로 만들면 파일만 늘어난다</p>
+	</div>
+	<div class="ui-card">
+		<div class="ui-card__body ui-card__body--flush">
+			<table class="ui-table ui-table--wrap">
+				<caption class="guide__caption">
+					가르는 기준
+				</caption>
+				<thead>
+					<tr>
+						<th scope="col">이럴 때</th>
+						<th scope="col">이렇게</th>
+					</tr>
+				</thead>
+				<tbody
+					class="dynamic-list"
+					data-source="/data/guide/structure.json"
+					data-template="#tpl_structure_row"
+					data-empty="#tpl_structure_row_none"
+					data-filter="group=split"
+				></tbody>
+			</table>
+		</div>
+	</div>
+</section>

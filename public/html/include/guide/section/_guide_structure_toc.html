@@ -1,0 +1,63 @@
+<!-- 구역 : 목차 -->
+<section class="section">
+	<div class="section__head">
+		<h2 class="section__title">한눈에 보기</h2>
+		<p class="section__desc">
+			파셜이 늘어날 때 <strong>어느 폴더에 두나</strong>를 정한 페이지. 부르는 문법은 「파셜(include) 사용법」에 있고,
+			여기는 <strong>위치</strong>만 다룬다.
+		</p>
+	</div>
+	<div class="ui-card">
+		<div class="ui-card__body">
+			<ul class="guide__toc">
+				<li><a href="#structure_fsd">1. FSD 와 견주기</a></li>
+				<li><a href="#structure_segment">2. 세그먼트 둘 — section · body</a></li>
+				<li><a href="#structure_naming">3. 이름 셋을 한 규칙으로</a></li>
+				<li><a href="#structure_when">4. 언제 빼고, 언제 그대로 두나</a></li>
+				<li><a href="#structure_dep">5. 지켜야 할 의존 방향</a></li>
+				<li><a href="#structure_now">6. 지금 저장소에 적용된 것</a></li>
+				<li><a href="#structure_next">7. 더 나아가려면</a></li>
+			</ul>
+			<p class="guide__note guide__note--tip">
+				새 아키텍처를 들여오는 페이지가 아니다. 이 저장소가 <strong>이미 지키고 있는 원칙</strong>에 폴더 이름만 맞추는
+				것이다. 문서 판은 <code>docs/STRUCTURE.md</code>.
+			</p>
+		</div>
+	</div>
+	<div class="ui-card">
+		<div class="ui-card__header">
+			<h3 class="ui-card__title">30초 요약</h3>
+		</div>
+		<div class="ui-card__body">
+			<textarea class="guide__src" data-raw readonly aria-label="코드 예시">
+				public/
+				├─ html/
+				│  ├─ Member.html                               ← 페이지
+				│  └─ include/
+				│     ├─ ui/       _ui_modal.html …             ← 공통 UI (프레임 · 아무도 참조하지 않는다)
+				│     ├─ common/   _header.html …               ← 두 곳 이상이 쓰는 서비스 조각
+				│     └─ member/                                ← 슬라이스 (data/member 와 같은 이름)
+				│        ├─ section/ _member_list.html …        ← 화면을 이루는 덩어리
+				│        ├─ body/    _member_invite_body.html   ← 슬롯 본문
+				│        └─ _member_row.html                    ← 그 밖의 조각
+				└─ data/
+				   └─ member/*.json                             ← 그 슬라이스의 데이터
+			</textarea>
+			<ol class="guide__steps">
+				<li>
+					<code>data/&lt;슬라이스&gt;</code> 와 <code>include/&lt;슬라이스&gt;</code> 는 <strong>같은 이름</strong>을
+					쓴다.
+				</li>
+				<li>
+					슬라이스 안은 <strong>세그먼트</strong>로 나눈다 — <code>section/</code>(화면 덩어리) ·
+					<code>body/</code>(슬롯 본문).
+				</li>
+				<li>두 슬라이스가 같은 것을 쓰게 되면 <code>common/</code> 으로 올린다(기존 규칙 그대로).</li>
+				<li>
+					<code>ui/</code> 는 아무 슬라이스도 참조하지 않는다. 필요한 마크업은
+					<strong>슬롯으로 받는다.</strong>
+				</li>
+			</ol>
+		</div>
+	</div>
+</section>

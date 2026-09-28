@@ -1,0 +1,41 @@
+<!-- 구역 : 더 나아가려면 -->
+<section class="section" id="structure_next">
+	<div class="section__head">
+		<h2 class="section__title">7. 더 나아가려면 (선택)</h2>
+		<p class="section__desc">지금 규모에서는 하지 않는다 — 슬롯 본문이 10개를 넘으면 검토한다</p>
+	</div>
+	<div class="ui-card">
+		<div class="ui-card__body">
+			<p class="guide__desc">
+				지금은 「template 요소째 파셜로 빼기」가 순서에 묶인다. 이것을 풀면 <code>body/</code> 에 template 파일 자체를
+				둘 수 있다.
+			</p>
+		</div>
+		<div class="ui-card__body ui-card__body--flush">
+			<table class="ui-table ui-table--wrap">
+				<caption class="guide__caption">
+					엔진 손질
+				</caption>
+				<thead>
+					<tr>
+						<th scope="col">고칠 곳</th>
+						<th scope="col">방법</th>
+					</tr>
+				</thead>
+				<tbody
+					class="dynamic-list"
+					data-source="/data/guide/structure.json"
+					data-template="#tpl_structure_row"
+					data-empty="#tpl_structure_row_none"
+					data-filter="group=next"
+				></tbody>
+			</table>
+		</div>
+		<div class="ui-card__body">
+			<p class="guide__note guide__note--warn">
+				<strong>두 구현을 반드시 같이 고친다</strong> — 한쪽만 고치면 화면과 산출물이 갈린다. 못 찾았을 때 조용히 비는
+				동작도 함께 손봐야 한다.
+			</p>
+		</div>
+	</div>
+</section>

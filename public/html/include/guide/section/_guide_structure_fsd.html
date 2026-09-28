@@ -1,0 +1,36 @@
+<!-- 구역 : FSD -->
+<section class="section" id="structure_fsd">
+	<div class="section__head">
+		<h2 class="section__title">1. FSD 와 견주기</h2>
+		<p class="section__desc">레이어 이름을 들여오지는 않는다 — 대응만 알아 두면 읽기 쉬워진다</p>
+	</div>
+	<div class="ui-card">
+		<div class="ui-card__body ui-card__body--flush">
+			<table class="ui-table ui-table--wrap">
+				<caption class="guide__caption">
+					FSD 레이어 대응
+				</caption>
+				<thead>
+					<tr>
+						<th scope="col">FSD 레이어</th>
+						<th scope="col">이 저장소</th>
+					</tr>
+				</thead>
+				<tbody
+					class="dynamic-list"
+					data-source="/data/guide/structure.json"
+					data-template="#tpl_structure_row"
+					data-empty="#tpl_structure_row_none"
+					data-filter="group=layer"
+				></tbody>
+			</table>
+		</div>
+		<div class="ui-card__body">
+			<p class="guide__note guide__note--tip">
+				FSD 의 핵심은 폴더 이름이 아니라 <strong>의존 방향</strong>인데, 이 저장소는 이미 그것을 지키고 있다 — 모달
+				프레임(shared)이 본문(feature)을 직접 include 하지 않고 <strong>슬롯으로 받는다.</strong> 슬롯이 곧 의존 역전
+				장치이고, React 의 <code>children</code> 과 같은 역할이다.
+			</p>
+		</div>
+	</div>
+</section>

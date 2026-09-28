@@ -1,0 +1,35 @@
+<!-- 구역 : 적용 실물 -->
+<section class="section" id="structure_now">
+	<div class="section__head">
+		<h2 class="section__title">6. 지금 저장소에 적용된 것</h2>
+		<p class="section__desc">개발 확인용 샘플 페이지가 이 구조의 실물이다</p>
+	</div>
+	<div class="ui-card">
+		<div class="ui-card__body">
+			<textarea class="guide__src" data-raw readonly aria-label="코드 예시">
+				include/sample/
+				├─ _sample_layout.html   틀(사이드 · LNB · 헤더) — 본문은 main 슬롯으로 받는다
+				├─ section/  _sample_list · _button · _input · _dropdown · _stepper · _date
+				│            _checkbox · _radio · _toggle · _tooltip · _tab · _accordion
+				│            _toast · _modal · _var
+				└─ body/     _sample_invite_body.html
+			</textarea>
+			<ul class="guide__check">
+				<li>
+					<strong>UI 하나에 구역 파셜 하나.</strong> 페이지는 틀(<code>_sample_layout</code>) + 구역 include 한 줄이다.
+				</li>
+				<li>
+					<code>Sample.html</code> 은 구역 15개를 모두 넣은 전체 모아보기, <code>Sample_&lt;UI&gt;.html</code> 은
+					하나씩. 목록은 LNB 「개발 확인용」이 <code>data/common/lnb_dev.json</code> 에서 그린다.
+				</li>
+				<li>
+					점검 상세 알림의 본문(문단 세 개)은 <strong>4번 기준에 따라</strong> <code>_sample_modal.html</code> 의
+					template 안에 직접 두었다 — 짧고 그 화면 전용이면 파일을 만들지 않는다.
+				</li>
+			</ul>
+			<p class="guide__note">
+				실제 화면은 <a href="/html/sample/Sample.html">개발 확인용 샘플</a>에서 열어 볼 수 있다.
+			</p>
+		</div>
+	</div>
+</section>

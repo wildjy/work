@@ -574,3 +574,16 @@ HTML 을 고칠 때마다 산출물을 옛 규칙(textarea 안 날것 `< >`)으�
 
 - **후속(같은 날)** — ① 「4. 값 넘기기」 예시의 `data-msg` 를 **데모 마크업과 글자까지 같게** 맞췄다(따옴표 방식 · 줄 나눔만 달랐고 값은 같았다 — 화면 글자를 데모 원본과 대조해 일치 확인).
   ② 이번 규칙을 **함정 표 3줄**(파셜 안 코드 예시 · 파셜 안 문장 · 목록 template 의 `data-raw`)과 **증상 표 1줄**로 `partial_traps.json` · `partial_symptoms.json` 에 올렸다 — 화면과 `docs/PARTIALS.md` 가 같은 JSON 에서 난다(`docs:check` 통과). 함정 칸은 문서에서 통째로 굵게 찍히므로 `<strong>` 을 넣지 않는다(겹쳐 깨진다).
+
+---
+
+## 26.09.28 · 폴더 구조 페이지(`Guide_Structure`)에도 1~3단계 적용 (유재영)
+
+`Guide_Structure.html` **367줄 → 78줄**. 코드 예시 5곳을 `textarea.guide__src` 원문으로 바꾸고, 구역 8개를
+`include/guide/section/_guide_structure_<키>.html` 로 뺐다(`toc` · `fsd` · `segment` · `naming` · `when` · `dep` · `now` · `next` — 키는 구역 id 에서 `structure_` 를 뗀 것).
+
+- 목록 template `tpl_structure_row` 는 **네 구역(fsd · when · dep · next)이 함께 쓰므로** 페이지에 남겼다.
+- 문장 속 `<code>id="{{prefix}}_name"</code>` 1곳 → 중괄호 엔티티.
+- ⚠ **코드 예시 안의 `</main>` 에 걸렸다** — 「세그먼트」 구역 예시에 `<main>…</main>` 이 있어, 본문 끝을 첫 `</main>` 으로 잡은 분리 스크립트가 구역 2개만 처리했다. **마지막 `</main>`** 으로 잡아 해결. 원문 예시를 쓰면 이런 「본문 속 진짜 같은 태그」가 생긴다 — 태그 위치로 무언가를 찾는 스크립트는 textarea 안을 먼저 걷어야 한다.
+- 확인 : 원본 · 산출물 모두 **코드 블록 5개 · main 본문 글자 전체(4,496자) 완전 일치 · 색칠 토큰 42 = 42** · 프리렌더 경고 0 · `validate` · `lint` · `docs:check` 통과. 화면이 같아 index 작업일자는 찍지 않았다.
+- IDE(VS Code) 가 textarea 안의 `style="width: {{width|10}}%"` 에 CSS 경고를 띄운다 — textarea 안을 속성으로 읽는 **오탐**이다(브라우저 · 프리렌더 · validate 는 글자로 다룬다).
