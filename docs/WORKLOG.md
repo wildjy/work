@@ -486,3 +486,28 @@ LNB 「개발 확인용」 하위 메뉴가 그 페이지 목록이며, 목록�
 
 - 신규 15장 : 두 날짜 모두 26.09.28
 - `Sample.html` · `Guide_Partial` · `Guide_Structure` : `update_date` 26.09.28 — LNB 하위 메뉴가 바뀌어 **화면이 달라졌다**(가이드 두 장은 설명 문구도 갱신)
+
+---
+
+## 26.09.28 · GitHub Pages 배포본에 base(`/work`) 붙이기 — `scripts/pages_base.js` · `npm run pages` (유재영)
+
+**증상** — https://wildjy.github.io/work/prerender/guide/Guide_Partial.html 에 스타일이 안 먹는다.
+**원인** — 경로를 사이트 루트 기준(`/css/common.css`)으로 바꿨는데(위 2단계), 프로젝트 사이트는 **`/work/` 아래**에 올라간다.
+브라우저가 `wildjy.github.io/css/common.css` 를 찾아 404 — CSS 뿐 아니라 js · 파셜 · JSON · 이미지 · LNB 링크도 같다.
+
+| 항목 | 위치 | 사유 |
+| --- | --- | --- |
+| `scripts/pages_base.js` · `npm run pages -- --base /work` | `scripts/` · `package.json` | `public/` 을 `_site/` 로 **복사하며** html · css · json 의 루트 경로 앞에 base 를 붙인다. 원본 · 커밋된 산출물은 그대로 — 산출물에 넣으면 로컬(:3500)이 깨지고 워크플로의 산출물 최신 검사(`git diff`)도 실패한다 |
+| 워크플로 | `.github/workflows/pages.yml` | `configure-pages` 의 `base_path` 를 넘겨 돌리고, 아티팩트를 `./public` → **`./_site`** 로. 저장소 이름이 바뀌어도 따라간다 |
+| `.gitignore` | 루트 | `/_site` |
+
+- 바꾸는 것은 **`public/` 최상위에 실제로 있는 이름**(`css` · `js` · `html` · `data` · `prerender` · `index.html` …)으로 시작하는 경로뿐 — 따옴표 바로 뒤(속성값 · `location.href='…'`) · `url(…)` · `srcset` · 루트 링크 `href="/"`. 이미 `/work/…` 인 것은 안 걸려 두 번 돌려도 같다.
+- **코드 예시(textarea · pre · code 안)는 바꾸지 않는다** — 사용법 문서가 보여 주는 코드가 달라진다.
+- JSON 은 **값 전체가 경로인 문자열**만(`"href": "/html/…"`). 문자열 안의 HTML · 코드 예시는 두고 간다 — ⚠ JSON 에 `href=\"/…\"` 처럼 **실제 링크를 HTML 로** 넣으면 배포본에서 깨진다.
+- `dynamicImport.js` · `listRender.js` · `common.js` 는 고칠 것이 없다 — 경로를 DOM 속성에서 읽고, `lnbActive` 는 파일명만 비교한다.
+- ⚠ **파셜 변수 기본값** `data-source="{{footer|/html/include/ui/_ui_modal_footer.html}}"` 은 따옴표 바로 뒤가 아니라 첫 판에서 빠졌다 — 모달 버튼 파셜이 런타임에 404. `{{key|/…}}` 규칙을 따로 두었다.
+- ⚠ `--base` 없이 돌리면 **경로를 안 바꾸고 복사만** 한다(`base 없음` 출력). 로컬 확인 때 이걸로 한 번 헷갈렸다.
+- `_site` 를 `eslint.config.js` ignores · `.prettierignore` 에 추가 — 안 넣으면 `npm run lint` 가 복사본의 인라인 script 를 검사해 93건 오류.
+- 확인 : 파일 131 · 경로 바꾼 파일 59 · `/work/…` 경로 **643곳 전부 실재** · 이중 치환(`/work/work`) 0 · 남은 루트 경로는 코드 예시(`pre`·`code` · JSON 의 `&quot;` 예시)와 주석뿐.
+  GitHub Pages 처럼 `/work/` 만 서빙하는 임시 서버 + 헤드리스 크롬으로 원본(`html/sample/Sample.html` · `html/guide/Guide_Partial.html`) · 산출물 · `index.html` 5장 → 요청 **134건 전부 200**(404 는 크롬 기본 `favicon.ico` 뿐) · 스타일 · 파셜 · JSON 목록 · 0건 상태 · LNB 활성 정상.
+  워크플로 순서(prerender → `git diff --exit-code` → validate) 통과 · `lint` 통과.

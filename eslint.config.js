@@ -49,7 +49,7 @@ const BROWSER = {
 module.exports = [
 	{
 		// 외부 라이브러리(*.min.js)는 전역에서 뺀다 — 설정 묶음 안의 ignores 는 그 묶음에만 걸려 recommended 가 그대로 검사한다
-		ignores: ['node_modules/**', 'public/prerender/**', '**/*.min.js'],
+		ignores: ['node_modules/**', 'public/prerender/**', '_site/**', '**/*.min.js'],
 	},
 
 	js.configs.recommended,

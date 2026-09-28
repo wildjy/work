@@ -13,6 +13,7 @@
     "format": "prettier --write .",
     "format:check": "prettier --check .",
     "validate": "html-validate public/prerender",
+    "pages": "node scripts/pages_base.js",
     "prepare": "simple-git-hooks",
     "docs": "node scripts/docs_from_json.js",
     "docs:check": "node scripts/docs_from_json.js --check",

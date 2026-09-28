@@ -37,9 +37,14 @@ jobs:
         run: git diff --exit-code --ignore-cr-at-eol public/prerender
       - run: npm run validate
 
-      - uses: actions/configure-pages@v5
+      - id: pages
+        uses: actions/configure-pages@v5
+      # 경로가 사이트 루트(/css/ …) 기준이라 프로젝트 사이트(/work/)에서는 그대로 404 가 난다.
+      # 복사본(_site)에만 base 를 붙인다 — 원본·커밋된 산출물은 로컬(localhost:3500) 기준 그대로다.
+      - name: 경로에 base 붙이기
+        run: npm run pages -- --base "${{ steps.pages.outputs.base_path }}"
       - uses: actions/upload-pages-artifact@v3
         with:
-          path: ./public
+          path: ./_site
       - id: deploy
         uses: actions/deploy-pages@v4
