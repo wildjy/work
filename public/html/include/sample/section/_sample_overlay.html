@@ -1,13 +1,13 @@
 <!-- 오버레이 구역 — 토스트 · 모달의 실체. 여는 버튼은 _sample_feedback.html 에 있고, 슬롯 template 은 include 를 적은 파일에 둔다는 규칙에 따라 여기 함께 둔다 -->
 <div
 	class="dynamic-content"
-	data-source="./include/ui/_ui_toast.html"
+	data-source="/html/include/ui/_ui_toast.html"
 	data-id="sample_toast"
 	data-text="저장되었습니다."
 ></div>
 <div
 	class="dynamic-content"
-	data-source="./include/ui/_ui_modal.html"
+	data-source="/html/include/ui/_ui_modal.html"
 	data-id="sample_invite"
 	data-title="멤버 초대"
 	data-subtext="초대할 멤버의 정보를 입력해주세요."
@@ -16,7 +16,7 @@
 ></div>
 <div
 	class="dynamic-content"
-	data-source="./include/ui/_ui_modal_alert.html"
+	data-source="/html/include/ui/_ui_modal_alert.html"
 	data-id="sample_alert"
 	data-title="점검 안내"
 	data-subtext="2026.09.20 02:00 ~ 06:00"
@@ -24,7 +24,7 @@
 ></div>
 <div
 	class="dynamic-content"
-	data-source="./include/ui/_ui_modal_alert.html"
+	data-source="/html/include/ui/_ui_modal_alert.html"
 	data-id="sample_alert_detail"
 	data-title="점검 상세"
 	data-subtext="2026.09.20 02:00 ~ 06:00"
@@ -32,7 +32,7 @@
 ></div>
 <div
 	class="dynamic-content"
-	data-source="./include/ui/_ui_modal_confirm.html"
+	data-source="/html/include/ui/_ui_modal_confirm.html"
 	data-id="sample_confirm"
 	data-title="이벤트를 삭제하시겠습니까?"
 	data-text="삭제한 이벤트는 복구할 수 없습니다."
@@ -41,7 +41,7 @@
 
 <!-- 슬롯 본문 — 짧고 이 화면 전용이면 여기 직접(점검 상세), 길거나 여러 화면이 쓰면 include/sample/body/ 파셜로(멤버 초대) -->
 <template id="sample_invite_body">
-	<div class="dynamic-content" data-source="./include/sample/body/_sample_invite_body.html"></div>
+	<div class="dynamic-content" data-source="/html/include/sample/body/_sample_invite_body.html"></div>
 </template>
 <template id="sample_alert_detail_body">
 	<p class="ui-modal__text">점검 시간에는 로그인 · 결제 · 알림 발송이 모두 멈춥니다.</p>

@@ -12,7 +12,7 @@ description: >-
 > 복사해 두면 **고칠 때마다 전부 찾아 고쳐야 하고, 반드시 하나를 빠뜨린다.**
 
 ```html
-<div class="dynamic-content" data-source="./include/common/_header.html"></div>
+<div class="dynamic-content" data-source="/html/include/common/_header.html"></div>
 ```
 
 ### 폴더
@@ -37,7 +37,7 @@ description: >-
 | **`replaceWith` 라 래퍼 클래스가 남지 않는다** | 위치 보정은 **형제 셀렉터**로 한다. include 하는 div 에 class 를 줘도 사라진다 |
 | **활성 상태를 파셜에 넣으면 모든 페이지가 같아진다** | 활성 메뉴·탭은 `common.js` 에서 **현재 파일명과 href 를 대조**하거나 각 페이지의 `dynamic-content-loaded` 에서 토글 |
 | **`<template>` 안에서는 include 가 동작하지 않는다** | 템플릿 자체를 파셜로 만든다 |
-| **경로는 「페이지」 기준이다** | 파셜 안의 `data-source` 도 페이지 기준으로 쓴다 |
+| **경로는 사이트 루트 기준이다** | `/html/include/…` 로 쓴다. 파셜 안에서도, 페이지가 어느 폴더에 있어도 같다 — 파셜은 「심어진 페이지」 기준으로 풀려서 `./` 로는 한 값으로 맞출 수가 없다 |
 | **id 를 고정으로 쓴 파셜은 한 페이지에 두 번 못 넣는다** | 두 번 쓰면 **id 가 겹쳐** 라벨·`getElementById` 가 **먼저 나온 것만** 가리킨다(`validate` 의 `no-dup-id` 가 막는다). 재사용할 파셜은 **id 를 `data-*` 로 받는다** — `id="{{prefix}}_name"` |
 | **빈 파셜에 짧은 주석 한 줄** | 「구역 표시」로 판정돼 산출물에 그대로 남는다 — 넣지 않는다 |
 
@@ -52,7 +52,7 @@ description: >-
 
 ```html
 <!-- 화면(부르는 쪽) -->
-<div class="dynamic-content" data-source="./include/common/_header.html" data-page-title="회원 관리"></div>
+<div class="dynamic-content" data-source="/html/include/common/_header.html" data-page-title="회원 관리"></div>
 
 <!-- 파셜(_header.html) -->
 <h1 class="title">{{pageTitle|페이지 제목}}</h1>
@@ -84,7 +84,7 @@ description: >-
 
 ```html
 <!-- 화면(부르는 쪽) — 컨테이너는 그대로 비워 두고, 내용은 template 에 적는다 -->
-<div class="dynamic-content" data-source="./include/ui/_ui_modal.html"
+<div class="dynamic-content" data-source="/html/include/ui/_ui_modal.html"
      data-id="modal_invite" data-title="멤버 초대" data-slot-body="#modal_invite_body"></div>
 
 <template id="modal_invite_body">
@@ -106,7 +106,7 @@ description: >-
   ⚠ 단, **같은 페이지의 슬롯 두 곳에 같은 파셜을 넣지 않는다** — 파셜이 id 를 고정으로 갖고 있으면 id 가 겹친다(위 표).
   ```html
   <template id="modal_invite_body">
-  	<div class="dynamic-content" data-source="./include/member/_modal_invite_body.html"></div>
+  	<div class="dynamic-content" data-source="/html/include/member/_modal_invite_body.html"></div>
   </template>
   ```
 - 슬롯은 **원문 그대로**(`{{{ }}}`) 들어간다. `{{body}}` 처럼 두 겹으로 적으면 태그가 글자로 보인다.
@@ -183,7 +183,7 @@ template   id="sample_invite_body"
 ```
 
 ```html
-<div class="dynamic-list" data-source="../data/common/banner.json"
+<div class="dynamic-list" data-source="/data/common/banner.json"
      data-template="#tpl_banner" data-filter="use"></div>
 
 <!-- 목록 템플릿 (listRender.js 가 JSON 을 순회해 렌더) -->
@@ -234,7 +234,7 @@ template   id="sample_invite_body"
 2. **상태별 페이지**는 파셜을 include 한 뒤 `dynamic-content-loaded` 에서 **상태 클래스를 붙인다**(래퍼에 미리 줄 수 없다 — §1).
 
 ```html
-<div class="dynamic-content" data-source="./include/member/_member_card.html"></div>
+<div class="dynamic-content" data-source="/html/include/member/_member_card.html"></div>
 <script>
 	document.addEventListener('dynamic-content-loaded', function () {
 		var card = document.querySelector('.member_card');

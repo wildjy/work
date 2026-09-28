@@ -42,3 +42,355 @@ tail -20 docs/WORKLOG.md                  # 최근 작업
 | 2026-09-18 | **폴더 구조 페이지** — `Guide_Structure.html`(구역 8 · 표 4개) · 데이터 `data/guide/structure.json`(17행 · group=layer/split/dep/next) · 템플릿 `tpl_structure_row` · LNB 「폴더 구조」 메뉴 | `public/html/` · `public/data/guide/` · `include/ui/_ui_lnb.html` · `public/index.html` · `docs/STRUCTURE.md` · `README.md` · `Guide_Partial.html` | `docs/STRUCTURE.md` 를 화면으로 옮긴 것. 문서는 저장소를 연 사람만 보지만 **작업 목록(index)에서 열리는 화면**은 검수자 · 개발자도 본다 — 「파셜(include) 사용법」과 같은 이유다. 표 4개(FSD 대응 6행 · 가르는 기준 5행 · 의존 방향 4행 · 엔진 손질 2행)가 모두 **두 칸짜리라 템플릿 하나**(`tpl_structure_row`)를 `data-filter="group=…"` 로 나눠 쓴다 — 0건 상태 포함. 스타일은 `_guide.scss` 를 그대로 써서 **새 SCSS 가 없다**(Watch Sass 불필요). 두 페이지를 서로 링크했고(슬롯 절 → 폴더 구조 / 폴더 구조 → 슬롯 절 · 샘플), 문서 `STRUCTURE.md` 머리말에 화면 판 안내를 넣어 `PARTIALS.md` 와 형식을 맞췄다. ⚠ JSON 값 안의 중괄호는 **엔티티**(`&#123;`) — 생성 스크립트에 검사를 걸어 두었다. LNB 에 메뉴가 늘어 Sample · 파셜 사용법도 화면이 달라졌지만 두 항목 다 작업일자가 이미 오늘이라 그대로. 확인 : 프리렌더(파셜 2 / 목록 4 · 17행) · `validate` error 0 · `lint` 통과 · 헤드리스 크롬으로 구역 8 · 표 17행 · 미치환 토큰 0 · LNB `is-active` · 코드 색칠 42토큰 | |
 | 2026-09-18 | **GitHub Pages 배포** — `.github/workflows/pages.yml`(`public/` 을 사이트 루트로) · `.gitattributes` 신설 · 문서 `docs/DEPLOY.md` | 저장소 루트 · `docs/` · `README.md` | 검수자 · 개발자가 저장소를 내려받지 않고 주소로 화면을 보게 한다(https://wildjy.github.io/work/). 「브랜치에서 배포」는 **저장소 루트 아니면 `/docs`** 만 고를 수 있어 사이트가 `public/` 에 있는 이 저장소와 맞지 않는다 — Actions 로 `upload-pages-artifact` 의 `path: ./public` 한 줄로 해결. **겪은 실패 세 가지** ① `Settings › Pages › Source` 만 `GitHub Actions` 로 바꾸고 **워크플로가 없어** 옛 브랜치(Jekyll) 빌드가 계속 서빙됐다 — 주소에 `public/` 이 남고 `/work/` 는 README 테마 페이지였다. ② **Jekyll 은 `_` 로 시작하는 파일을 내보내지 않아** 파셜이 전부 404(산출물은 파셜이 펼쳐져 있어 무사했다) — Actions 방식은 Jekyll 을 거치지 않아 저절로 풀린다. ③ **CI 의 프리렌더 최신성 검사가 항상 exit 1** — `core.autocrlf=true` 라 저장소에는 LF 로 저장되는데 `prerender.js` 는 CRLF 를 쓴다. 우분투 러너는 LF 로 체크아웃하므로 산출물의 모든 줄이 달라 보였다. `.gitattributes` 의 `public/** text eol=crlf` 로 러너에서도 CRLF 로 체크아웃시키고(`*.woff2 binary` 로 폰트 보호) 검사에 `--ignore-cr-at-eol` 을 붙였다. ④ Node 20 지원 종료는 경고일 뿐이었고 `checkout`·`setup-node` 를 `@v5` 로 올렸다. 배포 전에 `prerender` → `git diff --exit-code` → `validate` 를 돌려 **원본만 고치고 푸시한 것**을 막는다(아티팩트는 prerender 뒤의 `public/` 이라 검사를 빼도 화면은 최신) | |
 | 2026-09-22 | **사용법 페이지 통합 개편** — 구역 12 → **14**(신설 : 「5. 덩어리를 통째로 넣고 뺀다」 · 「8. 어느 것을 고를까」 · 구역 4 를 5부로 확장 · 구역 7 에 템플릿 전용 파셜 · 운영 컴포넌트) · 데이터 `partial_syntax`(11) · `partial_ladder`(12) 신설 · `partial_traps` 19→24 · `partial_symptoms` 7→10 · 데모 파셜 6개 `include/guide/_guide_*` · 빈 파셜 `include/common/_none.html` · `demo_opcomp.json` · 스타일 `_guide.scss`(`__bar`·`__flag`·`__ops`·`__op`) · **문서 생성기 `scripts/docs_from_json.js`**(`npm run docs` · `docs:check`) | `public/html/Guide_Partial.html` · `public/html/include/guide/` · `public/html/include/common/_none.html` · `public/data/guide/` · `public/scss/_guide.scss` · `scripts/` · `docs/PARTIALS.md` · `package.json` · `public/index.html` | 다른 저장소(ara-pub)의 같은 목적 페이지와 **합쳐 한 벌로** 만든 것. 두 저장소의 파셜 엔진을 대조해 보니 `dynamicImport.js` 는 **줄 단위로 완전히 같고**, `prerender.js` 도 공백·Prettier 를 걷어내면 다른 것은 **슬롯 정규식 둘뿐**이었다 — 「저장소마다 다른 문서」가 필요 없다는 것이 개편의 전제다. **가져온 것** ① `{{key}}` ↔ `{{{key}}}` 와 **파셜 변수 ↔ 목록 템플릿** 대조표 둘(`partial_syntax`) — 같은 괄호를 두 구현이 각각 보는 자리라 사고가 가장 잦다. ② **경로 변수 + 빈 파셜**을 한 절로(이 저장소는 「바꾸는 쪽」(`data-footer`)만 썼고 「비우는 쪽」이 없었다). ③ **운영 컴포넌트**(`type`→class · `use` 스위치). ④ **동작 데모** — 같은 파셜을 「값 넘긴 화면 / 안 넘긴 화면」 두 벌로 include 해 나란히 보인다. **신설한 것 — 「8. 어느 것을 고를까」 사다리 한 장.** 양쪽 문서 모두 도구를 나열만 하고 **고르는 법**이 없었다. 문구·모양·속성·길이·덩어리·본문·행·운영·런타임 12갈래를 위에서부터 읽다 걸리는 데서 멈추게 했고, `{{{ }}}` 는 맨 아래(마지막 수단)에 두었다. ⚠ **데모가 스스로 함정을 밟았다** — 같은 데모 파셜을 두 번 include 하자 공통 체크박스의 고정 id 가 겹쳐 `validate` 의 `no-dup-id` 가 걸렸다. 문서가 경고하는 그 항목이라 **파셜이 id 를 `data-chk-id` 로 받게** 고쳤다. ⚠ **JSON 값의 중괄호는 엔티티(`&#123;`)** · 데모에서 「보였다/숨었다」는 `style` 이 아니라 **`hidden` 속성**으로 보인다(이 저장소 규약). `data-flag-attrs=""` 로 **빈 값이 기본값을 이기는 것**까지 한 자리에서 보이게 했다. **문서판 이중화를 끊었다** — 같은 함정 표가 화면과 `docs/PARTIALS.md` 두 곳에 있었고 **이미 18 vs 24 로 갈려 있었다.** 산문은 손으로 쓴 채 두고 `<!-- auto:이름 -->` 마커 사이만 JSON 에서 찍는다(11블록). MD 에만 남아 있던 문구 5곳은 **JSON 쪽으로 되돌린 뒤** 생성으로 넘겼다. `npm run docs -- --check` 는 낡았으면 exit 1 이라 CI·훅에 걸 수 있다. 확인 : 프리렌더(파셜 2→**13** / 목록 11→**16** · 83→**110행**) · `validate` error 0 · `lint` 통과 · 생성기 2회 실행 동일(idempotent) · SCSS 문법은 scratchpad 로만 확인. **컴파일(Watch Sass)은 작업자** |  |
+
+---
+
+## 26.09.28 · 페이지 폴더 구조 — **1단계 : 빌드 도구 선행 수정** (유재영)
+
+`ara-pub` 에서 페이지가 167개까지 자란 뒤에 폴더를 나누느라 경로 **2,000곳 이상**을 고쳤다.
+base 프로젝트인 여기는 아직 페이지가 **3개**라 같은 일이 **239곳**으로 끝난다 — 지금 규칙을 정해 둔다.
+**이 단계에서는 파일을 하나도 옮기지 않는다.** 도구만 폴더를 받을 수 있게 하고, 산출물이 그대로인지 확인한다.
+
+### 왜 도구가 먼저인가
+
+`prerender.js` 는 파셜·JSON 경로를 **`public/html/` 기준**으로 풀고, 브라우저는 **페이지 자신의 위치** 기준으로 푼다.
+페이지가 전부 `public/html` 바로 아래 있으니 두 기준이 같아 지금까지 문제가 없었다. **폴더를 하나라도 만들면 갈라진다** —
+
+- `./include/…` 를 그대로 두면 → **프리렌더는 통과, 브라우저는 404**
+- `../include/…` 로 고치면 → **브라우저는 통과, 프리렌더가 `public/include/` 를 찾아 실패**
+
+마크업만 먼저 옮기면 「산출물은 멀쩡한데 서버로 열면 깨지는」 상태가 된다 — 가장 늦게 발견되는 사고다.
+
+### `scripts/prerender.js` — 패치 10건
+
+| 무엇 | 어떻게 |
+| --- | --- |
+| `SKIP_DIRS` · `toKey` | 페이지가 아닌 폴더(`include` · `_bak`)를 걸러내고, 페이지 이름을 `/` 로 통일한 상대경로로 다룬다 |
+| `PUBLIC_DIR` · **`resolveSrc`** | `/html/…` · `/data/…` 를 **사이트 루트(public/) 기준**으로 푼다. `path.resolve` 는 `/` 를 드라이브 루트로 튀기 때문에 반드시 가려야 한다 |
+| `pageList()` | 평면 `readdirSync` → **재귀**. 반환값이 `guide/Guide_Partial.html` 꼴이 된다 |
+| `build()` 전개 기준 | `SRC_DIR` → **`path.dirname(srcPath)`**(그 페이지가 있는 폴더 = 브라우저와 같은 기준) |
+| `build()` 산출물 | `public/prerender` 아래에 **같은 폴더 구조**로 낸다 |
+| **`sweepOrphans()`** | 원본 없는 산출물을 지운다(**전체 빌드에서만**). 페이지를 옮기면 옛 자리 산출물이 남아 「옛 화면이 멀쩡히 열리는」 상태가 된다 |
+| `affectedPages()`(감시) | `path.dirname(changed) === SRC_DIR` 비교 → 상대경로 + `SKIP_DIRS` 판정 |
+| `main()` 인자 | `npm run prerender -- guide/Guide_Partial.html` 도, **이름만** 줘도 폴더를 찾아 준다 |
+
+⚠ **ara-pub 의 파일을 복사하지 않았다.** 두 프로젝트의 `prerender.js` 는 **양방향으로** 갈라져 있다 —
+여기가 prettier 서식이고, **`<template>` 주변 주석을 위치로 걷는 정규식은 여기 쪽이 더 낫다**
+(ara-pub 은 「목록 템플릿」 문자열로 찾아서, 주석 문구를 바꾸면 산출물에 라벨만 남는 사고가 두 번 났다).
+그래서 **패치만 손으로 옮기고** `npm run format` 으로 마감했다(prettier 가 「unchanged」 → 서식이 이미 맞았다).
+
+### `scripts/precommit.js` — 패치 1건 (⚠ 여기서 걸렸다)
+
+고아 산출물 검사가 **평면 `readdirSync`** 였다.
+
+```js
+const srcPages = new Set(fs.readdirSync('public/html').filter((f) => f.endsWith('.html')));
+```
+
+페이지를 폴더에 두면 **`public/html` 최상위에 `.html` 이 하나도 없어** `srcPages` 가 비고,
+산출물 쪽 목록도 폴더 이름만 걸러져 **검사가 조용히 통과**한다. 재귀로 바꿨다.
+
+### 확인 — 다섯 가지
+
+**① 산출물 무변화** — 고치기 전 SHA1 을 떠 두고 다시 돌렸다.
+
+```
+이전 3 · 이후 3 · 내용이 달라진 것 0 · 사라진 것 0 · 새로 생긴 것 0
+```
+
+**② 하위 폴더가 실제로 되나** — `Guide_Structure.html` 을 `__probe/` 에 두 벌 놓고 빌드했다.
+
+| | 결과 |
+| --- | --- |
+| 페이지 상대(`../../css/` · `../include/`) | 파셜 2 / 목록 4 · 17행 — 깊이를 되돌리면 **평면 산출물과 완전 일치** |
+| 루트 상대(`/css/` · `/html/include/`) | 같음 — **완전 일치** |
+
+**③ 이름만 준 인자** — `prerender -- rooted.html` → `__probe/rooted.html` 을 찾았다.
+**④ `sweepOrphans`** — 원본을 지우고 전체 빌드 → 산출물·빈 폴더가 사라졌다.
+**⑤ 감시 모드** — 페이지를 고치면 그 페이지만, 파셜(`_header`)을 고치면 **3페이지 전부**,
+JSON 을 고치면 그 페이지가 다시 난다. 「전체 재생성」으로 빠지지 않았다.
+
+확인에 쓴 임시 폴더는 원본·산출물 양쪽에서 지웠다(`git status` 에 `scripts/` 만 남는다).
+
+### 이 프로젝트가 ara-pub 보다 유리한 점 둘
+
+- **`scripts/serve.js` 가 이미 `serve public -l 3500`** 이다 — 루트 상대경로의 유일한 전제조건이 이미 충족돼 있다.
+  `serve.json` 은 캐시 헤더만 있고 rewrite 가 없다.
+- **`precommit.js` 가 안전망이다** — 커밋 직전 프리렌더를 다시 돌려 산출물을 맞추고, **경고 하나에도 커밋을 막는다**
+  (`! 파셜 없음` · `! 데이터 없음`). 지금 경고가 **0건**이므로, 2단계에서 경로를 잘못 바꾸면 **커밋 단계에서 잡힌다.**
+
+### 다음
+
+지금 상태로는 **아무것도 깨지지 않는다** — 도구만 폴더를 받을 수 있게 됐고 구조는 그대로다.
+
+| 단계 | 무엇 | 양 |
+| --- | --- | --- |
+| ~~1~~ | ~~도구(prerender · precommit)~~ | **완료** |
+| 2 | `public/` 안의 경로를 루트 상대로 | **158곳** (페이지 74 · 파셜 52 · JSON 27 · index 5) |
+| 3 | 페이지 3개를 폴더로 (`guide/` · `sample/`) | 3개 |
+| 4 | 문서·스킬 | **81곳** (docs 41 · skills 38 · README·js 2) |
+
+⚠ **2단계에서 놓치기 쉬운 경로 형태** — ara-pub 에서 세 번 되짚은 것들이다.
+`data-json` · `data-done-url` · `data-back` · `data-path` · `onclick` 안의 `location.href` ·
+`style="…url(…)"` · `srcset` · **`{{key|./include/…}}` 파셜 변수 기본값** · **`./` 없는 페이지 이름** ·
+**`public/data/*.json` 안의 경로**(마크업만 훑으면 안 보인다 — ara-pub 에서 이것만 300곳이었다).
+
+⚠ **4단계는 `docs/PARTIALS.md` 를 손으로 고치지 않는다** — `docs_from_json.js` 가
+`public/data/guide/*.json` 에서 표를 찍는다. 2단계에서 JSON 을 고치고 `npm run docs` 로 따라오게 한다.
+가이드 JSON 은 `./include/` 를 **가르치는 예시**라 정규식 치환으로 끝나지 않고 **설명 문구도** 함께 바꿔야 한다.
+
+---
+
+## 26.09.28 · 페이지 폴더 구조 — **2단계 : `public/` 경로를 루트 상대로** (유재영)
+
+`public/` 안의 자산·파셜·데이터 경로 **145곳**을 루트 상대로 바꿨다. **페이지는 아직 옮기지 않았다**(3단계).
+
+```html
+<link rel="stylesheet" href="/css/common.css" />          <!-- ../css 아님 -->
+<script src="/js/common.js"></script>
+<div class="dynamic-content" data-source="/html/include/ui/_ui_dropdown.html"
+     data-items="/data/ui/sample_options.json"></div>
+```
+
+### 먼저 **어떤 형태가 있는지** 전수 조사했다
+
+ara-pub 은 `href`·`src`·`data-source` 만 보고 시작해 **세 번 되짚었다.** 여기서는 속성 이름을 먼저 세었다.
+
+| 형태 | 곳 | 비고 |
+| --- | --- | --- |
+| `data-source="…"` | 111 | 파셜 |
+| `href` · `src` | 50 | 자산·링크 |
+| **`data-items="…"`** | 7 | 드롭다운·아코디언의 JSON 경로 |
+| **`data-extra="…"`** | 3 | 파셜을 **값으로** 넘기는 자리 |
+| **파셜 변수 기본값** `{{block\|./include/…}}` | 2 | `_guide_optional_host` · `_ui_modal` |
+| `url(…)` in `public/css/common.css` | 9 | **건드리지 않았다** — 아래 |
+
+그래서 치환을 **속성 이름을 가리지 않는 방식**으로 한 번에 돌렸다(`../data/` · `./include/` · `../css|js|images|video|font`).
+`./` 없이 적힌 페이지 이름은 **0건**이었다(ara-pub 에는 21곳 있었다).
+
+### ⚠ `public/css/common.css` 의 `url()` 은 건드리지 않았다
+
+`url("../font/Pretendard/…")` 는 **CSS 파일 기준**으로 풀린다 — 페이지 폴더와 무관하다.
+루트 상대로 바꿀 이유가 없고, 바꾸면 오히려 손이 더 간다. `public/scss` 도 같다.
+
+### ⚠ 문구를 같이 고쳐야 했다 — 경로만 바꾸면 **가이드가 자기모순**이 된다
+
+가이드 JSON 은 `./include/` 를 **가르치는 예시**다. 경로만 치환하니 이런 문장이 남았다.
+
+```
+(전) data-source 는 언제나 「페이지」 기준(./include/…)
+(중) data-source 는 언제나 「페이지」 기준(/html/include/…)   ← 앞뒤가 안 맞는다
+(후) data-source 는 언제나 **사이트 루트 기준**(/html/include/…). 파셜 안에서도,
+     페이지가 어느 폴더에 있어도 같다
+```
+
+`partial_rules` · `partial_symptoms` · `partial_traps` 의 **6곳**을 고쳤다. 특히 함정 표의 설명을
+「왜 루트 기준인가」로 다시 썼다 — **파셜은 「심어진 페이지」 기준으로 풀리므로, 깊이가 다른 페이지들이**
+**같은 파셜을 쓰면 `./` 로는 한 값으로 맞출 수가 없다.** 이게 이 전환의 이유 전부다.
+
+`docs/PARTIALS.md` 는 **손으로 고치지 않았다** — `npm run docs` 가 JSON 에서 11블록을 다시 찍었다(`docs:check` 통과).
+
+### ⚠ 문서의 「틀린 예시」 둘은 그대로 뒀다
+
+- `partial_rules` 의 `./_x.html` — 「이렇게 적으면 404」라는 **반례**다.
+- `partial_symptoms` 의 `./prerender/` — index 링크를 설명하는 문장이고, 실제로 그게 맞다.
+
+### 확인
+
+| | 결과 |
+| --- | --- |
+| 경로 외 내용 대조(git HEAD) | **2/3 동일** · 1건은 **위에서 일부러 고친 가이드 문구** |
+| 원본 경로 실재 확인 | **115곳 확인** · 남은 8건은 전부 3단계 몫(페이지 링크·HTML 이스케이프된 예시) |
+| 산출물 경로 | 30곳 확인 |
+| **프리렌더 경고** | **0건** — `precommit` 이 경고 하나에도 커밋을 막으므로 이게 관문이다 |
+| `npm run docs:check` · `eslint .` | 통과 |
+| 파셜·목록 수 | 13/16 · 2/4 · 53/7 — 전과 같다 |
+
+### 같이 고친 것
+
+- `public/html/include/ui/_ui_lnb.html` 의 `../index.html` → **`/index.html`**.
+  페이지가 폴더로 들어가면 `../index.html` 이 `public/html/index.html` 을 가리켜 깨진다.
+- `public/js/listRender.js` 의 사용법 주석(`data-source="../data/…"`) 도 새 표기로.
+
+### 다음 — 3단계
+
+페이지 3개를 폴더로 옮기고 **남은 페이지 링크 8곳**을 한 번에 바꾼다.
+
+```
+public/html/guide/Guide_Partial.html   ← Guide_Partial.html
+public/html/guide/Guide_Structure.html ← Guide_Structure.html
+public/html/sample/Sample.html         ← Sample.html
+```
+
+`index.html` 의 `./prerender/…` 링크 4개도 그때 폴더를 붙인다.
+
+---
+
+## 26.09.28 · 페이지 폴더 구조 — **3·4단계 : 페이지 이동 · 문서 정리 (완료)** (유재영)
+
+페이지 3개를 기능별 폴더로 옮기고, 문서·스킬의 경로 표기와 설명을 새 규칙으로 맞췄다.
+`include/` 가 이미 `guide/`·`sample/` 로 갈려 있어 **페이지도 같은 이름**을 쓴다.
+
+```
+public/html/guide/Guide_Partial.html   ·  guide/Guide_Structure.html  ·  sample/Sample.html
+public/prerender/guide/…               ·  prerender/sample/…          ← 같은 구조로 난다
+```
+
+### 3단계 — 이동과 페이지 링크
+
+| | |
+| --- | --- |
+| `git mv` | 3개 |
+| 페이지 링크 | **10곳** (페이지·파셜·JSON·index) |
+| `index.html` | `./prerender/guide/…` · `./prerender/sample/…` 3개 |
+
+**`sweepOrphans` 가 옛 자리의 산출물 3개를 스스로 지웠다** — 1단계에서 넣어 둔 것이 여기서 값을 했다.
+`#guide_slot` 같은 파편(fragment)은 지키며 바꿨다.
+
+### 4단계 — 문서·스킬 **51곳** + 설명문 **3곳**
+
+| 파일 | 경로 |
+| --- | --- |
+| `.claude/skills/pub-common-ui/SKILL.md` | 23 |
+| `docs/PARTIALS.md` | 11 (산문 쪽만 — 자동 블록은 JSON 에서 난다) |
+| `.claude/skills/pub-markup/SKILL.md` | 6 |
+| `CLAUDE.md` · `docs/STRUCTURE.md` · `pub-list-render` · `pub-scss` | 4 · 3 · 3 · 1 |
+
+### ⚠ 문맥을 가려야 했다 — 「바꾸면 안 되는 `../`」
+
+| 어디 | 무엇 | 왜 그대로 두나 |
+| --- | --- | --- |
+| `pub-scss/SKILL.md` | `savePath: ~/../css/` | **Live Sass Compiler 설정**이다. 페이지 경로가 아니다 |
+| `public/css/common.css` | `url("../font/…")` | **CSS 파일 기준**으로 풀린다. 페이지 폴더와 무관 |
+| `partial_rules.json` | `./_x.html` | 「이렇게 적으면 404」라는 **반례** |
+| `partial_symptoms.json` · `index.html` | `./prerender/` | index 링크 설명이고, 실제로 그게 맞다 |
+
+그래서 치환을 **속성(`attr="…"`)·백틱(`` `경로` ``)·파셜 변수 기본값** 문맥에만 걸었다.
+
+### ⚠ 낡은 **설명문** 3곳 — 경로만 바꾸면 자기모순이 된다
+
+```
+(전) 출력 폴더는 public/html 과 **같은 깊이**라 ../css/·../js/ 경로가 그대로 동작한다
+(후) 출력 폴더는 public/html 과 **같은 폴더 구조**로 난다. 경로는 전부 사이트 루트 기준이라
+     페이지가 어느 폴더에 있어도 그대로 동작한다
+
+(전) | **경로는 「페이지」 기준이다** | 파셜 안의 data-source 도 페이지 기준으로 쓴다 |
+(후) | **경로는 사이트 루트 기준이다** | … 파셜은 「심어진 페이지」 기준으로 풀려서 ./ 로는 한 값으로 맞출 수가 없다 |
+```
+
+`pub-list-render` · `pub-markup` · `docs/PARTIALS.md`(목록 경로 설명) 세 곳이다.
+2단계에서 가이드 JSON 6곳을 고친 것과 같은 성격 — **이 전환의 이유를 문서가 말할 수 있게** 다시 썼다.
+
+### `CLAUDE.md` 확정판
+
+- 구조 그림 : `html/<폴더>/*.html` · `prerender/<폴더>/*.html`(**같은 폴더 구조**)
+- 「경로 기준은 **페이지**다」 → **「경로는 전부 사이트 루트 기준이다」** 로 바꾸고 **왜** 를 적었다
+- 함께 적은 것 : 기준은 `public/`(`npm run serve` → :3500) · **`file://` 로 못 연다** ·
+  **JSON 안의 경로도 같다** · **`onclick` 안의 `location.href` 도 같다** · **CSS 의 `url()` 은 예외** ·
+  새 페이지는 이름에 맞는 폴더에 · `prerender -- <이름>` 이 폴더를 찾아 준다
+
+### 확인
+
+| | 결과 |
+| --- | --- |
+| 경로 외 내용 대조(git HEAD) | **2/3 동일** · 1건은 **일부러 고친 가이드 문구** |
+| 원본 경로 실재 확인 | **122곳** · 문제 1건은 HTML 이스케이프된 예시(가짜) |
+| 원본 = 산출물 구조 | `guide/` 2 · `sample/` 1 — **완전 일치** |
+| **프리렌더 경고** | **0건** |
+| `npm run docs:check` | 통과 (PARTIALS.md 가 JSON 과 맞다) |
+| `eslint .` · `prettier --check **/*.md` | 통과 |
+| 파셜·목록 수 | 13/16 · 2/4 · 53/7 — 처음과 같다 |
+
+### 네 단계를 합쳐 — ara-pub 과 비교
+
+| | ara-pub | work |
+| --- | --- | --- |
+| 페이지 | 167 → 12폴더 | 3 → 2폴더 |
+| 고친 경로 | **2,000곳 이상** | **206곳**(public 145+10 · 문서 51) |
+| 되짚은 횟수 | **3번**(`data-json` · 파셜 변수 기본값 · JSON 300곳) | **0번** — 먼저 형태를 전수 조사했다 |
+| 남은 깨진 경로 | `footer.html` 16 · `html_style_change.css` 11 (예전부터) | **0** |
+
+**base 프로젝트가 정리됐으므로, 여기서 파생되는 프로젝트는 처음부터 루트 상대경로로 시작한다.**
+
+### 남은 것
+
+- `docs/WORKLOG.md` 의 옛 기록에 남은 `./include/` 표기는 **고치지 않았다** — 과거 기록이다.
+- ara-pub 으로 **역방향 이관 한 건**이 남았다 — 여기 `prerender.js` 의 `<template>` 주변 주석 정리
+  정규식(위치 기반)이 ara-pub 의 「목록 템플릿」 문자열 매칭보다 낫다. 거기서 두 번 사고가 났다.
+
+---
+
+## 26.09.28 · 산출물의 페이지 링크를 /prerender/ 로 (ara-pub 에서 이관 · 유재영)
+
+ara-pub 에서 먼저 만든 `toOutputLinks()` 를 그대로 옮겼다.
+
+```
+원본    href="/html/guide/Guide_Partial.html"
+산출물  href="/prerender/guide/Guide_Partial.html"
+```
+
+**왜** — `index.html` 이 `./prerender/…` 만 가리키므로 검수는 **산출물에서 출발**한다.
+그런데 페이지끼리의 링크가 `/html/…` 이면 **첫 클릭에 원본으로 빠진다.**
+원본도 파셜을 fetch 로 그려 화면이 보이기 때문에 눈에 잘 안 띈다.
+
+⚠ **`data-source` 는 바꾸지 않는다** — `include/` 는 산출물로 복사되지 않으므로 바꾸면 런타임 fetch 가 404 다.
+⚠ 원본은 `/html/` 그대로 둔다. 파셜 하나가 여러 깊이에서 include 되면 상대경로를 쓸 수 없어서다.
+⚠ `data-back` · `data-btn-href` 같은 **파셜 변수**는 `LINK_ATTRS` 에 없어도 된다 — 결국 `href` 로 들어간다.
+⚠ `href` 가 `location.href=…` 에도 걸려 **onclick·인라인 script 안의 이동도 함께** 바뀐다(의도한 부수효과).
+
+확인 : 산출물에 남은 `/html/` **페이지 링크 0** · `data-source` 는 `/html/include/…` 그대로 ·
+프리렌더 경고 0 · `docs:check` 통과 · prettier `unchanged`.
+
+⚠ **`lnbActive()` 는 영향 없다** — `lnbFile()` 이 basename 만 비교하므로 `/prerender/` 아래서도 활성이 맞는다.
+   `data-path` 는 JS 가 읽지 않는 파셜 변수다.
+
+---
+
+## 26.09.28 · 공용 런타임 동기화 — `npm run sync` 신설 (유재영)
+
+`prerender.js` · `dynamicImport.js` · `listRender.js` 는 파생 프로젝트와 **로직이 같아야 하는 파일**이다.
+벌어진 것을 알아채지 못해 한쪽만 고치는 일이 실제로 있었다 — 검사를 스크립트로 만들었다.
+
+```sh
+npm run sync                       # 설정(package.json 의 pubSync.peers)의 상대와 비교
+npm run sync -- D:/ara-pub         # 상대를 직접 지정
+npm run sync -- --check            # 벌어졌으면 종료코드 1 (훅에 걸 때)
+npm run sync -- --pull prerender   # 상대 것을 여기로 + prettier
+npm run sync -- --push prerender   # 여기 것을 상대로
+```
+
+### ⚠ 「자동 복사」로 만들지 않았다
+
+개선이 **양방향으로** 일어난다. 26.09.28 하루에 실제로 둘 다 있었다 —
+
+| 방향 | 무엇 |
+| --- | --- |
+| 파생(ara-pub) → base | 하위 폴더 · 루트 상대경로 · `sweepOrphans` · `toOutputLinks` |
+| base → 파생 | `<template>` 주변 주석 정리(문구가 아니라 **위치**로 찾는다) |
+
+한 방향 자동 복사는 그중 하나를 **조용히 지운다.** 그래서 **벌어진 사실만 알리고**,
+옮기는 것은 `--pull`/`--push` 로 사람이 방향을 정해서 한다.
+
+### 비교는 「로직」만 본다
+
+주석 · 공백 · 따옴표 종류 · 꼬리 쉼표 · prettier 가 붙이는 `return ( )` 을 지우고 비교한다.
+두 프로젝트의 포매터가 달라(여기는 prettier 탭·단일따옴표) **byte 비교는 늘 「다름」**이 되기 때문이다.
+실제로 이 규칙으로 보니 세 파일이 **전부 동일**했다 — byte 로는 3천 자 이상 달랐다.
+
+### ⚠ `common.js` 는 대상이 아니다
+
+두 프로젝트가 **서로 다른 구현**이다 — 여기는 `el.hidden` + `is-open`, ara-pub 은 `style.display` 기반.
+로직 줄이 각각 280 / 225종 다르다. **복사하면 UI 계층이 날아간다.** 목록을 늘릴 때는
+「로직이 같아야 하는 파일인가」를 먼저 따진다.
+
+### 확인
+
+- 일부러 상대 쪽을 흔든 뒤 : **벌어진 파일 1개**로 잡고 문맥·양쪽 차이를 보여 준다 · `--check` **종료코드 1**
+- 되돌린 뒤 : 세 파일 **로직 동일** · `--check` **종료코드 0**
+- `--pull dynamicImport` : 복사 + prettier — 내용이 같아 **변화 없음**(무해) 확인
+- 상대 경로가 없거나 설정이 없으면 **안내만 하고 종료코드 0** — 빌드를 막지 않는다
+
+⚠ `precommit` 에 걸지 **않았다.** 상대 프로젝트가 작업 중일 수 있고, 경로가 PC 마다 다르다.
+걸고 싶으면 `precommit.js` 에 `sync_runtime.js --check` 를 더하면 된다.
+
+⚠ `package.json` 의 `pubSync.peers` 는 **이 PC 기준 절대경로**다(`D:/ara-pub`). 다른 PC 에서는 고쳐야 한다.

@@ -4,10 +4,10 @@
 		<meta charset="utf-8" />
 		<meta name="viewport" content="width=device-width,initial-scale=1.0" />
 		<title>파셜(include) 사용법</title>
-		<link rel="stylesheet" href="../css/common.css" />
-		<script src="../js/dynamicImport.js"></script>
-		<script src="../js/listRender.js"></script>
-		<script src="../js/common.js"></script>
+		<link rel="stylesheet" href="/css/common.css" />
+		<script src="/js/dynamicImport.js"></script>
+		<script src="/js/listRender.js"></script>
+		<script src="/js/common.js"></script>
 	</head>
 
 	<body>
@@ -15,13 +15,13 @@
 			<!-- 사이드 : 브랜드 + LNB -->
 			<aside class="layout__side">
 				<p class="layout__brand">pub-base</p>
-				<div class="dynamic-content" data-source="./include/ui/_ui_lnb.html"></div>
+				<div class="dynamic-content" data-source="/html/include/ui/_ui_lnb.html"></div>
 			</aside>
 
 			<div class="layout__body">
 				<div
 					class="dynamic-content"
-					data-source="./include/common/_header.html"
+					data-source="/html/include/common/_header.html"
 					data-page-title="파셜(include) 사용법"
 				></div>
 
@@ -79,7 +79,7 @@
 								<div class="ui-card__body">
 									<pre class="guide__code"><code>&lt;div
 	class="dynamic-content"
-	data-source="./include/common/_header.html"
+	data-source="/html/include/common/_header.html"
 	data-page-title="회원 관리"
 &gt;&lt;/div&gt;</code></pre>
 								</div>
@@ -109,7 +109,7 @@
 									</thead>
 									<tbody
 										class="dynamic-list"
-										data-source="../data/guide/partial_rules.json"
+										data-source="/data/guide/partial_rules.json"
 										data-template="#tpl_guide_rule"
 										data-empty="#tpl_guide_rule_none"
 										data-filter="group=summary"
@@ -210,7 +210,7 @@
 									</thead>
 									<tbody
 										class="dynamic-list"
-										data-source="../data/guide/partial_rules.json"
+										data-source="/data/guide/partial_rules.json"
 										data-template="#tpl_guide_rule"
 										data-empty="#tpl_guide_rule_none"
 										data-filter="group=call"
@@ -288,7 +288,7 @@
 							<div class="ui-card__body">
 								<pre
 									class="guide__code"
-								><code>&lt;div class="dynamic-content" data-source="./include/guide/_guide_var.html"
+								><code>&lt;div class="dynamic-content" data-source="/html/include/guide/_guide_var.html"
 	data-title="값을 넘긴 화면"
 	data-msg="따옴표 &amp;quot;큰따옴표&amp;quot; · 꺾쇠 &amp;lt;b&amp;gt; · 앰퍼샌드 &amp;amp;"
 	data-msg-raw="원문이라 &lt;b&gt;태그가 살아난다&lt;/b&gt;"
@@ -298,7 +298,7 @@
 						</div>
 						<div
 							class="dynamic-content"
-							data-source="./include/guide/_guide_var.html"
+							data-source="/html/include/guide/_guide_var.html"
 							data-title="값을 넘긴 화면"
 							data-msg='따옴표 "큰따옴표" · 꺾쇠 &lt;b&gt; · 앰퍼샌드 &amp;'
 							data-msg-raw="원문이라 <b>태그가 살아난다</b>"
@@ -308,7 +308,7 @@
 						></div>
 						<div
 							class="dynamic-content"
-							data-source="./include/guide/_guide_var.html"
+							data-source="/html/include/guide/_guide_var.html"
 							data-title="아무것도 안 넘긴 화면"
 						></div>
 						<p class="guide__note guide__note--tip">
@@ -349,7 +349,7 @@
 						</div>
 						<div
 							class="dynamic-content"
-							data-source="./include/guide/_guide_flags.html"
+							data-source="/html/include/guide/_guide_flags.html"
 							data-title="값을 넘긴 화면"
 							data-variant="ui-btn--contained"
 							data-attrs="checked"
@@ -361,7 +361,7 @@
 						></div>
 						<div
 							class="dynamic-content"
-							data-source="./include/guide/_guide_flags.html"
+							data-source="/html/include/guide/_guide_flags.html"
 							data-title="아무것도 안 넘긴 화면"
 							data-chk-id="guide_flags_off"
 						></div>
@@ -388,7 +388,7 @@
 									</thead>
 									<tbody
 										class="dynamic-list"
-										data-source="../data/guide/partial_syntax.json"
+										data-source="/data/guide/partial_syntax.json"
 										data-template="#tpl_guide_syntax"
 										data-empty="#tpl_guide_syntax_none"
 										data-filter="group=escape"
@@ -414,7 +414,7 @@
 									</thead>
 									<tbody
 										class="dynamic-list"
-										data-source="../data/guide/partial_syntax.json"
+										data-source="/data/guide/partial_syntax.json"
 										data-template="#tpl_guide_syntax"
 										data-empty="#tpl_guide_syntax_none"
 										data-filter="group=scope"
@@ -497,14 +497,14 @@ function Header({ pageTitle = &#39;페이지 제목&#39; }) {
 						<div class="ui-card">
 							<div class="ui-card__body">
 								<pre class="guide__code"><code>&lt;!-- 공통 파셜 : 갈아끼울 자리를 「경로 변수」로 비워 둔다 --&gt;
-&lt;div class="dynamic-content" data-source="&#123;&#123;extra|./include/common/_none.html&#125;&#125;"&gt;&lt;/div&gt;
+&lt;div class="dynamic-content" data-source="&#123;&#123;extra|/html/include/common/_none.html&#125;&#125;"&gt;&lt;/div&gt;
 
 &lt;!-- ① 덩어리가 필요한 화면 : 조각의 경로를 넘긴다 --&gt;
-&lt;div class="dynamic-content" data-source="./include/guide/_guide_optional_host.html"
-	data-extra="./include/guide/_guide_optional.html"&gt;&lt;/div&gt;
+&lt;div class="dynamic-content" data-source="/html/include/guide/_guide_optional_host.html"
+	data-extra="/html/include/guide/_guide_optional.html"&gt;&lt;/div&gt;
 
 &lt;!-- ② 필요 없는 화면 : 아무것도 넘기지 않는다 → 기본값인 빈 파셜이 들어온다 --&gt;
-&lt;div class="dynamic-content" data-source="./include/guide/_guide_optional_host.html"&gt;&lt;/div&gt;</code></pre>
+&lt;div class="dynamic-content" data-source="/html/include/guide/_guide_optional_host.html"&gt;&lt;/div&gt;</code></pre>
 							</div>
 						</div>
 
@@ -516,8 +516,8 @@ function Header({ pageTitle = &#39;페이지 제목&#39; }) {
 								<div class="ui-card__body">
 									<div
 										class="dynamic-content"
-										data-source="./include/guide/_guide_optional_host.html"
-										data-extra="./include/guide/_guide_optional.html"
+										data-source="/html/include/guide/_guide_optional_host.html"
+										data-extra="/html/include/guide/_guide_optional.html"
 									></div>
 								</div>
 							</div>
@@ -526,7 +526,7 @@ function Header({ pageTitle = &#39;페이지 제목&#39; }) {
 									<h3 class="ui-card__title">② 넘기지 않은 화면</h3>
 								</div>
 								<div class="ui-card__body">
-									<div class="dynamic-content" data-source="./include/guide/_guide_optional_host.html"></div>
+									<div class="dynamic-content" data-source="/html/include/guide/_guide_optional_host.html"></div>
 								</div>
 							</div>
 						</div>
@@ -628,7 +628,7 @@ function Host({ extra = null }) {
 								><code>&lt;!-- 부르는 쪽 : 컨테이너는 비우고, 내용은 같은 파일의 template 에 적는다 --&gt;
 &lt;div
 	class="dynamic-content"
-	data-source="./include/ui/_ui_modal.html"
+	data-source="/html/include/ui/_ui_modal.html"
 	data-id="modal_invite"
 	data-title="멤버 초대"
 	data-slot-body="#modal_invite_body"
@@ -710,7 +710,7 @@ function Host({ extra = null }) {
 									</thead>
 									<tbody
 										class="dynamic-list"
-										data-source="../data/guide/partial_slot.json"
+										data-source="/data/guide/partial_slot.json"
 										data-template="#tpl_guide_rule"
 										data-empty="#tpl_guide_rule_none"
 										data-filter="group=place"
@@ -721,7 +721,7 @@ function Host({ extra = null }) {
 								<p class="guide__desc">
 									파셜로 뺄 때는 <strong>슬라이스 폴더 아래 <code>body/</code> 세그먼트</strong>에 모은다.
 									<code>data/&lt;슬라이스&gt;</code> 와 이름을 맞추면 데이터와 마크업이 대칭이 된다. 폴더 규칙 전체는
-									<a href="./Guide_Structure.html">폴더 구조 — 어느 폴더에 두나</a>.
+									<a href="/html/guide/Guide_Structure.html">폴더 구조 — 어느 폴더에 두나</a>.
 								</p>
 								<pre class="guide__code"><code>public/html/include/
 ├─ ui/         _ui_modal.html …            ← 프레임 (본문을 직접 부르지 않고 슬롯으로 받는다)
@@ -763,7 +763,7 @@ template   id="sample_invite_body"
 									</thead>
 									<tbody
 										class="dynamic-list"
-										data-source="../data/guide/partial_slot.json"
+										data-source="/data/guide/partial_slot.json"
 										data-template="#tpl_guide_order"
 										data-empty="#tpl_guide_order_none"
 										data-filter="group=order"
@@ -818,8 +818,8 @@ function Modal({ title, children }) {
 								<pre class="guide__code"><code>&lt;!-- 부르는 쪽 --&gt;
 &lt;div
 	class="dynamic-content"
-	data-source="./include/ui/_ui_dropdown.html"
-	data-items="../data/ui/sample_options.json"
+	data-source="/html/include/ui/_ui_dropdown.html"
+	data-items="/data/ui/sample_options.json"
 &gt;&lt;/div&gt;
 
 &lt;!-- 받는 쪽(_ui_dropdown.html) --&gt;
@@ -829,9 +829,9 @@ function Modal({ title, children }) {
 	data-template="#tpl_ui_dropdown_item"
 	data-empty="#tpl_ui_dropdown_empty"
 &gt;&lt;/ul&gt;
-&lt;div class="dynamic-content" data-source="./include/ui/_ui_dropdown_tpl.html"&gt;&lt;/div&gt;</code></pre>
+&lt;div class="dynamic-content" data-source="/html/include/ui/_ui_dropdown_tpl.html"&gt;&lt;/div&gt;</code></pre>
 								<ul class="guide__list">
-									<li>목록 경로(<code>data-items</code>)는 <code>../data/…</code> — 목록도 페이지 기준이다.</li>
+									<li>목록 경로(<code>data-items</code>)는 <code>/data/…</code> — 목록도 페이지 기준이다.</li>
 									<li>
 										템플릿만 담은 파셜(<code>_ui_dropdown_tpl.html</code>)을 따로 두면 여러 파셜이 템플릿을 함께
 										쓴다(드롭다운 · 검색 드롭다운).
@@ -870,7 +870,7 @@ function Modal({ title, children }) {
 									드롭다운이 <code>_ui_dropdown_tpl.html</code> 하나를 함께 쓰는 것이 그 모양이다.
 								</p>
 								<pre class="guide__code"><code>&lt;!-- 페이지 맨 아래에서 include 한다 --&gt;
-&lt;div class="dynamic-content" data-source="./include/ui/_ui_dropdown_tpl.html"&gt;&lt;/div&gt;</code></pre>
+&lt;div class="dynamic-content" data-source="/html/include/ui/_ui_dropdown_tpl.html"&gt;&lt;/div&gt;</code></pre>
 								<p class="guide__note guide__note--warn">
 									<strong>목록 template 은 파셜로 빼도 되지만 슬롯 template 은 안 된다.</strong>
 									목록은 파셜 주입이 <strong>다 끝난 뒤</strong> 쓰이고, 슬롯은 <strong>전개 도중</strong> 쓰인다 —
@@ -892,7 +892,7 @@ function Modal({ title, children }) {
 									파셜에 두고 내용은 JSON 이 갖는다 — 그러면 <strong>다음 것은 데이터 한 줄이다.</strong>
 								</p>
 								<pre class="guide__code"><code>&lt;!-- 틀 : 컨테이너와 template 을 파셜 하나에 둔다 --&gt;
-&lt;div class="dynamic-list" data-source="../data/guide/demo_opcomp.json"
+&lt;div class="dynamic-list" data-source="/data/guide/demo_opcomp.json"
 	data-template="#tpl_guide_op" data-filter="&#123;&#123;show|use&#125;&#125;"&gt;&lt;/div&gt;
 
 &lt;template id="tpl_guide_op"&gt;
@@ -917,7 +917,7 @@ function Modal({ title, children }) {
 								</ul>
 							</div>
 						</div>
-						<div class="dynamic-content" data-source="./include/guide/_guide_opcomp.html"></div>
+						<div class="dynamic-content" data-source="/html/include/guide/_guide_opcomp.html"></div>
 						<p class="guide__note guide__note--tip">
 							위 네 줄 중 <strong>세 줄만 나온다</strong> — 나머지 한 줄은 <code>"use": false</code> 로 내려둔 것이고,
 							마지막 줄은 <code>_tpl</code> 로 <strong>버튼 없는 틀</strong>을 골랐다.
@@ -933,7 +933,7 @@ function Modal({ title, children }) {
 								</p>
 								<div
 									class="dynamic-list guide__ops"
-									data-source="../data/guide/demo_opcomp.json"
+									data-source="/data/guide/demo_opcomp.json"
 									data-template="#tpl_guide_op"
 									data-empty="#tpl_guide_op_none"
 									data-filter="type=plus"
@@ -967,7 +967,7 @@ function Modal({ title, children }) {
 									</thead>
 									<tbody
 										class="dynamic-list"
-										data-source="../data/guide/partial_ladder.json"
+										data-source="/data/guide/partial_ladder.json"
 										data-template="#tpl_guide_ladder"
 										data-empty="#tpl_guide_ladder_none"
 									></tbody>
@@ -1015,7 +1015,7 @@ function Modal({ title, children }) {
 									</thead>
 									<tbody
 										class="dynamic-list"
-										data-source="../data/guide/partial_react.json"
+										data-source="/data/guide/partial_react.json"
 										data-template="#tpl_guide_react"
 										data-empty="#tpl_guide_react_none"
 									></tbody>
@@ -1105,7 +1105,7 @@ function Modal({ title, children }) {
 									</thead>
 									<tbody
 										class="dynamic-list"
-										data-source="../data/guide/partial_traps.json"
+										data-source="/data/guide/partial_traps.json"
 										data-template="#tpl_guide_trap"
 										data-empty="#tpl_guide_trap_none"
 									></tbody>
@@ -1135,7 +1135,7 @@ function Modal({ title, children }) {
 									</thead>
 									<tbody
 										class="dynamic-list"
-										data-source="../data/guide/partial_symptoms.json"
+										data-source="/data/guide/partial_symptoms.json"
 										data-template="#tpl_guide_symptom"
 										data-empty="#tpl_guide_symptom_none"
 									></tbody>
@@ -1151,7 +1151,7 @@ function Modal({ title, children }) {
 							<h2 class="section__title">13. 예시 모음</h2>
 							<p class="section__desc">
 								저장소에 있는 파셜과 받는 값. 동작하는 화면은
-								<a href="./Sample.html">공통 UI · 파셜 · 목록 샘플</a>
+								<a href="/html/sample/Sample.html">공통 UI · 파셜 · 목록 샘플</a>
 							</p>
 						</div>
 						<div class="ui-card">
@@ -1161,7 +1161,7 @@ function Modal({ title, children }) {
 							<div class="ui-card__body">
 								<div
 									class="dynamic-list guide__samples"
-									data-source="../data/guide/partial_samples.json"
+									data-source="/data/guide/partial_samples.json"
 									data-template="#tpl_guide_sample"
 									data-empty="#tpl_guide_sample_none"
 									data-filter="group=common"
@@ -1175,7 +1175,7 @@ function Modal({ title, children }) {
 							<div class="ui-card__body">
 								<div
 									class="dynamic-list guide__samples"
-									data-source="../data/guide/partial_samples.json"
+									data-source="/data/guide/partial_samples.json"
 									data-template="#tpl_guide_sample"
 									data-empty="#tpl_guide_sample_none"
 									data-filter="group=input"
@@ -1189,7 +1189,7 @@ function Modal({ title, children }) {
 							<div class="ui-card__body">
 								<div
 									class="dynamic-list guide__samples"
-									data-source="../data/guide/partial_samples.json"
+									data-source="/data/guide/partial_samples.json"
 									data-template="#tpl_guide_sample"
 									data-empty="#tpl_guide_sample_none"
 									data-filter="group=choice"
@@ -1203,7 +1203,7 @@ function Modal({ title, children }) {
 							<div class="ui-card__body">
 								<div
 									class="dynamic-list guide__samples"
-									data-source="../data/guide/partial_samples.json"
+									data-source="/data/guide/partial_samples.json"
 									data-template="#tpl_guide_sample"
 									data-empty="#tpl_guide_sample_none"
 									data-filter="group=modal"

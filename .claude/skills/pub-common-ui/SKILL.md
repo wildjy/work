@@ -50,12 +50,12 @@ description: >-
 ## 불러오기
 
 ```html
-<script src="../js/dynamicImport.js"></script>
-<script src="../js/listRender.js"></script>
-<script src="../js/common.js"></script>
+<script src="/js/dynamicImport.js"></script>
+<script src="/js/listRender.js"></script>
+<script src="/js/common.js"></script>
 
 <!-- 날짜 · 기간 입력을 쓰는 페이지만 -->
-<script src="../js/jquery-3.7.1.min.js"></script>
+<script src="/js/jquery-3.7.1.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.13.2/jquery-ui.min.js"></script>
 ```
 
@@ -94,8 +94,8 @@ description: >-
 ## 2. 드롭다운 · 검색 드롭다운
 
 ```html
-<div class="dynamic-content" data-source="./include/ui/_ui_dropdown.html"
-     data-items="../data/member/sort_options.json" data-placeholder="정렬을 선택해주세요."></div>
+<div class="dynamic-content" data-source="/html/include/ui/_ui_dropdown.html"
+     data-items="/data/member/sort_options.json" data-placeholder="정렬을 선택해주세요."></div>
 ```
 
 ```json
@@ -121,7 +121,7 @@ description: >-
 ## 3. 입력 · 지우기 · 안내문
 
 ```html
-<div class="dynamic-content" data-source="./include/ui/_ui_input.html" data-id="join_birth"
+<div class="dynamic-content" data-source="/html/include/ui/_ui_input.html" data-id="join_birth"
      data-modifier="is-error" data-helper="생년월일 8자리를 입력해주세요." data-helper-type="ui-helper--error"></div>
 ```
 
@@ -132,7 +132,7 @@ description: >-
 ## 4. 수량 스테퍼
 
 ```html
-<div class="dynamic-content" data-source="./include/ui/_ui_stepper.html" data-id="draw_count" data-value="1" data-min="1" data-max="9999"></div>
+<div class="dynamic-content" data-source="/html/include/ui/_ui_stepper.html" data-id="draw_count" data-value="1" data-min="1" data-max="9999"></div>
 ```
 
 - 경계에 닿으면 `.ui-stepper__btn--minus` / `--plus` 에 `is-disabled` 가 자동으로 붙는다. 직접 타이핑은 숫자만 남기고 범위로 자르며, 비운 채 포커스를 잃으면 최소값.
@@ -140,7 +140,7 @@ description: >-
 ## 5. LNB
 
 ```html
-<div class="dynamic-content" data-source="./include/ui/_ui_lnb.html"></div>
+<div class="dynamic-content" data-source="/html/include/ui/_ui_lnb.html"></div>
 ```
 
 - `.ui-lnb > .ui-lnb__menu > ul.ui-lnb__group > li.ui-lnb__item > a.ui-lnb__link[href]` · 하위 메뉴 `button.ui-lnb__link--toggle` + `.ui-lnb__sub[hidden]`.
@@ -170,7 +170,7 @@ description: >-
 ## 7. 아코디언
 
 ```html
-<div class="dynamic-content" data-source="./include/ui/_ui_accordion.html" data-items="../data/support/faq.json" data-mode="single"></div>
+<div class="dynamic-content" data-source="/html/include/ui/_ui_accordion.html" data-items="/data/support/faq.json" data-mode="single"></div>
 ```
 
 ```json
@@ -187,7 +187,7 @@ description: >-
 
 ```html
 <!-- 페이지 끝 -->
-<div class="dynamic-content" data-source="./include/ui/_ui_toast.html" data-id="toast_saved" data-text="저장되었습니다."></div>
+<div class="dynamic-content" data-source="/html/include/ui/_ui_toast.html" data-id="toast_saved" data-text="저장되었습니다."></div>
 <!-- 띄우기 -->
 <button type="button" data-toast="toast_saved">저장</button>
 ```
@@ -215,7 +215,7 @@ description: >-
 ```html
 <button type="button" class="ui-btn ui-btn--contained" data-modal-open="modal_member_invite">멤버 초대</button>
 
-<div class="dynamic-content" data-source="./include/ui/_ui_modal.html"
+<div class="dynamic-content" data-source="/html/include/ui/_ui_modal.html"
      data-id="modal_member_invite" data-title="멤버 초대" data-subtext="초대할 멤버의 정보를 입력해주세요."
      data-slot-body="#modal_member_invite_body" data-confirm="초대하기"></div>
 
@@ -237,7 +237,7 @@ description: >-
 ```html
 <button type="button" data-modal-open="modal_notice">점검 안내</button>
 
-<div class="dynamic-content" data-source="./include/ui/_ui_modal_alert.html"
+<div class="dynamic-content" data-source="/html/include/ui/_ui_modal_alert.html"
      data-id="modal_notice" data-title="점검 안내" data-subtext="2026.09.20 02:00 ~ 06:00"
      data-text="서비스 점검 시간에는 로그인과 결제를 이용할 수 없습니다."></div>
 ```
@@ -252,7 +252,7 @@ description: >-
 ```html
 <button type="button" data-modal-open="modal_delete">삭제</button>
 
-<div class="dynamic-content" data-source="./include/ui/_ui_modal_confirm.html"
+<div class="dynamic-content" data-source="/html/include/ui/_ui_modal_confirm.html"
      data-id="modal_delete" data-title="이벤트를 삭제하시겠습니까?" data-text="삭제한 이벤트는 복구할 수 없습니다." data-confirm="삭제"></div>
 ```
 
@@ -273,8 +273,8 @@ description: >-
 **달력 마크업을 손으로 짜지 않는다.** 파셜만 넣으면 `datePickerInit()` 이 살린다(jQuery · jQuery UI 가 없으면 콘솔 경고 후 건너뛴다).
 
 ```html
-<div class="dynamic-content" data-source="./include/ui/_ui_date.html" data-id="open_date"></div>
-<div class="dynamic-content" data-source="./include/ui/_ui_period.html" data-id="query_period"></div>
+<div class="dynamic-content" data-source="/html/include/ui/_ui_date.html" data-id="open_date"></div>
+<div class="dynamic-content" data-source="/html/include/ui/_ui_period.html" data-id="query_period"></div>
 ```
 
 | | 날짜 하나 | 기간 |
@@ -294,16 +294,16 @@ description: >-
 
 ```html
 <div class="ui-choice-group ui-choice-group--column" role="group" aria-label="수신 동의">
-	<div class="dynamic-content" data-source="./include/ui/_ui_checkbox.html" data-id="agree_email" data-name="agree_email" data-value="Y" data-label="이메일 수신" data-attrs="checked"></div>
-	<div class="dynamic-content" data-source="./include/ui/_ui_checkbox.html" data-id="agree_sms" data-name="agree_sms" data-value="Y" data-label="문자 수신"></div>
+	<div class="dynamic-content" data-source="/html/include/ui/_ui_checkbox.html" data-id="agree_email" data-name="agree_email" data-value="Y" data-label="이메일 수신" data-attrs="checked"></div>
+	<div class="dynamic-content" data-source="/html/include/ui/_ui_checkbox.html" data-id="agree_sms" data-name="agree_sms" data-value="Y" data-label="문자 수신"></div>
 </div>
 
 <div class="ui-choice-group" role="radiogroup" aria-label="공개 범위">
-	<div class="dynamic-content" data-source="./include/ui/_ui_radio.html" data-id="open_all" data-name="open" data-value="all" data-label="전체 공개" data-attrs="checked"></div>
-	<div class="dynamic-content" data-source="./include/ui/_ui_radio.html" data-id="open_private" data-name="open" data-value="private" data-label="비공개"></div>
+	<div class="dynamic-content" data-source="/html/include/ui/_ui_radio.html" data-id="open_all" data-name="open" data-value="all" data-label="전체 공개" data-attrs="checked"></div>
+	<div class="dynamic-content" data-source="/html/include/ui/_ui_radio.html" data-id="open_private" data-name="open" data-value="private" data-label="비공개"></div>
 </div>
 
-<div class="dynamic-content" data-source="./include/ui/_ui_toggle.html" data-id="noti_on" data-label="알림 받기"></div>
+<div class="dynamic-content" data-source="/html/include/ui/_ui_toggle.html" data-id="noti_on" data-label="알림 받기"></div>
 ```
 
 - 구조는 `label.블록 > input.__input + span.__box(토글은 __track) + span.__label` — 라벨 어디를 눌러도 바뀐다. 입력은 보이지 않지만 포커스는 받는다.
@@ -319,7 +319,7 @@ description: >-
 ```html
 <div class="ui-label">
 	<label for="join_email">이메일</label>
-	<div class="dynamic-content" data-source="./include/ui/_ui_tooltip.html"
+	<div class="dynamic-content" data-source="/html/include/ui/_ui_tooltip.html"
 	     data-id="tip_join_email" data-position="right" data-text="로그인에 쓸 이메일입니다."></div>
 </div>
 ```

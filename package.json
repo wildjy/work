@@ -15,7 +15,8 @@
     "validate": "html-validate public/prerender",
     "prepare": "simple-git-hooks",
     "docs": "node scripts/docs_from_json.js",
-    "docs:check": "node scripts/docs_from_json.js --check"
+    "docs:check": "node scripts/docs_from_json.js --check",
+    "sync": "node scripts/sync_runtime.js"
   },
   "engines": {
     "node": ">=20"
@@ -44,5 +45,10 @@
     ],
     "*.json": "prettier --write --ignore-unknown",
     "*.scss": "prettier --write --ignore-unknown"
+  },
+  "pubSync": {
+    "peers": [
+      "D:/ara-pub"
+    ]
   }
 }

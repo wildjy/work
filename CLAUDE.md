@@ -63,12 +63,12 @@ npm run validate                    # 산출물 마크업 검사 (html-validate)
 
 ```
 public/
-├─ index.html                  작업 목록 (링크는 전부 ./prerender/)
-├─ html/*.html                 페이지 원본 (루트에만 페이지)
+├─ index.html                  작업 목록 (링크는 전부 ./prerender/<폴더>/)
+├─ html/<폴더>/*.html           페이지 원본 — 기능별 폴더(guide · sample …). include/ 와 같은 이름을 쓴다
 ├─ html/include/<폴더>/_*.html  파셜 — 서비스·기능별 폴더, 두 곳 이상이 쓰면 common/
 ├─ html/include/ui/_ui_*.html   공통 UI 컴포넌트 파셜 (드롭다운 · 입력 · 체크박스 · 라디오 · 토글 · 툴팁 · 스테퍼 · LNB · 아코디언 · 토스트 · 모달 · 날짜 · 기간)
 ├─ data/<기능>/*.json          목록 데이터
-├─ prerender/*.html            산출물 (scripts/prerender.js 가 만든다 — 손으로 고치지 않는다)
+├─ prerender/<폴더>/*.html      산출물 — **html/ 과 같은 폴더 구조** (scripts/prerender.js 가 만든다 — 손으로 고치지 않는다)
 ├─ scss/                      _variable(토큰) · _mixin · _font(Pretendard) · _reset · common.scss(진입 → css/common.css)
 ├─ css/                       컴파일 산출물 (Watch Sass — 직접 고치지 않는다)
 ├─ font/Pretendard/           웹폰트 woff2
@@ -80,15 +80,33 @@ public/
 ```
 
 ```html
-<div class="dynamic-content" data-source="./include/common/_header.html" data-page-title="제목"></div>
-<tbody class="dynamic-list" data-source="../data/common/rows.json" data-template="#tpl_row" data-empty="#tpl_row_none"></tbody>
+<div class="dynamic-content" data-source="/html/include/common/_header.html" data-page-title="제목"></div>
+<tbody class="dynamic-list" data-source="/data/common/rows.json" data-template="#tpl_row" data-empty="#tpl_row_none"></tbody>
 
 <!-- 마크업 덩어리는 슬롯으로 넘긴다 : data-slot-본문 → 파셜 안 {{{본문}}} -->
-<div class="dynamic-content" data-source="./include/ui/_ui_modal.html" data-id="modal_x" data-title="제목" data-slot-body="#modal_x_body"></div>
+<div class="dynamic-content" data-source="/html/include/ui/_ui_modal.html" data-id="modal_x" data-title="제목" data-slot-body="#modal_x_body"></div>
 <template id="modal_x_body">…본문…</template>
 ```
 
-> ⚠ **경로 기준은 「페이지」다.** 파셜 안에서 다른 파셜을 include 할 때도 `./include/<폴더>/_x.html` 로 적는다.
+> ⚠ **경로는 전부 「사이트 루트」 기준이다** — `/css/` · `/js/` · `/images/` · `/data/` · `/html/include/…`.
+> `../` 를 쓰지 않는다. 파셜 안에서 다른 파셜을 include 할 때도 `/html/include/<폴더>/_x.html` 로 적는다.
+>
+> **왜** — 파셜은 「심어진 페이지」 기준으로 풀린다. 깊이가 다른 페이지들이 같은 파셜을 쓰면
+> `../images/…` 를 **한 값으로 맞출 수가 없다.** 루트 기준이면 깊이와 무관해져, 폴더를 더 나눠도 안 깨진다.
+>
+> ⚠ **기준은 `public/`** 이다 — `npm run serve` 가 그 폴더를 `/` 로 준다(http://localhost:3500).
+> 그래서 **산출물을 `file://` 로 더블클릭해 열 수 없다.** 반드시 서버로 본다.
+> ⚠ **`public/data/*.json` 안의 경로도 같다** — 목록이 그려 내는 `img`·`href` 도 `/images/…` · `/html/…` 로 적는다.
+> ⚠ **`onclick` 안의 `location.href` 도 같다.** 눈에 잘 안 띄는 자리라 빠뜨리기 쉽다.
+> ⚠ `public/css/*.css` 안의 `url(../font/…)` 은 **CSS 파일 기준**이라 그대로 둔다 — 페이지 폴더와 무관하다.
+>
+> **새 페이지는 이름에 맞는 폴더에 둔다.** `index.html` 에는 `./prerender/<폴더>/파일.html` 로 등록한다.
+> 빌드는 하위 폴더를 알아서 훑고(`_bak/`·`include/` 제외), 전체 빌드 끝에 **원본 없는 산출물을 지운다.**
+>
+> ```sh
+> npm run prerender -- guide/Guide_Partial.html   # 폴더를 적어도 되고
+> npm run prerender -- Guide_Partial.html         # 이름만 적어도 찾아 준다
+> ```
 > ⚠ **`dynamicImport.js` 와 `prerender.js` 는 같은 치환 규칙을 각각 구현한다 — 한쪽만 고치지 않는다.**
 > 📄 동작 예시는 `public/html/Sample.html` — 실제 화면을 만들기 시작하면 샘플과 index 의 그 줄을 지운다.
 

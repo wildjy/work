@@ -30,12 +30,12 @@ description: >-
 
 ```html
 <!-- 1) head : dynamicImport.js 다음에 로드 -->
-<script src="../js/dynamicImport.js"></script>
-<script src="../js/listRender.js"></script>
+<script src="/js/dynamicImport.js"></script>
+<script src="/js/listRender.js"></script>
 
 <!-- 2) 컨테이너 : 비워두고 data-* 로 선언 -->
 <tbody class="dynamic-list"
-  data-source="../data/member/list.json"
+  data-source="/data/member/list.json"
   data-template="#tpl_member_row"
   data-empty="#tpl_member_row_none"
   data-filter="!owner"></tbody>
@@ -111,7 +111,7 @@ npm run prerender:keep                # 원본 주석 그대로
 npm run prerender:watch               # 감시 모드
 ```
 
-- 출력 폴더는 `public/html` 과 **같은 깊이**라 `../css/`·`../js/`·`../images/` 경로가 그대로 동작한다.
+- 출력 폴더는 `public/html` 과 **같은 폴더 구조**로 난다. 경로는 전부 사이트 루트 기준(`/css/`·`/js/`·`/images/`)이라 페이지가 어느 폴더에 있어도 그대로 동작한다.
 - 산출물에서는 `dynamic-list` 클래스와 `data-source/template/empty/filter` 속성이 제거돼 **재렌더되지 않는다.**
 - 산출물은 **git 에 포함된다.** 원본 `.html`·`.json` 과 **함께 커밋**한다.
 - **특정 파일만** 프리렌더하면 페이지 간 링크가 404 날 수 있다. 링크까지 확인하려면 전체를 돌린다.

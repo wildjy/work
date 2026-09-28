@@ -25,7 +25,7 @@
   },
   {
     "diff": "덩어리가 통째로 있다 / 없다",
-    "tool": "<strong>경로 변수 + 빈 파셜</strong> — <code>data-source=\"&#123;&#123;block|./include/common/_none.html&#125;&#125;\"</code>",
+    "tool": "<strong>경로 변수 + 빈 파셜</strong> — <code>data-source=\"&#123;&#123;block|/html/include/common/_none.html&#125;&#125;\"</code>",
     "where": "경로 변수",
     "note": "끈 화면의 산출물에는 죽은 마크업이 한 줄도 안 나간다"
   },

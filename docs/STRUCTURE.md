@@ -59,8 +59,8 @@ FSD 의 핵심은 폴더 이름이 아니라 **의존 방향**인데, 이 저장
 
 ```html
 <main class="layout__main">
-	<div class="dynamic-content" data-source="./include/sample/section/_sample_list.html"></div>
-	<div class="dynamic-content" data-source="./include/sample/section/_sample_input.html"></div>
+	<div class="dynamic-content" data-source="/html/include/sample/section/_sample_list.html"></div>
+	<div class="dynamic-content" data-source="/html/include/sample/section/_sample_input.html"></div>
 </main>
 ```
 
@@ -75,7 +75,7 @@ FSD 의 핵심은 폴더 이름이 아니라 **의존 방향**인데, 이 저장
 
 ```html
 <template id="sample_invite_body">
-	<div class="dynamic-content" data-source="./include/sample/body/_sample_invite_body.html"></div>
+	<div class="dynamic-content" data-source="/html/include/sample/body/_sample_invite_body.html"></div>
 </template>
 ```
 

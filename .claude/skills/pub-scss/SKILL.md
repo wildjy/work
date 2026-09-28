@@ -21,7 +21,7 @@ public/font/Pretendard/Pretendard-*.woff2
 
 - **`_` 로 시작하는 파셜은 단독으로 컴파일되지 않는다.** 진입 파일(`_` 없음)만 css 가 된다.
 - 파셜에서 토큰·믹스인은 **모듈 방식**으로 쓴다 — `@use 'variable';` → `variable.$gray-900`, `@use 'mixin';` → `@include mixin.txt-shorten;` (`@import` 금지)
-- 페이지는 `<link rel="stylesheet" href="../css/common.css" />` 로 불러온다.
+- 페이지는 `<link rel="stylesheet" href="/css/common.css" />` 로 불러온다.
 
 ## 2. 컴파일 — 작업자가 Watch Sass 로 한다
 

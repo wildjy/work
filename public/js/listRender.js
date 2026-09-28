@@ -6,7 +6,7 @@
  *
  * ── 사용법 ────────────────────────────────────────────────
  *  <tbody class="dynamic-list"
- *         data-source="../data/파일.json"
+ *         data-source="/data/파일.json"
  *         data-template="#tpl_row"
  *         data-empty="#tpl_empty"     <!-- 선택: 0건일 때 -->
  *         data-filter="!owner">      <!-- 선택: 값이 거짓인 항목만. "owner"=참인 항목만, "page=1"=값이 일치하는 항목만 -->

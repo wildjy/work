@@ -16,7 +16,7 @@
 
 ```html
 <!-- 부르는 쪽 : 페이지(public/html/*.html) 또는 다른 파셜 -->
-<div class="dynamic-content" data-source="./include/common/_header.html" data-page-title="회원 관리"></div>
+<div class="dynamic-content" data-source="/html/include/common/_header.html" data-page-title="회원 관리"></div>
 
 <!-- 받는 쪽 : public/html/include/common/_header.html -->
 <header class="app-header">
@@ -29,7 +29,7 @@
 |  | 규칙 |
 | --- | --- |
 | 컨테이너 | **`div` 태그 · `class="dynamic-content"` · 내용은 비운다** — 다른 태그로는 전개되지 않는다 |
-| 경로 | `data-source` 는 **언제나 「페이지」 기준**(`./include/…`). 파셜 안에서도 같다 |
+| 경로 | `data-source` 는 **언제나 사이트 루트 기준**(`/html/include/…`). 파셜 안에서도, 페이지가 어느 폴더에 있어도 같다 |
 | 값 | `data-page-title="…"` → 파셜 안 `{{pageTitle}}` · 기본값은 `{{pageTitle\|페이지 제목}}` — **React 의 props 자리** |
 | 마크업 덩어리 | `data-slot-body="#tpl_id"` → 파셜 안 `{{{body}}}` — **React 의 children 자리**(같은 파일의 template 요소를 가리킨다) |
 | 결과 | include 한 `div` 는 **사라지고**(`replaceWith`) 파셜 내용이 그 자리에 들어간다 — React 의 Fragment 처럼 래퍼가 남지 않는다 |
@@ -95,7 +95,7 @@ DOMContentLoaded
 ## 2. 부르는 쪽 규칙
 
 ```html
-<div class="dynamic-content" data-source="./include/ui/_ui_toast.html" data-id="save_toast" data-text="저장되었습니다."></div>
+<div class="dynamic-content" data-source="/html/include/ui/_ui_toast.html" data-id="save_toast" data-text="저장되었습니다."></div>
 ```
 
 <!-- auto:call -->
@@ -104,7 +104,7 @@ DOMContentLoaded
 | --- | --- |
 | **태그는 `div`** | 프리렌더가 `div` 만 잡는다(`PARTIAL_RE`). `span`·`li`·`td` 자리에는 파셜을 못 넣는다 — 문장 한가운데 툴팁을 넣지 못하는 이유다(`.ui-label` 을 flex 로 두고 옆에 둔다) |
 | **컨테이너는 비운다** | `<div …></div>`. 안에 내용을 적으면 전개 대상이 아니다. 슬롯도 내용을 넣지 않고 template 요소를 가리킨다 |
-| **경로는 페이지 기준** | `fetch` 가 문서 기준이라 파셜 안에서도 `./include/…` 로 적는다. 파셜 위치 기준(`./_x.html`)으로 적으면 404 |
+| **경로는 루트 기준** | 파셜은 **「심어진 페이지」 기준**으로 풀리므로, 깊이가 다른 페이지들이 같은 파셜을 쓰면 `./` 로는 한 값으로 맞출 수가 없다. 그래서 `/html/include/…` 로 적는다 — 페이지 폴더와 무관해진다. 파셜 위치 기준(`./_x.html`)으로 적으면 404 |
 | **class 를 더 줘도 사라진다** | `replaceWith` 라 래퍼가 남지 않는다. 위치 보정은 **형제 셀렉터**나 파셜이 받는 `data-modifier` 로 한다 |
 | **주석 처리하면 전개되지 않는다** | 런타임·프리렌더 모두 주석 안은 건너뛴다. 잠깐 끄고 싶을 때 안전하게 쓸 수 있다 |
 | **순환 include 를 만들지 않는다** | 프리렌더는 경고하고 건너뛰지만 **브라우저에는 방어가 없다** — 요청이 멈추지 않는다 |
@@ -116,7 +116,7 @@ DOMContentLoaded
 ## 3. 값 넘기기 — `data-*` → `{{key}}`
 
 ```html
-<div class="dynamic-content" data-source="./include/ui/_ui_input.html"
+<div class="dynamic-content" data-source="/html/include/ui/_ui_input.html"
      data-id="join_email" data-placeholder="이메일을 입력해주세요."></div>
 ```
 
@@ -175,7 +175,7 @@ DOMContentLoaded
 <input type="checkbox" id="{{id}}" name="{{name|}}" value="{{value|}}" {{{attrs|}}} />
 
 <!-- 부르는 쪽 -->
-<div class="dynamic-content" data-source="./include/ui/_ui_checkbox.html"
+<div class="dynamic-content" data-source="/html/include/ui/_ui_checkbox.html"
      data-id="agree_sms" data-label="문자 수신" data-attrs="checked disabled"></div>
 ```
 
@@ -185,7 +185,7 @@ DOMContentLoaded
 
 ```html
 <!-- 파셜(_ui_modal.html) 안 -->
-<div class="dynamic-content" data-source="{{footer|./include/ui/_ui_modal_footer.html}}"
+<div class="dynamic-content" data-source="{{footer|/html/include/ui/_ui_modal_footer.html}}"
      data-cancel="{{cancel|취소}}" data-confirm="{{confirm|확인}}"></div>
 ```
 
@@ -197,7 +197,7 @@ DOMContentLoaded
 
 ```html
 <!-- 부르는 쪽 : 컨테이너는 비우고, 내용은 같은 파일의 template 에 적는다 -->
-<div class="dynamic-content" data-source="./include/ui/_ui_modal.html"
+<div class="dynamic-content" data-source="/html/include/ui/_ui_modal.html"
      data-id="modal_invite" data-title="멤버 초대" data-slot-body="#modal_invite_body" data-confirm="초대하기"></div>
 
 <template id="modal_invite_body">
@@ -218,7 +218,7 @@ DOMContentLoaded
 - **슬롯 안에서 파셜을 include 할 수 있다.** 여러 화면이 함께 쓰는 본문은 이렇게 넘긴다.
   ```html
   <template id="modal_invite_body">
-  	<div class="dynamic-content" data-source="./include/member/_modal_invite_body.html"></div>
+  	<div class="dynamic-content" data-source="/html/include/member/_modal_invite_body.html"></div>
   </template>
   ```
 - ⚠ **슬롯 이름을 파셜 안 목록 템플릿의 필드명과 겹치지 않게** 짓는다. 겹치면 목록 필드 자리까지 슬롯 내용으로 덮인다
@@ -283,15 +283,15 @@ template   id="sample_invite_body"
 
 ```html
 <!-- 부르는 쪽 -->
-<div class="dynamic-content" data-source="./include/ui/_ui_dropdown.html"
-     data-items="../data/ui/sample_options.json" data-placeholder="정렬을 선택해주세요."></div>
+<div class="dynamic-content" data-source="/html/include/ui/_ui_dropdown.html"
+     data-items="/data/ui/sample_options.json" data-placeholder="정렬을 선택해주세요."></div>
 
 <!-- 받는 쪽(_ui_dropdown.html) -->
 <ul class="dynamic-list" data-source="{{items}}" data-template="#tpl_ui_dropdown_item" data-empty="#tpl_ui_dropdown_empty"></ul>
-<div class="dynamic-content" data-source="./include/ui/_ui_dropdown_tpl.html"></div>
+<div class="dynamic-content" data-source="/html/include/ui/_ui_dropdown_tpl.html"></div>
 ```
 
-- **목록 경로(`data-items`)는 `../data/…`** — 목록 렌더도 페이지 기준이다.
+- **목록 경로(`data-items`)는 `/data/…`** — 목록 렌더도 같은 규칙, 사이트 루트 기준이다.
 - 템플릿만 담은 파셜(`_ui_dropdown_tpl.html`)을 따로 두면 **여러 파셜이 템플릿을 함께 쓴다**(드롭다운 · 검색 드롭다운).
 - ⚠ 파셜 안 목록 템플릿의 `{{name}}` 은 **파셜 변수와 같은 괄호**다. 파셜에 같은 이름을 넘기면 **파셜 변수가 먼저 먹는다** — 이름을 갈라 쓴다.
 
@@ -325,7 +325,7 @@ template   id="sample_invite_body"
 | **모양만 (색 · 크기 · 정렬)** | class 이름을 값으로 받는다 — `class="ui-btn {{tone\|}}"` | class · 속성 · style |
 | **속성이 있다 / 없다** | `{{{attrs\|}}}` 한 자리에 `"checked disabled"` 를 통째로 | class · 속성 · style |
 | **길이 · 표시 여부** | `style="width: {{width\|10}}%"` | class · 속성 · style |
-| **덩어리가 통째로 있다 / 없다** | **경로 변수 + 빈 파셜** — `data-source="{{block\|./include/common/_none.html}}"` | 경로 변수 |
+| **덩어리가 통째로 있다 / 없다** | **경로 변수 + 빈 파셜** — `data-source="{{block\|/html/include/common/_none.html}}"` | 경로 변수 |
 | **껍데기는 같고 **본문**이 다르다** | **슬롯** — `data-slot-body` → `{{{body}}}` | 슬롯 |
 | **행이 반복된다** | **JSON + template** — `data-source` · `data-template` | 목록 |
 | **같은 데이터를 화면마다 **잘라** 쓴다** | `data-filter="group=summary"` | 목록 |
@@ -357,7 +357,7 @@ template   id="sample_invite_body"
 | **`data-text` 와 `data-slot-body` 를 함께** | 본문이 두 벌 나온다 | 택일한다 |
 | **목록 템플릿 안의 include** | **브라우저에서는 전개되지 않고**(목록은 파셜 주입이 끝난 뒤 문자열로 찍힌다) 프리렌더는 펴 버려 **화면과 산출물이 갈린다** | 반복 행 안에는 include 를 두지 않는다 — **템플릿 자체를 파셜로** 만든다. **슬롯 template 은 다르다** — 실제 마크업이 되므로 동작한다 |
 | **JSON 값 안의 `{{ }}`** | 치환이 두 번 돌아 **마커가 지워진다** | 중괄호를 엔티티(`&#123;`)로 적는다 — 이 페이지의 표가 그렇게 만들어졌다 |
-| **파셜 안 경로를 파셜 기준으로** | 404 — 화면이 비어 있다 | 페이지 기준 `./include/…` |
+| **경로를 `./` 로 (파셜·페이지 기준)** | 404 — 화면이 비어 있다 | 루트 기준 `/html/include/…` — 페이지 깊이와 무관해진다 |
 | **빈 파셜에 짧은 주석 한 줄** | 「구역 표시」로 판정돼 산출물에 주석만 남는다 | 넣지 않는다 |
 | **설명 주석에 태그를 그대로** | 프리렌더가 실제 태그로 오인한다 | 「template 요소」처럼 풀어 쓴다 |
 | **개발단이 봐야 할 주석** | 산출물에서 걷힌다 | `<!--@ … -->` 로 표시한다 |
@@ -386,13 +386,13 @@ template   id="sample_invite_body"
 **헤더** — data-page-title
 
 ```html
-<div class="dynamic-content" data-source="./include/common/_header.html" data-page-title="회원 관리"></div>
+<div class="dynamic-content" data-source="/html/include/common/_header.html" data-page-title="회원 관리"></div>
 ```
 
 **LNB** — 받는 값 없음 — 메뉴는 파셜에서 고치고, 현재 메뉴 표시는 common.js 가 붙인다
 
 ```html
-<div class="dynamic-content" data-source="./include/ui/_ui_lnb.html"></div>
+<div class="dynamic-content" data-source="/html/include/ui/_ui_lnb.html"></div>
 ```
 
 ### 입력 — `include/ui/`
@@ -400,31 +400,31 @@ template   id="sample_invite_body"
 **입력** — data-id(필수) · data-name · data-type · data-placeholder · data-value · data-modifier · data-helper · data-helper-type
 
 ```html
-<div&#10;&#9;class="dynamic-content"&#10;&#9;data-source="./include/ui/_ui_input.html"&#10;&#9;data-id="join_birth"&#10;&#9;data-value="1999"&#10;&#9;data-modifier="is-error"&#10;&#9;data-helper="생년월일 8자리를 입력해주세요."&#10;&#9;data-helper-type="ui-helper--error"&#10;></div>
+<div&#10;&#9;class="dynamic-content"&#10;&#9;data-source="/html/include/ui/_ui_input.html"&#10;&#9;data-id="join_birth"&#10;&#9;data-value="1999"&#10;&#9;data-modifier="is-error"&#10;&#9;data-helper="생년월일 8자리를 입력해주세요."&#10;&#9;data-helper-type="ui-helper--error"&#10;></div>
 ```
 
 **드롭다운** — data-items(JSON 경로 · 필수) · data-placeholder · data-modifier
 
 ```html
-<div&#10;&#9;class="dynamic-content"&#10;&#9;data-source="./include/ui/_ui_dropdown.html"&#10;&#9;data-items="../data/ui/sample_options.json"&#10;&#9;data-placeholder="정렬을 선택해주세요."&#10;></div>
+<div&#10;&#9;class="dynamic-content"&#10;&#9;data-source="/html/include/ui/_ui_dropdown.html"&#10;&#9;data-items="/data/ui/sample_options.json"&#10;&#9;data-placeholder="정렬을 선택해주세요."&#10;></div>
 ```
 
 **검색 드롭다운** — data-items(필수) · data-placeholder · data-name
 
 ```html
-<div&#10;&#9;class="dynamic-content"&#10;&#9;data-source="./include/ui/_ui_dropdown_search.html"&#10;&#9;data-items="../data/ui/sample_options.json"&#10;&#9;data-placeholder="회사명을 검색해주세요."&#10;></div>
+<div&#10;&#9;class="dynamic-content"&#10;&#9;data-source="/html/include/ui/_ui_dropdown_search.html"&#10;&#9;data-items="/data/ui/sample_options.json"&#10;&#9;data-placeholder="회사명을 검색해주세요."&#10;></div>
 ```
 
 **수량 스테퍼** — data-id(필수) · data-name · data-value · data-min · data-max
 
 ```html
-<div&#10;&#9;class="dynamic-content"&#10;&#9;data-source="./include/ui/_ui_stepper.html"&#10;&#9;data-id="order_count"&#10;&#9;data-value="1"&#10;&#9;data-min="1"&#10;&#9;data-max="3"&#10;></div>
+<div&#10;&#9;class="dynamic-content"&#10;&#9;data-source="/html/include/ui/_ui_stepper.html"&#10;&#9;data-id="order_count"&#10;&#9;data-value="1"&#10;&#9;data-min="1"&#10;&#9;data-max="3"&#10;></div>
 ```
 
 **날짜 · 기간** — data-id(필수) · data-name · data-placeholder · data-value — 이 페이지에 jQuery · jQuery UI 가 있어야 한다
 
 ```html
-<div class="dynamic-content" data-source="./include/ui/_ui_date.html" data-id="open_date"></div>&#10;<div class="dynamic-content" data-source="./include/ui/_ui_period.html" data-id="search_period"></div>
+<div class="dynamic-content" data-source="/html/include/ui/_ui_date.html" data-id="open_date"></div>&#10;<div class="dynamic-content" data-source="/html/include/ui/_ui_period.html" data-id="search_period"></div>
 ```
 
 ### 선택 · 안내 — `include/ui/`
@@ -432,19 +432,19 @@ template   id="sample_invite_body"
 **체크박스 · 라디오 · 토글** — data-id(필수) · data-label(필수) · data-name · data-value · data-attrs(checked · disabled) · data-modifier
 
 ```html
-<div&#10;&#9;class="dynamic-content"&#10;&#9;data-source="./include/ui/_ui_checkbox.html"&#10;&#9;data-id="agree_sms"&#10;&#9;data-name="agree_sms"&#10;&#9;data-value="Y"&#10;&#9;data-label="문자 수신"&#10;&#9;data-attrs="checked"&#10;></div>&#10;<div&#10;&#9;class="dynamic-content"&#10;&#9;data-source="./include/ui/_ui_radio.html"&#10;&#9;data-id="open_all"&#10;&#9;data-name="open_range"&#10;&#9;data-value="all"&#10;&#9;data-label="전체 공개"&#10;></div>&#10;<div class="dynamic-content" data-source="./include/ui/_ui_toggle.html" data-id="use_push" data-label="알림 받기"></div>
+<div&#10;&#9;class="dynamic-content"&#10;&#9;data-source="/html/include/ui/_ui_checkbox.html"&#10;&#9;data-id="agree_sms"&#10;&#9;data-name="agree_sms"&#10;&#9;data-value="Y"&#10;&#9;data-label="문자 수신"&#10;&#9;data-attrs="checked"&#10;></div>&#10;<div&#10;&#9;class="dynamic-content"&#10;&#9;data-source="/html/include/ui/_ui_radio.html"&#10;&#9;data-id="open_all"&#10;&#9;data-name="open_range"&#10;&#9;data-value="all"&#10;&#9;data-label="전체 공개"&#10;></div>&#10;<div class="dynamic-content" data-source="/html/include/ui/_ui_toggle.html" data-id="use_push" data-label="알림 받기"></div>
 ```
 
 **툴팁** — data-id(필수) · data-text(필수) · data-position(top · right · bottom · left) · data-label
 
 ```html
-<div&#10;&#9;class="dynamic-content"&#10;&#9;data-source="./include/ui/_ui_tooltip.html"&#10;&#9;data-id="tip_email"&#10;&#9;data-position="right"&#10;&#9;data-text="가입 후에는 바꿀 수 없습니다."&#10;></div>
+<div&#10;&#9;class="dynamic-content"&#10;&#9;data-source="/html/include/ui/_ui_tooltip.html"&#10;&#9;data-id="tip_email"&#10;&#9;data-position="right"&#10;&#9;data-text="가입 후에는 바꿀 수 없습니다."&#10;></div>
 ```
 
 **아코디언** — data-items(JSON 경로 · 필수) · data-mode(single 하나만 열림 · multiple 여러 개)
 
 ```html
-<div&#10;&#9;class="dynamic-content"&#10;&#9;data-source="./include/ui/_ui_accordion.html"&#10;&#9;data-items="../data/ui/sample_accordion.json"&#10;></div>
+<div&#10;&#9;class="dynamic-content"&#10;&#9;data-source="/html/include/ui/_ui_accordion.html"&#10;&#9;data-items="/data/ui/sample_accordion.json"&#10;></div>
 ```
 
 ### 알림 · 모달 — `include/ui/` (페이지 끝에 둔다)
@@ -452,25 +452,25 @@ template   id="sample_invite_body"
 **토스트** — data-id(필수) · data-text · data-type(success · error) — 띄우기는 data-toast="아이디" 버튼
 
 ```html
-<div&#10;&#9;class="dynamic-content"&#10;&#9;data-source="./include/ui/_ui_toast.html"&#10;&#9;data-id="save_toast"&#10;&#9;data-text="저장되었습니다."&#10;></div>
+<div&#10;&#9;class="dynamic-content"&#10;&#9;data-source="/html/include/ui/_ui_toast.html"&#10;&#9;data-id="save_toast"&#10;&#9;data-text="저장되었습니다."&#10;></div>
 ```
 
 **확인창** — data-id(필수) · data-title(필수) · data-text · data-cancel · data-confirm · data-modifier
 
 ```html
-<div&#10;&#9;class="dynamic-content"&#10;&#9;data-source="./include/ui/_ui_modal_confirm.html"&#10;&#9;data-id="del_confirm"&#10;&#9;data-title="이벤트를 삭제하시겠습니까?"&#10;&#9;data-text="삭제한 이벤트는 복구할 수 없습니다."&#10;&#9;data-confirm="삭제"&#10;></div>
+<div&#10;&#9;class="dynamic-content"&#10;&#9;data-source="/html/include/ui/_ui_modal_confirm.html"&#10;&#9;data-id="del_confirm"&#10;&#9;data-title="이벤트를 삭제하시겠습니까?"&#10;&#9;data-text="삭제한 이벤트는 복구할 수 없습니다."&#10;&#9;data-confirm="삭제"&#10;></div>
 ```
 
 **모달 프레임 (본문은 슬롯)** — data-id(필수) · data-title(필수) · data-slot-body(필수) · data-subtext · data-footer · data-cancel · data-confirm · data-modifier
 
 ```html
-<div&#10;&#9;class="dynamic-content"&#10;&#9;data-source="./include/ui/_ui_modal.html"&#10;&#9;data-id="modal_invite"&#10;&#9;data-title="멤버 초대"&#10;&#9;data-subtext="초대할 멤버의 정보를 입력해주세요."&#10;&#9;data-slot-body="#modal_invite_body"&#10;&#9;data-confirm="초대하기"&#10;></div>&#10;<template id="modal_invite_body">&#10;&#9;<div class="dynamic-content" data-source="./include/member/_modal_invite_body.html"></div>&#10;</template>
+<div&#10;&#9;class="dynamic-content"&#10;&#9;data-source="/html/include/ui/_ui_modal.html"&#10;&#9;data-id="modal_invite"&#10;&#9;data-title="멤버 초대"&#10;&#9;data-subtext="초대할 멤버의 정보를 입력해주세요."&#10;&#9;data-slot-body="#modal_invite_body"&#10;&#9;data-confirm="초대하기"&#10;></div>&#10;<template id="modal_invite_body">&#10;&#9;<div class="dynamic-content" data-source="/html/include/member/_modal_invite_body.html"></div>&#10;</template>
 ```
 
 **알림 모달 (버튼 없음)** — data-id(필수) · data-title(필수) · data-subtext · data-text · data-slot-body · data-modifier — data-text 와 슬롯은 택일
 
 ```html
-<div&#10;&#9;class="dynamic-content"&#10;&#9;data-source="./include/ui/_ui_modal_alert.html"&#10;&#9;data-id="notice_alert"&#10;&#9;data-title="점검 안내"&#10;&#9;data-subtext="2026.09.20 02:00 ~ 06:00"&#10;&#9;data-text="점검 시간에는 로그인과 결제를 이용할 수 없습니다."&#10;></div>
+<div&#10;&#9;class="dynamic-content"&#10;&#9;data-source="/html/include/ui/_ui_modal_alert.html"&#10;&#9;data-id="notice_alert"&#10;&#9;data-title="점검 안내"&#10;&#9;data-subtext="2026.09.20 02:00 ~ 06:00"&#10;&#9;data-text="점검 시간에는 로그인과 결제를 이용할 수 없습니다."&#10;></div>
 ```
 
 <!-- /auto:samples -->
@@ -484,7 +484,7 @@ template   id="sample_invite_body"
 | --- | --- |
 | `{{key}}` 가 글자로 보인다 | 키를 안 넘겼다 / 파셜에 기본값이 없다 / `data-*` 에 대문자를 썼다 / 브라우저가 옛 JS 를 캐시했다 |
 | `{{{body}}}` 가 글자로 보인다 | 슬롯을 안 넘겼다 / template 아이디가 다르다 / 옛 `dynamicImport.js`(강력 새로고침) |
-| 파셜 자리가 통째로 비어 있다 | 경로가 파셜 기준이다(페이지 기준으로 적는다) / 파일명 오타 — 콘솔과 프리렌더 경고(`! 파셜 없음`)를 본다 |
+| 파셜 자리가 통째로 비어 있다 | 경로가 파셜 기준이거나 `./` 로 적혀 있다(루트 기준 `/html/include/…` 로 적는다) / 파일명 오타 — 콘솔과 프리렌더 경고(`! 파셜 없음`)를 본다 |
 | 화면은 되는데 **산출물만** 다르다 | include 태그가 `div` 가 아니다 / 컨테이너에 내용을 적었다 / 두 구현 중 한쪽만 고쳤다 |
 | index 에서 열면 옛 화면이다 | `npm run prerender` 를 돌리지 않았다 (index 링크는 전부 `./prerender/`) |
 | 라벨을 눌렀는데 다른 입력이 반응한다 | 고정 id 파셜을 두 번 넣었다 → `npm run validate` 의 `no-dup-id` |

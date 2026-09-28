@@ -4,10 +4,10 @@
 		<meta charset="utf-8" />
 		<meta name="viewport" content="width=device-width,initial-scale=1.0" />
 		<title>파셜(include) 사용법</title>
-		<link rel="stylesheet" href="../css/common.css" />
-		<script src="../js/dynamicImport.js"></script>
-		<script src="../js/listRender.js"></script>
-		<script src="../js/common.js"></script>
+		<link rel="stylesheet" href="/css/common.css" />
+		<script src="/js/dynamicImport.js"></script>
+		<script src="/js/listRender.js"></script>
+		<script src="/js/common.js"></script>
 	</head>
 
 	<body>
@@ -21,17 +21,17 @@
 					<div class="ui-lnb__menu">
 						<ul class="ui-lnb__group">
 							<li class="ui-lnb__item">
-								<a class="ui-lnb__link" href="../index.html">작업 목록</a>
+								<a class="ui-lnb__link" href="/index.html">작업 목록</a>
 							</li>
 							<li class="ui-lnb__item">
 								<button type="button" class="ui-lnb__link ui-lnb__link--toggle" aria-expanded="false">사용법</button>
 								<div class="ui-lnb__sub" hidden>
 									<ul class="ui-lnb__group">
 										<li class="ui-lnb__item">
-											<a class="ui-lnb__link" href="./Guide_Structure.html">폴더 구조</a>
+											<a class="ui-lnb__link" href="/prerender/guide/Guide_Structure.html">폴더 구조</a>
 										</li>
 										<li class="ui-lnb__item">
-											<a class="ui-lnb__link" href="./Guide_Partial.html">파셜(include)</a>
+											<a class="ui-lnb__link" href="/prerender/guide/Guide_Partial.html">파셜(include)</a>
 										</li>
 									</ul>
 								</div>
@@ -41,7 +41,7 @@
 								<div class="ui-lnb__sub" hidden>
 									<ul class="ui-lnb__group">
 										<li class="ui-lnb__item">
-											<a class="ui-lnb__link" href="./Sample.html">샘플</a>
+											<a class="ui-lnb__link" href="/prerender/sample/Sample.html">샘플</a>
 										</li>
 									</ul>
 								</div>
@@ -111,7 +111,7 @@
 								<div class="ui-card__body">
 									<pre class="guide__code"><code>&lt;div
 	class="dynamic-content"
-	data-source="./include/common/_header.html"
+	data-source="/html/include/common/_header.html"
 	data-page-title="회원 관리"
 &gt;&lt;/div&gt;</code></pre>
 								</div>
@@ -146,7 +146,7 @@
 									  </tr>
 									  <tr>
 									  	<td class="guide__term">경로</td>
-									  	<td><code>data-source</code> 는 <strong>언제나 「페이지」 기준</strong>(<code>./include/…</code>). 파셜 안에서도 같다</td>
+									  	<td><code>data-source</code> 는 <strong>언제나 사이트 루트 기준</strong>(<code>/html/include/…</code>). 파셜 안에서도, 페이지가 어느 폴더에 있어도 같다</td>
 									  </tr>
 									  <tr>
 									  	<td class="guide__term">값</td>
@@ -269,8 +269,8 @@
 									  	<td><code>&lt;div …&gt;&lt;/div&gt;</code>. 안에 내용을 적으면 전개 대상이 아니다. 슬롯도 내용을 넣지 않고 template 요소를 가리킨다</td>
 									  </tr>
 									  <tr>
-									  	<td class="guide__term">경로는 페이지 기준</td>
-									  	<td><code>fetch</code> 가 문서 기준이라 파셜 안에서도 <code>./include/…</code> 로 적는다. 파셜 위치 기준(<code>./_x.html</code>)으로 적으면 404</td>
+									  	<td class="guide__term">경로는 루트 기준</td>
+									  	<td>파셜은 <strong>「심어진 페이지」 기준</strong>으로 풀리므로, 깊이가 다른 페이지들이 같은 파셜을 쓰면 <code>./</code> 로는 한 값으로 맞출 수가 없다. 그래서 <code>/html/include/…</code> 로 적는다 — 페이지 폴더와 무관해진다. 파셜 위치 기준(<code>./_x.html</code>)으로 적으면 404</td>
 									  </tr>
 									  <tr>
 									  	<td class="guide__term">class 를 더 줘도 사라진다</td>
@@ -358,7 +358,7 @@
 							<div class="ui-card__body">
 								<pre
 									class="guide__code"
-								><code>&lt;div class="dynamic-content" data-source="./include/guide/_guide_var.html"
+								><code>&lt;div class="dynamic-content" data-source="/html/include/guide/_guide_var.html"
 	data-title="값을 넘긴 화면"
 	data-msg="따옴표 &amp;quot;큰따옴표&amp;quot; · 꺾쇠 &amp;lt;b&amp;gt; · 앰퍼샌드 &amp;amp;"
 	data-msg-raw="원문이라 &lt;b&gt;태그가 살아난다&lt;/b&gt;"
@@ -805,14 +805,14 @@ function Header({ pageTitle = &#39;페이지 제목&#39; }) {
 						<div class="ui-card">
 							<div class="ui-card__body">
 								<pre class="guide__code"><code>&lt;!-- 공통 파셜 : 갈아끼울 자리를 「경로 변수」로 비워 둔다 --&gt;
-&lt;div class="dynamic-content" data-source="&#123;&#123;extra|./include/common/_none.html&#125;&#125;"&gt;&lt;/div&gt;
+&lt;div class="dynamic-content" data-source="&#123;&#123;extra|/html/include/common/_none.html&#125;&#125;"&gt;&lt;/div&gt;
 
 &lt;!-- ① 덩어리가 필요한 화면 : 조각의 경로를 넘긴다 --&gt;
-&lt;div class="dynamic-content" data-source="./include/guide/_guide_optional_host.html"
-	data-extra="./include/guide/_guide_optional.html"&gt;&lt;/div&gt;
+&lt;div class="dynamic-content" data-source="/html/include/guide/_guide_optional_host.html"
+	data-extra="/html/include/guide/_guide_optional.html"&gt;&lt;/div&gt;
 
 &lt;!-- ② 필요 없는 화면 : 아무것도 넘기지 않는다 → 기본값인 빈 파셜이 들어온다 --&gt;
-&lt;div class="dynamic-content" data-source="./include/guide/_guide_optional_host.html"&gt;&lt;/div&gt;</code></pre>
+&lt;div class="dynamic-content" data-source="/html/include/guide/_guide_optional_host.html"&gt;&lt;/div&gt;</code></pre>
 							</div>
 						</div>
 
@@ -954,7 +954,7 @@ function Host({ extra = null }) {
 								><code>&lt;!-- 부르는 쪽 : 컨테이너는 비우고, 내용은 같은 파일의 template 에 적는다 --&gt;
 &lt;div
 	class="dynamic-content"
-	data-source="./include/ui/_ui_modal.html"
+	data-source="/html/include/ui/_ui_modal.html"
 	data-id="modal_invite"
 	data-title="멤버 초대"
 	data-slot-body="#modal_invite_body"
@@ -1058,7 +1058,7 @@ function Host({ extra = null }) {
 								<p class="guide__desc">
 									파셜로 뺄 때는 <strong>슬라이스 폴더 아래 <code>body/</code> 세그먼트</strong>에 모은다.
 									<code>data/&lt;슬라이스&gt;</code> 와 이름을 맞추면 데이터와 마크업이 대칭이 된다. 폴더 규칙 전체는
-									<a href="./Guide_Structure.html">폴더 구조 — 어느 폴더에 두나</a>.
+									<a href="/prerender/guide/Guide_Structure.html">폴더 구조 — 어느 폴더에 두나</a>.
 								</p>
 								<pre class="guide__code"><code>public/html/include/
 ├─ ui/         _ui_modal.html …            ← 프레임 (본문을 직접 부르지 않고 슬롯으로 받는다)
@@ -1170,8 +1170,8 @@ function Modal({ title, children }) {
 								<pre class="guide__code"><code>&lt;!-- 부르는 쪽 --&gt;
 &lt;div
 	class="dynamic-content"
-	data-source="./include/ui/_ui_dropdown.html"
-	data-items="../data/ui/sample_options.json"
+	data-source="/html/include/ui/_ui_dropdown.html"
+	data-items="/data/ui/sample_options.json"
 &gt;&lt;/div&gt;
 
 &lt;!-- 받는 쪽(_ui_dropdown.html) --&gt;
@@ -1181,9 +1181,9 @@ function Modal({ title, children }) {
 	data-template="#tpl_ui_dropdown_item"
 	data-empty="#tpl_ui_dropdown_empty"
 &gt;&lt;/ul&gt;
-&lt;div class="dynamic-content" data-source="./include/ui/_ui_dropdown_tpl.html"&gt;&lt;/div&gt;</code></pre>
+&lt;div class="dynamic-content" data-source="/html/include/ui/_ui_dropdown_tpl.html"&gt;&lt;/div&gt;</code></pre>
 								<ul class="guide__list">
-									<li>목록 경로(<code>data-items</code>)는 <code>../data/…</code> — 목록도 페이지 기준이다.</li>
+									<li>목록 경로(<code>data-items</code>)는 <code>/data/…</code> — 목록도 페이지 기준이다.</li>
 									<li>
 										템플릿만 담은 파셜(<code>_ui_dropdown_tpl.html</code>)을 따로 두면 여러 파셜이 템플릿을 함께
 										쓴다(드롭다운 · 검색 드롭다운).
@@ -1222,7 +1222,7 @@ function Modal({ title, children }) {
 									드롭다운이 <code>_ui_dropdown_tpl.html</code> 하나를 함께 쓰는 것이 그 모양이다.
 								</p>
 								<pre class="guide__code"><code>&lt;!-- 페이지 맨 아래에서 include 한다 --&gt;
-&lt;div class="dynamic-content" data-source="./include/ui/_ui_dropdown_tpl.html"&gt;&lt;/div&gt;</code></pre>
+&lt;div class="dynamic-content" data-source="/html/include/ui/_ui_dropdown_tpl.html"&gt;&lt;/div&gt;</code></pre>
 								<p class="guide__note guide__note--warn">
 									<strong>목록 template 은 파셜로 빼도 되지만 슬롯 template 은 안 된다.</strong>
 									목록은 파셜 주입이 <strong>다 끝난 뒤</strong> 쓰이고, 슬롯은 <strong>전개 도중</strong> 쓰인다 —
@@ -1244,7 +1244,7 @@ function Modal({ title, children }) {
 									파셜에 두고 내용은 JSON 이 갖는다 — 그러면 <strong>다음 것은 데이터 한 줄이다.</strong>
 								</p>
 								<pre class="guide__code"><code>&lt;!-- 틀 : 컨테이너와 template 을 파셜 하나에 둔다 --&gt;
-&lt;div class="dynamic-list" data-source="../data/guide/demo_opcomp.json"
+&lt;div class="dynamic-list" data-source="/data/guide/demo_opcomp.json"
 	data-template="#tpl_guide_op" data-filter="&#123;&#123;show|use&#125;&#125;"&gt;&lt;/div&gt;
 
 &lt;template id="tpl_guide_op"&gt;
@@ -1357,7 +1357,7 @@ function Modal({ title, children }) {
 									  </tr>
 									  <tr>
 									  	<td class="guide__term">덩어리가 통째로 있다 / 없다</td>
-									  	<td><strong>경로 변수 + 빈 파셜</strong> — <code>data-source="&#123;&#123;block|./include/common/_none.html&#125;&#125;"</code><br /><span class="guide__sample-args">끈 화면의 산출물에는 죽은 마크업이 한 줄도 안 나간다</span></td>
+									  	<td><strong>경로 변수 + 빈 파셜</strong> — <code>data-source="&#123;&#123;block|/html/include/common/_none.html&#125;&#125;"</code><br /><span class="guide__sample-args">끈 화면의 산출물에는 죽은 마크업이 한 줄도 안 나간다</span></td>
 									  	<td>경로 변수</td>
 									  </tr>
 									  <tr>
@@ -1656,9 +1656,9 @@ function Modal({ title, children }) {
 									  	<td>중괄호를 엔티티(<code>&amp;#123;</code>)로 적는다 — 이 페이지의 표가 그렇게 만들어졌다</td>
 									  </tr>
 									  <tr>
-									  	<td class="guide__term">파셜 안 경로를 파셜 기준으로</td>
+									  	<td class="guide__term">경로를 <code>./</code> 로 (파셜·페이지 기준)</td>
 									  	<td>404 — 화면이 비어 있다</td>
-									  	<td>페이지 기준 <code>./include/…</code></td>
+									  	<td>루트 기준 <code>/html/include/…</code> — 페이지 깊이와 무관해진다</td>
 									  </tr>
 									  <tr>
 									  	<td class="guide__term">빈 파셜에 짧은 주석 한 줄</td>
@@ -1756,7 +1756,7 @@ function Modal({ title, children }) {
 									  </tr>
 									  <tr>
 									  	<td class="guide__term">파셜 자리가 통째로 비어 있다</td>
-									  	<td>경로가 파셜 기준이다(페이지 기준으로 적는다) / 파일명 오타 — 콘솔과 프리렌더 경고(<code>! 파셜 없음</code>)를 본다</td>
+									  	<td>경로가 파셜 기준이거나 <code>./</code> 로 적혀 있다(루트 기준 <code>/html/include/…</code> 로 적는다) / 파일명 오타 — 콘솔과 프리렌더 경고(<code>! 파셜 없음</code>)를 본다</td>
 									  </tr>
 									  <tr>
 									  	<td class="guide__term">화면은 되는데 <strong>산출물만</strong> 다르다</td>
@@ -1799,7 +1799,7 @@ function Modal({ title, children }) {
 							<h2 class="section__title">13. 예시 모음</h2>
 							<p class="section__desc">
 								저장소에 있는 파셜과 받는 값. 동작하는 화면은
-								<a href="./Sample.html">공통 UI · 파셜 · 목록 샘플</a>
+								<a href="/prerender/sample/Sample.html">공통 UI · 파셜 · 목록 샘플</a>
 							</p>
 						</div>
 						<div class="ui-card">
@@ -1811,12 +1811,12 @@ function Modal({ title, children }) {
 								  <div class="guide__sample">
 								  	<h4 class="guide__sample-name">헤더</h4>
 								  	<p class="guide__sample-args">data-page-title</p>
-								  	<pre class="guide__code"><code>&lt;div class=&quot;dynamic-content&quot; data-source=&quot;./include/common/_header.html&quot; data-page-title=&quot;회원 관리&quot;&gt;&lt;/div&gt;</code></pre>
+								  	<pre class="guide__code"><code>&lt;div class=&quot;dynamic-content&quot; data-source=&quot;/html/include/common/_header.html&quot; data-page-title=&quot;회원 관리&quot;&gt;&lt;/div&gt;</code></pre>
 								  </div>
 								  <div class="guide__sample">
 								  	<h4 class="guide__sample-name">LNB</h4>
 								  	<p class="guide__sample-args">받는 값 없음 — 메뉴는 파셜에서 고치고, 현재 메뉴 표시는 common.js 가 붙인다</p>
-								  	<pre class="guide__code"><code>&lt;div class=&quot;dynamic-content&quot; data-source=&quot;./include/ui/_ui_lnb.html&quot;&gt;&lt;/div&gt;</code></pre>
+								  	<pre class="guide__code"><code>&lt;div class=&quot;dynamic-content&quot; data-source=&quot;/html/include/ui/_ui_lnb.html&quot;&gt;&lt;/div&gt;</code></pre>
 								  </div>
 								</div>
 							</div>
@@ -1830,27 +1830,27 @@ function Modal({ title, children }) {
 								  <div class="guide__sample">
 								  	<h4 class="guide__sample-name">입력</h4>
 								  	<p class="guide__sample-args">data-id(필수) · data-name · data-type · data-placeholder · data-value · data-modifier · data-helper · data-helper-type</p>
-								  	<pre class="guide__code"><code>&lt;div&#10;&#9;class=&quot;dynamic-content&quot;&#10;&#9;data-source=&quot;./include/ui/_ui_input.html&quot;&#10;&#9;data-id=&quot;join_birth&quot;&#10;&#9;data-value=&quot;1999&quot;&#10;&#9;data-modifier=&quot;is-error&quot;&#10;&#9;data-helper=&quot;생년월일 8자리를 입력해주세요.&quot;&#10;&#9;data-helper-type=&quot;ui-helper--error&quot;&#10;&gt;&lt;/div&gt;</code></pre>
+								  	<pre class="guide__code"><code>&lt;div&#10;&#9;class=&quot;dynamic-content&quot;&#10;&#9;data-source=&quot;/html/include/ui/_ui_input.html&quot;&#10;&#9;data-id=&quot;join_birth&quot;&#10;&#9;data-value=&quot;1999&quot;&#10;&#9;data-modifier=&quot;is-error&quot;&#10;&#9;data-helper=&quot;생년월일 8자리를 입력해주세요.&quot;&#10;&#9;data-helper-type=&quot;ui-helper--error&quot;&#10;&gt;&lt;/div&gt;</code></pre>
 								  </div>
 								  <div class="guide__sample">
 								  	<h4 class="guide__sample-name">드롭다운</h4>
 								  	<p class="guide__sample-args">data-items(JSON 경로 · 필수) · data-placeholder · data-modifier</p>
-								  	<pre class="guide__code"><code>&lt;div&#10;&#9;class=&quot;dynamic-content&quot;&#10;&#9;data-source=&quot;./include/ui/_ui_dropdown.html&quot;&#10;&#9;data-items=&quot;../data/ui/sample_options.json&quot;&#10;&#9;data-placeholder=&quot;정렬을 선택해주세요.&quot;&#10;&gt;&lt;/div&gt;</code></pre>
+								  	<pre class="guide__code"><code>&lt;div&#10;&#9;class=&quot;dynamic-content&quot;&#10;&#9;data-source=&quot;/html/include/ui/_ui_dropdown.html&quot;&#10;&#9;data-items=&quot;/data/ui/sample_options.json&quot;&#10;&#9;data-placeholder=&quot;정렬을 선택해주세요.&quot;&#10;&gt;&lt;/div&gt;</code></pre>
 								  </div>
 								  <div class="guide__sample">
 								  	<h4 class="guide__sample-name">검색 드롭다운</h4>
 								  	<p class="guide__sample-args">data-items(필수) · data-placeholder · data-name</p>
-								  	<pre class="guide__code"><code>&lt;div&#10;&#9;class=&quot;dynamic-content&quot;&#10;&#9;data-source=&quot;./include/ui/_ui_dropdown_search.html&quot;&#10;&#9;data-items=&quot;../data/ui/sample_options.json&quot;&#10;&#9;data-placeholder=&quot;회사명을 검색해주세요.&quot;&#10;&gt;&lt;/div&gt;</code></pre>
+								  	<pre class="guide__code"><code>&lt;div&#10;&#9;class=&quot;dynamic-content&quot;&#10;&#9;data-source=&quot;/html/include/ui/_ui_dropdown_search.html&quot;&#10;&#9;data-items=&quot;/data/ui/sample_options.json&quot;&#10;&#9;data-placeholder=&quot;회사명을 검색해주세요.&quot;&#10;&gt;&lt;/div&gt;</code></pre>
 								  </div>
 								  <div class="guide__sample">
 								  	<h4 class="guide__sample-name">수량 스테퍼</h4>
 								  	<p class="guide__sample-args">data-id(필수) · data-name · data-value · data-min · data-max</p>
-								  	<pre class="guide__code"><code>&lt;div&#10;&#9;class=&quot;dynamic-content&quot;&#10;&#9;data-source=&quot;./include/ui/_ui_stepper.html&quot;&#10;&#9;data-id=&quot;order_count&quot;&#10;&#9;data-value=&quot;1&quot;&#10;&#9;data-min=&quot;1&quot;&#10;&#9;data-max=&quot;3&quot;&#10;&gt;&lt;/div&gt;</code></pre>
+								  	<pre class="guide__code"><code>&lt;div&#10;&#9;class=&quot;dynamic-content&quot;&#10;&#9;data-source=&quot;/html/include/ui/_ui_stepper.html&quot;&#10;&#9;data-id=&quot;order_count&quot;&#10;&#9;data-value=&quot;1&quot;&#10;&#9;data-min=&quot;1&quot;&#10;&#9;data-max=&quot;3&quot;&#10;&gt;&lt;/div&gt;</code></pre>
 								  </div>
 								  <div class="guide__sample">
 								  	<h4 class="guide__sample-name">날짜 · 기간</h4>
 								  	<p class="guide__sample-args">data-id(필수) · data-name · data-placeholder · data-value — 이 페이지에 jQuery · jQuery UI 가 있어야 한다</p>
-								  	<pre class="guide__code"><code>&lt;div class=&quot;dynamic-content&quot; data-source=&quot;./include/ui/_ui_date.html&quot; data-id=&quot;open_date&quot;&gt;&lt;/div&gt;&#10;&lt;div class=&quot;dynamic-content&quot; data-source=&quot;./include/ui/_ui_period.html&quot; data-id=&quot;search_period&quot;&gt;&lt;/div&gt;</code></pre>
+								  	<pre class="guide__code"><code>&lt;div class=&quot;dynamic-content&quot; data-source=&quot;/html/include/ui/_ui_date.html&quot; data-id=&quot;open_date&quot;&gt;&lt;/div&gt;&#10;&lt;div class=&quot;dynamic-content&quot; data-source=&quot;/html/include/ui/_ui_period.html&quot; data-id=&quot;search_period&quot;&gt;&lt;/div&gt;</code></pre>
 								  </div>
 								</div>
 							</div>
@@ -1864,17 +1864,17 @@ function Modal({ title, children }) {
 								  <div class="guide__sample">
 								  	<h4 class="guide__sample-name">체크박스 · 라디오 · 토글</h4>
 								  	<p class="guide__sample-args">data-id(필수) · data-label(필수) · data-name · data-value · data-attrs(checked · disabled) · data-modifier</p>
-								  	<pre class="guide__code"><code>&lt;div&#10;&#9;class=&quot;dynamic-content&quot;&#10;&#9;data-source=&quot;./include/ui/_ui_checkbox.html&quot;&#10;&#9;data-id=&quot;agree_sms&quot;&#10;&#9;data-name=&quot;agree_sms&quot;&#10;&#9;data-value=&quot;Y&quot;&#10;&#9;data-label=&quot;문자 수신&quot;&#10;&#9;data-attrs=&quot;checked&quot;&#10;&gt;&lt;/div&gt;&#10;&lt;div&#10;&#9;class=&quot;dynamic-content&quot;&#10;&#9;data-source=&quot;./include/ui/_ui_radio.html&quot;&#10;&#9;data-id=&quot;open_all&quot;&#10;&#9;data-name=&quot;open_range&quot;&#10;&#9;data-value=&quot;all&quot;&#10;&#9;data-label=&quot;전체 공개&quot;&#10;&gt;&lt;/div&gt;&#10;&lt;div class=&quot;dynamic-content&quot; data-source=&quot;./include/ui/_ui_toggle.html&quot; data-id=&quot;use_push&quot; data-label=&quot;알림 받기&quot;&gt;&lt;/div&gt;</code></pre>
+								  	<pre class="guide__code"><code>&lt;div&#10;&#9;class=&quot;dynamic-content&quot;&#10;&#9;data-source=&quot;/html/include/ui/_ui_checkbox.html&quot;&#10;&#9;data-id=&quot;agree_sms&quot;&#10;&#9;data-name=&quot;agree_sms&quot;&#10;&#9;data-value=&quot;Y&quot;&#10;&#9;data-label=&quot;문자 수신&quot;&#10;&#9;data-attrs=&quot;checked&quot;&#10;&gt;&lt;/div&gt;&#10;&lt;div&#10;&#9;class=&quot;dynamic-content&quot;&#10;&#9;data-source=&quot;/html/include/ui/_ui_radio.html&quot;&#10;&#9;data-id=&quot;open_all&quot;&#10;&#9;data-name=&quot;open_range&quot;&#10;&#9;data-value=&quot;all&quot;&#10;&#9;data-label=&quot;전체 공개&quot;&#10;&gt;&lt;/div&gt;&#10;&lt;div class=&quot;dynamic-content&quot; data-source=&quot;/html/include/ui/_ui_toggle.html&quot; data-id=&quot;use_push&quot; data-label=&quot;알림 받기&quot;&gt;&lt;/div&gt;</code></pre>
 								  </div>
 								  <div class="guide__sample">
 								  	<h4 class="guide__sample-name">툴팁</h4>
 								  	<p class="guide__sample-args">data-id(필수) · data-text(필수) · data-position(top · right · bottom · left) · data-label</p>
-								  	<pre class="guide__code"><code>&lt;div&#10;&#9;class=&quot;dynamic-content&quot;&#10;&#9;data-source=&quot;./include/ui/_ui_tooltip.html&quot;&#10;&#9;data-id=&quot;tip_email&quot;&#10;&#9;data-position=&quot;right&quot;&#10;&#9;data-text=&quot;가입 후에는 바꿀 수 없습니다.&quot;&#10;&gt;&lt;/div&gt;</code></pre>
+								  	<pre class="guide__code"><code>&lt;div&#10;&#9;class=&quot;dynamic-content&quot;&#10;&#9;data-source=&quot;/html/include/ui/_ui_tooltip.html&quot;&#10;&#9;data-id=&quot;tip_email&quot;&#10;&#9;data-position=&quot;right&quot;&#10;&#9;data-text=&quot;가입 후에는 바꿀 수 없습니다.&quot;&#10;&gt;&lt;/div&gt;</code></pre>
 								  </div>
 								  <div class="guide__sample">
 								  	<h4 class="guide__sample-name">아코디언</h4>
 								  	<p class="guide__sample-args">data-items(JSON 경로 · 필수) · data-mode(single 하나만 열림 · multiple 여러 개)</p>
-								  	<pre class="guide__code"><code>&lt;div&#10;&#9;class=&quot;dynamic-content&quot;&#10;&#9;data-source=&quot;./include/ui/_ui_accordion.html&quot;&#10;&#9;data-items=&quot;../data/ui/sample_accordion.json&quot;&#10;&gt;&lt;/div&gt;</code></pre>
+								  	<pre class="guide__code"><code>&lt;div&#10;&#9;class=&quot;dynamic-content&quot;&#10;&#9;data-source=&quot;/html/include/ui/_ui_accordion.html&quot;&#10;&#9;data-items=&quot;/data/ui/sample_accordion.json&quot;&#10;&gt;&lt;/div&gt;</code></pre>
 								  </div>
 								</div>
 							</div>
@@ -1888,22 +1888,22 @@ function Modal({ title, children }) {
 								  <div class="guide__sample">
 								  	<h4 class="guide__sample-name">토스트</h4>
 								  	<p class="guide__sample-args">data-id(필수) · data-text · data-type(success · error) — 띄우기는 data-toast=&quot;아이디&quot; 버튼</p>
-								  	<pre class="guide__code"><code>&lt;div&#10;&#9;class=&quot;dynamic-content&quot;&#10;&#9;data-source=&quot;./include/ui/_ui_toast.html&quot;&#10;&#9;data-id=&quot;save_toast&quot;&#10;&#9;data-text=&quot;저장되었습니다.&quot;&#10;&gt;&lt;/div&gt;</code></pre>
+								  	<pre class="guide__code"><code>&lt;div&#10;&#9;class=&quot;dynamic-content&quot;&#10;&#9;data-source=&quot;/html/include/ui/_ui_toast.html&quot;&#10;&#9;data-id=&quot;save_toast&quot;&#10;&#9;data-text=&quot;저장되었습니다.&quot;&#10;&gt;&lt;/div&gt;</code></pre>
 								  </div>
 								  <div class="guide__sample">
 								  	<h4 class="guide__sample-name">확인창</h4>
 								  	<p class="guide__sample-args">data-id(필수) · data-title(필수) · data-text · data-cancel · data-confirm · data-modifier</p>
-								  	<pre class="guide__code"><code>&lt;div&#10;&#9;class=&quot;dynamic-content&quot;&#10;&#9;data-source=&quot;./include/ui/_ui_modal_confirm.html&quot;&#10;&#9;data-id=&quot;del_confirm&quot;&#10;&#9;data-title=&quot;이벤트를 삭제하시겠습니까?&quot;&#10;&#9;data-text=&quot;삭제한 이벤트는 복구할 수 없습니다.&quot;&#10;&#9;data-confirm=&quot;삭제&quot;&#10;&gt;&lt;/div&gt;</code></pre>
+								  	<pre class="guide__code"><code>&lt;div&#10;&#9;class=&quot;dynamic-content&quot;&#10;&#9;data-source=&quot;/html/include/ui/_ui_modal_confirm.html&quot;&#10;&#9;data-id=&quot;del_confirm&quot;&#10;&#9;data-title=&quot;이벤트를 삭제하시겠습니까?&quot;&#10;&#9;data-text=&quot;삭제한 이벤트는 복구할 수 없습니다.&quot;&#10;&#9;data-confirm=&quot;삭제&quot;&#10;&gt;&lt;/div&gt;</code></pre>
 								  </div>
 								  <div class="guide__sample">
 								  	<h4 class="guide__sample-name">모달 프레임 (본문은 슬롯)</h4>
 								  	<p class="guide__sample-args">data-id(필수) · data-title(필수) · data-slot-body(필수) · data-subtext · data-footer · data-cancel · data-confirm · data-modifier</p>
-								  	<pre class="guide__code"><code>&lt;div&#10;&#9;class=&quot;dynamic-content&quot;&#10;&#9;data-source=&quot;./include/ui/_ui_modal.html&quot;&#10;&#9;data-id=&quot;modal_invite&quot;&#10;&#9;data-title=&quot;멤버 초대&quot;&#10;&#9;data-subtext=&quot;초대할 멤버의 정보를 입력해주세요.&quot;&#10;&#9;data-slot-body=&quot;#modal_invite_body&quot;&#10;&#9;data-confirm=&quot;초대하기&quot;&#10;&gt;&lt;/div&gt;&#10;&lt;template id=&quot;modal_invite_body&quot;&gt;&#10;&#9;&lt;div class=&quot;dynamic-content&quot; data-source=&quot;./include/member/_modal_invite_body.html&quot;&gt;&lt;/div&gt;&#10;&lt;/template&gt;</code></pre>
+								  	<pre class="guide__code"><code>&lt;div&#10;&#9;class=&quot;dynamic-content&quot;&#10;&#9;data-source=&quot;/html/include/ui/_ui_modal.html&quot;&#10;&#9;data-id=&quot;modal_invite&quot;&#10;&#9;data-title=&quot;멤버 초대&quot;&#10;&#9;data-subtext=&quot;초대할 멤버의 정보를 입력해주세요.&quot;&#10;&#9;data-slot-body=&quot;#modal_invite_body&quot;&#10;&#9;data-confirm=&quot;초대하기&quot;&#10;&gt;&lt;/div&gt;&#10;&lt;template id=&quot;modal_invite_body&quot;&gt;&#10;&#9;&lt;div class=&quot;dynamic-content&quot; data-source=&quot;/html/include/member/_modal_invite_body.html&quot;&gt;&lt;/div&gt;&#10;&lt;/template&gt;</code></pre>
 								  </div>
 								  <div class="guide__sample">
 								  	<h4 class="guide__sample-name">알림 모달 (버튼 없음)</h4>
 								  	<p class="guide__sample-args">data-id(필수) · data-title(필수) · data-subtext · data-text · data-slot-body · data-modifier — data-text 와 슬롯은 택일</p>
-								  	<pre class="guide__code"><code>&lt;div&#10;&#9;class=&quot;dynamic-content&quot;&#10;&#9;data-source=&quot;./include/ui/_ui_modal_alert.html&quot;&#10;&#9;data-id=&quot;notice_alert&quot;&#10;&#9;data-title=&quot;점검 안내&quot;&#10;&#9;data-subtext=&quot;2026.09.20 02:00 ~ 06:00&quot;&#10;&#9;data-text=&quot;점검 시간에는 로그인과 결제를 이용할 수 없습니다.&quot;&#10;&gt;&lt;/div&gt;</code></pre>
+								  	<pre class="guide__code"><code>&lt;div&#10;&#9;class=&quot;dynamic-content&quot;&#10;&#9;data-source=&quot;/html/include/ui/_ui_modal_alert.html&quot;&#10;&#9;data-id=&quot;notice_alert&quot;&#10;&#9;data-title=&quot;점검 안내&quot;&#10;&#9;data-subtext=&quot;2026.09.20 02:00 ~ 06:00&quot;&#10;&#9;data-text=&quot;점검 시간에는 로그인과 결제를 이용할 수 없습니다.&quot;&#10;&gt;&lt;/div&gt;</code></pre>
 								  </div>
 								</div>
 								<p class="guide__note guide__note--tip">

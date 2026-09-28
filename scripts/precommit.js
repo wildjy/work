@@ -61,10 +61,25 @@ if (stagedSrc.length) {
 	}
 
 	// 원본이 사라졌는데 남은 산출물
-	const srcPages = new Set(fs.readdirSync(path.join(ROOT, 'public/html')).filter((f) => f.endsWith('.html')));
-	const orphans = fs
-		.readdirSync(path.join(ROOT, OUT_DIR))
-		.filter((f) => f.endsWith('.html') && !srcPages.has(f))
+	// ⚠ **하위 폴더까지 훑는다.** 페이지를 기능별 폴더에 두므로 평면 readdirSync 로는
+	//    public/html 최상위에 .html 이 하나도 없어 검사가 조용히 통과해 버린다.
+	//    (prerender.js 의 sweepOrphans 가 이미 지우지만, 여기서도 한 번 더 막는다)
+	const SKIP_DIRS = new Set(['include', '_bak']);
+	const walkHtml = (dir, base, out) => {
+		if (!fs.existsSync(dir)) return out;
+		for (const e of fs.readdirSync(dir, { withFileTypes: true })) {
+			const key = base ? base + '/' + e.name : e.name;
+			if (e.isDirectory()) {
+				if (!SKIP_DIRS.has(e.name)) walkHtml(path.join(dir, e.name), key, out);
+				continue;
+			}
+			if (e.name.endsWith('.html')) out.push(key);
+		}
+		return out;
+	};
+	const srcPages = new Set(walkHtml(path.join(ROOT, 'public/html'), '', []));
+	const orphans = walkHtml(path.join(ROOT, OUT_DIR), '', [])
+		.filter((f) => !srcPages.has(f))
 		.map((f) => OUT_DIR + '/' + f);
 	if (orphans.length) {
 		fail('원본이 없는 산출물이 남아 있습니다.', orphans, ['→ git rm 으로 지운 뒤 다시 커밋하세요.']);

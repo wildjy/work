@@ -4,10 +4,10 @@
 		<meta charset="utf-8" />
 		<meta name="viewport" content="width=device-width,initial-scale=1.0" />
 		<title>폴더 구조 — 어느 폴더에 두나</title>
-		<link rel="stylesheet" href="../css/common.css" />
-		<script src="../js/dynamicImport.js"></script>
-		<script src="../js/listRender.js"></script>
-		<script src="../js/common.js"></script>
+		<link rel="stylesheet" href="/css/common.css" />
+		<script src="/js/dynamicImport.js"></script>
+		<script src="/js/listRender.js"></script>
+		<script src="/js/common.js"></script>
 	</head>
 
 	<body>
@@ -15,47 +15,15 @@
 			<!-- 사이드 : 브랜드 + LNB -->
 			<aside class="layout__side">
 				<p class="layout__brand">pub-base</p>
-				<!-- 공통 LNB -->
-				<!-- 현재 페이지 메뉴의 is-active 와 상위 메뉴의 is-open 은 common.js 의 lnbActive 가 붙인다 -->
-				<nav class="ui-lnb">
-					<div class="ui-lnb__menu">
-						<ul class="ui-lnb__group">
-							<li class="ui-lnb__item">
-								<a class="ui-lnb__link" href="../index.html">작업 목록</a>
-							</li>
-							<li class="ui-lnb__item">
-								<button type="button" class="ui-lnb__link ui-lnb__link--toggle" aria-expanded="false">사용법</button>
-								<div class="ui-lnb__sub" hidden>
-									<ul class="ui-lnb__group">
-										<li class="ui-lnb__item">
-											<a class="ui-lnb__link" href="./Guide_Structure.html">폴더 구조</a>
-										</li>
-										<li class="ui-lnb__item">
-											<a class="ui-lnb__link" href="./Guide_Partial.html">파셜(include)</a>
-										</li>
-									</ul>
-								</div>
-							</li>
-							<li class="ui-lnb__item">
-								<button type="button" class="ui-lnb__link ui-lnb__link--toggle" aria-expanded="false">개발 확인용</button>
-								<div class="ui-lnb__sub" hidden>
-									<ul class="ui-lnb__group">
-										<li class="ui-lnb__item">
-											<a class="ui-lnb__link" href="./Sample.html">샘플</a>
-										</li>
-									</ul>
-								</div>
-							</li>
-						</ul>
-					</div>
-				</nav>
+				<div class="dynamic-content" data-source="/html/include/ui/_ui_lnb.html"></div>
 			</aside>
 
 			<div class="layout__body">
-				<!-- 공통 헤더 -->
-				<header class="app-header">
-					<h1 class="app-header__title">폴더 구조 — 어느 폴더에 두나</h1>
-				</header>
+				<div
+					class="dynamic-content"
+					data-source="/html/include/common/_header.html"
+					data-page-title="폴더 구조 — 어느 폴더에 두나"
+				></div>
 
 				<main class="layout__main guide">
 					<!-- 구역 : 목차 -->
@@ -139,32 +107,13 @@
 											<th scope="col">이 저장소</th>
 										</tr>
 									</thead>
-									<tbody>
-									  <tr>
-									  	<td class="guide__term"><code>app</code></td>
-									  	<td><code>public/js/*.js</code> · <code>scss/common.scss</code> · <code>scripts/</code> · <code>index.html</code></td>
-									  </tr>
-									  <tr>
-									  	<td class="guide__term"><code>pages</code></td>
-									  	<td><code>public/html/*.html</code> — 루트에만 페이지를 둔다</td>
-									  </tr>
-									  <tr>
-									  	<td class="guide__term"><code>widgets</code></td>
-									  	<td><code>include/&lt;슬라이스&gt;/section/</code> — 화면을 이루는 한 덩어리</td>
-									  </tr>
-									  <tr>
-									  	<td class="guide__term"><code>features</code></td>
-									  	<td><code>include/&lt;슬라이스&gt;/</code> 의 행동 단위 — 초대 폼 · 필터</td>
-									  </tr>
-									  <tr>
-									  	<td class="guide__term"><code>entities</code></td>
-									  	<td><code>include/&lt;슬라이스&gt;/</code> 의 도메인 조각 + <code>data/&lt;슬라이스&gt;/*.json</code></td>
-									  </tr>
-									  <tr>
-									  	<td class="guide__term"><code>shared</code></td>
-									  	<td><code>include/ui/_ui_*.html</code> · <code>scss/_ui_*.scss</code> · <code>data/ui/*.json</code> — <strong>이미 정확히 이것</strong></td>
-									  </tr>
-									</tbody>
+									<tbody
+										class="dynamic-list"
+										data-source="/data/guide/structure.json"
+										data-template="#tpl_structure_row"
+										data-empty="#tpl_structure_row_none"
+										data-filter="group=layer"
+									></tbody>
 								</table>
 							</div>
 							<div class="ui-card__body">
@@ -193,8 +142,8 @@
 									한 페이지가 길어지면 구역 단위로 가른다. 페이지에는 <strong>include 줄만</strong> 남는다.
 								</p>
 								<pre class="guide__code"><code>&lt;main class="layout__main"&gt;
-	&lt;div class="dynamic-content" data-source="./include/sample/section/_sample_list.html"&gt;&lt;/div&gt;
-	&lt;div class="dynamic-content" data-source="./include/sample/section/_sample_input.html"&gt;&lt;/div&gt;
+	&lt;div class="dynamic-content" data-source="/html/include/sample/section/_sample_list.html"&gt;&lt;/div&gt;
+	&lt;div class="dynamic-content" data-source="/html/include/sample/section/_sample_input.html"&gt;&lt;/div&gt;
 &lt;/main&gt;</code></pre>
 								<ul class="guide__list">
 									<li><strong>목록 템플릿은 컨테이너와 같은 파일에</strong> 둔다 — 파셜이 목록보다 먼저 주입된다.</li>
@@ -217,12 +166,12 @@
 									모달 프레임에 넘길 본문. <strong>template 은 include 를 적은 파일에 남기고 내용만</strong> 여기 둔다.
 								</p>
 								<pre class="guide__code"><code>&lt;template id="sample_invite_body"&gt;
-	&lt;div class="dynamic-content" data-source="./include/sample/body/_sample_invite_body.html"&gt;&lt;/div&gt;
+	&lt;div class="dynamic-content" data-source="/html/include/sample/body/_sample_invite_body.html"&gt;&lt;/div&gt;
 &lt;/template&gt;</code></pre>
 								<p class="guide__note guide__note--warn">
 									<strong>template 요소째</strong> 파셜로 빼면 include 순서에 묶이고, 어기면
 									<strong>조용히 빈 본문</strong>으로 나간다. 배치별 동작표는
-									<a href="./Guide_Partial.html#guide_slot">파셜(include) 사용법 6절</a>.
+									<a href="/html/guide/Guide_Partial.html#guide_slot">파셜(include) 사용법 6절</a>.
 								</p>
 							</div>
 						</div>
@@ -272,28 +221,13 @@ template    id="sample_invite_body"
 											<th scope="col">이렇게</th>
 										</tr>
 									</thead>
-									<tbody>
-									  <tr>
-									  	<td class="guide__term">구역이 30줄 안쪽이고 페이지가 200줄을 넘지 않는다</td>
-									  	<td><strong>페이지에 그대로 둔다</strong> — 파일을 만들 이유가 없다</td>
-									  </tr>
-									  <tr>
-									  	<td class="guide__term">페이지가 길어져 구역을 찾기 어렵다</td>
-									  	<td><code>section/</code> 으로 가른다 — 페이지에는 include 줄만 남는다</td>
-									  </tr>
-									  <tr>
-									  	<td class="guide__term">슬롯 본문이 10줄 안팎 · 그 화면 전용</td>
-									  	<td>부르는 파일의 <code>template</code> 안에 <strong>직접</strong></td>
-									  </tr>
-									  <tr>
-									  	<td class="guide__term">슬롯 본문이 30줄을 넘거나 두 화면이 쓴다</td>
-									  	<td><code>body/</code> 파셜 — <strong>두 곳이 되는 순간</strong> 옮긴다</td>
-									  </tr>
-									  <tr>
-									  	<td class="guide__term">두 슬라이스가 같은 것을 쓰게 됐다</td>
-									  	<td><code>common/</code> 으로 올리고 <code>data-source</code> 를 전부 고친다</td>
-									  </tr>
-									</tbody>
+									<tbody
+										class="dynamic-list"
+										data-source="/data/guide/structure.json"
+										data-template="#tpl_structure_row"
+										data-empty="#tpl_structure_row_none"
+										data-filter="group=split"
+									></tbody>
 								</table>
 							</div>
 						</div>
@@ -318,24 +252,13 @@ template    id="sample_invite_body"
 											<th scope="col">왜</th>
 										</tr>
 									</thead>
-									<tbody>
-									  <tr>
-									  	<td class="guide__term"><code>include/ui/</code> 는 슬라이스를 <strong>include 하지 않는다</strong></td>
-									  	<td>프레임은 필요한 마크업을 <strong>슬롯으로 받는다</strong> — 이것이 의존 역전 장치이고, React 의 <code>children</code> 과 같은 역할이다</td>
-									  </tr>
-									  <tr>
-									  	<td class="guide__term"><code>&lt;슬라이스&gt;/body/</code> 는 <code>include/ui/</code> 를 <strong>써도 된다</strong></td>
-									  	<td>본문 안에서 입력 · 드롭다운 파셜을 부른다. 방향이 공통 UI 쪽으로만 향하면 된다</td>
-									  </tr>
-									  <tr>
-									  	<td class="guide__term">다른 슬라이스의 <code>body/</code> 를 <strong>가져다 쓰지 않는다</strong></td>
-									  	<td>두 곳이 쓰게 되면 <code>common/</code> 으로 올린다 — 기존 규칙 그대로다</td>
-									  </tr>
-									  <tr>
-									  	<td class="guide__term">본문 마크업을 <strong>JSON 으로 옮기지 않는다</strong></td>
-									  	<td><code>&lt;</code> 와 <code>&#123;&#123; &#125;&#125;</code> 의 이중 escape 지옥이 된다(가이드 페이지 데이터에서 겪었다). <strong>JSON 은 반복되는 값, 파셜은 마크업</strong></td>
-									  </tr>
-									</tbody>
+									<tbody
+										class="dynamic-list"
+										data-source="/data/guide/structure.json"
+										data-template="#tpl_structure_row"
+										data-empty="#tpl_structure_row_none"
+										data-filter="group=dep"
+									></tbody>
 								</table>
 							</div>
 						</div>
@@ -363,7 +286,9 @@ template    id="sample_invite_body"
 									</li>
 									<li>렌더 결과는 가르기 전과 <strong>같다.</strong> 구조 정리이므로 작업일자를 찍지 않았다.</li>
 								</ul>
-								<p class="guide__note">실제 화면은 <a href="./Sample.html">개발 확인용 샘플</a>에서 열어 볼 수 있다.</p>
+								<p class="guide__note">
+									실제 화면은 <a href="/html/sample/Sample.html">개발 확인용 샘플</a>에서 열어 볼 수 있다.
+								</p>
 							</div>
 						</div>
 					</section>
@@ -393,16 +318,13 @@ template    id="sample_invite_body"
 											<th scope="col">방법</th>
 										</tr>
 									</thead>
-									<tbody>
-									  <tr>
-									  	<td class="guide__term"><code>scripts/prerender.js</code></td>
-									  	<td>전개 전에 include 그래프를 한 번 훑어 <strong>모든 파셜의 template 을 먼저 수집</strong>한다 (2-pass)</td>
-									  </tr>
-									  <tr>
-									  	<td class="guide__term"><code>public/js/dynamicImport.js</code></td>
-									  	<td>슬롯을 못 찾으면 비워 두지 말고 <strong>주입이 다 끝난 뒤 한 번 더</strong> 시도한다</td>
-									  </tr>
-									</tbody>
+									<tbody
+										class="dynamic-list"
+										data-source="/data/guide/structure.json"
+										data-template="#tpl_structure_row"
+										data-empty="#tpl_structure_row_none"
+										data-filter="group=next"
+									></tbody>
 								</table>
 							</div>
 							<div class="ui-card__body">
@@ -418,5 +340,18 @@ template    id="sample_invite_body"
 			</div>
 		</div>
 
+		<!-- 목록 템플릿 (listRender.js 가 JSON 을 순회해 렌더) -->
+		<template id="tpl_structure_row">
+			<tr>
+				<td class="guide__term">{{{term}}}</td>
+				<td>{{{desc}}}</td>
+			</tr>
+		</template>
+		<template id="tpl_structure_row_none">
+			<tr>
+				<td colspan="2" class="ui-table__empty">등록된 내용이 없습니다.</td>
+			</tr>
+		</template>
+		<!--// 목록 템플릿 -->
 	</body>
 </html>

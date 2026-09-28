@@ -16,9 +16,16 @@
  *   인라인 <script> 안의 주석도 함께 걷는다(stripScriptComments) — 그쪽은 @ 표시한 것만 남는다.
  *   켜고 끄는 곳이 갈리면 「방금 정리한 산출물이 다음 프리렌더에 되살아나는」 일이 생겨서다.
  *
- * 입력  public/html/*.html  (+ public/data/<기능명>/*.json)
- * 출력  public/prerender/*.html
- *   └ public/html 과 같은 깊이라 ../css/ ../js/ ../images/ 경로가 그대로 동작한다.
+ * 입력  public/html 아래의 .html (하위 폴더 포함)  (+ public/data/<기능명>/*.json)
+ * 출력  public/prerender 아래에 같은 경로로
+ *   └ public/html 과 **같은 폴더 구조**로 낸다. 깊이가 같아야 /css/ /js/ /images/ 가 어느 폴더에서든 맞는다.
+ *
+ * ⚠ 페이지는 하위 폴더에 둔다(예: public/html/guide/Guide_Partial.html).
+ *   include/ 와 같은 이름의 기능별 폴더를 쓴다 — 페이지가 늘어난 뒤에 나누면 경로를 전부 다시 고쳐야 한다.
+ * ⚠ include/ 와 _bak/ 은 페이지가 아니다 — 빌드 대상에서 뺀다(SKIP_DIRS).
+ * ⚠ 산출물의 **페이지 링크는 /prerender/ 로 바뀐다**(toOutputLinks) — 원본은 /html/ 그대로다.
+ *    검수는 index → prerender 에서 출발하므로, 그러지 않으면 첫 클릭에 원본으로 빠진다.
+ *    data-source 는 바꾸지 않는다 — include/ 는 산출물에 없다.
  *
  * 전개 대상
  *   1) <div class="dynamic-content" data-source="./_파셜.html"></div>   (재귀)
@@ -31,8 +38,13 @@
  * ⚠ 목록 컨테이너는 반드시 **비어 있어야** 한다(`<tbody ...></tbody>`).
  *   listRender.js 와 동일한 규칙이며, 이 스크립트도 빈 컨테이너만 인식한다.
  *
- * ⚠ dynamicImport.js 는 fetch 를 쓰므로 data-source 를 항상 「페이지」 기준으로 해석한다.
- *   파셜 안의 include 경로도 파셜 위치가 아니라 페이지 위치 기준이다. 여기서도 동일하게 푼다.
+ * ⚠ data-source 는 두 가지를 받는다 — resolveSrc() 참고.
+ *   · **루트 상대**(권장) `/html/include/…` · `/data/…` : 사이트 루트(public/) 기준. **페이지 깊이와 무관**하다.
+ *     파셜은 「심어진 페이지」 기준으로 풀린다. 깊이가 다른 페이지들이 같은 파셜을 쓰면 `../images/…` 를
+ *     한 값으로 맞출 수가 없으므로, 루트 상대가 유일한 답이다.
+ *   · 페이지 상대 `./include/…` · `../data/…` : 옛 방식. 그 페이지가 있는 폴더 기준(브라우저와 같다).
+ *   둘은 섞여 있어도 된다 — 옮기는 중에는 그렇게 된다.
+ * ⚠ 루트 상대가 되려면 서버 루트가 public/ 이어야 한다 — scripts/serve.js 가 그렇게 띄운다.
  *
  * 치환 문법은 listRender.js 와 동일 — {{key}} / {{{key}}} / {{@index}} / {{@number}} / 항목의 "_tpl"
  */
@@ -43,6 +55,28 @@ const ROOT = path.resolve(__dirname, '..');
 const SRC_DIR = path.join(ROOT, 'public', 'html');
 const DATA_DIR = path.join(ROOT, 'public', 'data');
 const OUT_DIR = path.join(ROOT, 'public', 'prerender');
+
+// 페이지가 아닌 폴더 — 파셜 모음과 보관용. 하위 폴더를 훑기 시작하면 반드시 걸러야 한다.
+const SKIP_DIRS = new Set(['include', '_bak']);
+
+// 브라우저가 보는 사이트 루트. scripts/serve.js 가 이 폴더를 / 로 준다.
+const PUBLIC_DIR = path.join(ROOT, 'public');
+
+// data-source 한 줄을 실제 파일 경로로 푼다.
+//   "/html/include/common/_x.html"  → public/html/include/common/_x.html   (루트 상대 · 권장)
+//   "./include/common/_x.html"      → <페이지 폴더>/include/common/_x.html (페이지 상대 · 옛 방식)
+// ⚠ path.resolve 는 / 로 시작하면 **드라이브 루트**로 튄다(D:\html\…) — 반드시 여기서 가른다.
+// ⚠ 브라우저(dynamicImport·listRender)는 fetch 라 / 를 저절로 사이트 루트로 읽는다. 맞춰 주는 건 여기뿐이다.
+function resolveSrc(baseDir, src) {
+	if (src.startsWith('//')) return null; // 프로토콜 상대(//cdn…)는 바깥 주소다
+	if (/^[a-z]+:/i.test(src)) return null; // http: · data: 등
+	if (src.startsWith('/')) return path.join(PUBLIC_DIR, src.slice(1));
+	return path.resolve(baseDir, src);
+}
+
+// 페이지 이름은 항상 SRC_DIR 기준 상대경로이며 구분자는 / 로 통일한다.
+// (Windows 의 \ 가 섞이면 depMap 키와 인자 비교가 어긋난다)
+const toKey = (p) => path.relative(SRC_DIR, p).split(path.sep).join('/');
 
 const args = process.argv.slice(2);
 const keepTemplates = args.includes('--keep-templates');
@@ -445,7 +479,8 @@ function expandPartials(html, baseDir, stack, ctx) {
 		if (!src) return tag;
 		if (insideComment(whole, offset)) return tag; // 주석 처리된 include 는 그대로 둔다
 
-		const file = path.resolve(baseDir, src);
+		const file = resolveSrc(baseDir, src);
+		if (!file) return tag; // 바깥 주소는 건드리지 않는다
 		ctx.deps.add(file);
 
 		if (stack.includes(file)) {
@@ -549,7 +584,8 @@ function expandLists(html, baseDir, templates, ctx) {
 
 		if (!src) return whole;
 
-		const file = path.resolve(baseDir, src);
+		const file = resolveSrc(baseDir, src);
+		if (!file) return whole; // 바깥 주소는 건드리지 않는다
 		ctx.deps.add(file);
 
 		if (!fs.existsSync(file)) {
@@ -594,6 +630,46 @@ function expandLists(html, baseDir, templates, ctx) {
 
 /* ── 빌드 ──────────────────────────────────────────────── */
 
+// 템플릿 **바로 위**의 라벨 주석 · **바로 아래**의 닫음 표시를 지운다.
+// 템플릿만 사라지면 주석이 남아 엉뚱한 요소를 가리킨다.
+// ⚠ **문구로 찾지 않는다** — 「목록 템플릿」이 아닌 라벨을 쓰면 그대로 남는다.
+//    (실제로 _tpl_policy 의 설명과 landing4 의 템플릿 묶음에서 라벨이 산출물에 남았다)
+// ⚠ 주석이 **여러 겹** 쌓여 있으면 한 번으로는 안쪽 한 겹만 지워진다 —
+//    더 지울 것이 없을 때까지 돌린다(길이가 반드시 줄어들므로 멈춘다).
+// ⚠ 주석만 지운다 — 템플릿 자체는 호출부의 다음 규칙이 맡는다.
+// ⚠ @ 표시한 개발단 지침은 남긴다.
+function stripTemplateLabels(html) {
+	const ABOVE = /[ \t]*<!--(?!@)(?:(?!-->)[\s\S])*?-->[ \t]*\r?\n(?=[ \t]*<template\b)/gi;
+	const BELOW = /(?<=<\/template>[ \t]*\r?\n)[ \t]*<!--\/\/(?:(?!-->)[\s\S])*?-->[ \t]*\r?\n/gi;
+	for (let i = 0; i < 20; i += 1) {
+		const before = html;
+		html = html.replace(ABOVE, (m, offset, whole) => (insideComment(whole, offset) ? m : '')).replace(BELOW, '');
+		if (html === before) break;
+	}
+	return html;
+}
+// 산출물 안의 **페이지 링크**를 산출물 트리로 돌린다.
+//
+//   href="/html/guide/Guide_Partial.html"  →  href="/prerender/guide/Guide_Partial.html"
+//
+// 왜 필요한가 : index.html 이 ./prerender/… 만 가리키므로 검수는 **산출물에서 출발**한다.
+// 그런데 페이지끼리의 링크는 /html/… 로 적혀 있어, 한 번 누르면 원본으로 빠져
+// **산출물 검수가 첫 클릭에서 끊긴다.** 원본은 파셜을 fetch 로 그려 화면이 보이므로 눈에 잘 안 띈다.
+//
+// ⚠⚠ **data-source 는 바꾸지 않는다.** 파셜(include/)은 산출물로 복사되지 않으므로
+//     바꾸면 런타임 fetch 가 404 가 된다. 주석·template 안에 전개되지 않고 남은 것들이 있다.
+// ⚠ 원본은 그대로 둔다 — 루트 상대경로를 쓰는 편이 파셜에 유리하다.
+//    파셜 하나가 여러 깊이에서 include 되면 ../ 개수가 달라져 상대경로를 쓸 수 없다.
+// ⚠ 이미 /prerender/ 로 적힌 링크는 건드리지 않는다.
+// ⚠ 바꿀 속성은 **적어둔 것만**이다. 페이지 주소를 담는 속성을 새로 만들면 여기에 더한다.
+//    (data-back · data-btn-href 처럼 **파셜 변수**로 넘기는 것은 결국 href 로 들어가므로 여기 없어도 된다)
+//    ⚠ `\bhref` 는 `location.href='…'` 에도 걸린다 — onclick·인라인 script 안의 이동도 함께 바뀐다.
+const LINK_ATTRS = ['href', 'data-done-url'];
+function toOutputLinks(html) {
+	const re = new RegExp('\\b(' + LINK_ATTRS.join('|') + ')(\\s*=\\s*)(["\'])\\/html\\/', 'gi');
+	return html.replace(re, (m, attr, eq, q) => attr + eq + q + '/prerender/');
+}
+
 function build(fileName, quiet) {
 	const srcPath = path.join(SRC_DIR, fileName);
 
@@ -613,24 +689,21 @@ function build(fileName, quiet) {
 	//    페이지에 둔 것은 여기서, 파셜에 둔 것은 expandPartials 가 읽으면서 더한다.
 	const ctx = { partials: 0, lists: 0, rows: 0, deps: new Set(), templates: collectTemplates(html) };
 
-	html = expandPartials(html, SRC_DIR, [srcPath], ctx);
+	// ⚠ 기준은 **그 페이지가 있는 폴더**다. 브라우저(dynamicImport)가 fetch 를 푸는 기준과 같다.
+	//    페이지가 전부 public/html 바로 아래 있던 시절에는 SRC_DIR 과 같은 값이었다.
+	const pageDir = path.dirname(srcPath);
+	html = expandPartials(html, pageDir, [srcPath], ctx);
 
 	const templates = collectTemplates(html);
-	html = expandLists(html, SRC_DIR, templates, ctx);
+	html = expandLists(html, pageDir, templates, ctx);
 
 	if (!keepTemplates) {
 		// 템플릿 정의와 그 주변 주석 제거
 		html = html
 			.replace(/[ \t]*<!--\s*목록 템플릿[\s\S]*?-->\r?\n?/g, '')
 			.replace(/[ \t]*<!--\/\/\s*목록 템플릿\s*-->\r?\n?/g, '')
-			// 템플릿 **바로 위**의 라벨 주석 · **바로 아래**의 닫음 표시도 함께 지운다.
-			// 템플릿만 사라지면 주석이 남아 엉뚱한 요소를 가리킨다(슬롯 template 처럼 문구가 제각각일 때).
-			// ⚠ 주석만 지운다 — 템플릿 자체는 아래 규칙이 맡는다(주석 안의 template 글자를 먹지 않게).
-			// ⚠ @ 표시한 개발단 지침은 남긴다.
-			.replace(/[ \t]*<!--(?!@)(?:(?!-->)[\s\S])*?-->[ \t]*\r?\n(?=[ \t]*<template\b)/gi, (m, offset, whole) =>
-				insideComment(whole, offset) ? m : '',
-			)
-			.replace(/(?<=<\/template>[ \t]*\r?\n)[ \t]*<!--\/\/(?:(?!-->)[\s\S])*?-->[ \t]*\r?\n/gi, '')
+			// 문구에 의존하지 않는 규칙 — 위 두 줄이 못 잡는 라벨을 위치로 잡는다(여러 겹도)
+			.replace(/^[\s\S]*$/, stripTemplateLabels)
 			// ⚠ 주석 안의 template 글자에는 걸리지 않게 한다.
 			//    파셜 설명 주석에 template 태그를 예시로 적어 두면, 그 지점부터 실제 닫는 태그까지
 			//    통째로 지워져 주석의 닫는 표시가 사라지고 이후 문서 전체가 주석으로 먹힌다.
@@ -655,8 +728,13 @@ function build(fileName, quiet) {
 	// 스크립트 주석의 표시도 같이 뗀다 — 줄 전체가 주석인 줄만 본다(꼬리 주석은 안 건드린다)
 	html = html.replace(/^([ \t]*\/[/*])@[ ]?/gm, '$1 ');
 
-	fs.mkdirSync(OUT_DIR, { recursive: true });
-	fs.writeFileSync(path.join(OUT_DIR, fileName), html, 'utf8');
+	// 페이지 링크를 **산출물 트리**로 돌린다 — /html/… → /prerender/…
+	html = toOutputLinks(html);
+
+	// 원본과 **같은 폴더 구조**로 낸다 — 깊이가 같아야 루트 상대경로가 어느 폴더에서든 맞는다
+	const outPath = path.join(OUT_DIR, fileName);
+	fs.mkdirSync(path.dirname(outPath), { recursive: true });
+	fs.writeFileSync(outPath, html, 'utf8');
 	depMap.set(fileName, ctx.deps);
 
 	if (!quiet) {
@@ -664,8 +742,47 @@ function build(fileName, quiet) {
 	}
 }
 
-function pageList() {
-	return fs.readdirSync(SRC_DIR).filter((f) => f.endsWith('.html') && !f.startsWith('_'));
+// 원본이 없는 산출물을 지운다 — **전체 빌드에서만** 부른다.
+// 페이지를 폴더로 옮기면 옛 자리의 산출물이 그대로 남아, index 링크를 고치기 전까지
+// 「옛 화면이 멀쩡히 열리는」 상태가 된다. 가장 헷갈리는 종류라 빌드가 직접 치운다.
+// ⚠ 파일 하나만 지정해 돌릴 때와 감시 모드에서는 부르지 않는다 — 나머지를 전부 지워 버린다.
+function sweepOrphans() {
+	if (!fs.existsSync(OUT_DIR)) return 0;
+	let gone = 0;
+	const walk = (dir) => {
+		for (const e of fs.readdirSync(dir, { withFileTypes: true })) {
+			const p = path.join(dir, e.name);
+			if (e.isDirectory()) {
+				walk(p);
+				continue;
+			}
+			if (!e.name.endsWith('.html')) continue;
+			const src = path.join(SRC_DIR, path.relative(OUT_DIR, p));
+			if (fs.existsSync(src)) continue;
+			fs.unlinkSync(p);
+			gone += 1;
+			console.log('  - ' + rel(p) + ' (원본이 없어 산출물 삭제)');
+		}
+		// 비워진 폴더도 정리한다
+		if (dir !== OUT_DIR && !fs.readdirSync(dir).length) fs.rmdirSync(dir);
+	};
+	walk(OUT_DIR);
+	return gone;
+}
+
+// 페이지 목록 — 하위 폴더까지 훑는다. 반환값은 SRC_DIR 기준 상대경로("guide/Guide_Partial.html").
+// ⚠ _ 로 시작하는 파일(파셜)과 SKIP_DIRS 는 제외한다.
+function pageList(dir, out) {
+	dir = dir || SRC_DIR;
+	out = out || [];
+	for (const e of fs.readdirSync(dir, { withFileTypes: true })) {
+		if (e.isDirectory()) {
+			if (!SKIP_DIRS.has(e.name)) pageList(path.join(dir, e.name), out);
+			continue;
+		}
+		if (e.name.endsWith('.html') && !e.name.startsWith('_')) out.push(toKey(path.join(dir, e.name)));
+	}
+	return out;
 }
 
 function buildAll(quiet) {
@@ -686,8 +803,14 @@ function startWatch() {
 		const name = path.basename(changed);
 
 		// 페이지 자신 (파셜은 '_' 로 시작하므로 제외됨)
-		if (path.dirname(changed) === SRC_DIR && name.endsWith('.html') && !name.startsWith('_')) {
-			out.add(name);
+		// ⚠ 하위 폴더도 페이지다 — SRC_DIR 안에 있고 SKIP_DIRS 를 거치지 않으면 페이지로 본다.
+		const key = toKey(changed);
+		const inSkip = key
+			.split('/')
+			.slice(0, -1)
+			.some((seg) => SKIP_DIRS.has(seg));
+		if (!key.startsWith('..') && !inSkip && name.endsWith('.html') && !name.startsWith('_')) {
+			out.add(key);
 		}
 		// 이 파일에 의존(파셜·JSON)하는 페이지들
 		depMap.forEach((deps, page) => {
@@ -787,14 +910,25 @@ function main() {
 	}
 
 	let files = watchMode || !targets.length ? pageList() : targets;
-	files = files.filter((f) => {
-		if (fs.existsSync(path.join(SRC_DIR, f))) return true;
-		console.warn('  ! 파일 없음:', f);
-		return false;
-	});
+	// 인자는 "guide/Guide_Partial.html" 처럼 폴더를 포함해도 되고, 이름만 줘도 된다(폴더를 찾아 준다).
+	const all = watchMode || !targets.length ? files : pageList();
+	files = files
+		.map((f) => {
+			const key = f.split(path.sep).join('/');
+			if (fs.existsSync(path.join(SRC_DIR, key))) return key;
+			const hit = all.filter((p) => p.endsWith('/' + key));
+			if (hit.length === 1) return hit[0];
+			if (hit.length > 1) console.warn('  ! 이름이 겹칩니다:', key, '→', hit.join(', '));
+			else console.warn('  ! 파일 없음:', f);
+			return null;
+		})
+		.filter(Boolean);
 
 	console.log('prerender → ' + rel(OUT_DIR) + ' (' + files.length + '개)');
 	files.forEach((f) => build(f, watchMode));
+
+	// 전체를 돌렸을 때만 — 일부만 돌린 경우엔 나머지가 「주인 없음」으로 보인다
+	if (!targets.length) sweepOrphans();
 
 	if (!watchMode) {
 		if (cleanComments) {
