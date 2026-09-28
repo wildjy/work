@@ -1,0 +1,200 @@
+<!doctype html>
+<html lang="ko">
+	<head>
+		<meta charset="utf-8" />
+		<meta name="viewport" content="width=device-width,initial-scale=1.0" />
+		<title>[개발 확인용] Dropdown</title>
+		<link rel="stylesheet" href="/css/common.css" />
+		<script src="/js/dynamicImport.js"></script>
+		<script src="/js/listRender.js"></script>
+		<script src="/js/common.js"></script>
+	</head>
+
+	<body>
+		<!-- 개발 확인용 페이지 틀 -->
+		<div class="layout">
+			<!-- 사이드 : 브랜드 + LNB -->
+			<aside class="layout__side">
+				<p class="layout__brand">pub-base</p>
+				<!-- 공통 LNB -->
+				<!-- 현재 페이지 메뉴의 is-active 와 상위 메뉴의 is-open 은 common.js 의 lnbActive 가 붙인다 -->
+				<nav class="ui-lnb">
+					<div class="ui-lnb__menu">
+						<ul class="ui-lnb__group">
+							<li class="ui-lnb__item">
+								<a class="ui-lnb__link" href="/index.html">작업 목록</a>
+							</li>
+							<li class="ui-lnb__item">
+								<button type="button" class="ui-lnb__link ui-lnb__link--toggle" aria-expanded="false">사용법</button>
+								<div class="ui-lnb__sub" hidden>
+									<ul class="ui-lnb__group">
+										<li class="ui-lnb__item">
+											<a class="ui-lnb__link" href="/prerender/guide/Guide_Structure.html">폴더 구조</a>
+										</li>
+										<li class="ui-lnb__item">
+											<a class="ui-lnb__link" href="/prerender/guide/Guide_Partial.html">파셜(include)</a>
+										</li>
+									</ul>
+								</div>
+							</li>
+							<li class="ui-lnb__item">
+								<button type="button" class="ui-lnb__link ui-lnb__link--toggle" aria-expanded="false">개발 확인용</button>
+								<div class="ui-lnb__sub" hidden>
+									<!-- 개발 확인용 페이지 목록은 /data/common/lnb_dev.json 에서 고친다 -->
+									<ul class="ui-lnb__group">
+									  <li class="ui-lnb__item">
+									  	<a class="ui-lnb__link" href="/prerender/sample/Sample.html">전체 모아보기</a>
+									  </li>
+									  <li class="ui-lnb__item">
+									  	<a class="ui-lnb__link" href="/prerender/sample/Sample_List.html">List</a>
+									  </li>
+									  <li class="ui-lnb__item">
+									  	<a class="ui-lnb__link" href="/prerender/sample/Sample_Button.html">Button</a>
+									  </li>
+									  <li class="ui-lnb__item">
+									  	<a class="ui-lnb__link" href="/prerender/sample/Sample_Input.html">Input</a>
+									  </li>
+									  <li class="ui-lnb__item">
+									  	<a class="ui-lnb__link" href="/prerender/sample/Sample_Dropdown.html">Dropdown</a>
+									  </li>
+									  <li class="ui-lnb__item">
+									  	<a class="ui-lnb__link" href="/prerender/sample/Sample_Stepper.html">Stepper</a>
+									  </li>
+									  <li class="ui-lnb__item">
+									  	<a class="ui-lnb__link" href="/prerender/sample/Sample_Date.html">Date</a>
+									  </li>
+									  <li class="ui-lnb__item">
+									  	<a class="ui-lnb__link" href="/prerender/sample/Sample_Checkbox.html">Checkbox</a>
+									  </li>
+									  <li class="ui-lnb__item">
+									  	<a class="ui-lnb__link" href="/prerender/sample/Sample_Radio.html">Radio</a>
+									  </li>
+									  <li class="ui-lnb__item">
+									  	<a class="ui-lnb__link" href="/prerender/sample/Sample_Toggle.html">Toggle</a>
+									  </li>
+									  <li class="ui-lnb__item">
+									  	<a class="ui-lnb__link" href="/prerender/sample/Sample_Tooltip.html">Tooltip</a>
+									  </li>
+									  <li class="ui-lnb__item">
+									  	<a class="ui-lnb__link" href="/prerender/sample/Sample_Tab.html">Tab</a>
+									  </li>
+									  <li class="ui-lnb__item">
+									  	<a class="ui-lnb__link" href="/prerender/sample/Sample_Accordion.html">Accordion</a>
+									  </li>
+									  <li class="ui-lnb__item">
+									  	<a class="ui-lnb__link" href="/prerender/sample/Sample_Toast.html">Toast</a>
+									  </li>
+									  <li class="ui-lnb__item">
+									  	<a class="ui-lnb__link" href="/prerender/sample/Sample_Modal.html">Modal</a>
+									  </li>
+									  <li class="ui-lnb__item">
+									  	<a class="ui-lnb__link" href="/prerender/sample/Sample_Var.html">Var</a>
+									  </li>
+									</ul>
+								</div>
+							</li>
+						</ul>
+					</div>
+				</nav>
+			</aside>
+
+			<div class="layout__body">
+				<!-- 공통 헤더 -->
+				<header class="app-header">
+					<h1 class="app-header__title">Dropdown</h1>
+				</header>
+
+				<main class="layout__main">
+					<!-- 드롭다운 구역 -->
+					<section class="section">
+						<div class="section__head">
+							<h2 class="section__title">드롭다운</h2>
+							<p class="section__desc">항목은 JSON · 0건이면 빈 안내 · 검색 드롭다운</p>
+						</div>
+						<div class="ui-card">
+							<div class="ui-card__body">
+								<div class="grid grid--2">
+									<div>
+										<p class="ui-label">드롭다운</p>
+										<!-- 공통 드롭다운 -->
+										<div class="ui-dropdown ">
+											<button type="button" class="ui-dropdown__btn is-placeholder" onclick="toggleMenu(this)">
+												정렬을 선택해주세요.
+											</button>
+											<div class="ui-dropdown__list" hidden>
+												<ul>
+												  <li>
+												  	<button type="button" class="ui-dropdown__item " data-value="latest" onclick="dropdownSelect(this)">
+												  		최신순
+												  	</button>
+												  </li>
+												  <li>
+												  	<button type="button" class="ui-dropdown__item " data-value="name" onclick="dropdownSelect(this)">
+												  		이름순
+												  	</button>
+												  </li>
+												  <li>
+												  	<button type="button" class="ui-dropdown__item ui-dropdown__item--action" data-value="" onclick="dropdownSelect(this)">
+												  		직접 입력하기
+												  	</button>
+												  </li>
+												</ul>
+											</div>
+										</div>
+									</div>
+									<div>
+										<p class="ui-label">드롭다운 (0건)</p>
+										<!-- 공통 드롭다운 -->
+										<div class="ui-dropdown ">
+											<button type="button" class="ui-dropdown__btn is-placeholder" onclick="toggleMenu(this)">
+												선택해주세요.
+											</button>
+											<div class="ui-dropdown__list" hidden>
+												<ul>
+												  <li class="ui-dropdown__empty">선택할 항목이 없습니다.</li>
+												</ul>
+											</div>
+										</div>
+									</div>
+									<div>
+										<p class="ui-label">검색 드롭다운</p>
+										<!-- 공통 검색 드롭다운 -->
+										<div class="ui-dropdown ui-dropdown--search">
+											<div class="ui-input ui-input--search">
+												<input type="text" name="" placeholder="회사명을 검색해주세요." />
+												<button type="button" class="ui-input__clear">지우기</button>
+												<!-- 검색 결과를 받아 목록을 채운 뒤 연다(개발 연동) -->
+												<button type="button" class="ui-input__search" onclick="toggleMenu(this)">검색</button>
+											</div>
+											<div class="ui-dropdown__list" hidden>
+												<ul>
+												  <li>
+												  	<button type="button" class="ui-dropdown__item " data-value="latest" onclick="dropdownSelect(this)">
+												  		최신순
+												  	</button>
+												  </li>
+												  <li>
+												  	<button type="button" class="ui-dropdown__item " data-value="name" onclick="dropdownSelect(this)">
+												  		이름순
+												  	</button>
+												  </li>
+												  <li>
+												  	<button type="button" class="ui-dropdown__item ui-dropdown__item--action" data-value="" onclick="dropdownSelect(this)">
+												  		직접 입력하기
+												  	</button>
+												  </li>
+												</ul>
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+					</section>
+					<!--// 드롭다운 구역 -->
+				</main>
+			</div>
+		</div>
+
+	</body>
+</html>

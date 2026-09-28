@@ -65,7 +65,7 @@ FSD 의 핵심은 폴더 이름이 아니라 **의존 방향**인데, 이 저장
 ```
 
 - **목록 template 은 컨테이너와 같은 파일에** 둔다(파셜이 목록보다 먼저 주입된다).
-- 화면에 보이지 않는 덩어리(토스트 · 모달의 실체)도 여기 둔다 — `_sample_overlay.html`.
+- 화면에 보이지 않는 덩어리(토스트 · 모달의 실체)도 **여는 버튼과 같은 파일에** 둔다 — `_sample_modal.html` · `_sample_toast.html`.
 - ⚠ **닫음 표시를 `template` 바로 아래 두지 않는다.** 프리렌더가 template 의 닫음 표시로 보고 지운다.
   `</section>` 바로 뒤로 올린다.
 
@@ -126,15 +126,20 @@ FSD 도 「재사용·경계가 생길 때」 슬라이스를 나눈다. 처음�
 
 ## 6. 지금 저장소에 적용된 것
 
-`public/html/Sample.html` 이 이 구조의 실물이다 — 510줄이던 페이지가 include 8줄만 남았다.
+`public/html/sample/` 의 개발 확인용 페이지가 이 구조의 실물이다 — **UI 하나에 구역 파셜 하나**, 페이지는 틀 + include 한 줄.
 
 ```
 include/sample/
-├─ section/  _sample_list · _button · _input · _choice · _nav · _feedback · _var · _overlay
+├─ _sample_layout.html   틀(사이드 · LNB · 헤더) — 본문은 main 슬롯으로 받는다
+├─ section/  _sample_list · _button · _input · _dropdown · _stepper · _date
+│            _checkbox · _radio · _toggle · _tooltip · _tab · _accordion
+│            _toast · _modal · _var
 └─ body/     _sample_invite_body.html
 ```
 
-점검 상세 알림의 본문(문단 3개)은 **4번 기준에 따라** `_sample_overlay.html` 의 `template` 안에 직접 두었다.
+- `Sample.html` 은 구역 15개를 모두 넣은 **전체 모아보기**, `Sample_<UI>.html` 은 구역 하나씩이다.
+- 페이지 목록은 LNB 「개발 확인용」 하위 메뉴가 **`data/common/lnb_dev.json`** 에서 그린다 — 페이지를 늘리면 여기에 한 줄.
+- 점검 상세 알림의 본문(문단 3개)은 **4번 기준에 따라** `_sample_modal.html` 의 `template` 안에 직접 두었다.
 
 ---
 

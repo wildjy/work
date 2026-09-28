@@ -1,0 +1,21 @@
+<!-- 토스트 구역 — 여는 버튼 + 토스트 실체(화면에 보이지 않는 덩어리도 여는 버튼과 같은 파셜에 둔다) -->
+<section class="section">
+	<div class="section__head">
+		<h2 class="section__title">토스트</h2>
+		<p class="section__desc">data-toast 로 띄운다 — 2.5초 뒤 저절로 숨는다</p>
+	</div>
+	<div class="ui-card">
+		<div class="ui-card__body">
+			<div class="ui-btn-group">
+				<button type="button" class="ui-btn ui-btn--outlined" data-toast="sample_toast">토스트 띄우기</button>
+			</div>
+		</div>
+	</div>
+</section>
+<div
+	class="dynamic-content"
+	data-source="/html/include/ui/_ui_toast.html"
+	data-id="sample_toast"
+	data-text="저장되었습니다."
+></div>
+<!--// 토스트 구역 -->

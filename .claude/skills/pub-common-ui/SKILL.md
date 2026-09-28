@@ -70,7 +70,7 @@ description: >-
 | `_ui_dropdown_tpl.html` | — | 위 둘이 안에서 include 한다. **직접 쓰지 않는다** |
 | `_ui_input.html` | **`id`** · `name` · `type` · `placeholder` · `value` · `modifier` · `helper` · `helper-type` | |
 | `_ui_stepper.html` | **`id`** · `name` · `value`(0) · `min`(0) · `max` | |
-| `_ui_lnb.html` | — | 메뉴는 **파셜 안에서** 고친다 |
+| `_ui_lnb.html` | — | 메뉴는 **파셜 안에서** 고친다 · 「개발 확인용」 하위 목록만 `data/common/lnb_dev.json` |
 | `_ui_accordion.html` | **`items`** · `mode`(`single` \| `multiple`) | 항목 JSON `title`·`body`(HTML)·`state` |
 | `_ui_toast.html` | **`id`** · `text` · `type`(`success` \| `error`) | 페이지 끝에 둔다 |
 | `_ui_modal.html` | **`id`** · **`title`** · **`slot-body`**(본문 template 아이디) · `subtext` · `footer`(버튼 파셜 경로) · `cancel`(취소) · `confirm`(확인) · `modifier`(`ui-modal--md`) | 공통 모달 프레임 |
@@ -144,7 +144,7 @@ description: >-
 ```
 
 - `.ui-lnb > .ui-lnb__menu > ul.ui-lnb__group > li.ui-lnb__item > a.ui-lnb__link[href]` · 하위 메뉴 `button.ui-lnb__link--toggle` + `.ui-lnb__sub[hidden]`.
-- 메뉴는 **파셜 안 마크업**(listRender 는 중첩 목록을 못 그린다). `lnbActive()` 가 파일명 대조로 `is-active`, 하위가 활성이면 상위 `is-open` + 하위 목록 표시.
+- 메뉴는 **파셜 안 마크업**(listRender 는 중첩 목록을 못 그린다). 단 **한 단계짜리 하위 목록**은 `ul.ui-lnb__group.dynamic-list` 로 JSON 에서 그려도 된다 — 「개발 확인용」이 `data/common/lnb_dev.json`(`title`·`href`) 을 쓴다. `lnbActive` 는 `dynamic-list-loaded` 에도 걸려 있다. `lnbActive()` 가 파일명 대조로 `is-active`, 하위가 활성이면 상위 `is-open` + 하위 목록 표시.
 - 자기 메뉴가 없는 상세·빈 화면은 `common.js` 의 `LNB_ALIAS` 에 `변형: '대표'`.
 
 ## 6. 탭 — 파셜 없음, 구조대로 직접 쓴다

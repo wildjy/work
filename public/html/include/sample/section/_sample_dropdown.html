@@ -1,0 +1,40 @@
+<!-- 드롭다운 구역 — 기본 · 0건 · 검색 드롭다운 -->
+<section class="section">
+	<div class="section__head">
+		<h2 class="section__title">드롭다운</h2>
+		<p class="section__desc">항목은 JSON · 0건이면 빈 안내 · 검색 드롭다운</p>
+	</div>
+	<div class="ui-card">
+		<div class="ui-card__body">
+			<div class="grid grid--2">
+				<div>
+					<p class="ui-label">드롭다운</p>
+					<div
+						class="dynamic-content"
+						data-source="/html/include/ui/_ui_dropdown.html"
+						data-items="/data/ui/sample_options.json"
+						data-placeholder="정렬을 선택해주세요."
+					></div>
+				</div>
+				<div>
+					<p class="ui-label">드롭다운 (0건)</p>
+					<div
+						class="dynamic-content"
+						data-source="/html/include/ui/_ui_dropdown.html"
+						data-items="/data/ui/empty.json"
+					></div>
+				</div>
+				<div>
+					<p class="ui-label">검색 드롭다운</p>
+					<div
+						class="dynamic-content"
+						data-source="/html/include/ui/_ui_dropdown_search.html"
+						data-items="/data/ui/sample_options.json"
+						data-placeholder="회사명을 검색해주세요."
+					></div>
+				</div>
+			</div>
+		</div>
+	</div>
+</section>
+<!--// 드롭다운 구역 -->

@@ -1,0 +1,20 @@
+<!-- 개발 확인용 페이지 틀 — 사이드(브랜드 + LNB) · 헤더 · 본문
+	받는 값 : data-page-title(헤더 제목) · data-slot-main(본문 template 아이디 · 필수)
+	본문 template 은 이 파셜을 include 한 페이지에 둔다 -->
+<div class="layout">
+	<!-- 사이드 : 브랜드 + LNB -->
+	<aside class="layout__side">
+		<p class="layout__brand">pub-base</p>
+		<div class="dynamic-content" data-source="/html/include/ui/_ui_lnb.html"></div>
+	</aside>
+
+	<div class="layout__body">
+		<div
+			class="dynamic-content"
+			data-source="/html/include/common/_header.html"
+			data-page-title="{{pageTitle|공통 UI 샘플}}"
+		></div>
+
+		<main class="layout__main">{{{main}}}</main>
+	</div>
+</div>

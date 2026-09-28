@@ -1,0 +1,287 @@
+<!doctype html>
+<html lang="ko">
+	<head>
+		<meta charset="utf-8" />
+		<meta name="viewport" content="width=device-width,initial-scale=1.0" />
+		<title>[개발 확인용] Modal</title>
+		<link rel="stylesheet" href="/css/common.css" />
+		<script src="/js/dynamicImport.js"></script>
+		<script src="/js/listRender.js"></script>
+		<script src="/js/common.js"></script>
+	</head>
+
+	<body>
+		<!-- 개발 확인용 페이지 틀 -->
+		<div class="layout">
+			<!-- 사이드 : 브랜드 + LNB -->
+			<aside class="layout__side">
+				<p class="layout__brand">pub-base</p>
+				<!-- 공통 LNB -->
+				<!-- 현재 페이지 메뉴의 is-active 와 상위 메뉴의 is-open 은 common.js 의 lnbActive 가 붙인다 -->
+				<nav class="ui-lnb">
+					<div class="ui-lnb__menu">
+						<ul class="ui-lnb__group">
+							<li class="ui-lnb__item">
+								<a class="ui-lnb__link" href="/index.html">작업 목록</a>
+							</li>
+							<li class="ui-lnb__item">
+								<button type="button" class="ui-lnb__link ui-lnb__link--toggle" aria-expanded="false">사용법</button>
+								<div class="ui-lnb__sub" hidden>
+									<ul class="ui-lnb__group">
+										<li class="ui-lnb__item">
+											<a class="ui-lnb__link" href="/prerender/guide/Guide_Structure.html">폴더 구조</a>
+										</li>
+										<li class="ui-lnb__item">
+											<a class="ui-lnb__link" href="/prerender/guide/Guide_Partial.html">파셜(include)</a>
+										</li>
+									</ul>
+								</div>
+							</li>
+							<li class="ui-lnb__item">
+								<button type="button" class="ui-lnb__link ui-lnb__link--toggle" aria-expanded="false">개발 확인용</button>
+								<div class="ui-lnb__sub" hidden>
+									<!-- 개발 확인용 페이지 목록은 /data/common/lnb_dev.json 에서 고친다 -->
+									<ul class="ui-lnb__group">
+									  <li class="ui-lnb__item">
+									  	<a class="ui-lnb__link" href="/prerender/sample/Sample.html">전체 모아보기</a>
+									  </li>
+									  <li class="ui-lnb__item">
+									  	<a class="ui-lnb__link" href="/prerender/sample/Sample_List.html">List</a>
+									  </li>
+									  <li class="ui-lnb__item">
+									  	<a class="ui-lnb__link" href="/prerender/sample/Sample_Button.html">Button</a>
+									  </li>
+									  <li class="ui-lnb__item">
+									  	<a class="ui-lnb__link" href="/prerender/sample/Sample_Input.html">Input</a>
+									  </li>
+									  <li class="ui-lnb__item">
+									  	<a class="ui-lnb__link" href="/prerender/sample/Sample_Dropdown.html">Dropdown</a>
+									  </li>
+									  <li class="ui-lnb__item">
+									  	<a class="ui-lnb__link" href="/prerender/sample/Sample_Stepper.html">Stepper</a>
+									  </li>
+									  <li class="ui-lnb__item">
+									  	<a class="ui-lnb__link" href="/prerender/sample/Sample_Date.html">Date</a>
+									  </li>
+									  <li class="ui-lnb__item">
+									  	<a class="ui-lnb__link" href="/prerender/sample/Sample_Checkbox.html">Checkbox</a>
+									  </li>
+									  <li class="ui-lnb__item">
+									  	<a class="ui-lnb__link" href="/prerender/sample/Sample_Radio.html">Radio</a>
+									  </li>
+									  <li class="ui-lnb__item">
+									  	<a class="ui-lnb__link" href="/prerender/sample/Sample_Toggle.html">Toggle</a>
+									  </li>
+									  <li class="ui-lnb__item">
+									  	<a class="ui-lnb__link" href="/prerender/sample/Sample_Tooltip.html">Tooltip</a>
+									  </li>
+									  <li class="ui-lnb__item">
+									  	<a class="ui-lnb__link" href="/prerender/sample/Sample_Tab.html">Tab</a>
+									  </li>
+									  <li class="ui-lnb__item">
+									  	<a class="ui-lnb__link" href="/prerender/sample/Sample_Accordion.html">Accordion</a>
+									  </li>
+									  <li class="ui-lnb__item">
+									  	<a class="ui-lnb__link" href="/prerender/sample/Sample_Toast.html">Toast</a>
+									  </li>
+									  <li class="ui-lnb__item">
+									  	<a class="ui-lnb__link" href="/prerender/sample/Sample_Modal.html">Modal</a>
+									  </li>
+									  <li class="ui-lnb__item">
+									  	<a class="ui-lnb__link" href="/prerender/sample/Sample_Var.html">Var</a>
+									  </li>
+									</ul>
+								</div>
+							</li>
+						</ul>
+					</div>
+				</nav>
+			</aside>
+
+			<div class="layout__body">
+				<!-- 공통 헤더 -->
+				<header class="app-header">
+					<h1 class="app-header__title">Modal</h1>
+				</header>
+
+				<main class="layout__main">
+					<!-- 모달 구역 -->
+					<section class="section">
+						<div class="section__head">
+							<h2 class="section__title">모달</h2>
+							<p class="section__desc">모달 프레임은 본문만 스크롤 · 확인창 · 버튼 없는 알림은 딤을 누르면 닫힘</p>
+						</div>
+						<div class="ui-card">
+							<div class="ui-card__body">
+								<div class="ui-btn-group">
+									<button type="button" class="ui-btn ui-btn--contained" data-modal-open="sample_confirm">확인창 열기</button>
+									<button type="button" class="ui-btn ui-btn--contained" data-modal-open="sample_invite">모달 열기</button>
+									<button type="button" class="ui-btn ui-btn--outlined" data-modal-open="sample_alert">알림 모달 열기</button>
+									<button type="button" class="ui-btn ui-btn--outlined" data-modal-open="sample_alert_detail">
+										알림 모달(본문 슬롯) 열기
+									</button>
+								</div>
+							</div>
+						</div>
+					</section>
+					<!-- 공통 모달 프레임 -->
+					<!-- 열기 : data-modal-open="아이디" 버튼 또는 modalOpen('아이디') -->
+					<!-- 머리 · 버튼 영역은 고정이고 본문만 스크롤된다(모달 최대 높이 90dvh) -->
+					<div
+						class="ui-modal ui-modal--md"
+						id="sample_invite"
+						role="dialog"
+						aria-modal="true"
+						aria-labelledby="sample_invite_title"
+						hidden
+					>
+						<div class="ui-modal__dialog">
+							<div class="ui-modal__header">
+								<h2 class="ui-modal__title" id="sample_invite_title">멤버 초대</h2>
+								<p class="ui-modal__subtext">초대할 멤버의 정보를 입력해주세요.</p>
+							</div>
+							<div class="ui-modal__body">
+								<!-- 멤버 초대 모달 본문(슬롯) -->
+								<div class="grid">
+									<div>
+										<label class="ui-label" for="sample_invite_name">이름</label>
+										<!-- 공통 입력 -->
+										<div class="ui-field">
+											<div class="ui-input ">
+												<input type="text" id="sample_invite_name" name="" placeholder="이름을 입력해주세요." value="" />
+												<button type="button" class="ui-input__clear">지우기</button>
+											</div>
+											<!-- 오류·성공일 때만 문구를 채운다. 비어 있으면 스타일에서 숨긴다 -->
+											<p class="ui-helper "></p>
+										</div>
+									</div>
+									<div>
+										<label class="ui-label" for="sample_invite_email">이메일</label>
+										<!-- 공통 입력 -->
+										<div class="ui-field">
+											<div class="ui-input ">
+												<input type="text" id="sample_invite_email" name="" placeholder="이메일을 입력해주세요." value="" />
+												<button type="button" class="ui-input__clear">지우기</button>
+											</div>
+											<!-- 오류·성공일 때만 문구를 채운다. 비어 있으면 스타일에서 숨긴다 -->
+											<p class="ui-helper "></p>
+										</div>
+									</div>
+									<div>
+										<label class="ui-label" for="sample_invite_count">초대 인원</label>
+										<!-- 공통 수량 스테퍼 -->
+										<div class="ui-stepper" data-min="1" data-max="10">
+											<button type="button" class="ui-stepper__btn ui-stepper__btn--minus" onclick="stepperChange(this, -1)">감소</button>
+											<input type="text" class="ui-stepper__input" inputmode="numeric" id="sample_invite_count" name="" value="1" />
+											<button type="button" class="ui-stepper__btn ui-stepper__btn--plus" onclick="stepperChange(this, 1)">증가</button>
+										</div>
+									</div>
+									<div>
+										<p class="ui-label">초대 안내</p>
+										<p class="ui-modal__text">
+											초대 메일은 입력한 주소로 즉시 발송되며, 받은 사람이 7일 안에 수락하지 않으면 초대가 만료됩니다. 만료된 초대는
+											목록에서 다시 보낼 수 있습니다.
+										</p>
+										<p class="ui-modal__text">
+											초대받은 멤버는 수락한 시점부터 워크스페이스의 공개 프로젝트를 볼 수 있습니다. 비공개 프로젝트는 프로젝트 관리자가
+											따로 권한을 줘야 합니다.
+										</p>
+										<p class="ui-modal__text">
+											멤버 수가 요금제 한도를 넘으면 초대를 보낼 수 없습니다. 한도는 설정의 요금제 화면에서 확인할 수 있으며, 결제 주기
+											중간에 늘린 인원은 남은 기간만큼 나누어 청구됩니다.
+										</p>
+										<p class="ui-modal__text">
+											이 안내는 본문이 길어졌을 때 머리와 버튼 영역은 그대로 두고 본문만 스크롤되는지 확인하기 위한 샘플 문구입니다.
+										</p>
+									</div>
+								</div>
+							</div>
+							<div class="ui-modal__footer">
+								<!-- 공통 모달 기본 버튼 -->
+								<button type="button" class="ui-btn ui-btn--outlined" data-modal-close>취소</button>
+								<!-- 확인 동작은 개발 연동 — 처리 후 닫는다 -->
+								<button type="button" class="ui-btn ui-btn--contained">초대하기</button>
+							</div>
+							<button type="button" class="ui-modal__close">닫기</button>
+						</div>
+					</div>
+					<!-- 공통 알림 모달(정보성 · 버튼 없음) -->
+					<!-- 열기 : data-modal-open="아이디" 버튼 또는 modalOpen('아이디') -->
+					<!-- 버튼이 없는 모달이라 딤을 누르거나 닫기(X)로 닫는다(common.js) -->
+					<div
+						class="ui-modal ui-modal--alert ui-modal--sm"
+						id="sample_alert"
+						role="dialog"
+						aria-modal="true"
+						aria-labelledby="sample_alert_title"
+						hidden
+					>
+						<div class="ui-modal__dialog">
+							<div class="ui-modal__header">
+								<h2 class="ui-modal__title" id="sample_alert_title">점검 안내</h2>
+								<p class="ui-modal__subtext">2026.09.20 02:00 ~ 06:00</p>
+							</div>
+							<div class="ui-modal__body">
+								<p class="ui-modal__text">서비스 점검 시간에는 로그인과 결제를 이용할 수 없습니다. 바깥 영역을 누르면 닫힙니다.</p>
+							</div>
+							<button type="button" class="ui-modal__close">닫기</button>
+						</div>
+					</div>
+					<!-- 공통 알림 모달(정보성 · 버튼 없음) -->
+					<!-- 열기 : data-modal-open="아이디" 버튼 또는 modalOpen('아이디') -->
+					<!-- 버튼이 없는 모달이라 딤을 누르거나 닫기(X)로 닫는다(common.js) -->
+					<div
+						class="ui-modal ui-modal--alert ui-modal--sm"
+						id="sample_alert_detail"
+						role="dialog"
+						aria-modal="true"
+						aria-labelledby="sample_alert_detail_title"
+						hidden
+					>
+						<div class="ui-modal__dialog">
+							<div class="ui-modal__header">
+								<h2 class="ui-modal__title" id="sample_alert_detail_title">점검 상세</h2>
+								<p class="ui-modal__subtext">2026.09.20 02:00 ~ 06:00</p>
+							</div>
+							<div class="ui-modal__body">
+								<p class="ui-modal__text">점검 시간에는 로그인 · 결제 · 알림 발송이 모두 멈춥니다.</p>
+								<p class="ui-modal__text">점검 중 작성하던 내용은 저장되지 않으니 미리 저장해 주세요.</p>
+								<p class="ui-modal__text">점검이 일찍 끝나면 공지사항으로 다시 안내합니다.</p>
+								<p class="ui-modal__text"></p>
+							</div>
+							<button type="button" class="ui-modal__close">닫기</button>
+						</div>
+					</div>
+					<!-- 공통 확인창 -->
+					<!-- 열기 : data-modal-open="아이디" 버튼 또는 modalOpen('아이디') -->
+					<!-- 확인창은 닫기(X) 없이 취소 · 확인 중 하나를 고르게 한다 -->
+					<div
+						class="ui-modal ui-modal--confirm "
+						id="sample_confirm"
+						role="dialog"
+						aria-modal="true"
+						aria-labelledby="sample_confirm_title"
+						hidden
+					>
+						<div class="ui-modal__dialog">
+							<div class="ui-modal__header">
+								<h2 class="ui-modal__title" id="sample_confirm_title">이벤트를 삭제하시겠습니까?</h2>
+							</div>
+							<div class="ui-modal__body">
+								<p class="ui-modal__text">삭제한 이벤트는 복구할 수 없습니다.</p>
+							</div>
+							<div class="ui-modal__footer">
+								<button type="button" class="ui-btn" data-modal-close>취소</button>
+								<!-- 확인 동작은 개발 연동 — 처리 후 닫는다 -->
+								<button type="button" class="ui-btn ui-btn--contained" data-modal-close>삭제</button>
+							</div>
+						</div>
+					</div>
+					<!--// 모달 구역 -->
+
+				</main>
+			</div>
+		</div>
+
+	</body>
+</html>

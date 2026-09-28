@@ -4,7 +4,7 @@
 // ─────────────────────────────────────────────────────────────
 // _ui_lnb.scss — LNB (머터리얼 navigation drawer)
 // 파셜 : include/ui/_ui_lnb.html
-// 상태 : 항목 is-active(현재 페이지) · is-open(하위 펼침) — lnbActive 가 붙인다
+// 상태 : 링크 is-active(현재 페이지) · 항목 is-open(하위 펼침) — lnbActive 가 붙인다
 // ─────────────────────────────────────────────────────────────
 
 .ui-lnb {
@@ -54,12 +54,22 @@
 		}
 	}
 
+	// 하위 목록이 0건일 때 — 링크와 같은 들여쓰기 · 누를 수 없는 안내
+	&__empty {
+		display: flex;
+		align-items: center;
+		height: 40px;
+		padding: 0 16px 0 32px;
+		@include mixin.font-set(0.875rem, 400, variable.$color-placeholder);
+	}
+
 	&__item {
 		&.is-open > .ui-lnb__link--toggle {
 			color: variable.$color-text;
 			background-image: mixin.icon('arr3-up', variable.$color-text);
 		}
-		&.is-active > .ui-lnb__link {
+		// 현재 페이지 — lnbActive 가 **링크**에 is-active 를 붙인다(항목이 아니다)
+		> .ui-lnb__link.is-active {
 			background-color: variable.$color-primary-light;
 			color: variable.$color-primary;
 			font-weight: 600;

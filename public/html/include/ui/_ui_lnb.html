@@ -22,13 +22,27 @@
 			<li class="ui-lnb__item">
 				<button type="button" class="ui-lnb__link ui-lnb__link--toggle" aria-expanded="false">개발 확인용</button>
 				<div class="ui-lnb__sub" hidden>
-					<ul class="ui-lnb__group">
-						<li class="ui-lnb__item">
-							<a class="ui-lnb__link" href="/html/sample/Sample.html">샘플</a>
-						</li>
-					</ul>
+					<!--@ 개발 확인용 페이지 목록은 /data/common/lnb_dev.json 에서 고친다 -->
+					<ul
+						class="ui-lnb__group dynamic-list"
+						data-source="/data/common/lnb_dev.json"
+						data-template="#tpl_lnb_dev"
+						data-empty="#tpl_lnb_dev_none"
+					></ul>
 				</div>
 			</li>
 		</ul>
 	</div>
 </nav>
+<!-- 목록 템플릿 (listRender.js 가 JSON 을 순회해 렌더) -->
+<template id="tpl_lnb_dev">
+	<li class="ui-lnb__item">
+		<a class="ui-lnb__link" href="{{href}}">{{title}}</a>
+	</li>
+</template>
+<template id="tpl_lnb_dev_none">
+	<li class="ui-lnb__item">
+		<p class="ui-lnb__empty">등록된 페이지가 없습니다.</p>
+	</li>
+</template>
+<!--// 목록 템플릿 -->

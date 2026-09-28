@@ -1254,11 +1254,24 @@ textarea {
   font-size: 0.875rem;
   font-weight: 400;
 }
+.ui-lnb__empty {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  height: 40px;
+  padding: 0 16px 0 32px;
+  font-size: 0.875rem;
+  font-weight: 400;
+  color: #9e96a0;
+}
 .ui-lnb__item.is-open > .ui-lnb__link--toggle {
   color: #292a31;
   background-image: url("data:image/svg+xml;charset=utf8,%3Csvg width='10' height='6' viewBox='0 0 10 6' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M1 5L5 1L9 5' stroke='%23292a31' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E%0A");
 }
-.ui-lnb__item.is-active > .ui-lnb__link {
+.ui-lnb__item > .ui-lnb__link.is-active {
   background-color: #ebf2ff;
   color: #2264d1;
   font-weight: 600;

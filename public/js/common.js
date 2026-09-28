@@ -679,6 +679,8 @@ function lnbActive() {
 }
 document.addEventListener('dynamic-content-loaded', lnbActive);
 document.addEventListener('DOMContentLoaded', lnbActive);
+// 하위 메뉴를 JSON 목록으로 그리는 경우(개발 확인용) — 링크가 목록 렌더 뒤에 생긴다
+document.addEventListener('dynamic-list-loaded', lnbActive);
 
 document.addEventListener('click', function (e) {
 	var toggle = e.target && e.target.closest && e.target.closest('.ui-lnb__link--toggle');

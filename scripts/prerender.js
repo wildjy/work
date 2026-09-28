@@ -143,8 +143,8 @@ function reindent(block, indent) {
    ⚠ 브라우저도 textarea 안은 글자로만 읽는다(태그가 되지 않는다) — 그래서 < > 를 그대로 적을 수 있다.
    ⚠ 안쪽에 닫는 textarea 태그만은 적을 수 없다. */
 const RAW_RE = /(<textarea\b[^>]*\bdata-raw\b[^>]*>)([\s\S]*?)(<\/textarea>)/gi;
-// 자리표는 원문에 나올 수 없는 제어문자(\u0001)로 감싼다 — 일부러 쓴 것이라 규칙에서 뺀다.
-// eslint-disable-next-line no-control-regex
+// 자리표는 **제어문자(U+0001)로 감싼다** — HTML 원본에 들어갈 수 없는 글자라 본문과 절대 겹치지 않는다.
+// eslint-disable-next-line no-control-regex -- 의도한 자리표다(실수로 들어간 제어문자가 아니다)
 const RAW_TOKEN_RE = /\u0001RAW(\d+)\u0001/g;
 function protectRaw(src, ctx) {
 	return src.replace(
@@ -170,6 +170,18 @@ const IS_PARTIAL = /\bclass\s*=\s*"[^"]*\bdynamic-content\b[^"]*"/i;
 function insideComment(src, offset) {
 	const before = src.slice(0, offset);
 	return before.lastIndexOf('<!--') > before.lastIndexOf('-->');
+}
+
+// offset 이 template 요소 안인가 — 여는 태그가 닫는 태그보다 많으면 안쪽이다(겹쳐 있어도 센다).
+// ⚠ template 안의 include 는 **펼치지 않는다.** 브라우저(dynamicImport)도 template 안은 훑지 않는다.
+//    펼치면 ① 런타임과 산출물이 어긋나고 ② 슬롯 template 안에 목록 template 이 겹쳐 들어가
+//    제거 정규식이 안쪽 닫는 태그에서 멈춘다 — 바깥 닫는 태그와 사본이 산출물에 남는다(26.09.28).
+//    슬롯 · 목록이 쓰는 template 내용은 펼치기 **전에** 거둬 두므로(collectTemplates) 잃는 것이 없다.
+function insideTemplate(src, offset) {
+	const before = src.slice(0, offset);
+	const open = (before.match(/<template\b/gi) || []).length;
+	const close = (before.match(/<\/template>/gi) || []).length;
+	return open > close;
 }
 
 // 개발 인계용 주석 정리 (--clean-comments).
@@ -519,6 +531,7 @@ function expandPartials(html, baseDir, stack, ctx) {
 		const src = getAttr(tag, 'data-source');
 		if (!src) return tag;
 		if (insideComment(whole, offset)) return tag; // 주석 처리된 include 는 그대로 둔다
+		if (insideTemplate(whole, offset)) return tag; // template 안은 브라우저처럼 그대로 둔다
 
 		const file = resolveSrc(baseDir, src);
 		if (!file) return tag; // 바깥 주소는 건드리지 않는다

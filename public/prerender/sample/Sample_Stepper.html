@@ -1,0 +1,136 @@
+<!doctype html>
+<html lang="ko">
+	<head>
+		<meta charset="utf-8" />
+		<meta name="viewport" content="width=device-width,initial-scale=1.0" />
+		<title>[개발 확인용] Stepper</title>
+		<link rel="stylesheet" href="/css/common.css" />
+		<script src="/js/dynamicImport.js"></script>
+		<script src="/js/listRender.js"></script>
+		<script src="/js/common.js"></script>
+	</head>
+
+	<body>
+		<!-- 개발 확인용 페이지 틀 -->
+		<div class="layout">
+			<!-- 사이드 : 브랜드 + LNB -->
+			<aside class="layout__side">
+				<p class="layout__brand">pub-base</p>
+				<!-- 공통 LNB -->
+				<!-- 현재 페이지 메뉴의 is-active 와 상위 메뉴의 is-open 은 common.js 의 lnbActive 가 붙인다 -->
+				<nav class="ui-lnb">
+					<div class="ui-lnb__menu">
+						<ul class="ui-lnb__group">
+							<li class="ui-lnb__item">
+								<a class="ui-lnb__link" href="/index.html">작업 목록</a>
+							</li>
+							<li class="ui-lnb__item">
+								<button type="button" class="ui-lnb__link ui-lnb__link--toggle" aria-expanded="false">사용법</button>
+								<div class="ui-lnb__sub" hidden>
+									<ul class="ui-lnb__group">
+										<li class="ui-lnb__item">
+											<a class="ui-lnb__link" href="/prerender/guide/Guide_Structure.html">폴더 구조</a>
+										</li>
+										<li class="ui-lnb__item">
+											<a class="ui-lnb__link" href="/prerender/guide/Guide_Partial.html">파셜(include)</a>
+										</li>
+									</ul>
+								</div>
+							</li>
+							<li class="ui-lnb__item">
+								<button type="button" class="ui-lnb__link ui-lnb__link--toggle" aria-expanded="false">개발 확인용</button>
+								<div class="ui-lnb__sub" hidden>
+									<!-- 개발 확인용 페이지 목록은 /data/common/lnb_dev.json 에서 고친다 -->
+									<ul class="ui-lnb__group">
+									  <li class="ui-lnb__item">
+									  	<a class="ui-lnb__link" href="/prerender/sample/Sample.html">전체 모아보기</a>
+									  </li>
+									  <li class="ui-lnb__item">
+									  	<a class="ui-lnb__link" href="/prerender/sample/Sample_List.html">List</a>
+									  </li>
+									  <li class="ui-lnb__item">
+									  	<a class="ui-lnb__link" href="/prerender/sample/Sample_Button.html">Button</a>
+									  </li>
+									  <li class="ui-lnb__item">
+									  	<a class="ui-lnb__link" href="/prerender/sample/Sample_Input.html">Input</a>
+									  </li>
+									  <li class="ui-lnb__item">
+									  	<a class="ui-lnb__link" href="/prerender/sample/Sample_Dropdown.html">Dropdown</a>
+									  </li>
+									  <li class="ui-lnb__item">
+									  	<a class="ui-lnb__link" href="/prerender/sample/Sample_Stepper.html">Stepper</a>
+									  </li>
+									  <li class="ui-lnb__item">
+									  	<a class="ui-lnb__link" href="/prerender/sample/Sample_Date.html">Date</a>
+									  </li>
+									  <li class="ui-lnb__item">
+									  	<a class="ui-lnb__link" href="/prerender/sample/Sample_Checkbox.html">Checkbox</a>
+									  </li>
+									  <li class="ui-lnb__item">
+									  	<a class="ui-lnb__link" href="/prerender/sample/Sample_Radio.html">Radio</a>
+									  </li>
+									  <li class="ui-lnb__item">
+									  	<a class="ui-lnb__link" href="/prerender/sample/Sample_Toggle.html">Toggle</a>
+									  </li>
+									  <li class="ui-lnb__item">
+									  	<a class="ui-lnb__link" href="/prerender/sample/Sample_Tooltip.html">Tooltip</a>
+									  </li>
+									  <li class="ui-lnb__item">
+									  	<a class="ui-lnb__link" href="/prerender/sample/Sample_Tab.html">Tab</a>
+									  </li>
+									  <li class="ui-lnb__item">
+									  	<a class="ui-lnb__link" href="/prerender/sample/Sample_Accordion.html">Accordion</a>
+									  </li>
+									  <li class="ui-lnb__item">
+									  	<a class="ui-lnb__link" href="/prerender/sample/Sample_Toast.html">Toast</a>
+									  </li>
+									  <li class="ui-lnb__item">
+									  	<a class="ui-lnb__link" href="/prerender/sample/Sample_Modal.html">Modal</a>
+									  </li>
+									  <li class="ui-lnb__item">
+									  	<a class="ui-lnb__link" href="/prerender/sample/Sample_Var.html">Var</a>
+									  </li>
+									</ul>
+								</div>
+							</li>
+						</ul>
+					</div>
+				</nav>
+			</aside>
+
+			<div class="layout__body">
+				<!-- 공통 헤더 -->
+				<header class="app-header">
+					<h1 class="app-header__title">Stepper</h1>
+				</header>
+
+				<main class="layout__main">
+					<!-- 수량 스테퍼 구역 -->
+					<section class="section">
+						<div class="section__head">
+							<h2 class="section__title">수량 스테퍼</h2>
+							<p class="section__desc">최소 1 · 최대 3 — 경계에 닿으면 버튼이 비활성</p>
+						</div>
+						<div class="ui-card">
+							<div class="ui-card__body">
+								<div class="grid grid--2">
+									<div>
+										<label class="ui-label" for="sample_count">수량 스테퍼</label>
+										<!-- 공통 수량 스테퍼 -->
+										<div class="ui-stepper" data-min="1" data-max="3">
+											<button type="button" class="ui-stepper__btn ui-stepper__btn--minus" onclick="stepperChange(this, -1)">감소</button>
+											<input type="text" class="ui-stepper__input" inputmode="numeric" id="sample_count" name="" value="1" />
+											<button type="button" class="ui-stepper__btn ui-stepper__btn--plus" onclick="stepperChange(this, 1)">증가</button>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+					</section>
+					<!--// 수량 스테퍼 구역 -->
+				</main>
+			</div>
+		</div>
+
+	</body>
+</html>

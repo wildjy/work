@@ -1,0 +1,40 @@
+<!-- 라디오 구역 — 같은 묶음은 같은 name -->
+<section class="section">
+	<div class="section__head">
+		<h2 class="section__title">라디오</h2>
+		<p class="section__desc">같은 묶음은 같은 name · 처음 선택은 data-attrs="checked"</p>
+	</div>
+	<div class="ui-card">
+		<div class="ui-card__body">
+			<div class="ui-choice-group ui-choice-group--column" role="radiogroup" aria-label="라디오 예시">
+				<div
+					class="dynamic-content"
+					data-source="/html/include/ui/_ui_radio.html"
+					data-id="sample_radio1"
+					data-name="sample_radio"
+					data-value="all"
+					data-label="전체 공개"
+					data-attrs="checked"
+				></div>
+				<div
+					class="dynamic-content"
+					data-source="/html/include/ui/_ui_radio.html"
+					data-id="sample_radio2"
+					data-name="sample_radio"
+					data-value="member"
+					data-label="멤버 공개"
+				></div>
+				<div
+					class="dynamic-content"
+					data-source="/html/include/ui/_ui_radio.html"
+					data-id="sample_radio3"
+					data-name="sample_radio"
+					data-value="private"
+					data-label="비공개 (비활성)"
+					data-attrs="disabled"
+				></div>
+			</div>
+		</div>
+	</div>
+</section>
+<!--// 라디오 구역 -->

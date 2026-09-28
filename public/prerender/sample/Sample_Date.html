@@ -1,0 +1,176 @@
+<!doctype html>
+<html lang="ko">
+	<head>
+		<meta charset="utf-8" />
+		<meta name="viewport" content="width=device-width,initial-scale=1.0" />
+		<title>[개발 확인용] Date</title>
+		<link rel="stylesheet" href="/css/common.css" />
+		<script src="/js/dynamicImport.js"></script>
+		<script src="/js/listRender.js"></script>
+		<script src="/js/common.js"></script>
+		<!-- 날짜 · 기간 달력용 -->
+		<script src="/js/jquery-3.7.1.min.js"></script>
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.13.2/jquery-ui.min.js"></script>
+	</head>
+
+	<body>
+		<!-- 개발 확인용 페이지 틀 -->
+		<div class="layout">
+			<!-- 사이드 : 브랜드 + LNB -->
+			<aside class="layout__side">
+				<p class="layout__brand">pub-base</p>
+				<!-- 공통 LNB -->
+				<!-- 현재 페이지 메뉴의 is-active 와 상위 메뉴의 is-open 은 common.js 의 lnbActive 가 붙인다 -->
+				<nav class="ui-lnb">
+					<div class="ui-lnb__menu">
+						<ul class="ui-lnb__group">
+							<li class="ui-lnb__item">
+								<a class="ui-lnb__link" href="/index.html">작업 목록</a>
+							</li>
+							<li class="ui-lnb__item">
+								<button type="button" class="ui-lnb__link ui-lnb__link--toggle" aria-expanded="false">사용법</button>
+								<div class="ui-lnb__sub" hidden>
+									<ul class="ui-lnb__group">
+										<li class="ui-lnb__item">
+											<a class="ui-lnb__link" href="/prerender/guide/Guide_Structure.html">폴더 구조</a>
+										</li>
+										<li class="ui-lnb__item">
+											<a class="ui-lnb__link" href="/prerender/guide/Guide_Partial.html">파셜(include)</a>
+										</li>
+									</ul>
+								</div>
+							</li>
+							<li class="ui-lnb__item">
+								<button type="button" class="ui-lnb__link ui-lnb__link--toggle" aria-expanded="false">개발 확인용</button>
+								<div class="ui-lnb__sub" hidden>
+									<!-- 개발 확인용 페이지 목록은 /data/common/lnb_dev.json 에서 고친다 -->
+									<ul class="ui-lnb__group">
+									  <li class="ui-lnb__item">
+									  	<a class="ui-lnb__link" href="/prerender/sample/Sample.html">전체 모아보기</a>
+									  </li>
+									  <li class="ui-lnb__item">
+									  	<a class="ui-lnb__link" href="/prerender/sample/Sample_List.html">List</a>
+									  </li>
+									  <li class="ui-lnb__item">
+									  	<a class="ui-lnb__link" href="/prerender/sample/Sample_Button.html">Button</a>
+									  </li>
+									  <li class="ui-lnb__item">
+									  	<a class="ui-lnb__link" href="/prerender/sample/Sample_Input.html">Input</a>
+									  </li>
+									  <li class="ui-lnb__item">
+									  	<a class="ui-lnb__link" href="/prerender/sample/Sample_Dropdown.html">Dropdown</a>
+									  </li>
+									  <li class="ui-lnb__item">
+									  	<a class="ui-lnb__link" href="/prerender/sample/Sample_Stepper.html">Stepper</a>
+									  </li>
+									  <li class="ui-lnb__item">
+									  	<a class="ui-lnb__link" href="/prerender/sample/Sample_Date.html">Date</a>
+									  </li>
+									  <li class="ui-lnb__item">
+									  	<a class="ui-lnb__link" href="/prerender/sample/Sample_Checkbox.html">Checkbox</a>
+									  </li>
+									  <li class="ui-lnb__item">
+									  	<a class="ui-lnb__link" href="/prerender/sample/Sample_Radio.html">Radio</a>
+									  </li>
+									  <li class="ui-lnb__item">
+									  	<a class="ui-lnb__link" href="/prerender/sample/Sample_Toggle.html">Toggle</a>
+									  </li>
+									  <li class="ui-lnb__item">
+									  	<a class="ui-lnb__link" href="/prerender/sample/Sample_Tooltip.html">Tooltip</a>
+									  </li>
+									  <li class="ui-lnb__item">
+									  	<a class="ui-lnb__link" href="/prerender/sample/Sample_Tab.html">Tab</a>
+									  </li>
+									  <li class="ui-lnb__item">
+									  	<a class="ui-lnb__link" href="/prerender/sample/Sample_Accordion.html">Accordion</a>
+									  </li>
+									  <li class="ui-lnb__item">
+									  	<a class="ui-lnb__link" href="/prerender/sample/Sample_Toast.html">Toast</a>
+									  </li>
+									  <li class="ui-lnb__item">
+									  	<a class="ui-lnb__link" href="/prerender/sample/Sample_Modal.html">Modal</a>
+									  </li>
+									  <li class="ui-lnb__item">
+									  	<a class="ui-lnb__link" href="/prerender/sample/Sample_Var.html">Var</a>
+									  </li>
+									</ul>
+								</div>
+							</li>
+						</ul>
+					</div>
+				</nav>
+			</aside>
+
+			<div class="layout__body">
+				<!-- 공통 헤더 -->
+				<header class="app-header">
+					<h1 class="app-header__title">Date</h1>
+				</header>
+
+				<main class="layout__main">
+					<!-- 날짜 · 기간 구역 -->
+					<section class="section">
+						<div class="section__head">
+							<h2 class="section__title">날짜 · 기간</h2>
+							<p class="section__desc">jQuery UI datepicker — 입력을 누르면 달력이 열린다</p>
+						</div>
+						<div class="ui-card">
+							<div class="ui-card__body">
+								<div class="grid grid--2">
+									<div>
+										<label class="ui-label" for="sample_period">기간</label>
+										<!-- 공통 기간 입력 -->
+										<!-- 달력은 jQuery UI 가 그린다 — 이 파셜을 쓰는 페이지는 jquery · jquery-ui 를 불러야 한다 -->
+										<div class="ui-field ui-field--period">
+											<div class="ui-input ui-input--date">
+												<input
+													type="text"
+													id="sample_period"
+													name=""
+													placeholder="기간을 선택해주세요."
+													autocomplete="off"
+												/>
+												<button type="button" class="ui-input__clear">지우기</button>
+											</div>
+											<div class="ui-period" id="sample_period_period" data-datepicker hidden>
+												<div class="ui-period__header">
+													<input type="text" class="ui-period__date" aria-label="시작일" readonly />
+													<span class="ui-period__sep">~</span>
+													<input type="text" class="ui-period__date" aria-label="종료일" readonly />
+												</div>
+												<div class="ui-period__calendar"></div>
+												<!-- 종료일 · 시간 포함 같은 옵션은 화면에 따라 이 자리에 넣는다 -->
+												<div class="ui-period__footer"></div>
+											</div>
+										</div>
+									</div>
+									<div>
+										<label class="ui-label" for="sample_date">날짜</label>
+										<!-- 공통 날짜 입력 -->
+										<!-- 달력은 jQuery UI 가 그린다 — 이 파셜을 쓰는 페이지는 jquery · jquery-ui 를 불러야 한다 -->
+										<div class="ui-field">
+											<div class="ui-input ui-input--date">
+												<input
+													type="text"
+													id="sample_date"
+													name=""
+													placeholder="날짜를 선택해주세요."
+													value=""
+													autocomplete="off"
+													data-datepicker-day
+												/>
+												<button type="button" class="ui-input__clear">지우기</button>
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+					</section>
+					<!--// 날짜 · 기간 구역 -->
+				</main>
+			</div>
+		</div>
+
+	</body>
+</html>

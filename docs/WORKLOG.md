@@ -443,3 +443,39 @@ ara-pub 에서 `prerender.js` 에 prettier 를 돌리면 **1,826줄**이 움직�
   `https://` 나 정규식 안의 `//` 를 잘못 먹지 않으려는 선택이다. **과하게 알리는 쪽**이 안전하다.
 - `pubSync.peers` 는 **이 PC 기준 절대경로**다. 다른 PC 에서는 고치거나 인자로 넘긴다.
 - `common.js` 는 대상이 아니다 — 두 프로젝트가 서로 다른 구현이다.
+
+---
+
+## 26.09.28 · 개발 확인용 샘플 — UI 별 파셜 · 페이지 + LNB 하위 메뉴 JSON (유재영)
+
+`Sample.html` 한 장에 묶여 있던 공통 UI 를 **UI 하나에 구역 파셜 하나**로 나누고, UI 마다 확인 페이지를 두었다.
+LNB 「개발 확인용」 하위 메뉴가 그 페이지 목록이며, 목록은 **JSON 으로 따로 관리**한다.
+
+| 항목 | 위치 | 사유 |
+| --- | --- | --- |
+| 구역 파셜 15개 | `include/sample/section/_sample_{list · button · input · dropdown · stepper · date · checkbox · radio · toggle · tooltip · tab · accordion · toast · modal · var}.html` | 묶음 파셜(`_choice` · `_nav` · `_feedback` · `_overlay`)은 **UI 하나만 따로 볼 수 없었다.** 묶음 4개는 지웠다. 기존 `_list` · `_button` · `_var` 는 그대로 재사용 |
+| 페이지 틀 | `include/sample/_sample_layout.html` | 페이지 16장이 사이드(LNB) · 헤더를 **복사하지 않게** 틀을 파셜로 두고 본문은 **main 슬롯**(`data-slot-main`)으로 받는다. 지금은 sample 만 쓰므로 슬라이스 폴더에 둔다(가이드가 쓰게 되면 `common/` 으로 올린다) |
+| 페이지 15장 | `html/sample/Sample_<UI>.html` | LNB 는 **파일명으로** 현재 메뉴를 가린다(`lnbActive`) — 한 페이지 + `#앵커` 로는 하위 메뉴가 전부 활성이 된다. `Sample.html` 은 전체 모아보기로 남겼다 |
+| LNB 하위 목록 JSON | `data/common/lnb_dev.json` (`title` · `href`) + `_ui_lnb.html` 의 `#tpl_lnb_dev` / `#tpl_lnb_dev_none` | 페이지를 늘릴 때 **JSON 한 줄**만 적는다. `ui/` 파셜은 슬라이스를 참조하지 않으므로 `data/sample` 이 아니라 `data/common` 에 둔다. 0건 확인은 `data/ui/empty.json` 으로 바꿔 본다 |
+| `.ui-lnb__empty` | `scss/_ui_lnb.scss` | 하위 목록 0건 안내 — 링크와 같은 들여쓰기 · 누를 수 없는 글자 |
+
+### 함께 고친 것
+
+- **LNB 현재 메뉴가 한 번도 강조되지 않던 버그** — `lnbActive` 는 `is-active` 를 **링크**에 붙이는데 스타일은 **항목**(`.ui-lnb__item.is-active > .ui-lnb__link`)에 걸려 있었다. 스타일을 `.ui-lnb__item > .ui-lnb__link.is-active` 로 맞췄다(JS 는 그대로).
+- `common.js` — `lnbActive` 를 **`dynamic-list-loaded`** 에도 건다. 하위 메뉴 링크가 목록 렌더 뒤에 생기기 때문이다(원본 화면에서만 필요 · 산출물은 이미 그려져 있다).
+- **`prerender.js` — `template` 안의 include 를 펼치지 않는다**(`insideTemplate`).
+  페이지의 본문 슬롯 `template` 안에서 include 를 제자리에서 펼치자 **목록 `template` 이 겹쳐 들어가**,
+  제거 정규식(최단 일치)이 안쪽 닫는 태그에서 멈췄다 → 바깥 닫는 태그 · 중복 id 가 산출물에 남아 `validate` 47건.
+  브라우저(`dynamicImport`)는 원래 `template` 안을 훑지 않으므로 **런타임과 같아진 것**이다. 슬롯 · 목록 template 은 펼치기 전에 거둬 두므로 잃는 것이 없다.
+  가이드 두 페이지의 산출물은 LNB 외에 달라진 곳이 없음을 확인했다.
+  ara-pub 으로 `npm run sync -- --push prerender` 로 넘겼다 — 그쪽 산출물은 **바뀐 것이 없다**(그쪽엔 template 안 include 가 없다).
+  ⚠ 한 번은 ara-pub 쪽을 `--pull` 로 받으면서 이 수정이 **조용히 사라졌다**(validate 48건 재발). **받기 전에 `npm run sync` 로 어느 쪽이 앞섰는지 먼저 본다.**
+
+### 이름 — 하위 메뉴 · 헤더 · 문서 제목 · index 는 영문 태그명
+
+`Sample_<이름>.html` 의 `<이름>` 과 같게 쓴다(List · Button · Input …). 「전체 모아보기」만 한글이다.
+
+### 작업일자
+
+- 신규 15장 : 두 날짜 모두 26.09.28
+- `Sample.html` · `Guide_Partial` · `Guide_Structure` : `update_date` 26.09.28 — LNB 하위 메뉴가 바뀌어 **화면이 달라졌다**(가이드 두 장은 설명 문구도 갱신)

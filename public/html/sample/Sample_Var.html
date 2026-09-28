@@ -1,0 +1,26 @@
+<!doctype html>
+<html lang="ko">
+	<head>
+		<meta charset="utf-8" />
+		<meta name="viewport" content="width=device-width,initial-scale=1.0" />
+		<title>[개발 확인용] Var</title>
+		<link rel="stylesheet" href="/css/common.css" />
+		<script src="/js/dynamicImport.js"></script>
+		<script src="/js/listRender.js"></script>
+		<script src="/js/common.js"></script>
+	</head>
+
+	<body>
+		<div
+			class="dynamic-content"
+			data-source="/html/include/sample/_sample_layout.html"
+			data-page-title="Var"
+			data-slot-main="#sample_main"
+		></div>
+
+		<!-- 본문 — 틀(_sample_layout)의 main 슬롯에 들어간다 -->
+		<template id="sample_main">
+			<div class="dynamic-content" data-source="/html/include/sample/section/_sample_var.html"></div>
+		</template>
+	</body>
+</html>
