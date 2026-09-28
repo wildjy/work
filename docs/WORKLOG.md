@@ -394,3 +394,52 @@ npm run sync -- --push prerender   # 여기 것을 상대로
 걸고 싶으면 `precommit.js` 에 `sync_runtime.js --check` 를 더하면 된다.
 
 ⚠ `package.json` 의 `pubSync.peers` 는 **이 PC 기준 절대경로**다(`D:/ara-pub`). 다른 PC 에서는 고쳐야 한다.
+
+---
+
+## 26.09.28 · `npm run sync` — **양쪽에 대칭으로** 두었다 (유재영)
+
+처음엔 base(`D:\work`)에만 두었는데, **ara-pub 에서 작업할 때 실행할 생각을 못 한다**는 문제가 있었다.
+방향은 원래 양방향(`--pull`/`--push`)이었지만, **스크립트가 한쪽에만 있으면 한쪽 방향만 굴러간다.**
+그래서 `scripts/sync_runtime.js` 를 **두 프로젝트에 같은 내용으로** 두고 각자 `npm run sync` 를 갖게 했다.
+
+```sh
+npm run sync                        # 짝과 비교 (양쪽 어디서 실행해도 같은 표)
+npm run sync -- --pull prerender    # 짝 → 여기   (짝이 앞섰을 때)
+npm run sync -- --push prerender    # 여기 → 짝   (여기가 앞섰을 때)
+npm run sync -- --check             # 벌어졌으면 종료코드 1
+```
+
+| | |
+| --- | --- |
+| ara-pub | `pubSync.peers: ["D:/work"]` |
+| work | `pubSync.peers: ["D:/ara-pub"]` |
+
+**스크립트 자신도 비교 대상에 넣었다** — 한쪽에서만 고치면 다른 쪽이 낡는다.
+
+### ⚠ 서식은 옮기지 않는다 — 두 프로젝트 prettier 설정이 **정반대**다
+
+| | 들여쓰기 | 줄끝 |
+| --- | --- | --- |
+| work | **탭** | **CRLF** |
+| ara-pub | **스페이스** | **LF** |
+
+그래서 `--pull` 은 **복사만** 하고 포매터를 돌리지 않는다.
+ara-pub 에서 `prerender.js` 에 prettier 를 돌리면 **1,826줄**이 움직인다 — 로직 동기화의 대가로는 너무 크다.
+
+대신 받은 뒤 **읽기만 해서 알려 준다** — 「이 프로젝트 서식과 맞지 않습니다(줄끝·들여쓰기가 섞일 수 있습니다)」.
+맞추고 싶으면 `--format` 을 붙인다(work 에서는 값이 싸다 — 실제로 CRLF 까지 정리되는 것을 확인했다).
+
+### 확인
+
+- 양쪽에서 `npm run sync` → **네 파일 모두 로직 동일** (`prerender` · `dynamicImport` · `listRender` · `sync_runtime`)
+- **ara-pub 쪽을 일부러 고친 뒤** work 에서 실행 → 벌어진 파일을 잡고 **양쪽 차이와 실행할 명령**을 함께 보여 준다
+- `--pull dynamicImport` → 반영 확인 · 서식 경고 출력 · `--format` 붙이면 CRLF 까지 정리
+- 되돌린 뒤 다시 **모두 동일** · 산출물 영향 없음
+
+### ⚠ 알려진 한계
+
+- **꼬리 주석만 바뀌어도 「다름」으로 나온다.** 줄 전체가 주석인 것만 지우기 때문이다 —
+  `https://` 나 정규식 안의 `//` 를 잘못 먹지 않으려는 선택이다. **과하게 알리는 쪽**이 안전하다.
+- `pubSync.peers` 는 **이 PC 기준 절대경로**다. 다른 PC 에서는 고치거나 인자로 넘긴다.
+- `common.js` 는 대상이 아니다 — 두 프로젝트가 서로 다른 구현이다.

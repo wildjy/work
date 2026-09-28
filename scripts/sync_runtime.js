@@ -1,26 +1,33 @@
 #!/usr/bin/env node
 /**
- * sync_runtime.js — 파생 프로젝트와 **공용 런타임 파일**이 벌어졌는지 본다.
+ * sync_runtime.js — 짝 프로젝트와 **공용 런타임 파일**이 벌어졌는지 보고, 원하는 방향으로 옮긴다.
  *
- *   npm run sync                       # 설정에 적힌 상대 프로젝트와 비교
- *   npm run sync -- D:/ara-pub         # 상대를 직접 지정
- *   npm run sync -- --check            # 벌어졌으면 종료코드 1 (훅에 걸 때)
- *   npm run sync -- --pull prerender   # 상대 것을 여기로 복사 + prettier
- *   npm run sync -- --push prerender   # 여기 것을 상대로 복사 (상대 서식은 상대가 맡는다)
+ *   npm run sync                          # 설정(package.json 의 pubSync.peers)의 짝과 비교
+ *   npm run sync -- D:/ara-pub            # 짝을 직접 지정
+ *   npm run sync -- --check               # 벌어졌으면 종료코드 1 (훅에 걸 때)
+ *   npm run sync -- --pull prerender      # 짝 → 여기   (짝이 앞섰을 때)
+ *   npm run sync -- --push prerender      # 여기 → 짝   (여기가 앞섰을 때)
+ *   npm run sync -- --pull prerender --format    # 받은 뒤 이 프로젝트 prettier 까지
  *
- * 왜 「복사 자동화」가 아니라 「검사」인가
- *   개선이 **양방향으로** 일어난다. 실제로 26.09.28 에 그랬다 —
- *     · 파생(ara-pub) → base : 하위 폴더 · 루트 상대경로 · sweepOrphans · toOutputLinks
- *     · base → 파생 : <template> 주변 주석 정리(문구가 아니라 위치로 찾는다)
- *   한 방향 자동 복사는 그중 하나를 **조용히 지운다.** 그래서 벌어진 사실만 알리고,
- *   옮기는 것은 --pull/--push 로 **사람이 방향을 정해** 한다.
+ * ⚠ **이 파일은 두 프로젝트에 같은 내용으로 둔다.** 그래서 어느 쪽에서 작업하든 `npm run sync` 로
+ *   확인·반영할 수 있다(스크립트 자신도 비교 대상에 들어 있어 벌어지면 알려 준다).
  *
- * 비교 방법
- *   주석 · 공백 · 따옴표 종류 · 꼬리 쉼표 · prettier 가 붙이는 return( ) 을 지우고 **로직만** 본다.
- *   두 프로젝트의 포매터 설정이 달라(여기는 prettier 탭·단일따옴표) byte 비교는 늘 「다름」이 된다.
+ * 왜 「자동 복사」가 아니라 「검사 + 명시적 반영」인가
+ *   개선이 **양방향으로** 일어난다. 26.09.28 하루에 실제로 둘 다 있었다 —
+ *     · ara-pub → base : 하위 폴더 · 루트 상대경로 · sweepOrphans · toOutputLinks
+ *     · base → ara-pub : <template> 주변 주석 정리(문구가 아니라 위치로 찾는다)
+ *   한 방향 자동 복사는 그중 하나를 **조용히 지운다.**
+ *
+ * 비교 방법 — 주석 · 공백 · 따옴표 종류 · 꼬리 쉼표 · prettier 가 붙이는 return( ) 을 지우고 **로직만** 본다.
+ *   두 프로젝트의 포매터 설정이 **정반대**라서다(base: 탭·CRLF / ara-pub: 스페이스·LF).
+ *   byte 로는 늘 「다름」이 되지만 로직은 같을 수 있다 — 실제로 그랬다.
+ *
+ * ⚠ --format 은 **기본이 꺼져 있다.** 켜면 받은 파일이 이 프로젝트 서식으로 통째로 바뀐다
+ *   (ara-pub 에서 prerender.js 에 돌리면 1,800여 줄이 움직인다). 서식은 각자 프로젝트가 알아서 갖고,
+ *   sync 는 **로직만** 맞추는 도구다.
  *
  * ⚠ common.js 는 **대상이 아니다.** 두 프로젝트가 서로 다른 구현이다 —
- *   여기는 el.hidden + is-open, ara-pub 은 style.display 기반. 복사하면 UI 계층이 날아간다.
+ *   base 는 el.hidden + is-open, ara-pub 은 style.display 기반. 복사하면 UI 계층이 날아간다.
  *   대상을 늘릴 때는 「로직이 같아야 하는 파일인가」를 먼저 따진다.
  */
 
@@ -29,12 +36,15 @@ const path = require('path');
 const { spawnSync } = require('child_process');
 
 const ROOT = path.resolve(__dirname, '..');
+const HERE = path.basename(ROOT);
 
 // 로직이 같아야 하는 파일 — 짧은 이름으로도 고를 수 있다(--pull prerender)
 const FILES = [
 	{ key: 'prerender', file: 'scripts/prerender.js' },
 	{ key: 'dynamicImport', file: 'public/js/dynamicImport.js' },
 	{ key: 'listRender', file: 'public/js/listRender.js' },
+	// 이 도구 자신 — 한쪽에서만 고치면 다른 쪽이 낡는다
+	{ key: 'sync', file: 'scripts/sync_runtime.js' },
 ];
 
 const args = process.argv.slice(2);
@@ -44,15 +54,15 @@ const valueOf = (name) => {
 	return i >= 0 ? args[i + 1] : null;
 };
 
-/* ── 상대 프로젝트 찾기 ─────────────────────────────────
+/* ── 짝 프로젝트 찾기 ─────────────────────────────────
    ① 인자로 준 경로  ② package.json 의 pubSync.peers  ③ 없으면 안내만 하고 통과 */
 function peers() {
-	const direct = args.filter((a) => !a.startsWith('--') && a !== valueOf('pull') && a !== valueOf('push'));
+	const taken = [valueOf('pull'), valueOf('push')].filter(Boolean);
+	const direct = args.filter((a) => !a.startsWith('--') && !taken.includes(a));
 	if (direct.length) return direct;
 	try {
 		const pkg = JSON.parse(fs.readFileSync(path.join(ROOT, 'package.json'), 'utf8'));
-		const list = (pkg.pubSync && pkg.pubSync.peers) || [];
-		return list;
+		return (pkg.pubSync && pkg.pubSync.peers) || [];
 	} catch {
 		return [];
 	}
@@ -63,10 +73,10 @@ function logic(src) {
 	return src
 		.replace(/\/\*[\s\S]*?\*\//g, ' ') // 블록 주석
 		.replace(/^[ \t]*\/\/.*$/gm, ' ') // 줄 주석
-		.replace(/\s+/g, '') // 공백·줄바꿈
+		.replace(/\s+/g, '') // 공백·줄바꿈(탭/스페이스·CRLF/LF 차이를 없앤다)
 		.replace(/['"]/g, '\u00a7') // 따옴표 종류
 		.replace(/,(?=[)\]}])/g, '') // 꼬리 쉼표
-		.replace(/return\(/g, 'return') // prettier 가 붙이는 return( )
+		.replace(/return\(/g, 'return') // prettier 가 긴 return 에 붙이는 괄호
 		.replace(/\)\u00a7\)/g, ')\u00a7'); // 그 닫는 괄호
 }
 
@@ -76,11 +86,14 @@ function firstDiff(a, b) {
 	let j = 0;
 	while (j < a.length - i && j < b.length - i && a[a.length - 1 - j] === b[b.length - 1 - j]) j += 1;
 	return {
-		at: i,
 		before: a.slice(Math.max(0, i - 60), i),
 		mine: a.slice(i, a.length - j).slice(0, 120),
 		theirs: b.slice(i, b.length - j).slice(0, 120),
 	};
+}
+
+function hasPrettier() {
+	return fs.existsSync(path.join(ROOT, 'node_modules', 'prettier'));
 }
 
 /* ── 복사 ───────────────────────────────────────────── */
@@ -92,23 +105,46 @@ function copy(entry, peer, dir) {
 		console.error('  ✗ 원본이 없습니다: ' + from);
 		process.exit(1);
 	}
+	fs.mkdirSync(path.dirname(to), { recursive: true });
 	fs.copyFileSync(from, to);
-	console.log('  ✓ ' + (dir === 'pull' ? '← ' : '→ ') + entry.file + '  (' + from + ' → ' + to + ')');
-	// 받는 쪽 서식은 받는 쪽이 맡는다. 여기로 가져왔으면 prettier 를 돌린다.
-	if (dir === 'pull') {
-		const r = spawnSync('npx', ['prettier', '--write', entry.file], { cwd: ROOT, shell: true, encoding: 'utf8' });
-		console.log('    prettier ' + (r.status === 0 ? 'OK' : '실패 — 직접 확인하세요'));
-	} else {
-		console.log('    ⚠ 상대 프로젝트의 서식은 그쪽 규칙으로 맞추세요(여기 prettier 설정이 다를 수 있습니다).');
+	console.log('\n  ✓ ' + entry.file);
+	console.log('      ' + (dir === 'pull' ? '짝 → 여기' : '여기 → 짝') + '  :  ' + from);
+	console.log('                      →  ' + to);
+
+	if (dir === 'push') {
+		console.log('\n  ⚠ 짝 프로젝트의 **서식은 그쪽 규칙**으로 맞추세요 — 여기와 설정이 다를 수 있습니다.');
+		return;
 	}
+	if (!flag('format')) {
+		console.log('\n  서식은 건드리지 않았습니다(로직만 맞추는 것이 이 도구의 일).');
+		console.log('  이 프로젝트 서식으로 맞추려면 : npm run sync -- ... --pull ' + entry.key + ' --format');
+		console.log('  ⚠ --format 은 파일 전체를 다시 찍습니다 — diff 가 수백~수천 줄이 될 수 있습니다.');
+		// 받은 파일이 이 프로젝트 서식과 맞는지 **읽기만** 해서 알려 준다 — 고칠지는 사람이 정한다.
+		// (두 프로젝트의 줄끝이 다르면 CRLF/LF 가 섞인 채로 남는다)
+		if (hasPrettier()) {
+			const chk = spawnSync('npx', ['prettier', '--check', entry.file], { cwd: ROOT, shell: true, encoding: 'utf8' });
+			console.log(
+				chk.status === 0
+					? '  이 프로젝트 서식과 이미 맞습니다. ✓'
+					: '  ⚠ 이 프로젝트 서식과 맞지 않습니다 — 줄끝·들여쓰기가 섞여 있을 수 있습니다.',
+			);
+		}
+		return;
+	}
+	if (!hasPrettier()) {
+		console.log('\n  ⚠ prettier 가 설치돼 있지 않아 --format 을 건너뜁니다.');
+		return;
+	}
+	const r = spawnSync('npx', ['prettier', '--write', entry.file], { cwd: ROOT, shell: true, encoding: 'utf8' });
+	console.log('\n  prettier ' + (r.status === 0 ? '적용 ✓' : '실패 — 직접 확인하세요'));
 }
 
 /* ── 실행 ───────────────────────────────────────────── */
 const list = peers();
 if (!list.length) {
-	console.log('\n  상대 프로젝트가 지정되지 않았습니다 — 비교를 건너뜁니다.');
-	console.log('    npm run sync -- <경로>          예) npm run sync -- D:/ara-pub');
-	console.log('    또는 package.json 에 "pubSync": { "peers": ["D:/ara-pub"] }\n');
+	console.log('\n  짝 프로젝트가 지정되지 않았습니다 — 비교를 건너뜁니다.');
+	console.log('    npm run sync -- <경로>');
+	console.log('    또는 package.json 에 "pubSync": { "peers": ["../다른프로젝트"] }\n');
 	process.exit(0);
 }
 
@@ -118,11 +154,12 @@ if (pull || push) {
 	const key = pull || push;
 	const entry = FILES.find((f) => f.key === key || f.file === key || f.file.endsWith('/' + key));
 	if (!entry) {
-		console.error('  ✗ 대상을 모르겠습니다: ' + key + '\n    고를 수 있는 것 : ' + FILES.map((f) => f.key).join(' · '));
+		console.error('  ✗ 대상을 모르겠습니다: ' + key);
+		console.error('    고를 수 있는 것 : ' + FILES.map((f) => f.key).join(' · '));
 		process.exit(1);
 	}
 	if (list.length > 1) {
-		console.error('  ✗ 상대가 여러 개입니다 — 복사할 때는 하나만 지정하세요: ' + list.join(' , '));
+		console.error('  ✗ 짝이 여러 개입니다 — 복사할 때는 하나만 지정하세요: ' + list.join(' , '));
 		process.exit(1);
 	}
 	copy(entry, path.resolve(list[0]), pull ? 'pull' : 'push');
@@ -132,7 +169,7 @@ if (pull || push) {
 let drift = 0;
 for (const peer of list) {
 	const abs = path.resolve(peer);
-	console.log('\n  ' + path.basename(ROOT) + '  ↔  ' + abs);
+	console.log('\n  여기: ' + HERE + '   ↔   짝: ' + abs);
 	if (!fs.existsSync(abs)) {
 		console.log('    ⚠ 경로가 없습니다 — 건너뜁니다.');
 		continue;
@@ -141,7 +178,9 @@ for (const peer of list) {
 		const here = path.join(ROOT, entry.file);
 		const there = path.join(abs, entry.file);
 		if (!fs.existsSync(here) || !fs.existsSync(there)) {
-			console.log('    ? ' + entry.file.padEnd(28) + '한쪽에 없습니다');
+			const which = fs.existsSync(here) ? '짝에 없습니다' : '여기에 없습니다';
+			console.log('    ? ' + entry.file.padEnd(28) + which);
+			drift += 1;
 			continue;
 		}
 		const a = logic(fs.readFileSync(here, 'utf8'));
@@ -152,11 +191,12 @@ for (const peer of list) {
 		}
 		drift += 1;
 		const d = firstDiff(a, b);
-		console.log('    ✗ ' + entry.file.padEnd(28) + '로직 다름  (여기 ' + a.length + ' / 상대 ' + b.length + ')');
+		console.log('    ✗ ' + entry.file.padEnd(28) + '로직 다름  (여기 ' + a.length + ' / 짝 ' + b.length + ')');
 		console.log('        문맥 …' + d.before);
 		console.log('        여기 : ' + (d.mine || '(없음)'));
-		console.log('        상대 : ' + (d.theirs || '(없음)'));
-		console.log('        옮기려면 : npm run sync -- ' + peer + ' --pull ' + entry.key + '   (또는 --push)');
+		console.log('        짝   : ' + (d.theirs || '(없음)'));
+		console.log('        짝이 맞다면 : npm run sync -- ' + peer + ' --pull ' + entry.key);
+		console.log('        여기가 맞다면 : npm run sync -- ' + peer + ' --push ' + entry.key);
 	}
 }
 
