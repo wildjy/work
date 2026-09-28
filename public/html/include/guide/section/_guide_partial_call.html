@@ -1,0 +1,29 @@
+<!-- 구역 : 부르는 쪽 규칙 -->
+<section class="section" id="guide_call">
+	<div class="section__head">
+		<h2 class="section__title">3. 부르는 쪽 규칙</h2>
+		<p class="section__desc">이 여섯 가지를 지키면 브라우저와 산출물이 같아진다</p>
+	</div>
+	<div class="ui-card">
+		<div class="ui-card__body ui-card__body--flush">
+			<table class="ui-table ui-table--wrap">
+				<caption class="guide__caption">
+					부르는 쪽 규칙
+				</caption>
+				<thead>
+					<tr>
+						<th scope="col">규칙</th>
+						<th scope="col">이유 · 어기면</th>
+					</tr>
+				</thead>
+				<tbody
+					class="dynamic-list"
+					data-source="/data/guide/partial_rules.json"
+					data-template="#tpl_guide_rule"
+					data-empty="#tpl_guide_rule_none"
+					data-filter="group=call"
+				></tbody>
+			</table>
+		</div>
+	</div>
+</section>

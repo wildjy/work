@@ -1,0 +1,63 @@
+<!-- 구역 : React 대응 -->
+<section class="section" id="guide_react">
+	<div class="section__head">
+		<h2 class="section__title">9. React 와 견주기</h2>
+		<p class="section__desc">이름만 다르고 하는 일은 같다. React 를 써 봤다면 이 표가 가장 빠르다</p>
+	</div>
+	<div class="ui-card">
+		<div class="ui-card__body ui-card__body--flush">
+			<table class="ui-table ui-table--wrap">
+				<caption class="guide__caption">
+					React 대응
+				</caption>
+				<colgroup>
+					<col style="width: 15%" />
+					<col />
+					<col style="width: 38%" />
+				</colgroup>
+				<thead>
+					<tr>
+						<th scope="col">하려는 일</th>
+						<th scope="col">이 저장소</th>
+						<th scope="col">React</th>
+					</tr>
+				</thead>
+				<tbody
+					class="dynamic-list"
+					data-source="/data/guide/partial_react.json"
+					data-template="#tpl_guide_react"
+					data-empty="#tpl_guide_react_none"
+				></tbody>
+			</table>
+		</div>
+		<div class="ui-card__body">
+			<p class="guide__note guide__note--warn">
+				<strong>컴포넌트가 아니라 문자열 치환이다.</strong> 상태(<code>useState</code>)도 생명주기도 없고, props 로는
+				<strong>문자열만</strong> 넘어간다 — 객체·함수·JSX 는 못 넘긴다. 목록은 <strong>JSON 경로</strong>로, 마크업
+				덩어리는 <strong>슬롯</strong>으로 넘긴다.
+			</p>
+			<p class="guide__note guide__note--warn">
+				값을 안 넘기면 <strong>빈칸이 되는 것이 아니라</strong> <code>&#123;&#123;key&#125;&#125;</code> 가 화면에
+				그대로 남는다. 파셜에 기본값(<code>&#123;&#123;key|기본값&#125;&#125;</code>)을 적어 둔다.
+			</p>
+			<p class="guide__note guide__note--tip">
+				<code>key</code> 가 없다. 대신 같은 파셜을 한 화면에 두 번 넣을 때는 <strong>id 가 겹치지 않도록</strong> 파셜이
+				<code>data-id</code> 를 받는다.
+			</p>
+		</div>
+	</div>
+</section>
+
+<template id="tpl_guide_react">
+	<tr>
+		<td class="guide__term">{{{concept}}}</td>
+		<td>{{{pub}}}</td>
+		<td>{{{react}}}</td>
+	</tr>
+</template>
+
+<template id="tpl_guide_react_none">
+	<tr>
+		<td colspan="3" class="ui-table__empty">등록된 대응이 없습니다.</td>
+	</tr>
+</template>

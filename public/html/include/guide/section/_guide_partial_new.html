@@ -1,0 +1,36 @@
+<!-- 구역 : 새로 만들 때 -->
+<section class="section" id="guide_new">
+	<div class="section__head">
+		<h2 class="section__title">10. 파셜을 새로 만들 때</h2>
+		<p class="section__desc">같은 마크업이 두 곳 이상에 생기면 그 자리에서 파셜로 뺀다</p>
+	</div>
+	<div class="ui-card">
+		<div class="ui-card__body">
+			<ol class="guide__steps">
+				<li>
+					<strong>폴더</strong> — 한 기능만 쓰면 <code>include/&lt;기능&gt;/</code>, 두 곳 이상이 쓰게 되면
+					<code>common/</code> 으로 옮긴다(옮길 때 <code>data-source</code> 를 전부 고친다). 공통 UI 는
+					<code>include/ui/_ui_*.html</code>.
+				</li>
+				<li>
+					<strong>파일명은 저장소 안에서 고유하게.</strong> <code>_</code> 로 시작한다(프리렌더가 페이지로 오인하지
+					않는다).
+				</li>
+				<li>
+					<strong>머리 주석에 「받는 값」을 적는다.</strong> 이 저장소의 모든 파셜이 같은 형식이다 —
+					<code>&lt;!-- 공통 입력 — 받는 값 : data-id(필수) · data-placeholder --&gt;</code>
+				</li>
+				<li>
+					<strong>재사용할 파셜은 id 를 data-* 로 받는다</strong> — <code>id="&#123;&#123;id&#125;&#125;"</code> ·
+					<code>id="&#123;&#123;id&#125;&#125;_title"</code>. 고정 id 를 박으면 한 페이지에 두 번 못 넣는다.
+				</li>
+				<li><strong>활성 상태를 파셜에 박지 않는다.</strong> 현재 메뉴·현재 탭은 <code>common.js</code> 가 붙인다.</li>
+				<li><strong>새 이름은 grep 으로 충돌 검사</strong>하고, 만들었으면 <code>docs/WORKLOG.md</code> 에 한 줄.</li>
+				<li>
+					<code>npm run prerender</code> 로 파셜 개수가 늘었는지 확인한다 — 페이지마다
+					<code>✓ 파일명 (파셜 n / 목록 n · n행)</code> 이 찍힌다.
+				</li>
+			</ol>
+		</div>
+	</div>
+</section>

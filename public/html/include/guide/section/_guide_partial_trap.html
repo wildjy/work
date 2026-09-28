@@ -1,0 +1,43 @@
+<!-- 구역 : 함정 -->
+<section class="section" id="guide_trap">
+	<div class="section__head">
+		<h2 class="section__title">11. 함정 — 여기서 실수한다</h2>
+		<p class="section__desc">겪은 것만 모았다. 증상이 조용해서 늦게 발견되는 순서로</p>
+	</div>
+	<div class="ui-card">
+		<div class="ui-card__body ui-card__body--flush">
+			<table class="ui-table ui-table--wrap">
+				<caption class="guide__caption">
+					파셜 함정
+				</caption>
+				<thead>
+					<tr>
+						<th scope="col">함정</th>
+						<th scope="col">무슨 일이 나나</th>
+						<th scope="col">어떻게</th>
+					</tr>
+				</thead>
+				<tbody
+					class="dynamic-list"
+					data-source="/data/guide/partial_traps.json"
+					data-template="#tpl_guide_trap"
+					data-empty="#tpl_guide_trap_none"
+				></tbody>
+			</table>
+		</div>
+	</div>
+</section>
+
+<template id="tpl_guide_trap">
+	<tr>
+		<td class="guide__term">{{{trap}}}</td>
+		<td>{{{what}}}</td>
+		<td>{{{how}}}</td>
+	</tr>
+</template>
+
+<template id="tpl_guide_trap_none">
+	<tr>
+		<td colspan="3" class="ui-table__empty">등록된 함정이 없습니다.</td>
+	</tr>
+</template>

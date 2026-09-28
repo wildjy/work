@@ -535,3 +535,39 @@ LNB 「개발 확인용」 하위 메뉴가 그 페이지 목록이며, 목록�
 - 확인 : 고치기 전후 헤드리스 크롬 DOM 에서 **코드 블록 28개의 보이는 글자가 원본 · 산출물 모두 완전 일치** · 색칠 토큰 515 = 515 · 화면 동일 · 프리렌더 경고 0 · `validate` · `lint` · `docs:check` 통과 · 배포본(`pages_base`)에서도 textarea 는 그대로.
   화면이 같아 `index.html` 작업일자는 찍지 않았다.
 - ⚠ `prerender.js` 가 바뀌었다 — ara-pub 과 `npm run sync` 로 맞출 것(이 PC 에는 `pubSync.peers` 경로가 없어 확인하지 못했다).
+
+---
+
+## 26.09.28 · 사용법 페이지 구역 분리 (3단계) · 예시 속 `{{ }}` 치환 막기 (유재영)
+
+`Guide_Partial.html` **1,359줄 → 106줄**. 구역 15개를 `include/guide/section/_guide_partial_<키>.html` 로 뺐다
+(`toc` · `basic` · `flow` · `call` · `vars` · `optional` · `slot` · `list` · `ladder` · `react` · `new` · `trap` · `symptom` · `sample` · `finish` — 키는 구역 id 에서 `guide_` 를 뗀 것).
+
+| 항목 | 위치 | 사유 |
+| --- | --- | --- |
+| 구역 파셜 15개 | `include/guide/section/` | 슬라이스 `guide` + 페이지 이름(`_guide_partial_`)을 앞에 붙였다 — 데모 파셜 `_guide_var` 와 헷갈리지 않고, `Guide_Structure` 를 가를 때 `_guide_structure_` 로 나란히 선다 |
+| 목록 template 이동 | 각 구역 파셜 끝 | 「컨테이너와 같은 파일」 규칙. **두 구역 이상이 쓰는 `tpl_guide_rule` 만 페이지에 남겼다**(basic · call · slot) |
+| **`dynamicImport.js` — `<textarea data-raw>` 보호** | `public/js/` · `pub-env` §4 | 아래 |
+| 문장 속 `<code>` 의 중괄호 9곳 → `&#123;` | 구역 파셜 | 아래 |
+
+### 예시 속 `{{ }}` 가 실제 값으로 바뀌는 문제
+
+페이지에 있을 때는 아무도 치환하지 않았는데, **파셜이 되면 두 구현 모두 `{{키|기본값}}` 을 채운다.**
+
+| 자리 | 예 | 브라우저 | 프리렌더 | 막은 방법 |
+| --- | --- | --- | --- | --- |
+| 코드 예시(textarea) | `{{pageTitle\|페이지 제목}}` 등 6종 21곳 | 바뀐다 | 원래 안전(`protectRaw`) | **`dynamicImport` 에 같은 보호** — 치환 전 자리표 → 치환 뒤 복원. 슬롯으로 넘긴 값도 함께 |
+| 문장 속 `<code>` | `{{key\|기본값}}` · `{{{body\|}}}` | 바뀐다 | 바뀐다 | 중괄호를 **엔티티**로(이 페이지와 JSON 이 이미 쓰던 표기) |
+
+- **대조 실험** — 보호가 없는 옛 `dynamicImport.js` 로 열면 `{{extra|…}}` 가 화면에서 **사라지고** `{{pageTitle|페이지 제목}}` 은 「페이지 제목」으로 채워졌다(4곳 → 3곳). 보호가 있으면 전부 남는다.
+- ⚠ **기본값 없는 `{{키}}` 는 지금은 안 바뀐다**(넘기지 않은 키는 그대로 남는 규칙). 그래도 구역 include 에 `data-*` 를 넘기기 시작하면 바뀌므로 문장 속 것은 모두 엔티티로 맞췄다.
+- ⚠ `dynamicImport.js` 가 바뀌었다 — ara-pub 과 `npm run sync` 로 맞출 것(`prerender.js` 는 1·2단계에서 이미 바뀌었다).
+
+### 확인
+
+분리 전(2단계 직후)과 후를 헤드리스 크롬 DOM 으로 대조 —
+원본 · 산출물 모두 **코드 블록 28개 완전 일치 · main 본문 글자 전체(약 2.6만 자) 완전 일치 · 색칠 토큰 515 = 515** ·
+예시 기본값 8종의 개수가 원본 · 산출물 같음 · 표 행 153 = 153 · 프리렌더 경고 0 · `validate` · `lint` · `docs:check` 통과. 화면이 같아 index 작업일자는 찍지 않았다.
+
+⚠ **`prerender:watch` 는 스크립트를 고친 뒤 다시 띄운다** — 떠 있던 감시 프로세스가 옛 `restoreRaw` 를 들고 있어,
+HTML 을 고칠 때마다 산출물을 옛 규칙(textarea 안 날것 `< >`)으로 덮어 `validate` 가 156건으로 터졌다. 코드 문제로 보이기 쉽다.

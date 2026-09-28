@@ -1,0 +1,82 @@
+<!-- 구역 : 예시 모음 -->
+<section class="section" id="guide_sample">
+	<div class="section__head">
+		<h2 class="section__title">13. 예시 모음</h2>
+		<p class="section__desc">
+			저장소에 있는 파셜과 받는 값. 동작하는 화면은
+			<a href="/html/sample/Sample.html">공통 UI · 파셜 · 목록 샘플</a>
+		</p>
+	</div>
+	<div class="ui-card">
+		<div class="ui-card__header">
+			<h3 class="ui-card__title">공통</h3>
+		</div>
+		<div class="ui-card__body">
+			<div
+				class="dynamic-list guide__samples"
+				data-source="/data/guide/partial_samples.json"
+				data-template="#tpl_guide_sample"
+				data-empty="#tpl_guide_sample_none"
+				data-filter="group=common"
+			></div>
+		</div>
+	</div>
+	<div class="ui-card">
+		<div class="ui-card__header">
+			<h3 class="ui-card__title">입력</h3>
+		</div>
+		<div class="ui-card__body">
+			<div
+				class="dynamic-list guide__samples"
+				data-source="/data/guide/partial_samples.json"
+				data-template="#tpl_guide_sample"
+				data-empty="#tpl_guide_sample_none"
+				data-filter="group=input"
+			></div>
+		</div>
+	</div>
+	<div class="ui-card">
+		<div class="ui-card__header">
+			<h3 class="ui-card__title">선택 · 안내</h3>
+		</div>
+		<div class="ui-card__body">
+			<div
+				class="dynamic-list guide__samples"
+				data-source="/data/guide/partial_samples.json"
+				data-template="#tpl_guide_sample"
+				data-empty="#tpl_guide_sample_none"
+				data-filter="group=choice"
+			></div>
+		</div>
+	</div>
+	<div class="ui-card">
+		<div class="ui-card__header">
+			<h3 class="ui-card__title">알림 · 모달</h3>
+		</div>
+		<div class="ui-card__body">
+			<div
+				class="dynamic-list guide__samples"
+				data-source="/data/guide/partial_samples.json"
+				data-template="#tpl_guide_sample"
+				data-empty="#tpl_guide_sample_none"
+				data-filter="group=modal"
+			></div>
+			<p class="guide__note guide__note--tip">
+				여는 방법은 <code>data-modal-open="아이디"</code> · <code>data-toast="아이디"</code> — 페이지에 전용 스크립트를
+				두지 않는다.
+			</p>
+		</div>
+	</div>
+</section>
+
+<template id="tpl_guide_sample">
+	<div class="guide__sample">
+		<h4 class="guide__sample-name">{{name}}</h4>
+		<p class="guide__sample-args">{{{args}}}</p>
+		<textarea class="guide__src" readonly aria-label="코드 예시">{{code}}</textarea>
+	</div>
+</template>
+
+<template id="tpl_guide_sample_none">
+	<p class="guide__sample-none">등록된 예시가 없습니다.</p>
+</template>

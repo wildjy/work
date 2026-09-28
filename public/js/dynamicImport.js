@@ -81,9 +81,27 @@ document.addEventListener('DOMContentLoaded', () => {
 				//      그래서 vars 가 비어도 치환을 돌린다 — 기본값 없는 {{key}} 는 그대로 남는다.
 				const RAW_RE = /\{\{\{\s*([\w@.-]+)\s*(?:\|([^}]*?))?\s*\}\}\}/g;
 				const ESC_RE = /\{\{\s*([\w@.-]+)\s*(?:\|([^}]*?))?\s*\}\}/g;
-				const filled = html
+				// 원문 블록(<textarea data-raw>) 안은 치환하지 않는다 — 코드 예시의 {{key|기본값}} 이 채워지면
+				//   「보여주려던 코드」가 바뀐다. 치환 전에 자리표로 바꿔 두고 치환 뒤에 되돌린다.
+				//   ⚠ prerender.js 의 protectRaw/restoreRaw 와 같은 규칙이다 — 한쪽만 고치지 않는다.
+				//   ⚠ 슬롯으로 넘긴 마크업도 같은 치환을 거치므로 함께 막는다.
+				//   (자리표는 제어문자로 감싼다 — HTML 에 들어갈 수 없는 글자라 본문과 겹치지 않는다)
+				const RAW_BLOCK_RE = /(<textarea\b[^>]*\bdata-raw\b[^>]*>)([\s\S]*?)(<\/textarea>)/gi;
+				const rawKept = [];
+				const protect = (t) =>
+					String(t).replace(
+						RAW_BLOCK_RE,
+						(m, open, inner, close) => open + '\u0001RAW' + (rawKept.push(inner) - 1) + '\u0001' + close,
+					);
+				Object.keys(vars).forEach((k) => {
+					vars[k] = protect(vars[k]);
+				});
+				// eslint-disable-next-line no-control-regex -- 의도한 자리표다
+				const RAW_TOKEN_RE = /\u0001RAW(\d+)\u0001/g;
+				const filled = protect(html)
 					.replace(RAW_RE, (m, k, d) => (k in vars ? String(vars[k]) : d !== undefined ? d : m))
-					.replace(ESC_RE, (m, k, d) => (k in vars ? esc(vars[k]) : d !== undefined ? d : m));
+					.replace(ESC_RE, (m, k, d) => (k in vars ? esc(vars[k]) : d !== undefined ? d : m))
+					.replace(RAW_TOKEN_RE, (m, i) => rawKept[Number(i)]);
 
 				const temp = document.createElement('div');
 				temp.innerHTML = filled;

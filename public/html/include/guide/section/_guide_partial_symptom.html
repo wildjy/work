@@ -1,0 +1,41 @@
+<!-- 구역 : 증상 -->
+<section class="section" id="guide_symptom">
+	<div class="section__head">
+		<h2 class="section__title">12. 증상 → 원인</h2>
+		<p class="section__desc">화면이 이상할 때 먼저 볼 곳</p>
+	</div>
+	<div class="ui-card">
+		<div class="ui-card__body ui-card__body--flush">
+			<table class="ui-table ui-table--wrap">
+				<caption class="guide__caption">
+					증상과 원인
+				</caption>
+				<thead>
+					<tr>
+						<th scope="col">화면에서 본 것</th>
+						<th scope="col">먼저 볼 것</th>
+					</tr>
+				</thead>
+				<tbody
+					class="dynamic-list"
+					data-source="/data/guide/partial_symptoms.json"
+					data-template="#tpl_guide_symptom"
+					data-empty="#tpl_guide_symptom_none"
+				></tbody>
+			</table>
+		</div>
+	</div>
+</section>
+
+<template id="tpl_guide_symptom">
+	<tr>
+		<td class="guide__term">{{{symptom}}}</td>
+		<td>{{{cause}}}</td>
+	</tr>
+</template>
+
+<template id="tpl_guide_symptom_none">
+	<tr>
+		<td colspan="2" class="ui-table__empty">등록된 증상이 없습니다.</td>
+	</tr>
+</template>

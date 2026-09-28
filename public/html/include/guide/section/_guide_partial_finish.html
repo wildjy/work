@@ -1,0 +1,21 @@
+<!-- 구역 : 마무리 -->
+<section class="section" id="guide_finish">
+	<div class="section__head">
+		<h2 class="section__title">14. 파셜을 고친 뒤</h2>
+		<p class="section__desc">이 순서를 지키지 않으면 index 에서 열어본 화면이 옛것이다</p>
+	</div>
+	<div class="ui-card">
+		<div class="ui-card__body">
+			<ul class="guide__check">
+				<li><code>npm run prerender</code> — 전체를 돌린다(특정 파일만 돌리면 페이지 간 링크가 404).</li>
+				<li>
+					<code>public/index.html</code> — 그 파셜을 include 한 페이지의 수정일 갱신.
+					<strong>화면·동작이 달라진 페이지에만</strong> 찍는다.
+				</li>
+				<li>신규 파셜이면 <code>docs/WORKLOG.md</code> 에 한 줄(날짜 · 항목 · 위치 · 사유 · 작성자).</li>
+				<li><code>npm run validate</code> 에 error 가 없다 · 고친 파일은 <code>npx prettier --write</code> 로 정렬.</li>
+				<li>커밋에 <strong>원본과 산출물을 함께</strong> 넣는다(커밋 직전 검사가 확인한다).</li>
+			</ul>
+		</div>
+	</div>
+</section>

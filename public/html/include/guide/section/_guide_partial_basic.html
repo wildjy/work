@@ -1,0 +1,57 @@
+<!-- 구역 : 기본형 -->
+<section class="section" id="guide_basic">
+	<div class="section__head">
+		<h2 class="section__title">1. 기본형</h2>
+		<p class="section__desc">부르는 쪽은 빈 div 하나, 받는 쪽은 조각 마크업</p>
+	</div>
+	<div class="grid grid--2">
+		<div class="ui-card">
+			<div class="ui-card__header">
+				<h3 class="ui-card__title">부르는 쪽 — 페이지</h3>
+			</div>
+			<div class="ui-card__body">
+				<textarea class="guide__src" data-raw readonly aria-label="코드 예시">
+					<div
+						class="dynamic-content"
+						data-source="/html/include/common/_header.html"
+						data-page-title="회원 관리"
+					></div>
+				</textarea>
+			</div>
+		</div>
+		<div class="ui-card">
+			<div class="ui-card__header">
+				<h3 class="ui-card__title">받는 쪽 — _header.html</h3>
+			</div>
+			<div class="ui-card__body">
+				<textarea class="guide__src" data-raw readonly aria-label="코드 예시">
+					<header class="app-header">
+						<h1 class="app-header__title">{{pageTitle|페이지 제목}}</h1>
+					</header>
+				</textarea>
+			</div>
+		</div>
+	</div>
+	<div class="ui-card">
+		<div class="ui-card__body ui-card__body--flush">
+			<table class="ui-table ui-table--wrap">
+				<caption class="guide__caption">
+					파셜 기본 규칙
+				</caption>
+				<thead>
+					<tr>
+						<th scope="col">항목</th>
+						<th scope="col">규칙</th>
+					</tr>
+				</thead>
+				<tbody
+					class="dynamic-list"
+					data-source="/data/guide/partial_rules.json"
+					data-template="#tpl_guide_rule"
+					data-empty="#tpl_guide_rule_none"
+					data-filter="group=summary"
+				></tbody>
+			</table>
+		</div>
+	</div>
+</section>

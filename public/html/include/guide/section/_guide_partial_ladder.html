@@ -1,0 +1,57 @@
+<!-- 구역 : 사다리 -->
+<section class="section" id="guide_ladder">
+	<div class="section__head">
+		<h2 class="section__title">8. 어느 것을 고를까 — 위에서부터 걸리는 데서 멈춘다</h2>
+		<p class="section__desc">
+			앞의 4~7 은 도구를 하나씩 설명했다. 실제로 막히는 자리는 「무엇을 쓸까」다 —
+			<strong>아래로 갈수록 자유롭고 그만큼 위험하다.</strong>
+		</p>
+	</div>
+	<div class="ui-card">
+		<div class="ui-card__body ui-card__body--flush">
+			<table class="ui-table ui-table--wrap">
+				<caption class="guide__caption">
+					무엇이 다른가에 따라 무엇을 쓰나
+				</caption>
+				<thead>
+					<tr>
+						<th scope="col">무엇이 다른가</th>
+						<th scope="col">쓰는 것</th>
+						<th scope="col">어디에 적혀 있나</th>
+					</tr>
+				</thead>
+				<tbody
+					class="dynamic-list"
+					data-source="/data/guide/partial_ladder.json"
+					data-template="#tpl_guide_ladder"
+					data-empty="#tpl_guide_ladder_none"
+				></tbody>
+			</table>
+		</div>
+		<div class="ui-card__body">
+			<p class="guide__note guide__note--warn">
+				<strong>&#123;&#123;&#123;key&#125;&#125;&#125; 는 마지막 수단이다.</strong> 위에서 멈추지 않고 여기까지
+				내려왔다면 「무엇이 다른가」를 잘못 잡은 것이 아닌지 먼저 본다 — <strong>모양만</strong> 다르면 class,
+				<strong>구조</strong>가 다르면 템플릿, <strong>있다/없다</strong>면 경로 변수다.
+			</p>
+			<p class="guide__note guide__note--tip">
+				<strong>판단이 안 서면 아래쪽(자유로운 쪽)이 아니라 위쪽을 고른다.</strong>
+				위쪽은 할 수 있는 일이 적은 만큼 <strong>틀리게 쓸 방법도 적다.</strong>
+			</p>
+		</div>
+	</div>
+</section>
+
+<template id="tpl_guide_ladder">
+	<tr>
+		<td class="guide__term">{{{diff}}}</td>
+		<td>{{{tool}}}<br /><span class="guide__sample-args">{{{note}}}</span></td>
+		<td>{{where}}</td>
+	</tr>
+</template>
+
+<template id="tpl_guide_ladder_none">
+	<tr>
+		<td colspan="3" class="ui-table__empty">등록된 갈래가 없습니다.</td>
+	</tr>
+</template>
