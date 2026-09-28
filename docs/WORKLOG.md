@@ -471,6 +471,13 @@ LNB 「개발 확인용」 하위 메뉴가 그 페이지 목록이며, 목록�
   ara-pub 으로 `npm run sync -- --push prerender` 로 넘겼다 — 그쪽 산출물은 **바뀐 것이 없다**(그쪽엔 template 안 include 가 없다).
   ⚠ 한 번은 ara-pub 쪽을 `--pull` 로 받으면서 이 수정이 **조용히 사라졌다**(validate 48건 재발). **받기 전에 `npm run sync` 로 어느 쪽이 앞섰는지 먼저 본다.**
 
+- **토글 `disabled`·`checked` 가 산출물에서만 빠지던 버그** — `prerender.js` 의 `fillSlots` 가 한 줄짜리 `{{{이름|}}}` 를
+  「슬롯을 넘겼나」로만 판정해, 일반 변수인 `data-attrs` 를 넘겨도 줄째 지웠다(`_ui_toggle.html` 의 `{{{attrs|}}}`).
+  이제 **슬롯 · 일반 변수 둘 다** 보고 넘겼으면 남긴다. 원본 화면(`dynamicImport`)은 원래 정상이었다.
+  산출물 전체에서 달라진 곳은 토글의 두 줄뿐이다.
+- 사용법 보강 — `Guide_Partial` · `docs/PARTIALS.md` 에 위 두 규칙(한 줄짜리 `{{{이름|}}}` 줄 삭제 · template 안 include 는 펼치지 않음)을 적었다.
+  함정 표(`partial_traps.json`)와 증상 표(`partial_symptoms.json`)에 두 줄씩 — 문서판 표는 `npm run docs` 로 같은 JSON 에서 찍었다.
+
 ### 이름 — 하위 메뉴 · 헤더 · 문서 제목 · index 는 영문 태그명
 
 `Sample_<이름>.html` 의 `<이름>` 과 같게 쓴다(List · Button · Input …). 「전체 모아보기」만 한글이다.

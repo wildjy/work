@@ -118,5 +118,15 @@
     "trap": "파셜을 <strong>「상태 예시」</strong>인 채로 복사",
     "what": "파셜은 <code>is-active</code> · <code>is-error</code> 같은 상태를 보여주려 만들어 둔 것이 많다 — 복사하면 <strong>그 상태가 따라온다</strong>",
     "how": "기준 마크업은 <strong>실제 화면</strong>에서 가져온다"
+  },
+  {
+    "trap": "빈 기본값 원문 자리(<code>&#123;&#123;&#123;attrs|&#125;&#125;&#125;</code>)가 <strong>한 줄을 통째로</strong> 차지",
+    "what": "넘기지 않으면 프리렌더가 <strong>그 줄을 지운다</strong>(빈 줄이 남지 않게). 넘겼으면 남는다 — <strong>슬롯이든 일반 변수든 같다</strong>",
+    "how": "그대로 두면 된다. ⚠ 26.09.28 전 <code>prerender.js</code> 는 슬롯만 봐서 <code>data-attrs</code> 를 넘겨도 지웠다 — 짝 프로젝트는 <code>npm run sync</code> 로 맞춘다"
+  },
+  {
+    "trap": "template 요소 안에 include",
+    "what": "<strong>브라우저도 프리렌더도 펼치지 않는다.</strong> 슬롯으로 꺼내 파셜에 꽂힌 뒤에 펼쳐진다",
+    "how": "슬롯 template 안의 include 는 <strong>정상 패턴</strong>이다. 목록 template 안의 include 는 행에 그대로 남으므로 template 자체를 파셜로 뺀다"
   }
 ]

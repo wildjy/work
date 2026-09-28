@@ -179,6 +179,9 @@ DOMContentLoaded
      data-id="agree_sms" data-label="문자 수신" data-attrs="checked disabled"></div>
 ```
 
+- `{{{attrs|}}}` 가 **한 줄을 통째로** 차지하면(공통 토글처럼 속성을 줄마다 적은 태그) 넘기지 않았을 때 프리렌더가 **그 줄을 지운다.** 넘겼으면 남는다.
+  ⚠ 26.09.28 전의 `prerender.js` 는 **슬롯만 보고** 판정해 `data-attrs` 를 넘겨도 지웠다 — `disabled` 가 산출물에서만 빠졌다.
+
 ### 중첩 include 의 `data-source` 에도 변수를 쓸 수 있다
 
 모달 프레임이 **버튼 영역 파셜을 갈아 끼우는** 방식이다(런타임·프리렌더 양쪽 동작 확인됨).
@@ -213,7 +216,7 @@ DOMContentLoaded
 | 키 이름 | `data-slot-body` → 파셜 안 `{{{body}}}` (케밥 → 카멜) |
 | 값 | **template 요소의 아이디 선택자**(`#아이디`) — 마크업을 속성에 직접 적지 않는다 |
 | template 위치 | include 를 적은 **같은 파일**(페이지든 파셜이든). 산출물에서는 template 정의가 걷힌다 |
-| 없어도 되는 슬롯 | 파셜에 `{{{body|}}}` — 넘기지 않으면 프리렌더가 **그 줄을 지운다** |
+| 없어도 되는 슬롯 | 파셜에 `{{{body|}}}` — 넘기지 않으면 프리렌더가 **그 줄을 지운다**. 넘겼으면 남는다(슬롯 · 일반 변수 모두 같은 규칙) |
 
 - **슬롯 안에서 파셜을 include 할 수 있다.** 여러 화면이 함께 쓰는 본문은 이렇게 넘긴다.
   ```html
@@ -221,6 +224,9 @@ DOMContentLoaded
   	<div class="dynamic-content" data-source="/html/include/member/_modal_invite_body.html"></div>
   </template>
   ```
+- **template 안의 include 는 그 자리에서 펼쳐지지 않는다** — 브라우저도 프리렌더도 같다(26.09.28 부터 프리렌더도 같다).
+  슬롯으로 파셜에 꽂힌 뒤에 펼쳐지므로, 본문 template 안에 목록 template 을 가진 파셜을 불러도 겹치지 않는다.
+  (개발 확인용 페이지가 이렇게 쓴다 — 틀 `_sample_layout` 의 main 슬롯에 구역 파셜을 넘긴다)
 - ⚠ **슬롯 이름을 파셜 안 목록 템플릿의 필드명과 겹치지 않게** 짓는다. 겹치면 목록 필드 자리까지 슬롯 내용으로 덮인다
   (아코디언 파셜은 항목 필드로 `{{{body}}}` 를 쓴다 → 그 파셜에 `data-slot-body` 를 넘기면 안 된다).
 - ⚠ **`{{body}}` 처럼 두 겹으로 적으면 태그가 글자로 보인다.** 슬롯은 항상 세 겹.
@@ -370,6 +376,8 @@ template   id="sample_invite_body"
 | **참 · 거짓을 문자열로 — `data-checked="false"`** | 치환은 **글자 바꿔치기**라 참/거짓을 모른다. `<input false>` 가 되고 class 자리면 `class="ui-tag false"` 가 된다 | **끄는 방법은 「안 넘기는 것」 하나뿐이다** |
 | **기본값 안에 `}`** | 정규식이 `[^}]*?` 라 **거기서 끊긴다** — 기본값이 잘린 채 나온다 | 중괄호가 필요한 값은 기본값에 두지 않고 **넘겨서** 채운다 |
 | **파셜을 **「상태 예시」**인 채로 복사** | 파셜은 `is-active` · `is-error` 같은 상태를 보여주려 만들어 둔 것이 많다 — 복사하면 **그 상태가 따라온다** | 기준 마크업은 **실제 화면**에서 가져온다 |
+| **빈 기본값 원문 자리(`{{{attrs\|}}}`)가 **한 줄을 통째로** 차지** | 넘기지 않으면 프리렌더가 **그 줄을 지운다**(빈 줄이 남지 않게). 넘겼으면 남는다 — **슬롯이든 일반 변수든 같다** | 그대로 두면 된다. ⚠ 26.09.28 전 `prerender.js` 는 슬롯만 봐서 `data-attrs` 를 넘겨도 지웠다 — 짝 프로젝트는 `npm run sync` 로 맞춘다 |
+| **template 요소 안에 include** | **브라우저도 프리렌더도 펼치지 않는다.** 슬롯으로 꺼내 파셜에 꽂힌 뒤에 펼쳐진다 | 슬롯 template 안의 include 는 **정상 패턴**이다. 목록 template 안의 include 는 행에 그대로 남으므로 template 자체를 파셜로 뺀다 |
 
 <!-- /auto:traps -->
 
@@ -492,6 +500,8 @@ template   id="sample_invite_body"
 | class 가 하나 모자라거나 `false` 가 붙어 있다 | 빈 값을 넘겨 기본값이 밀렸다 / 참·거짓을 문자열로 넘겼다 — 끄려면 **안 넘긴다** |
 | 기본값이 **잘린 채** 나온다 | 기본값 안에 `}` 를 썼다 — 정규식이 거기서 끊는다 |
 | **산출물에서만** 값이 기본값이다 | `data-*` 를 작은따옴표로 적었다 / `data-*` 에 대문자를 썼다(이쪽은 반대로 브라우저만 실패) |
+| `disabled` · `checked` 가 원본 화면엔 있는데 **산출물에만 없다** | 옛 `prerender.js` — 한 줄짜리 `{{{attrs\|}}}` 를 「슬롯을 넘겼나」로만 보고 지웠다(26.09.28 수정). `npm run sync` 로 짝과 맞는지 본다 |
+| `npm run validate` 에 `Stray end tag </template>` · 중복 id | 옛 `prerender.js` 가 template 안의 include 를 펼쳐 **목록 template 이 슬롯 template 안에 겹쳤다**(26.09.28 수정) / 설명 주석에 template 태그를 그대로 적었다 |
 
 <!-- /auto:symptoms -->
 

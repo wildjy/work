@@ -337,6 +337,13 @@
 									<code>&lt;input false&gt;</code> 가 되고 class 자리면 <code>class="ui-btn false"</code> 가 된다 —
 									<strong>끄는 방법은 「안 넘기는 것」 하나뿐이다.</strong>
 								</p>
+								<p class="guide__note">
+									<code>&#123;&#123;&#123;attrs|&#125;&#125;&#125;</code> 가
+									<strong>한 줄을 통째로</strong> 차지하면(공통 토글처럼 속성을 줄마다 적은 태그) 넘기지 않았을 때
+									프리렌더가 <strong>그 줄을 지운다</strong> — 빈 줄이 남지 않게 하려는 것이다. 넘겼으면 남는다.
+									<strong>26.09.28 전의 <code>prerender.js</code> 는 넘겨도 지워</strong> <code>disabled</code> 가
+									산출물에서만 빠졌다(원본 화면은 멀쩡해 눈에 안 띈다).
+								</p>
 								<p class="guide__note guide__note--warn">
 									<strong>빈 값을 넘기는 것과 안 넘기는 것은 다르다.</strong> <code>data-variant=""</code> 는 「넘긴
 									것」이라 <strong>기본값을 이긴다.</strong> 기본값을 쓰려면 속성을 아예 적지 않는다.
@@ -667,7 +674,10 @@ function Host({ extra = null }) {
 										</tr>
 										<tr>
 											<td>없어도 되는 슬롯</td>
-											<td>파셜에 <code>{{{body|}}}</code> — 넘기지 않으면 프리렌더가 그 줄을 지운다</td>
+											<td>
+												파셜에 <code>{{{body|}}}</code> — 넘기지 않으면 프리렌더가 그 줄을 지운다. 넘겼으면 남는다(슬롯
+												· 일반 변수 모두 같은 규칙)
+											</td>
 										</tr>
 									</tbody>
 								</table>
@@ -679,6 +689,11 @@ function Host({ extra = null }) {
 										그 파셜을 부른다.
 									</li>
 									<li>슬롯은 항상 세 겹이다. 두 겹으로 적으면 태그가 글자로 보인다.</li>
+									<li>
+										<strong>template 안의 include 는 그 자리에서 펼쳐지지 않는다</strong> — 브라우저도 프리렌더도 같다.
+										슬롯으로 파셜에 꽂힌 뒤에 펼쳐진다. 그래서 본문 template 안에 목록 template 을 가진 파셜을 불러도
+										겹치지 않는다.
+									</li>
 								</ul>
 								<p class="guide__note guide__note--warn">
 									슬롯 이름을 <strong>파셜 안 목록 템플릿의 필드명과 겹치지 않게</strong> 짓는다. 겹치면 목록 필드

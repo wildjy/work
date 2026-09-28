@@ -38,5 +38,13 @@
   {
     "symptom": "<strong>산출물에서만</strong> 값이 기본값이다",
     "cause": "<code>data-*</code> 를 작은따옴표로 적었다 / <code>data-*</code> 에 대문자를 썼다(이쪽은 반대로 브라우저만 실패)"
+  },
+  {
+    "symptom": "<code>disabled</code> · <code>checked</code> 가 원본 화면엔 있는데 <strong>산출물에만 없다</strong>",
+    "cause": "옛 <code>prerender.js</code> — 한 줄짜리 <code>&#123;&#123;&#123;attrs|&#125;&#125;&#125;</code> 를 「슬롯을 넘겼나」로만 보고 지웠다(26.09.28 수정). <code>npm run sync</code> 로 짝과 맞는지 본다"
+  },
+  {
+    "symptom": "<code>npm run validate</code> 에 <code>Stray end tag &lt;/template&gt;</code> · 중복 id",
+    "cause": "옛 <code>prerender.js</code> 가 template 안의 include 를 펼쳐 <strong>목록 template 이 슬롯 template 안에 겹쳤다</strong>(26.09.28 수정) / 설명 주석에 template 태그를 그대로 적었다"
   }
 ]

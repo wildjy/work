@@ -516,8 +516,12 @@ function resolveSlots(vars, ctx) {
 //    ② {{{이름|}}} — 기본값이 비어 있으면 **넘기지 않았을 때 그 줄을 지운다**(없어도 되는 자리).
 const SLOT_LINE_RE = /^([ \t]*)(.*?)\{\{\{\s*(\w+)\s*(?:\|[^}]*?)?\s*\}\}\}(.*)$/gm;
 const SLOT_EMPTY_LINE_RE = /^[ \t]*\{\{\{\s*(\w+)\s*\|\s*\}\}\}[ \t]*\r?\n/gm;
-function fillSlots(str, slots) {
-	const out = str.replace(SLOT_EMPTY_LINE_RE, (m, name) => (name in slots ? m : ''));
+// ⚠ 「넘겼는가」는 **슬롯과 일반 변수를 함께** 본다(vars). 슬롯만 보면 한 줄짜리 {{{attrs|}}} 처럼
+//    일반 변수를 넘겨도 줄째 지워진다 — 토글의 disabled · checked 가 산출물에서만 빠졌다(26.09.28).
+//    브라우저(dynamicImport)는 넘긴 값을 그대로 채우므로 원본 화면은 멀쩡해 눈에 안 띈다.
+function fillSlots(str, slots, vars) {
+	const passed = (name) => name in slots || (vars && name in vars);
+	const out = str.replace(SLOT_EMPTY_LINE_RE, (m, name) => (passed(name) ? m : ''));
 	return out.replace(SLOT_LINE_RE, (m, ind, before, name, after) => {
 		if (!(name in slots)) return m;
 		if (!before.trim() && !after.trim()) return reindent(slots[name], ind);
@@ -553,7 +557,7 @@ function expandPartials(html, baseDir, stack, ctx) {
 		const slots = resolveSlots(vars, ctx);
 		// ⚠ vars 가 비어도 부른다 — {{key|기본값}} 을 채워야 하기 때문이다.
 		//    기본값이 없는 {{key}} 는 여전히 그대로 남으므로 목록 template 은 안전하다.
-		content = fillSlots(content, slots);
+		content = fillSlots(content, slots, vars);
 		content = fillVars(content, vars);
 		// dynamicImport.js 는 fetch 를 문서(페이지) 기준으로 해석하므로,
 		// 파셜 안의 data-source 도 파셜 위치가 아니라 페이지 기준으로 푼다.
