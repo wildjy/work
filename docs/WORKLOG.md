@@ -511,3 +511,27 @@ LNB 「개발 확인용」 하위 메뉴가 그 페이지 목록이며, 목록�
 - 확인 : 파일 131 · 경로 바꾼 파일 59 · `/work/…` 경로 **643곳 전부 실재** · 이중 치환(`/work/work`) 0 · 남은 루트 경로는 코드 예시(`pre`·`code` · JSON 의 `&quot;` 예시)와 주석뿐.
   GitHub Pages 처럼 `/work/` 만 서빙하는 임시 서버 + 헤드리스 크롬으로 원본(`html/sample/Sample.html` · `html/guide/Guide_Partial.html`) · 산출물 · `index.html` 5장 → 요청 **134건 전부 200**(404 는 크롬 기본 `favicon.ico` 뿐) · 스타일 · 파셜 · JSON 목록 · 0건 상태 · LNB 활성 정상.
   워크플로 순서(prerender → `git diff --exit-code` → validate) 통과 · `lint` 통과.
+
+---
+
+## 26.09.28 · 사용법 페이지 원본 가독성 — 코드 예시를 「적은 그대로」 (1·2단계 · 유재영)
+
+**문제** — `Guide_Partial.html` 의 코드 예시가 전부 엔티티(`&lt;div …&gt;`)이고 `<pre>` 안이라 **열 0** 에서 시작했다.
+`partial_samples.json` 은 줄바꿈·탭·따옴표까지 `&#10;` · `&#9;` · `&quot;` 라 사람이 읽을 수 없었다.
+
+| 항목 | 위치 | 사유 |
+| --- | --- | --- |
+| `textarea.guide__src` (원문 코드 블록) | `Guide_Partial.html` 14곳 | 안쪽을 **이스케이프 없이** 적는다. 둘레 마크업과 같은 깊이로 들여써도 된다 |
+| 함수 `codeSource` | `public/js/common.js` §13 · `eslint.config.js` | `textarea.guide__src` → `pre.guide__code > code` 로 바꿔 그린다. **공통 들여쓰기 · 앞뒤 빈 줄을 걷는다.** `codeHighlight` 첫 줄에서 불러 색칠 전에 돈다 |
+| 목록 template | `#tpl_guide_sample` | `pre > code {{{code}}}` → `textarea.guide__src {{code}}`. `{{code}}` 의 이스케이프를 textarea 가 다시 푼다 |
+| `partial_samples.json` `code` | `public/data/guide/` | 엔티티를 걷어 **평문**(`\n` · `\t`)으로 |
+| `docs_from_json.js` `decode()` 삭제 | `scripts/` | 되돌릴 엔티티가 없다. ⚠ 예전 `decode` 는 `&#10;` · `&#9;` 를 몰라 **`docs/PARTIALS.md` 에 12곳이 글자로 찍혀 있었다** — 함께 풀렸다 |
+| `restoreRaw` 가 `<` `>` 를 엔티티로 | `scripts/prerender.js` | html-validate `no-raw-characters` 가 textarea 안의 날것 `< >` 를 error 로 잡는다. **산출물만** 바꾼다(원본은 날것 · 화면 글자는 같다). `&` 는 두 번 이스케이프되므로 두지 않는다 |
+
+- ⚠ **목록 template 안에서는 `data-raw` 를 쓰지 않는다** — `protectRaw` 가 template 안쪽을 자리표로 바꿔 두어 **모든 행이 `{{code}}` 글자로** 나온다.
+- ⚠ textarea 는 문자 참조를 푼다 — 코드에 `&quot;` 를 글자로 보이려면 `&amp;quot;` 로 적는다(변환 스크립트가 그렇게 막았다). 닫는 textarea 태그는 적을 수 없다.
+- ⚠ **페이지 원본 안에서만 안전하다.** 3단계에서 구역을 파셜로 빼면 런타임(`dynamicImport`)이 파셜 안의 `{{ }}` 를 채운다 — `{{pageTitle|페이지 제목}}` 같은 예시가 치환된다. 3단계에서 따로 막아야 한다.
+- 그대로 둔 엔티티 : 데모 속성값(`data-msg`) · 문장 속 짧은 `<code>` 4곳 · 설명 문구(`args`) — 실제 HTML 로 해석되는 자리라 엔티티가 맞다.
+- 확인 : 고치기 전후 헤드리스 크롬 DOM 에서 **코드 블록 28개의 보이는 글자가 원본 · 산출물 모두 완전 일치** · 색칠 토큰 515 = 515 · 화면 동일 · 프리렌더 경고 0 · `validate` · `lint` · `docs:check` 통과 · 배포본(`pages_base`)에서도 textarea 는 그대로.
+  화면이 같아 `index.html` 작업일자는 찍지 않았다.
+- ⚠ `prerender.js` 가 바뀌었다 — ara-pub 과 `npm run sync` 로 맞출 것(이 PC 에는 `pubSync.peers` 경로가 없어 확인하지 못했다).

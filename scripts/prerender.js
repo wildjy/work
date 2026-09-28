@@ -152,8 +152,12 @@ function protectRaw(src, ctx) {
 		(m, open, inner, close) => open + '\u0001RAW' + (ctx.raw.push(inner) - 1) + '\u0001' + close,
 	);
 }
+// ⚠ 되돌릴 때 **< > 만** 엔티티로 바꾼다(26.09.28). html-validate 의 no-raw-characters 가 textarea 안의
+//    날것 < > 를 error 로 잡아 커밋 훅이 막는다. textarea 는 문자 참조를 풀어 보여 주므로 화면 글자는 같다 —
+//    원본은 읽기 좋게 날것으로 두고 산출물만 검사를 통과하는 모양으로 낸다.
+//    & 는 건드리지 않는다 — 원본이 글자 &quot; 를 보이려고 &amp;quot; 로 적은 것이 두 번 이스케이프된다.
 function restoreRaw(src, ctx) {
-	return src.replace(RAW_TOKEN_RE, (m, i) => ctx.raw[Number(i)]);
+	return src.replace(RAW_TOKEN_RE, (m, i) => ctx.raw[Number(i)].replace(/</g, '&lt;').replace(/>/g, '&gt;'));
 }
 
 /* ── 1) 파셜 include 전개 ──────────────────────────────── */

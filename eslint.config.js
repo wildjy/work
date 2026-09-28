@@ -36,6 +36,7 @@ const COMMON_FUNCTIONS = Object.fromEntries(
 		'checkGroupSyncAll',
 		'lnbActive',
 		'datePickerInit',
+		'codeSource',
 		'codeHighlight',
 	].map((name) => [name, 'readonly']),
 );

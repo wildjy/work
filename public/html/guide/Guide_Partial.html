@@ -77,11 +77,13 @@
 									<h3 class="ui-card__title">부르는 쪽 — 페이지</h3>
 								</div>
 								<div class="ui-card__body">
-									<pre class="guide__code"><code>&lt;div
-	class="dynamic-content"
-	data-source="/html/include/common/_header.html"
-	data-page-title="회원 관리"
-&gt;&lt;/div&gt;</code></pre>
+									<textarea class="guide__src" data-raw readonly aria-label="코드 예시">
+										<div
+											class="dynamic-content"
+											data-source="/html/include/common/_header.html"
+											data-page-title="회원 관리"
+										></div>
+									</textarea>
 								</div>
 							</div>
 							<div class="ui-card">
@@ -89,9 +91,11 @@
 									<h3 class="ui-card__title">받는 쪽 — _header.html</h3>
 								</div>
 								<div class="ui-card__body">
-									<pre class="guide__code"><code>&lt;header class="app-header"&gt;
-	&lt;h1 class="app-header__title"&gt;{{pageTitle|페이지 제목}}&lt;/h1&gt;
-&lt;/header&gt;</code></pre>
+									<textarea class="guide__src" data-raw readonly aria-label="코드 예시">
+										<header class="app-header">
+											<h1 class="app-header__title">{{pageTitle|페이지 제목}}</h1>
+										</header>
+									</textarea>
 								</div>
 							</div>
 						</div>
@@ -286,14 +290,14 @@
 								<h3 class="ui-card__title">동작 — 같은 파셜에 값만 바꿔 넣는다</h3>
 							</div>
 							<div class="ui-card__body">
-								<pre
-									class="guide__code"
-								><code>&lt;div class="dynamic-content" data-source="/html/include/guide/_guide_var.html"
-	data-title="값을 넘긴 화면"
-	data-msg="따옴표 &amp;quot;큰따옴표&amp;quot; · 꺾쇠 &amp;lt;b&amp;gt; · 앰퍼샌드 &amp;amp;"
-	data-msg-raw="원문이라 &lt;b&gt;태그가 살아난다&lt;/b&gt;"
-	data-modal-id="modal_invite" data-max-size="10MB"
-	data-with-default="넘긴 값이 기본값을 이긴다"&gt;&lt;/div&gt;</code></pre>
+								<textarea class="guide__src" data-raw readonly aria-label="코드 예시">
+									<div class="dynamic-content" data-source="/html/include/guide/_guide_var.html"
+										data-title="값을 넘긴 화면"
+										data-msg="따옴표 &amp;quot;큰따옴표&amp;quot; · 꺾쇠 &amp;lt;b&amp;gt; · 앰퍼샌드 &amp;amp;"
+										data-msg-raw="원문이라 <b>태그가 살아난다</b>"
+										data-modal-id="modal_invite" data-max-size="10MB"
+										data-with-default="넘긴 값이 기본값을 이긴다"></div>
+								</textarea>
 							</div>
 						</div>
 						<div
@@ -324,14 +328,16 @@
 									치환은 <strong>글자 바꿔치기</strong>라 넣는 자리를 가리지 않는다. 속성값이면 어디든 들어간다 — class
 									이름 · 속성 · <code>style</code> · <code>href</code> 안까지.
 								</p>
-								<pre class="guide__code"><code>&lt;!-- 모양만 다르다 : class 이름을 값으로 받는다 --&gt;
-&lt;button class="ui-btn &#123;&#123;variant|ui-btn--outlined&#125;&#125;"&gt;
+								<textarea class="guide__src" data-raw readonly aria-label="코드 예시">
+									<!-- 모양만 다르다 : class 이름을 값으로 받는다 -->
+									<button class="ui-btn {{variant|ui-btn--outlined}}">
 
-&lt;!-- 있다 / 없다 : 속성 묶음을 통째로 받는다(공통 체크박스가 실제로 이 모양이다) --&gt;
-&lt;input type="checkbox" &#123;&#123;&#123;attrs|&#125;&#125;&#125; /&gt;      &lt;!-- data-attrs="checked disabled" --&gt;
+									<!-- 있다 / 없다 : 속성 묶음을 통째로 받는다(공통 체크박스가 실제로 이 모양이다) -->
+									<input type="checkbox" {{{attrs|}}} />      <!-- data-attrs="checked disabled" -->
 
-&lt;!-- 길이 · 색 : style 안도 그냥 글자다 --&gt;
-&lt;i style="width: &#123;&#123;width|10&#125;&#125;%"&gt;&lt;/i&gt;</code></pre>
+									<!-- 길이 · 색 : style 안도 그냥 글자다 -->
+									<i style="width: {{width|10}}%"></i>
+								</textarea>
 								<p class="guide__note guide__note--warn">
 									<strong>참 · 거짓을 문자열로 넘기지 않는다.</strong> <code>data-attrs="false"</code> 는
 									<code>&lt;input false&gt;</code> 가 되고 class 자리면 <code>class="ui-btn false"</code> 가 된다 —
@@ -481,12 +487,14 @@
 									파셜은 <code>data-page-title="회원 관리"</code> 로 넘기고
 									<code>&#123;&#123;pageTitle|페이지 제목&#125;&#125;</code> 로 받는다. 같은 일을 React 는 이렇게 한다.
 								</p>
-								<pre class="guide__code"><code>// props 로 넘기고, 기본값은 매개변수 기본값으로 둔다
-function Header({ pageTitle = &#39;페이지 제목&#39; }) {
-	return &lt;h1 className="app-header__title"&gt;{pageTitle}&lt;/h1&gt;;
-}
+								<textarea class="guide__src" data-raw readonly aria-label="코드 예시">
+									// props 로 넘기고, 기본값은 매개변수 기본값으로 둔다
+									function Header({ pageTitle = '페이지 제목' }) {
+										return <h1 className="app-header__title">{pageTitle}</h1>;
+									}
 
-&lt;Header pageTitle="회원 관리" /&gt;</code></pre>
+									<Header pageTitle="회원 관리" />
+								</textarea>
 							</div>
 						</div>
 					</section>
@@ -503,15 +511,17 @@ function Header({ pageTitle = &#39;페이지 제목&#39; }) {
 						</div>
 						<div class="ui-card">
 							<div class="ui-card__body">
-								<pre class="guide__code"><code>&lt;!-- 공통 파셜 : 갈아끼울 자리를 「경로 변수」로 비워 둔다 --&gt;
-&lt;div class="dynamic-content" data-source="&#123;&#123;extra|/html/include/common/_none.html&#125;&#125;"&gt;&lt;/div&gt;
+								<textarea class="guide__src" data-raw readonly aria-label="코드 예시">
+									<!-- 공통 파셜 : 갈아끼울 자리를 「경로 변수」로 비워 둔다 -->
+									<div class="dynamic-content" data-source="{{extra|/html/include/common/_none.html}}"></div>
 
-&lt;!-- ① 덩어리가 필요한 화면 : 조각의 경로를 넘긴다 --&gt;
-&lt;div class="dynamic-content" data-source="/html/include/guide/_guide_optional_host.html"
-	data-extra="/html/include/guide/_guide_optional.html"&gt;&lt;/div&gt;
+									<!-- ① 덩어리가 필요한 화면 : 조각의 경로를 넘긴다 -->
+									<div class="dynamic-content" data-source="/html/include/guide/_guide_optional_host.html"
+										data-extra="/html/include/guide/_guide_optional.html"></div>
 
-&lt;!-- ② 필요 없는 화면 : 아무것도 넘기지 않는다 → 기본값인 빈 파셜이 들어온다 --&gt;
-&lt;div class="dynamic-content" data-source="/html/include/guide/_guide_optional_host.html"&gt;&lt;/div&gt;</code></pre>
+									<!-- ② 필요 없는 화면 : 아무것도 넘기지 않는다 → 기본값인 빈 파셜이 들어온다 -->
+									<div class="dynamic-content" data-source="/html/include/guide/_guide_optional_host.html"></div>
+								</textarea>
 							</div>
 						</div>
 
@@ -611,10 +621,12 @@ function Header({ pageTitle = &#39;페이지 제목&#39; }) {
 								<p class="guide__desc">
 									파셜은 <strong>경로를 넘기거나 넘기지 않는 것</strong>으로 가른다. 같은 일을 React 는 이렇게 한다.
 								</p>
-								<pre class="guide__code"><code>// 넘기면 그리고, 안 넘기면 아무것도 그리지 않는다
-function Host({ extra = null }) {
-	return &lt;div className="ui-card__body"&gt;&lt;p&gt;…&lt;/p&gt;{extra}&lt;/div&gt;;
-}</code></pre>
+								<textarea class="guide__src" data-raw readonly aria-label="코드 예시">
+									// 넘기면 그리고, 안 넘기면 아무것도 그리지 않는다
+									function Host({ extra = null }) {
+										return <div className="ui-card__body"><p>…</p>{extra}</div>;
+									}
+								</textarea>
 							</div>
 						</div>
 					</section>
@@ -630,23 +642,23 @@ function Host({ extra = null }) {
 						</div>
 						<div class="ui-card">
 							<div class="ui-card__body">
-								<pre
-									class="guide__code"
-								><code>&lt;!-- 부르는 쪽 : 컨테이너는 비우고, 내용은 같은 파일의 template 에 적는다 --&gt;
-&lt;div
-	class="dynamic-content"
-	data-source="/html/include/ui/_ui_modal.html"
-	data-id="modal_invite"
-	data-title="멤버 초대"
-	data-slot-body="#modal_invite_body"
-&gt;&lt;/div&gt;
+								<textarea class="guide__src" data-raw readonly aria-label="코드 예시">
+									<!-- 부르는 쪽 : 컨테이너는 비우고, 내용은 같은 파일의 template 에 적는다 -->
+									<div
+										class="dynamic-content"
+										data-source="/html/include/ui/_ui_modal.html"
+										data-id="modal_invite"
+										data-title="멤버 초대"
+										data-slot-body="#modal_invite_body"
+									></div>
 
-&lt;template id="modal_invite_body"&gt;
-	&lt;div class="grid"&gt;…&lt;/div&gt;
-&lt;/template&gt;
+									<template id="modal_invite_body">
+										<div class="grid">…</div>
+									</template>
 
-&lt;!-- 받는 쪽(_ui_modal.html) --&gt;
-&lt;div class="ui-modal__body"&gt;{{{body}}}&lt;/div&gt;</code></pre>
+									<!-- 받는 쪽(_ui_modal.html) -->
+									<div class="ui-modal__body">{{{body}}}</div>
+								</textarea>
 							</div>
 							<div class="ui-card__body ui-card__body--flush">
 								<table class="ui-table ui-table--wrap">
@@ -738,15 +750,17 @@ function Host({ extra = null }) {
 									<code>data/&lt;슬라이스&gt;</code> 와 이름을 맞추면 데이터와 마크업이 대칭이 된다. 폴더 규칙 전체는
 									<a href="/html/guide/Guide_Structure.html">폴더 구조 — 어느 폴더에 두나</a>.
 								</p>
-								<pre class="guide__code"><code>public/html/include/
-├─ ui/         _ui_modal.html …            ← 프레임 (본문을 직접 부르지 않고 슬롯으로 받는다)
-└─ sample/                                 ← 슬라이스 (data/sample 과 같은 이름)
-   ├─ section/ _sample_modal.html …        ← 화면을 이루는 덩어리
-   └─ body/    _sample_invite_body.html    ← 슬롯 본문
+								<textarea class="guide__src" data-raw readonly aria-label="코드 예시">
+									public/html/include/
+									├─ ui/         _ui_modal.html …            ← 프레임 (본문을 직접 부르지 않고 슬롯으로 받는다)
+									└─ sample/                                 ← 슬라이스 (data/sample 과 같은 이름)
+									   ├─ section/ _sample_modal.html …        ← 화면을 이루는 덩어리
+									   └─ body/    _sample_invite_body.html    ← 슬롯 본문
 
-파일       include/sample/body/_sample_invite_body.html
-template   id="sample_invite_body"
-모달       data-id="sample_invite"</code></pre>
+									파일       include/sample/body/_sample_invite_body.html
+									template   id="sample_invite_body"
+									모달       data-id="sample_invite"
+								</textarea>
 								<p class="guide__note">
 									파일 이름 · <code>template</code> 아이디 · 모달 <code>data-id</code> 를 <strong>한 규칙</strong>으로
 									묶으면 <code>grep</code> 한 번에 다 잡힌다.
@@ -802,19 +816,21 @@ template   id="sample_invite_body"
 									파셜은 <code>data-slot-body="#modal_invite_body"</code> 로 넘기고 <code>{{{body}}}</code> 자리에
 									꽂는다. React 의 children 과 같다.
 								</p>
-								<pre class="guide__code"><code>// 여러 줄 마크업은 children 으로 넘긴다
-function Modal({ title, children }) {
-	return (
-		&lt;div className="ui-modal"&gt;
-			&lt;h2 className="ui-modal__title"&gt;{title}&lt;/h2&gt;
-			&lt;div className="ui-modal__body"&gt;{children}&lt;/div&gt;
-		&lt;/div&gt;
-	);
-}
+								<textarea class="guide__src" data-raw readonly aria-label="코드 예시">
+									// 여러 줄 마크업은 children 으로 넘긴다
+									function Modal({ title, children }) {
+										return (
+											<div className="ui-modal">
+												<h2 className="ui-modal__title">{title}</h2>
+												<div className="ui-modal__body">{children}</div>
+											</div>
+										);
+									}
 
-&lt;Modal title="멤버 초대"&gt;
-	&lt;div className="grid"&gt;…&lt;/div&gt;
-&lt;/Modal&gt;</code></pre>
+									<Modal title="멤버 초대">
+										<div className="grid">…</div>
+									</Modal>
+								</textarea>
 							</div>
 						</div>
 					</section>
@@ -830,21 +846,23 @@ function Modal({ title, children }) {
 						</div>
 						<div class="ui-card">
 							<div class="ui-card__body">
-								<pre class="guide__code"><code>&lt;!-- 부르는 쪽 --&gt;
-&lt;div
-	class="dynamic-content"
-	data-source="/html/include/ui/_ui_dropdown.html"
-	data-items="/data/ui/sample_options.json"
-&gt;&lt;/div&gt;
+								<textarea class="guide__src" data-raw readonly aria-label="코드 예시">
+									<!-- 부르는 쪽 -->
+									<div
+										class="dynamic-content"
+										data-source="/html/include/ui/_ui_dropdown.html"
+										data-items="/data/ui/sample_options.json"
+									></div>
 
-&lt;!-- 받는 쪽(_ui_dropdown.html) --&gt;
-&lt;ul
-	class="dynamic-list"
-	data-source="{{items}}"
-	data-template="#tpl_ui_dropdown_item"
-	data-empty="#tpl_ui_dropdown_empty"
-&gt;&lt;/ul&gt;
-&lt;div class="dynamic-content" data-source="/html/include/ui/_ui_dropdown_tpl.html"&gt;&lt;/div&gt;</code></pre>
+									<!-- 받는 쪽(_ui_dropdown.html) -->
+									<ul
+										class="dynamic-list"
+										data-source="{{items}}"
+										data-template="#tpl_ui_dropdown_item"
+										data-empty="#tpl_ui_dropdown_empty"
+									></ul>
+									<div class="dynamic-content" data-source="/html/include/ui/_ui_dropdown_tpl.html"></div>
+								</textarea>
 								<ul class="guide__list">
 									<li>목록 경로(<code>data-items</code>)는 <code>/data/…</code> — 목록도 페이지 기준이다.</li>
 									<li>
@@ -867,12 +885,14 @@ function Modal({ title, children }) {
 									파셜은 속성 네 개가 이 일을 한다 — <code>data-source</code>(데이터) · <code>data-template</code>(행
 									모양) · <code>data-filter</code>(거르기) · <code>data-empty</code>(0건).
 								</p>
-								<pre class="guide__code"><code>// 거르고 · 돌리고 · 0건이면 다른 것을 그린다
-{items.length === 0 ? (
-	&lt;Empty /&gt;
-) : (
-	items.filter((it) =&gt; it.group === 'input').map((it) =&gt; &lt;Row key={it.name} {...it} /&gt;)
-)}</code></pre>
+								<textarea class="guide__src" data-raw readonly aria-label="코드 예시">
+									// 거르고 · 돌리고 · 0건이면 다른 것을 그린다
+									{items.length === 0 ? (
+										<Empty />
+									) : (
+										items.filter((it) => it.group === 'input').map((it) => <Row key={it.name} {...it} />)
+									)}
+								</textarea>
 							</div>
 						</div>
 						<div class="ui-card">
@@ -884,8 +904,10 @@ function Modal({ title, children }) {
 									행 마크업을 두 곳 이상이 쓰면 <strong>template 요소만 담은 파셜</strong>을 따로 둔다 — 드롭다운과 검색
 									드롭다운이 <code>_ui_dropdown_tpl.html</code> 하나를 함께 쓰는 것이 그 모양이다.
 								</p>
-								<pre class="guide__code"><code>&lt;!-- 페이지 맨 아래에서 include 한다 --&gt;
-&lt;div class="dynamic-content" data-source="/html/include/ui/_ui_dropdown_tpl.html"&gt;&lt;/div&gt;</code></pre>
+								<textarea class="guide__src" data-raw readonly aria-label="코드 예시">
+									<!-- 페이지 맨 아래에서 include 한다 -->
+									<div class="dynamic-content" data-source="/html/include/ui/_ui_dropdown_tpl.html"></div>
+								</textarea>
 								<p class="guide__note guide__note--warn">
 									<strong>목록 template 은 파셜로 빼도 되지만 슬롯 template 은 안 된다.</strong>
 									목록은 파셜 주입이 <strong>다 끝난 뒤</strong> 쓰이고, 슬롯은 <strong>전개 도중</strong> 쓰인다 —
@@ -906,15 +928,17 @@ function Modal({ title, children }) {
 									배너 · 팝업 · 공지처럼 <strong>앞으로도 계속 갈릴 것</strong>은 파셜로 빼는 데서 멈추지 않는다. 틀만
 									파셜에 두고 내용은 JSON 이 갖는다 — 그러면 <strong>다음 것은 데이터 한 줄이다.</strong>
 								</p>
-								<pre class="guide__code"><code>&lt;!-- 틀 : 컨테이너와 template 을 파셜 하나에 둔다 --&gt;
-&lt;div class="dynamic-list" data-source="/data/guide/demo_opcomp.json"
-	data-template="#tpl_guide_op" data-filter="&#123;&#123;show|use&#125;&#125;"&gt;&lt;/div&gt;
+								<textarea class="guide__src" data-raw readonly aria-label="코드 예시">
+									<!-- 틀 : 컨테이너와 template 을 파셜 하나에 둔다 -->
+									<div class="dynamic-list" data-source="/data/guide/demo_opcomp.json"
+										data-template="#tpl_guide_op" data-filter="{{show|use}}"></div>
 
-&lt;template id="tpl_guide_op"&gt;
-	&lt;div class="guide__op guide__op--&#123;&#123;type&#125;&#125;"&gt;   &lt;!-- type 이 그대로 class --&gt;
-		&lt;span class="guide__op-txt"&gt;{{{txt}}}&lt;/span&gt;
-	&lt;/div&gt;
-&lt;/template&gt;</code></pre>
+									<template id="tpl_guide_op">
+										<div class="guide__op guide__op--{{type}}">   <!-- type 이 그대로 class -->
+											<span class="guide__op-txt">{{{txt}}}</span>
+										</div>
+									</template>
+								</textarea>
 								<ul class="guide__list">
 									<li>
 										<strong>컨테이너와 template 을 한 파일에</strong> 둔다 — 파셜이 목록보다 먼저 주입되므로 두 경로가
@@ -1312,7 +1336,7 @@ function Modal({ title, children }) {
 			<div class="guide__sample">
 				<h4 class="guide__sample-name">{{name}}</h4>
 				<p class="guide__sample-args">{{{args}}}</p>
-				<pre class="guide__code"><code>{{{code}}}</code></pre>
+				<textarea class="guide__src" readonly aria-label="코드 예시">{{code}}</textarea>
 			</div>
 		</template>
 		<template id="tpl_guide_sample_none">

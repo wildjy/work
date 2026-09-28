@@ -33,7 +33,7 @@
  * 10. LNB                     lnbActive                     .ui-lnb__link--toggle
  * 11. 날짜 · 기간 달력          datePickerInit (jQuery UI)     [data-datepicker-day] · .ui-period[data-datepicker]
  * 12. 툴팁                    tooltipSet · tooltipCloseAll   .ui-tooltip__btn (hover · focus · 누르면 고정)
- * 13. 문서 코드 색칠          codeHighlight                 .guide__code (사용법 문서 전용)
+ * 13. 문서 코드 색칠          codeSource · codeHighlight    textarea.guide__src → .guide__code (사용법 문서 전용)
  */
 
 /* ── 0. 공통 헬퍼 ─────────────────────────────────────────── */
@@ -988,7 +988,39 @@ function _codeStr(s) {
 	return '<span class="guide__tok--str">' + inner + '</span>';
 }
 
+// 원문 코드(textarea.guide__src)를 pre.guide__code > code 로 바꿔 그린다 — codeHighlight 가 칠하기 전에 돈다.
+//   <textarea class="guide__src" data-raw readonly aria-label="코드 예시">
+//   	<div class="dynamic-content" data-source="…"></div>     ← < > " 를 이스케이프하지 않고 적는다
+//   </textarea>
+// - 원본에서는 둘레 마크업과 같은 깊이로 들여써도 된다 — **공통 들여쓰기를 걷어** 화면에서는 열 0 부터 보인다.
+// - 앞뒤 빈 줄은 뗀다(여는 태그 바로 뒤 · 닫는 태그 앞의 들여쓰기).
+// ⚠ textarea 안은 문자 참조를 푼다 — 코드에 &quot; 를 글자로 보이려면 &amp;quot; 로 적는다. 닫는 textarea 태그는 적을 수 없다.
+// ⚠ data-raw 는 프리렌더가 안쪽을 손대지 않게 하는 표시다(include 전개 · 주석 정리 · 치환을 건너뛴다).
+//    목록 template 안에서는 쓰지 않는다 — 자리표로 바뀌어 모든 행이 {{code}} 글자로 나온다.
+function codeSource(root) {
+	var srcs = (root || document).querySelectorAll('textarea.guide__src');
+	Array.prototype.forEach.call(srcs, function (ta) {
+		var lines = ta.value.replace(/\r\n?/g, '\n').split('\n');
+		while (lines.length && !lines[0].trim()) lines.shift();
+		while (lines.length && !lines[lines.length - 1].trim()) lines.pop();
+		var cut = lines.reduce(function (min, l) {
+			return l.trim() ? Math.min(min, l.match(/^[ \t]*/)[0].length) : min;
+		}, Infinity);
+		var pre = document.createElement('pre');
+		pre.className = 'guide__code';
+		var code = document.createElement('code');
+		code.textContent = lines
+			.map(function (l) {
+				return cut === Infinity ? l : l.slice(cut);
+			})
+			.join('\n');
+		pre.appendChild(code);
+		ta.replaceWith(pre);
+	});
+}
+
 function codeHighlight(root) {
+	codeSource(root);
 	var blocks = (root || document).querySelectorAll('.guide__code code');
 
 	Array.prototype.forEach.call(blocks, function (code) {

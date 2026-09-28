@@ -112,23 +112,15 @@ function samples() {
 		if (!list.length) return;
 		out.push('### ' + title, '');
 		list.forEach((r) => {
-			out.push('**' + md(r.name) + '** — ' + md(r.args), '', '```html', decode(r.code), '```', '');
+			out.push('**' + md(r.name) + '** — ' + md(r.args), '', '```html', String(r.code), '```', '');
 		});
 	});
 	return out.join('\n').trimEnd();
 }
-/* 코드 블록은 마크다운이 아니라 원문이다 — 엔티티만 되돌린다 */
-function decode(code) {
-	return String(code)
-		.replace(/&#123;/g, '{')
-		.replace(/&#125;/g, '}')
-		.replace(/&lt;/g, '<')
-		.replace(/&gt;/g, '>')
-		.replace(/&quot;/g, '"')
-		.replace(/&#39;/g, "'")
-		.replace(/&nbsp;/g, ' ')
-		.replace(/&amp;/g, '&');
-}
+/* 코드 블록은 마크다운이 아니라 원문이다.
+   ⚠ partial_samples.json 의 code 는 **평문**이다(26.09.28 — 엔티티를 걷었다). 화면은 textarea 가 받고,
+      listRender 의 {{code}} 이스케이프를 textarea 가 다시 풀어 준다. 그래서 여기서도 되돌릴 것이 없다.
+      (예전 decode 는 &#10;·&#9; 를 몰라 문서에 글자로 찍혀 있었다) */
 
 /* ── 마커 사이를 갈아 끼운다 ───────────────────────────────── */
 function main() {

@@ -408,31 +408,57 @@ template   id="sample_invite_body"
 **입력** — data-id(필수) · data-name · data-type · data-placeholder · data-value · data-modifier · data-helper · data-helper-type
 
 ```html
-<div&#10;&#9;class="dynamic-content"&#10;&#9;data-source="/html/include/ui/_ui_input.html"&#10;&#9;data-id="join_birth"&#10;&#9;data-value="1999"&#10;&#9;data-modifier="is-error"&#10;&#9;data-helper="생년월일 8자리를 입력해주세요."&#10;&#9;data-helper-type="ui-helper--error"&#10;></div>
+<div
+	class="dynamic-content"
+	data-source="/html/include/ui/_ui_input.html"
+	data-id="join_birth"
+	data-value="1999"
+	data-modifier="is-error"
+	data-helper="생년월일 8자리를 입력해주세요."
+	data-helper-type="ui-helper--error"
+></div>
 ```
 
 **드롭다운** — data-items(JSON 경로 · 필수) · data-placeholder · data-modifier
 
 ```html
-<div&#10;&#9;class="dynamic-content"&#10;&#9;data-source="/html/include/ui/_ui_dropdown.html"&#10;&#9;data-items="/data/ui/sample_options.json"&#10;&#9;data-placeholder="정렬을 선택해주세요."&#10;></div>
+<div
+	class="dynamic-content"
+	data-source="/html/include/ui/_ui_dropdown.html"
+	data-items="/data/ui/sample_options.json"
+	data-placeholder="정렬을 선택해주세요."
+></div>
 ```
 
 **검색 드롭다운** — data-items(필수) · data-placeholder · data-name
 
 ```html
-<div&#10;&#9;class="dynamic-content"&#10;&#9;data-source="/html/include/ui/_ui_dropdown_search.html"&#10;&#9;data-items="/data/ui/sample_options.json"&#10;&#9;data-placeholder="회사명을 검색해주세요."&#10;></div>
+<div
+	class="dynamic-content"
+	data-source="/html/include/ui/_ui_dropdown_search.html"
+	data-items="/data/ui/sample_options.json"
+	data-placeholder="회사명을 검색해주세요."
+></div>
 ```
 
 **수량 스테퍼** — data-id(필수) · data-name · data-value · data-min · data-max
 
 ```html
-<div&#10;&#9;class="dynamic-content"&#10;&#9;data-source="/html/include/ui/_ui_stepper.html"&#10;&#9;data-id="order_count"&#10;&#9;data-value="1"&#10;&#9;data-min="1"&#10;&#9;data-max="3"&#10;></div>
+<div
+	class="dynamic-content"
+	data-source="/html/include/ui/_ui_stepper.html"
+	data-id="order_count"
+	data-value="1"
+	data-min="1"
+	data-max="3"
+></div>
 ```
 
 **날짜 · 기간** — data-id(필수) · data-name · data-placeholder · data-value — 이 페이지에 jQuery · jQuery UI 가 있어야 한다
 
 ```html
-<div class="dynamic-content" data-source="/html/include/ui/_ui_date.html" data-id="open_date"></div>&#10;<div class="dynamic-content" data-source="/html/include/ui/_ui_period.html" data-id="search_period"></div>
+<div class="dynamic-content" data-source="/html/include/ui/_ui_date.html" data-id="open_date"></div>
+<div class="dynamic-content" data-source="/html/include/ui/_ui_period.html" data-id="search_period"></div>
 ```
 
 ### 선택 · 안내 — `include/ui/`
@@ -440,19 +466,46 @@ template   id="sample_invite_body"
 **체크박스 · 라디오 · 토글** — data-id(필수) · data-label(필수) · data-name · data-value · data-attrs(checked · disabled) · data-modifier
 
 ```html
-<div&#10;&#9;class="dynamic-content"&#10;&#9;data-source="/html/include/ui/_ui_checkbox.html"&#10;&#9;data-id="agree_sms"&#10;&#9;data-name="agree_sms"&#10;&#9;data-value="Y"&#10;&#9;data-label="문자 수신"&#10;&#9;data-attrs="checked"&#10;></div>&#10;<div&#10;&#9;class="dynamic-content"&#10;&#9;data-source="/html/include/ui/_ui_radio.html"&#10;&#9;data-id="open_all"&#10;&#9;data-name="open_range"&#10;&#9;data-value="all"&#10;&#9;data-label="전체 공개"&#10;></div>&#10;<div class="dynamic-content" data-source="/html/include/ui/_ui_toggle.html" data-id="use_push" data-label="알림 받기"></div>
+<div
+	class="dynamic-content"
+	data-source="/html/include/ui/_ui_checkbox.html"
+	data-id="agree_sms"
+	data-name="agree_sms"
+	data-value="Y"
+	data-label="문자 수신"
+	data-attrs="checked"
+></div>
+<div
+	class="dynamic-content"
+	data-source="/html/include/ui/_ui_radio.html"
+	data-id="open_all"
+	data-name="open_range"
+	data-value="all"
+	data-label="전체 공개"
+></div>
+<div class="dynamic-content" data-source="/html/include/ui/_ui_toggle.html" data-id="use_push" data-label="알림 받기"></div>
 ```
 
 **툴팁** — data-id(필수) · data-text(필수) · data-position(top · right · bottom · left) · data-label
 
 ```html
-<div&#10;&#9;class="dynamic-content"&#10;&#9;data-source="/html/include/ui/_ui_tooltip.html"&#10;&#9;data-id="tip_email"&#10;&#9;data-position="right"&#10;&#9;data-text="가입 후에는 바꿀 수 없습니다."&#10;></div>
+<div
+	class="dynamic-content"
+	data-source="/html/include/ui/_ui_tooltip.html"
+	data-id="tip_email"
+	data-position="right"
+	data-text="가입 후에는 바꿀 수 없습니다."
+></div>
 ```
 
 **아코디언** — data-items(JSON 경로 · 필수) · data-mode(single 하나만 열림 · multiple 여러 개)
 
 ```html
-<div&#10;&#9;class="dynamic-content"&#10;&#9;data-source="/html/include/ui/_ui_accordion.html"&#10;&#9;data-items="/data/ui/sample_accordion.json"&#10;></div>
+<div
+	class="dynamic-content"
+	data-source="/html/include/ui/_ui_accordion.html"
+	data-items="/data/ui/sample_accordion.json"
+></div>
 ```
 
 ### 알림 · 모달 — `include/ui/` (페이지 끝에 둔다)
@@ -460,25 +513,55 @@ template   id="sample_invite_body"
 **토스트** — data-id(필수) · data-text · data-type(success · error) — 띄우기는 data-toast="아이디" 버튼
 
 ```html
-<div&#10;&#9;class="dynamic-content"&#10;&#9;data-source="/html/include/ui/_ui_toast.html"&#10;&#9;data-id="save_toast"&#10;&#9;data-text="저장되었습니다."&#10;></div>
+<div
+	class="dynamic-content"
+	data-source="/html/include/ui/_ui_toast.html"
+	data-id="save_toast"
+	data-text="저장되었습니다."
+></div>
 ```
 
 **확인창** — data-id(필수) · data-title(필수) · data-text · data-cancel · data-confirm · data-modifier
 
 ```html
-<div&#10;&#9;class="dynamic-content"&#10;&#9;data-source="/html/include/ui/_ui_modal_confirm.html"&#10;&#9;data-id="del_confirm"&#10;&#9;data-title="이벤트를 삭제하시겠습니까?"&#10;&#9;data-text="삭제한 이벤트는 복구할 수 없습니다."&#10;&#9;data-confirm="삭제"&#10;></div>
+<div
+	class="dynamic-content"
+	data-source="/html/include/ui/_ui_modal_confirm.html"
+	data-id="del_confirm"
+	data-title="이벤트를 삭제하시겠습니까?"
+	data-text="삭제한 이벤트는 복구할 수 없습니다."
+	data-confirm="삭제"
+></div>
 ```
 
 **모달 프레임 (본문은 슬롯)** — data-id(필수) · data-title(필수) · data-slot-body(필수) · data-subtext · data-footer · data-cancel · data-confirm · data-modifier
 
 ```html
-<div&#10;&#9;class="dynamic-content"&#10;&#9;data-source="/html/include/ui/_ui_modal.html"&#10;&#9;data-id="modal_invite"&#10;&#9;data-title="멤버 초대"&#10;&#9;data-subtext="초대할 멤버의 정보를 입력해주세요."&#10;&#9;data-slot-body="#modal_invite_body"&#10;&#9;data-confirm="초대하기"&#10;></div>&#10;<template id="modal_invite_body">&#10;&#9;<div class="dynamic-content" data-source="/html/include/member/_modal_invite_body.html"></div>&#10;</template>
+<div
+	class="dynamic-content"
+	data-source="/html/include/ui/_ui_modal.html"
+	data-id="modal_invite"
+	data-title="멤버 초대"
+	data-subtext="초대할 멤버의 정보를 입력해주세요."
+	data-slot-body="#modal_invite_body"
+	data-confirm="초대하기"
+></div>
+<template id="modal_invite_body">
+	<div class="dynamic-content" data-source="/html/include/member/_modal_invite_body.html"></div>
+</template>
 ```
 
 **알림 모달 (버튼 없음)** — data-id(필수) · data-title(필수) · data-subtext · data-text · data-slot-body · data-modifier — data-text 와 슬롯은 택일
 
 ```html
-<div&#10;&#9;class="dynamic-content"&#10;&#9;data-source="/html/include/ui/_ui_modal_alert.html"&#10;&#9;data-id="notice_alert"&#10;&#9;data-title="점검 안내"&#10;&#9;data-subtext="2026.09.20 02:00 ~ 06:00"&#10;&#9;data-text="점검 시간에는 로그인과 결제를 이용할 수 없습니다."&#10;></div>
+<div
+	class="dynamic-content"
+	data-source="/html/include/ui/_ui_modal_alert.html"
+	data-id="notice_alert"
+	data-title="점검 안내"
+	data-subtext="2026.09.20 02:00 ~ 06:00"
+	data-text="점검 시간에는 로그인과 결제를 이용할 수 없습니다."
+></div>
 ```
 
 <!-- /auto:samples -->
