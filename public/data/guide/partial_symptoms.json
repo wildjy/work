@@ -46,5 +46,9 @@
   {
     "symptom": "<code>npm run validate</code> 에 <code>Stray end tag &lt;/template&gt;</code> · 중복 id",
     "cause": "옛 <code>prerender.js</code> 가 template 안의 include 를 펼쳐 <strong>목록 template 이 슬롯 template 안에 겹쳤다</strong>(26.09.28 수정) / 설명 주석에 template 태그를 그대로 적었다"
+  },
+  {
+    "symptom": "코드 예시의 <code>&#123;&#123;key|기본값&#125;&#125;</code> 가 <strong>기본값으로 바뀌어</strong> 보인다",
+    "cause": "파셜 안 예시를 <code>&lt;textarea data-raw&gt;</code> 로 적지 않았다 / 옛 <code>dynamicImport.js</code>(강력 새로고침)"
   }
 ]

@@ -128,5 +128,20 @@
     "trap": "template 요소 안에 include",
     "what": "<strong>브라우저도 프리렌더도 펼치지 않는다.</strong> 슬롯으로 꺼내 파셜에 꽂힌 뒤에 펼쳐진다",
     "how": "슬롯 template 안의 include 는 <strong>정상 패턴</strong>이다. 목록 template 안의 include 는 행에 그대로 남으므로 template 자체를 파셜로 뺀다"
+  },
+  {
+    "trap": "파셜 안 코드 예시의 <code>&#123;&#123;key|기본값&#125;&#125;</code>",
+    "what": "파셜이 되면 브라우저 · 프리렌더 <strong>둘 다 기본값을 채운다</strong> — 보여주려던 코드가 바뀐다(<code>&#123;&#123;extra|…&#125;&#125;</code> 는 통째로 사라진다)",
+    "how": "예시는 <code>&lt;textarea class=\"guide__src\" data-raw&gt;</code> 안에 <strong>적은 그대로</strong> 적는다 — 두 구현 모두 안쪽을 건너뛴다. 글자로 보일 <code>&amp;</code> 는 <code>&amp;amp;</code> 로"
+  },
+  {
+    "trap": "파셜 안 문장의 <code>&#123;&#123;key|기본값&#125;&#125;</code>",
+    "what": "문장 속 인라인 코드도 <strong>똑같이 채워진다</strong>",
+    "how": "중괄호를 엔티티(<code>&amp;#123;</code> · <code>&amp;#125;</code>)로 적는다"
+  },
+  {
+    "trap": "목록 template 안의 <code>data-raw</code>",
+    "what": "프리렌더가 안쪽을 자리표로 바꿔 두어 <strong>모든 행이 <code>&#123;&#123;code&#125;&#125;</code> 글자로</strong> 나온다",
+    "how": "목록 template 의 textarea 에는 <code>data-raw</code> 를 붙이지 않는다 — <code>&#123;&#123;code&#125;&#125;</code> 의 이스케이프를 textarea 가 다시 푼다"
   }
 ]

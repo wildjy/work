@@ -378,6 +378,9 @@ template   id="sample_invite_body"
 | **파셜을 **「상태 예시」**인 채로 복사** | 파셜은 `is-active` · `is-error` 같은 상태를 보여주려 만들어 둔 것이 많다 — 복사하면 **그 상태가 따라온다** | 기준 마크업은 **실제 화면**에서 가져온다 |
 | **빈 기본값 원문 자리(`{{{attrs\|}}}`)가 **한 줄을 통째로** 차지** | 넘기지 않으면 프리렌더가 **그 줄을 지운다**(빈 줄이 남지 않게). 넘겼으면 남는다 — **슬롯이든 일반 변수든 같다** | 그대로 두면 된다. ⚠ 26.09.28 전 `prerender.js` 는 슬롯만 봐서 `data-attrs` 를 넘겨도 지웠다 — 짝 프로젝트는 `npm run sync` 로 맞춘다 |
 | **template 요소 안에 include** | **브라우저도 프리렌더도 펼치지 않는다.** 슬롯으로 꺼내 파셜에 꽂힌 뒤에 펼쳐진다 | 슬롯 template 안의 include 는 **정상 패턴**이다. 목록 template 안의 include 는 행에 그대로 남으므로 template 자체를 파셜로 뺀다 |
+| **파셜 안 코드 예시의 `{{key\|기본값}}`** | 파셜이 되면 브라우저 · 프리렌더 **둘 다 기본값을 채운다** — 보여주려던 코드가 바뀐다(`{{extra\|…}}` 는 통째로 사라진다) | 예시는 `<textarea class="guide__src" data-raw>` 안에 **적은 그대로** 적는다 — 두 구현 모두 안쪽을 건너뛴다. 글자로 보일 `&` 는 `&amp;` 로 |
+| **파셜 안 문장의 `{{key\|기본값}}`** | 문장 속 인라인 코드도 **똑같이 채워진다** | 중괄호를 엔티티(`&#123;` · `&#125;`)로 적는다 |
+| **목록 template 안의 `data-raw`** | 프리렌더가 안쪽을 자리표로 바꿔 두어 **모든 행이 `{{code}}` 글자로** 나온다 | 목록 template 의 textarea 에는 `data-raw` 를 붙이지 않는다 — `{{code}}` 의 이스케이프를 textarea 가 다시 푼다 |
 
 <!-- /auto:traps -->
 
@@ -585,6 +588,7 @@ template   id="sample_invite_body"
 | **산출물에서만** 값이 기본값이다 | `data-*` 를 작은따옴표로 적었다 / `data-*` 에 대문자를 썼다(이쪽은 반대로 브라우저만 실패) |
 | `disabled` · `checked` 가 원본 화면엔 있는데 **산출물에만 없다** | 옛 `prerender.js` — 한 줄짜리 `{{{attrs\|}}}` 를 「슬롯을 넘겼나」로만 보고 지웠다(26.09.28 수정). `npm run sync` 로 짝과 맞는지 본다 |
 | `npm run validate` 에 `Stray end tag </template>` · 중복 id | 옛 `prerender.js` 가 template 안의 include 를 펼쳐 **목록 template 이 슬롯 template 안에 겹쳤다**(26.09.28 수정) / 설명 주석에 template 태그를 그대로 적었다 |
+| 코드 예시의 `{{key\|기본값}}` 가 **기본값으로 바뀌어** 보인다 | 파셜 안 예시를 `<textarea data-raw>` 로 적지 않았다 / 옛 `dynamicImport.js`(강력 새로고침) |
 
 <!-- /auto:symptoms -->
 
