@@ -139,6 +139,27 @@ function copy(entry, peer, dir) {
 	console.log('\n  prettier ' + (r.status === 0 ? '적용 ✓' : '실패 — 직접 확인하세요'));
 }
 
+/* ── 사용법 — 벌어진 파일이 있을 때 끝에 붙여 바로 골라 쓰게 한다 ── */
+function usage() {
+	const keys = FILES.map((f) => f.key).join(' · ');
+	const rows = [
+		['npm run sync', '짝과 비교 (파일은 건드리지 않는다)'],
+		['npm run sync -- --pull <키>', '짝 → 여기   (짝이 앞섰을 때)'],
+		['npm run sync -- --push <키>', '여기 → 짝   (여기가 앞섰을 때)'],
+		['npm run sync -- --pull <키> --format', '받은 뒤 이 프로젝트 prettier 까지 (파일 전체가 다시 찍힌다)'],
+		['npm run sync -- --check', '벌어졌으면 종료코드 1 (훅에 걸 때)'],
+		['npm run sync -- <경로> ...', '짝을 직접 지정 (다른 PC · 짝이 여러 개일 때)'],
+	];
+	console.log('  ── 사용할 수 있는 명령 ─────────────────────────────');
+	// 한글은 터미널에서 두 칸이라 padEnd 로는 줄이 어긋난다 — 보이는 폭으로 맞춘다
+	const wide = (cp) =>
+		(cp >= 0x1100 && cp <= 0x11ff) || (cp >= 0x3000 && cp <= 0x9fff) || (cp >= 0xac00 && cp <= 0xd7af);
+	const width = (s) => [...s].reduce((n, c) => n + (wide(c.codePointAt(0)) ? 2 : 1), 0);
+	rows.forEach(([cmd, desc]) => console.log('    ' + cmd + ' '.repeat(Math.max(1, 40 - width(cmd))) + desc));
+	console.log('\n    <키> : ' + keys);
+	console.log('    받거나 보낸 뒤에는 npm run sync 로 다시 비교하고, 산출물은 npm run prerender 로 새로 만든다.\n');
+}
+
 /* ── 실행 ───────────────────────────────────────────── */
 const list = peers();
 if (!list.length) {
@@ -203,6 +224,7 @@ for (const peer of list) {
 if (drift) {
 	console.log('\n  벌어진 파일 ' + drift + '개 — 어느 쪽이 맞는지 보고 --pull / --push 로 옮기세요.');
 	console.log('  ⚠ 자동으로 덮지 않습니다. 개선이 양방향으로 일어나기 때문입니다(머리 주석 참고).\n');
+	usage();
 	if (flag('check')) process.exit(1);
 } else {
 	console.log('\n  모두 동일합니다. ✓\n');

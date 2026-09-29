@@ -6,9 +6,11 @@
   "scripts": {
     "serve": "node scripts/serve.js",
     "prerender": "node scripts/prerender.js",
+    "postprerender": "npm run validate",
     "prerender:watch": "node scripts/prerender.js --watch",
     "prerender:keep": "node scripts/prerender.js --keep-comments",
     "lint": "eslint .",
+    "check": "npm run prerender && npm run lint",
     "lint:fix": "eslint . --fix",
     "format": "prettier --write .",
     "format:check": "prettier --check .",
