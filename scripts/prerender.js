@@ -106,6 +106,18 @@ function indentAt(src, index) {
 	return m ? m[0] : '';
 }
 
+// 들여쓰기 문자를 끼울 자리에 맞춘다 (26.09.29 · ara-pub 전용 — work 에는 반영하지 않았다)
+//   파셜은 탭으로 들여쓰는데 페이지가 공백으로 들여쓰면, 끼운 자리의 공백 뒤에 파셜 안쪽 탭이 붙어
+//   한 줄에 「공백+탭」이 섞였다(공통 입력 파셜을 계정 화면에 넣으며 드러났다).
+//   자리가 **공백뿐**이면 파셜 안쪽의 앞 탭을 공백 두 칸으로 바꾼다. 자리가 탭이거나 없으면 그대로다.
+//   ⚠ 공백만 바뀐다 — 화면 · 마크업은 같다. npm run sync 는 이 차이 때문에 prerender 를 「로직 다름」으로 보고한다.
+const INDENT_SPACES = '  ';
+const spaceIndented = (indent) => !!indent && !indent.includes('\t');
+const indentUnit = (indent) => (spaceIndented(indent) ? INDENT_SPACES : '\t');
+function matchLead(line, indent) {
+	return spaceIndented(indent) ? line.replace(/^[ \t]+/, (w) => w.replace(/\t/g, INDENT_SPACES)) : line;
+}
+
 // 여러 줄 블록을 주어진 들여쓰기로 다시 정렬
 // ⚠ <pre> · <textarea> 안쪽 줄은 **손대지 않는다**(26.09.28). 공백이 곧 내용이라
 //    들여쓰기를 더하면 화면에서 둘째 줄부터 오른쪽으로 밀린다
@@ -132,7 +144,7 @@ function reindent(block, indent) {
 		.filter((l, i) => l.trim() && !keep[i])
 		.reduce((min, l) => Math.min(min, l.match(/^[ \t]*/)[0].length), Infinity);
 	const strip = base === Infinity ? 0 : base;
-	return lines.map((l, i) => (keep[i] ? l : l.trim() ? indent + l.slice(strip) : '')).join('\r\n');
+	return lines.map((l, i) => (keep[i] ? l : l.trim() ? indent + matchLead(l.slice(strip), indent) : '')).join('\r\n');
 }
 
 /* ── 0) 원문 블록 보호 ─────────────────────────────────── (26.09.28)
@@ -549,7 +561,7 @@ function fillSlots(str, slots, vars) {
 	return out.replace(SLOT_LINE_RE, (m, ind, before, name, after) => {
 		if (!(name in slots)) return m;
 		if (!before.trim() && !after.trim()) return reindent(slots[name], ind);
-		return ind + before + '\r\n' + reindent(slots[name], ind + '\t') + '\r\n' + ind + after;
+		return ind + before + '\r\n' + reindent(slots[name], ind + indentUnit(ind)) + '\r\n' + ind + after;
 	});
 }
 
