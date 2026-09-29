@@ -29,6 +29,7 @@
 	}
 
 	//**** 코드 블록 ****/ — pre 요소 안의 code 는 상자 안이라 바탕을 지운다
+	//   __code(코드 예시)는 어두운 판, __flow(흐름도)는 밝은 판 — 색은 $code-* 토큰(ara-pub 카탈로그와 같은 색 · 26.09.29)
 	&__code,
 	&__flow {
 		overflow-x: auto;
@@ -52,51 +53,61 @@
 	&__flow code {
 		color: variable.$color-text-sub;
 	}
+	&__code {
+		border-color: variable.$code-bg;
+		background-color: variable.$code-bg;
+		@include mixin.scrollbar(8px, variable.$gray-600);
+
+		code {
+			color: variable.$code-text;
+		}
+	}
 
 	//**** 코드 색칠 ****/ — common.js 의 codeHighlight 가 화면에서 감싼다(마크업·JSON 에는 없다)
 	// 태그 · 속성 이름 · 문자열 · 치환 자리({{ }}) · 주석만 가른다
 	//**** 코드 색칠 토큰 ****/ — common.js §13 codeHighlight 가 붙인다(원본 마크업에는 적지 않는다)
-	//   구조(꺾쇠 · =)는 흐리게, 이름은 종류별로, 값은 초록 — 눈이 이름과 값으로 먼저 간다.
+	//   구조(꺾쇠 · =)는 흐리게, 태그는 파랑 · 속성은 노랑 · 값은 초록 · 치환 자리는 보라 — 어두운 판(-*).
 	//   개발단 주석(<!--@ · //@)만 바탕을 깔아 일반 주석과 가른다 — 산출물에 남는 지침이다.
 	&__tok {
 		&--punct {
-			color: variable.$gray-500; // < </ > /> =
+			color: variable.$gray-400; // < </ > /> = — 구조는 흐리게
 		}
 		&--tag {
-			color: variable.$blue-700; // 태그 이름
+			color: variable.$code-tag; // 태그 이름
 		}
 		&--attr {
-			color: variable.$teal-700; // 일반 속성 class · type · id · aria-*
+			color: variable.$code-attr; // 일반 속성 class · type · id · aria-*
 		}
 		&--data {
-			color: variable.$indigo-600; // data-* — 파셜 변수 · 동작 연결 자리
+			color: variable.$code-attr; // data-* — 파셜 변수 · 동작 연결 자리
 		}
 		&--bool {
-			color: variable.$orange-700; // 값 없는 속성 disabled · hidden · open · data-raw
+			color: variable.$code-attr; // 값 없는 속성 disabled · hidden · open · data-raw
 		}
 		&--str {
-			color: variable.$green-700; // 속성값 · 문자열
+			color: variable.$code-str; // 속성값 · 문자열
 		}
 		&--var {
 			font-weight: 600;
-			color: variable.$pink-700; // {{ }} 치환 자리
+			color: variable.$code-fn; // {{ }} 치환 자리
 		}
 		&--expr {
-			color: variable.$blue-900; // JSX 값 {title}
+			color: variable.$code-fn; // JSX 값 {title}
 		}
 		&--kw {
-			color: variable.$indigo-800; // const · return · => · true · null
+			color: variable.$code-tag; // const · return · => · true · null
 		}
 		&--ent {
-			color: variable.$red-600; // 문자 참조 &amp; · &lt;
+			color: variable.$code-str; // 문자 참조 &amp; · &lt;
 		}
 		&--cmt {
-			color: variable.$gray-500;
+			font-style: italic;
+			color: variable.$code-cmt;
 		}
 		&--dev {
 			border-radius: variable.$radius-sm;
-			background-color: variable.$orange-50;
-			color: variable.$orange-900; // 개발단 주석 <!--@ … -->
+			background-color: rgba(variable.$code-cmt, 0.35); // 어두운 판 위에서 일반 주석과 가르는 바탕
+			color: variable.$code-text; // 개발단 주석 <!--@ … -->
 		}
 	}
 
@@ -288,6 +299,16 @@
 		font-weight: 600;
 	}
 
+	//**** 코드 칸 이름 ****/ — 「부르는 쪽」 · 파셜 경로 (개발 확인용 카탈로그의 소스 코드 카드)
+	&__src-path {
+		margin: 20px 0 6px;
+		@include mixin.font-set(0.75rem, 600, variable.$color-text-sub);
+
+		&:first-child {
+			margin-top: 0;
+		}
+	}
+
 	//**** 접는 소스 코드 ****/ — 개발 확인용 샘플 구역의 「소스 코드」 (details · summary)
 	//   <details class="ui-card guide__src-fold">
 	//     <summary class="ui-card__header"><h3 class="ui-card__title">소스 코드</h3></summary>
@@ -324,6 +345,94 @@
 		}
 	}
 
+	//**** 파셜 사용법 형식 ****/ (26.09.29) — 절마다 「언제 → 코드 | 결과 → 규칙 → ✗/✓ → React → 더 알아보기」
+	// 코드 | 결과는 grid--2 + ui-card, 더 알아보기는 위 __src-fold 를 그대로 쓴다. 여기는 새로 필요한 것만.
+	// 카드 사이 — 한 절 안에 카드가 여러 장 쌓인다(Guide_Partial 의 main 에 guide--partial)
+	&--partial .section > :not(.section__head) + * {
+		margin-top: 16px;
+	}
+	// 하위 절 제목은 위를 더 띄운다 — 위 규칙(특정성 0,3,0)과 같은 깊이로 적는다
+	&--partial .section > .guide__sub {
+		margin-top: 32px;
+	}
+	// 하위 절 제목(3-0 ~ 3-4 · 6 의 골라 그리기 등)
+	&__sub {
+		margin-top: 32px;
+		padding-top: 20px;
+		border-top: 1px dashed variable.$color-border;
+		scroll-margin-top: 24px;
+		@include mixin.font-set(1rem, 600, variable.$color-text);
+	}
+	// 데모 한 줄 — 버튼 · 체크박스 · 막대를 가로로
+	&__row {
+		display: flex;
+		flex-wrap: wrap;
+		align-items: center;
+		gap: 12px;
+
+		.guide__bar {
+			flex: 1;
+			width: auto;
+		}
+	}
+	// ✗ 틀린 예 / ✓ 맞는 예 — grid--2 안의 ui-card 두 장
+	&__vs {
+		border-top: 3px solid variable.$color-border;
+
+		&--bad {
+			border-top-color: variable.$color-error;
+
+			.ui-card__title {
+				color: variable.$color-error-text;
+			}
+		}
+		&--good {
+			border-top-color: variable.$color-success;
+
+			.ui-card__title {
+				color: variable.$color-success-text;
+			}
+		}
+	}
+
+	//**** 긴 코드 접기 ****/ (26.09.29) — common.js §13 codeFold 가 긴 코드(.guide__code)만 이 상자로 감싸고 버튼을 붙인다
+	// 접히는 높이는 스크립트가 정한다(12줄 · 작은 화면 8줄). 여기는 모양만 — 아래 흐림 · 전체 폭 버튼.
+	&__code-fold {
+		position: relative;
+
+		> .guide__code {
+			border-radius: variable.$radius-sm variable.$radius-sm 0 0;
+		}
+		// 접혀 있을 때 마지막 줄이 흐려지며 끊긴다 — 더 있다는 표시
+		&:not(.is-open)::after {
+			content: '';
+			@include mixin.position(absolute, $left: 0, $right: 0, $bottom: 36px);
+			height: 44px;
+			background: linear-gradient(rgba(variable.$code-bg, 0), variable.$code-bg);
+			pointer-events: none;
+		}
+	}
+	&__code-more {
+		display: block;
+		width: 100%;
+		min-height: 36px;
+		padding: 0 16px;
+		border: 0;
+		border-top: 1px solid rgba(variable.$white, 0.08);
+		border-radius: 0 0 variable.$radius-sm variable.$radius-sm;
+		background-color: variable.$gray-800;
+		@include mixin.font-set(0.8125rem, 600, variable.$code-text);
+		cursor: pointer;
+
+		&:hover {
+			color: variable.$white;
+		}
+		&:focus-visible {
+			outline: 2px solid variable.$code-text;
+			outline-offset: -2px;
+		}
+	}
+
 	//**** 표 제목 ****/ — 카드 제목과 겹쳐 화면에서는 감추고 보조기기에만 읽힌다
 	&__caption {
 		@include mixin.blind;
@@ -333,6 +442,13 @@
 		&__code,
 		&__flow {
 			padding: 12px;
+		}
+		// 작은 화면 — 누르기 쉬운 높이(44). 흐림도 버튼 높이에 맞춰 올린다
+		&__code-more {
+			min-height: 44px;
+		}
+		&__code-fold:not(.is-open)::after {
+			bottom: 44px;
 		}
 	}
 }

@@ -1,8 +1,13 @@
-<!-- 구역 : 동작 -->
+<!-- 구역 : 8. 동작 원리 — 옛 2 「어떻게 도는가」 + 옛 4-4 「같은 괄호, 다른 규칙」
+     ⚠ 설명 글에 파셜 변수의 기본값 문법을 적을 때는 세로막대를 &#124; 로 적는다. 코드 예시(textarea data-raw) 안은 그대로.
+     ⚠ 대조표의 목록 template(tpl_guide_syntax)은 3-3 파셜에 있다. -->
 <section class="section" id="guide_flow">
 	<div class="section__head">
-		<h2 class="section__title">2. 어떻게 도는가 — 같은 규칙, 두 벌의 구현</h2>
-		<p class="section__desc">브라우저는 실시간으로 끼우고(마운트 뒤), 프리렌더는 같은 결과를 파일로 만든다(SSG 빌드)</p>
+		<h2 class="section__title">8. 동작 원리 — 같은 규칙, 두 벌의 구현</h2>
+		<p class="section__desc">
+			규칙이 왜 그런지 궁금할 때 읽는다. 앞 절의 「✗」 대부분이 여기서 나온다 — 브라우저는 실시간으로 끼우고(마운트 뒤),
+			프리렌더는 같은 결과를 파일로 만든다(SSG 빌드)
+		</p>
 	</div>
 	<div class="ui-card">
 		<div class="ui-card__body ui-card__body--flush">
@@ -19,29 +24,44 @@
 				</thead>
 				<tbody>
 					<tr>
-						<td>구현 파일</td>
+						<td class="guide__term">언제 보나</td>
+						<td><code>npm run serve</code> 로 <code>/html/…</code> 을 연 작업 화면</td>
+						<td>index 의 링크 · 개발자에게 넘기는 <code>/prerender/…</code></td>
+					</tr>
+					<tr>
+						<td class="guide__term">구현 파일</td>
 						<td><code>public/js/dynamicImport.js</code></td>
 						<td><code>scripts/prerender.js</code></td>
 					</tr>
 					<tr>
-						<td>방식</td>
+						<td class="guide__term">방식</td>
 						<td>fetch 로 가져와 치환 후 <code>replaceWith</code> (중첩은 재귀)</td>
 						<td>같은 규칙으로 문자열 전개 → <code>public/prerender/*.html</code></td>
 					</tr>
 					<tr>
-						<td>변수</td>
+						<td class="guide__term">변수</td>
 						<td><code>RAW_RE</code> / <code>ESC_RE</code> 블록</td>
 						<td><code>partialVars()</code> / <code>fillVars()</code></td>
 					</tr>
 					<tr>
-						<td>슬롯</td>
+						<td class="guide__term">슬롯</td>
 						<td><code>data-slot-*</code> 처리 블록</td>
 						<td><code>resolveSlots()</code> / <code>fillSlots()</code></td>
 					</tr>
 				</tbody>
 			</table>
 		</div>
+		<div class="ui-card__body">
+			<p class="guide__note guide__note--warn">
+				<strong>두 구현 중 한쪽만 고치지 않는다.</strong> 규칙이 갈리면 「화면은 되는데 산출물이 다르다」가 된다 —
+				대문자 키 · 작은따옴표(<a href="#guide_vars_name">3-0</a>)가 실제로 갈렸던 예다. 의심스러우면
+				<strong>이 페이지를 두 곳에서 각각 열어</strong>
+				결과가 같은지 본다.
+			</p>
+		</div>
 	</div>
+
+	<h3 class="guide__sub">도는 순서 — 스크립트는 다 그려진 뒤에</h3>
 	<div class="ui-card">
 		<div class="ui-card__body">
 			<pre class="guide__flow"><code>DOMContentLoaded
@@ -50,15 +70,65 @@
   → JSON 목록 렌더                   listRender.js  (파셜이 있으면 이 이벤트를 기다린다)
   → 'dynamic-list-loaded' 발생</code></pre>
 			<ul class="guide__list">
-				<li><strong>파셜이 먼저, 목록이 나중이다.</strong> 그래서 파셜 안에 목록 컨테이너를 넣어도 된다.</li>
 				<li>
-					파셜이 들어온 뒤에 잡아야 하는 스크립트는 <code>dynamic-content-loaded</code> 에 건다. 공통
-					UI(<code>common.js</code>)는 문서 위임이라 나중에 주입된 파셜에서도 그냥 동작한다 — 페이지에 전용 스크립트를
-					두지 않는다.
+					<strong>파셜이 먼저, 목록이 나중이다.</strong> 그래서 파셜 안에 목록 컨테이너를 넣어도 된다(<a
+						href="#guide_list"
+						>6</a
+					>).
+				</li>
+				<li>
+					파셜 · 목록이 들어온 뒤에 잡아야 하는 스크립트는 <code>dynamic-content-loaded</code> ·
+					<code>dynamic-list-loaded</code>
+					에 건다. 공통 UI(<code>common.js</code>)는 문서 위임이라 나중에 주입된 파셜에서도 그냥 동작한다 — 페이지에
+					전용 스크립트를 두지 않는다.
 				</li>
 			</ul>
+		</div>
+	</div>
+
+	<h3 class="guide__sub" id="guide_scope">같은 괄호, 다른 규칙 — 괄호가 쓰이는 세 곳</h3>
+	<p class="guide__desc">
+		같은 <code>{{ }}</code> 를 세 군데서 쓴다. <strong>안 채워졌을 때 어떻게 되는지</strong>가 다르다 — 파셜 안이면 파셜
+		변수, 목록 template 안이면 JSON 필드, 그 밖이면 「개발에서 채운다」는 표시일 뿐이다.
+	</p>
+	<div class="ui-card">
+		<div class="ui-card__body ui-card__body--flush">
+			<table class="ui-table ui-table--wrap">
+				<caption class="guide__caption">
+					파셜 변수와 목록 템플릿 대조
+				</caption>
+				<thead>
+					<tr>
+						<th scope="col">무엇이</th>
+						<th scope="col">파셜 변수 — <code>data-*</code></th>
+						<th scope="col">목록 템플릿 — JSON</th>
+					</tr>
+				</thead>
+				<tbody
+					class="dynamic-list"
+					data-source="/data/guide/partial_syntax.json"
+					data-template="#tpl_guide_syntax"
+					data-empty="#tpl_guide_syntax_none"
+					data-filter="group=scope"
+				></tbody>
+			</table>
+		</div>
+		<div class="ui-card__body">
 			<p class="guide__note guide__note--warn">
-				두 구현 중 <strong>한쪽만 고치지 않는다.</strong> 규칙이 갈리면 「화면은 되는데 산출물이 다르다」가 된다.
+				<strong>파셜 안 목록 템플릿에는 기본값 <code>&#124;</code> 를 쓰지 않는다.</strong> 「안 넘긴 키를 그대로
+				둔다」는 보호는 <strong>기본값이 없을 때만</strong> 든다 — <code>{{name&#124;이름없음}}</code> 은 파셜 변수
+				패스가 <strong>먼저 채워버려</strong>
+				listRender 가 볼 것이 남지 않는다.
+			</p>
+			<p class="guide__note guide__note--warn">
+				<strong>개발단에 넘기는 표시는 영문 한 단어만 쓰지 않는다.</strong> 키 형식이 <code>[\w@.-]+</code> 라
+				<code>{{Pro}}</code> 는 키로 잡혀 <strong>지워지거나 치환된다</strong> — 한글 · 공백 · 태그를 섞는다(<code
+					>{{플랜 구독하기}}</code
+				>).
+			</p>
+			<p class="guide__note">
+				세 겹으로 넣은 값 안의 괄호는 <strong>한 번 더 읽힌다</strong> — 세 겹 → 두 겹 순서로 두 번 채우기 때문이다.
+				위와 같은 이유로 한글 · 공백을 섞으면 안전하다.
 			</p>
 		</div>
 	</div>

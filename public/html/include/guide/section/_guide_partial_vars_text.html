@@ -1,0 +1,86 @@
+<!-- 구역 : 3-1. 문구 넘기기 — _guide_partial_vars.html 이 부른다
+     ⚠ 설명 글에 파셜 변수의 기본값 문법을 적을 때는 세로막대를 &#124; 로 적는다. 코드 예시(textarea data-raw) 안은 그대로. -->
+<h3 class="guide__sub" id="guide_vars_text">3-1. 문구 넘기기</h3>
+<p class="guide__desc">파셜 하나를 두 번 불렀다. 모양은 같고 <strong>글자만</strong> 다르다.</p>
+<div class="grid grid--2">
+	<div class="ui-card">
+		<div class="ui-card__header">
+			<h4 class="ui-card__title">코드</h4>
+		</div>
+		<div class="ui-card__body">
+			<textarea class="guide__src" data-raw readonly aria-label="코드 예시">
+				<!-- 파셜 _guide_v_text.html -->
+				<div class="guide__op">
+					<span class="guide__op-badge">{{title}}</span>
+					<span class="guide__op-txt">{{msg}}</span>
+				</div>
+
+				<!-- 페이지 : 두 번 부르며 값만 바꾼다 -->
+				<div class="dynamic-content" data-source="/html/include/guide/_guide_v_text.html"
+					data-title="멤버 초대"
+					data-msg="최대 10명까지 한 번에 초대할 수 있습니다."></div>
+				<div class="dynamic-content" data-source="/html/include/guide/_guide_v_text.html"
+					data-title="파일 올리기"
+					data-msg="최대 크기 10MB · 지원 파일 xlsx"></div>
+			</textarea>
+		</div>
+	</div>
+	<div class="ui-card">
+		<div class="ui-card__header">
+			<h4 class="ui-card__title">결과</h4>
+		</div>
+		<div class="ui-card__body guide__ops">
+			<div
+				class="dynamic-content"
+				data-source="/html/include/guide/_guide_v_text.html"
+				data-title="멤버 초대"
+				data-msg="최대 10명까지 한 번에 초대할 수 있습니다."
+			></div>
+			<div
+				class="dynamic-content"
+				data-source="/html/include/guide/_guide_v_text.html"
+				data-title="파일 올리기"
+				data-msg="최대 크기 10MB · 지원 파일 xlsx"
+			></div>
+		</div>
+	</div>
+</div>
+<div class="ui-card">
+	<div class="ui-card__body">
+		<ul class="guide__list">
+			<li><strong>속성 이름은 소문자와 하이픈만</strong> 쓴다(<a href="#guide_vars_name">3-0</a>).</li>
+			<li><strong>값은 큰따옴표로</strong> 감싼다 — 작은따옴표는 프리렌더가 읽지 못한다.</li>
+			<li>
+				⚠ <strong>prettier 는 값에 <code>&amp;quot;</code> 가 든 속성을 작은따옴표로 바꾼다</strong> — 그러면 위 규칙에
+				걸려 프리렌더만 값을 못 채운다(이 문서의 옛 데모가 실제로 그랬다). 값에서 큰따옴표를 빼거나, 꼭 필요하면 그 요소
+				위에 <code>prettier-ignore</code> 주석을 단다.
+			</li>
+			<li>
+				파셜 맨 위 주석에 <strong>어떤 <code>data-*</code> 를 받는지</strong> 적어 둔다 — 부르는 사람이 파셜을 열지
+				않아도 알 수 있게.
+			</li>
+		</ul>
+	</div>
+</div>
+<div class="grid grid--2">
+	<div class="ui-card guide__vs guide__vs--bad">
+		<div class="ui-card__header">
+			<h4 class="ui-card__title">✗ 작은따옴표 — 프리렌더만 못 읽는다</h4>
+		</div>
+		<div class="ui-card__body">
+			<textarea class="guide__src" data-raw readonly aria-label="틀린 예">
+				<div class="dynamic-content" data-source="…" data-title='멤버 초대'></div>
+			</textarea>
+		</div>
+	</div>
+	<div class="ui-card guide__vs guide__vs--good">
+		<div class="ui-card__header">
+			<h4 class="ui-card__title">✓ 큰따옴표 — 값 안의 큰따옴표는 &amp;quot;</h4>
+		</div>
+		<div class="ui-card__body">
+			<textarea class="guide__src" data-raw readonly aria-label="맞는 예">
+				<div class="dynamic-content" data-source="…" data-title="멤버 초대"></div>
+			</textarea>
+		</div>
+	</div>
+</div>

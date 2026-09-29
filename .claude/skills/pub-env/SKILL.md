@@ -76,6 +76,7 @@ node -e "const fs=require('fs');const f='public/html/X.html';let s=fs.readFileSy
 | --- | --- | --- |
 | 파셜 include · `data-*` → `{{key}}` · `{{key\|기본값}}` | `public/js/dynamicImport.js` | `scripts/prerender.js` `expandPartials`·`partialVars`·`fillVars` |
 | 목록 렌더 · `_tpl` · `data-filter` | `public/js/listRender.js` | `scripts/prerender.js` `expandLists`·`applyFilter`·`fillTemplate` |
+| **파셜 원문 보여주기** `<textarea class="guide__src" data-src-file="/html/include/…/_x.html">` — 그 파일을 읽은 그대로 코드로 보여 준다(카탈로그의 「펼친 마크업」). 손으로 옮겨 적지 않는다 | `public/js/common.js` `codeSourceFile`(비어 있을 때만 fetch) | `scripts/prerender.js` `fillSrcFiles`(산출물에 채워 넣고 원문 블록으로 보호) |
 | 원문 블록 `<textarea data-raw>` — 안쪽은 치환하지 않는다 | `public/js/dynamicImport.js` `protect` · `RAW_TOKEN_RE` | `scripts/prerender.js` `protectRaw`·`restoreRaw`(산출물에서 `<` `>` 만 엔티티로) |
 
 > ⚠ **한쪽만 고치면 `npm run serve` 로 본 화면과 index(산출물)로 본 화면이 달라진다.** 두 파일을 함께 고치고 `Sample.html` 로 양쪽을 확인한다.

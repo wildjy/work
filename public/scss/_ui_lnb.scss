@@ -54,6 +54,31 @@
 		}
 	}
 
+	// 이 페이지의 목차 — 현재 페이지 항목 아래에 common.js(lnbTocBuild)가 붙인다(사용법 문서)
+	// ⚠ .ui-lnb__sub 의 링크 규칙과 같은 무게라 **그보다 뒤에** 둔다.
+	&__toc {
+		margin: 4px 0 8px 22px;
+		padding-left: 10px;
+		border-left: 2px solid variable.$color-divider;
+		gap: 0;
+
+		.ui-lnb__link {
+			display: block;
+			height: 32px;
+			padding: 0 10px;
+			border-radius: variable.$radius-sm;
+			@include mixin.font-set(0.8125rem, 400, variable.$color-text-sub);
+			line-height: 32px;
+			@include mixin.txt-shorten;
+
+			&.is-current {
+				background-color: variable.$color-primary-light;
+				color: variable.$color-primary;
+				font-weight: 600;
+			}
+		}
+	}
+
 	// 하위 목록이 0건일 때 — 링크와 같은 들여쓰기 · 누를 수 없는 안내
 	&__empty {
 		display: flex;

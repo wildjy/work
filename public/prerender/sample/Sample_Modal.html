@@ -18,6 +18,7 @@
 				<p class="layout__brand">pub-base</p>
 				<!-- 공통 LNB -->
 				<!-- 현재 페이지 메뉴의 is-active 와 상위 메뉴의 is-open 은 common.js 의 lnbActive 가 붙인다 -->
+				<!-- 사용법 문서를 열면 현재 페이지 항목 아래에 그 페이지의 목차(.ui-lnb__toc)가 붙는다 — common.js 의 lnbTocBuild 가 절 제목을 읽어 만든다(여기 적지 않는다) -->
 				<nav class="ui-lnb">
 					<div class="ui-lnb__menu">
 						<ul class="ui-lnb__group">
@@ -111,10 +112,11 @@
 							<h2 class="section__title">모달</h2>
 							<p class="section__desc">모달 프레임은 본문만 스크롤 · 확인창 · 버튼 없는 알림은 딤을 누르면 닫힘</p>
 						</div>
-						<details class="ui-card guide__src-fold">
+						<details class="ui-card guide__src-fold" open>
 							<summary class="ui-card__header"><h3 class="ui-card__title">소스 코드</h3></summary>
 							<div class="ui-card__body">
-								<textarea class="guide__src" data-raw readonly aria-label="소스 코드">
+								<p class="guide__src-path">부르는 쪽 — 페이지에 적는 줄</p>
+								<textarea class="guide__src" data-raw readonly aria-label="부르는 쪽 소스 코드">
 				&lt;div class="ui-btn-group"&gt;
 					&lt;button type="button" class="ui-btn ui-btn--contained" data-modal-open="sample_confirm"&gt;확인창 열기&lt;/button&gt;
 					&lt;button type="button" class="ui-btn ui-btn--contained" data-modal-open="sample_invite"&gt;모달 열기&lt;/button&gt;
@@ -167,6 +169,126 @@
 					&lt;p class="ui-modal__text"&gt;점검이 일찍 끝나면 공지사항으로 다시 안내합니다.&lt;/p&gt;
 				&lt;/template&gt;
 			</textarea>
+
+								<!-- 아래 칸은 파셜 파일을 그대로 읽어 온다(data-src-file) — 파셜을 고치면 여기도 따라 바뀐다 -->
+								<p class="guide__src-path">펼친 마크업 — /html/include/ui/_ui_modal.html</p>
+								<textarea
+									class="guide__src"
+									data-src-file="/html/include/ui/_ui_modal.html"
+									readonly
+									aria-label="모달 프레임 파셜 원문"
+								>
+&lt;!-- 공통 모달 프레임 — 받는 값 : data-id(필수) · data-title(필수) · data-slot-body(본문 template 아이디 · 필수) · data-subtext · data-footer(버튼 파셜 경로) · data-cancel · data-confirm · data-modifier(크기 · 기본 ui-modal--md) --&gt;
+&lt;!-- 본문은 부르는 쪽에 template 으로 적어 data-slot-body="#아이디" 로 넘긴다. 여러 화면이 함께 쓰는 본문은 그 template 안에서 파셜을 include 한다 --&gt;
+&lt;!--@ 열기 : data-modal-open="아이디" 버튼 또는 modalOpen('아이디') --&gt;
+&lt;!--@ 머리 · 버튼 영역은 고정이고 본문만 스크롤된다(모달 최대 높이 90dvh) --&gt;
+&lt;div
+	class="ui-modal {{modifier|ui-modal--md}}"
+	id="{{id}}"
+	role="dialog"
+	aria-modal="true"
+	aria-labelledby="{{id}}_title"
+	hidden
+&gt;
+	&lt;div class="ui-modal__dialog"&gt;
+		&lt;div class="ui-modal__header"&gt;
+			&lt;h2 class="ui-modal__title" id="{{id}}_title"&gt;{{title}}&lt;/h2&gt;
+			&lt;p class="ui-modal__subtext"&gt;{{subtext|}}&lt;/p&gt;
+		&lt;/div&gt;
+		&lt;div class="ui-modal__body"&gt;{{{body}}}&lt;/div&gt;
+		&lt;div class="ui-modal__footer"&gt;
+			&lt;div
+				class="dynamic-content"
+				data-source="{{footer|/html/include/ui/_ui_modal_footer.html}}"
+				data-cancel="{{cancel|취소}}"
+				data-confirm="{{confirm|확인}}"
+			&gt;&lt;/div&gt;
+		&lt;/div&gt;
+		&lt;button type="button" class="ui-modal__close"&gt;닫기&lt;/button&gt;
+	&lt;/div&gt;
+&lt;/div&gt;
+</textarea>
+
+								<p class="guide__src-path">펼친 마크업 — /html/include/ui/_ui_modal_footer.html</p>
+								<textarea
+									class="guide__src"
+									data-src-file="/html/include/ui/_ui_modal_footer.html"
+									readonly
+									aria-label="모달 기본 버튼 파셜 원문"
+								>
+&lt;!-- 공통 모달 기본 버튼 — 받는 값 : data-cancel · data-confirm (_ui_modal 이 넘긴다) --&gt;
+&lt;!-- 버튼 구성이 다르면 버튼 파셜을 따로 만들어 _ui_modal 의 data-footer 로 넘긴다 --&gt;
+&lt;button type="button" class="ui-btn ui-btn--outlined" data-modal-close&gt;{{cancel|취소}}&lt;/button&gt;
+&lt;!--@ 확인 동작은 개발 연동 — 처리 후 닫는다 --&gt;
+&lt;button type="button" class="ui-btn ui-btn--contained"&gt;{{confirm|확인}}&lt;/button&gt;
+</textarea>
+
+								<p class="guide__src-path">펼친 마크업 — /html/include/ui/_ui_modal_alert.html</p>
+								<textarea
+									class="guide__src"
+									data-src-file="/html/include/ui/_ui_modal_alert.html"
+									readonly
+									aria-label="알림 모달 파셜 원문"
+								>
+&lt;!-- 공통 알림 모달(정보성 · 버튼 없음) — 받는 값 : data-id(필수) · data-title(필수) · data-subtext · data-text · data-slot-body(본문 template 아이디) · data-modifier(크기 · 기본 ui-modal--sm) --&gt;
+&lt;!-- 본문은 data-text 한 문단이 기본이다. 내용이 많으면 template 에 적어 data-slot-body="#아이디" 로 넘긴다(그때 data-text 는 넘기지 않는다) --&gt;
+&lt;!--@ 열기 : data-modal-open="아이디" 버튼 또는 modalOpen('아이디') --&gt;
+&lt;!--@ 버튼이 없는 모달이라 딤을 누르거나 닫기(X)로 닫는다(common.js) --&gt;
+&lt;div
+	class="ui-modal ui-modal--alert {{modifier|ui-modal--sm}}"
+	id="{{id}}"
+	role="dialog"
+	aria-modal="true"
+	aria-labelledby="{{id}}_title"
+	hidden
+&gt;
+	&lt;div class="ui-modal__dialog"&gt;
+		&lt;div class="ui-modal__header"&gt;
+			&lt;h2 class="ui-modal__title" id="{{id}}_title"&gt;{{title}}&lt;/h2&gt;
+			&lt;p class="ui-modal__subtext"&gt;{{subtext|}}&lt;/p&gt;
+		&lt;/div&gt;
+		&lt;div class="ui-modal__body"&gt;
+			{{{body|}}}
+			&lt;p class="ui-modal__text"&gt;{{text|}}&lt;/p&gt;
+		&lt;/div&gt;
+		&lt;button type="button" class="ui-modal__close"&gt;닫기&lt;/button&gt;
+	&lt;/div&gt;
+&lt;/div&gt;
+</textarea>
+
+								<p class="guide__src-path">펼친 마크업 — /html/include/ui/_ui_modal_confirm.html</p>
+								<textarea
+									class="guide__src"
+									data-src-file="/html/include/ui/_ui_modal_confirm.html"
+									readonly
+									aria-label="확인창 파셜 원문"
+								>
+&lt;!-- 공통 확인창 — 받는 값 : data-id(필수) · data-title(필수) · data-text · data-confirm · data-cancel · data-modifier(추가 변형) --&gt;
+&lt;!--@ 열기 : data-modal-open="아이디" 버튼 또는 modalOpen('아이디') --&gt;
+&lt;!--@ 확인창은 닫기(X) 없이 취소 · 확인 중 하나를 고르게 한다 --&gt;
+&lt;div
+	class="ui-modal ui-modal--confirm {{modifier|}}"
+	id="{{id}}"
+	role="dialog"
+	aria-modal="true"
+	aria-labelledby="{{id}}_title"
+	hidden
+&gt;
+	&lt;div class="ui-modal__dialog"&gt;
+		&lt;div class="ui-modal__header"&gt;
+			&lt;h2 class="ui-modal__title" id="{{id}}_title"&gt;{{title}}&lt;/h2&gt;
+		&lt;/div&gt;
+		&lt;div class="ui-modal__body"&gt;
+			&lt;p class="ui-modal__text"&gt;{{text|}}&lt;/p&gt;
+		&lt;/div&gt;
+		&lt;div class="ui-modal__footer"&gt;
+			&lt;button type="button" class="ui-btn" data-modal-close&gt;{{cancel|취소}}&lt;/button&gt;
+			&lt;!--@ 확인 동작은 개발 연동 — 처리 후 닫는다 --&gt;
+			&lt;button type="button" class="ui-btn ui-btn--contained" data-modal-close&gt;{{confirm|확인}}&lt;/button&gt;
+		&lt;/div&gt;
+	&lt;/div&gt;
+&lt;/div&gt;
+</textarea>
 							</div>
 						</details>
 						<div class="ui-card">

@@ -1,0 +1,13 @@
+<!-- 사용법 문서 전용 데모 — 3-4 속성이 있다 / 없다. 속성 묶음을 통째로 받아 공통 체크박스에 그대로 이어 넘긴다.
+     받는 값 : data-chk-id(필수 — 한 화면에 두 번 넣으므로) · data-attrs · data-disabled
+     ⚠ 이 파일의 마크업은 _guide_partial_*.html 코드 예시(코드 칸)에 그대로 실려 있다 — 고치면 그쪽도 같이 고친다. -->
+<div class="guide__row">
+	<div
+		class="dynamic-content"
+		data-source="/html/include/ui/_ui_checkbox.html"
+		data-id="{{chkId}}"
+		data-label="체크"
+		data-attrs="{{attrs|}}"
+	></div>
+	<button type="button" class="ui-btn ui-btn--sm ui-btn--contained" {{disabled|}}>버튼</button>
+</div>

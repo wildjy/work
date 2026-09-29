@@ -4,7 +4,7 @@
     "type": "notice",
     "badge": "공지",
     "txt": "이 줄은 <strong>JSON 한 줄</strong>이다. 다음 것을 올릴 때 마크업을 고치지 않는다.",
-    "href": "#guide_list",
+    "href": "#guide_opcomp",
     "btn": "자세히"
   },
   {

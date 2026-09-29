@@ -142,7 +142,7 @@ function reindent(block, indent) {
    모든 처리가 끝난 뒤(build 의 마지막) 되돌린다.
    ⚠ 브라우저도 textarea 안은 글자로만 읽는다(태그가 되지 않는다) — 그래서 < > 를 그대로 적을 수 있다.
    ⚠ 안쪽에 닫는 textarea 태그만은 적을 수 없다. */
-const RAW_RE = /(<textarea\b[^>]*\bdata-raw\b[^>]*>)([\s\S]*?)(<\/textarea>)/gi;
+const RAW_RE = /(<textarea\b[^>]*\b(?:data-raw|data-src-file)\b[^>]*>)([\s\S]*?)(<\/textarea>)/gi;
 // 자리표는 **제어문자(U+0001)로 감싼다** — HTML 원본에 들어갈 수 없는 글자라 본문과 절대 겹치지 않는다.
 // eslint-disable-next-line no-control-regex -- 의도한 자리표다(실수로 들어간 제어문자가 아니다)
 const RAW_TOKEN_RE = /\u0001RAW(\d+)\u0001/g;
@@ -158,6 +158,26 @@ function protectRaw(src, ctx) {
 //    & 는 건드리지 않는다 — 원본이 글자 &quot; 를 보이려고 &amp;quot; 로 적은 것이 두 번 이스케이프된다.
 function restoreRaw(src, ctx) {
 	return src.replace(RAW_TOKEN_RE, (m, i) => ctx.raw[Number(i)].replace(/</g, '&lt;').replace(/>/g, '&gt;'));
+}
+
+/* 파셜 원문 보여주기 — <textarea class="guide__src" data-src-file="/html/include/ui/_ui_dropdown.html"></textarea>
+   그 파일을 **읽은 그대로** 안에 넣는다. 카탈로그(개발 확인용)가 「파셜을 펼친 마크업」을 보여줄 때 쓴다.
+   손으로 옮겨 적으면 파셜을 고칠 때마다 조용히 어긋나므로, 보여줄 것도 파일 하나만 본다.
+   ⚠ 경로는 **사이트 루트 기준**(/html/…) — public/ 아래에서 찾는다.
+   ⚠ 채워 넣은 내용은 곧바로 원문 블록으로 보호된다(RAW_RE 가 data-src-file 도 본다) —
+      안의 include 줄이 진짜로 펴지거나 주석이 걷히면 「보여주려던 코드」가 바뀐다.
+   ⚠ public/js/common.js 의 codeSourceFile 과 규칙이 같아야 한다 — 한쪽만 고치지 않는다. */
+const SRC_FILE_RE = /(<textarea\b[^>]*\bdata-src-file\s*=\s*"([^"]+)"[^>]*>)([\s\S]*?)(<\/textarea>)/gi;
+function fillSrcFiles(src, ctx) {
+	return src.replace(SRC_FILE_RE, (m, open, file, inner, close) => {
+		const p = path.join(ROOT, 'public', file.replace(/^\//, ''));
+		if (ctx && ctx.deps) ctx.deps.add(p);
+		if (!fs.existsSync(p)) {
+			console.warn('  ! 원문 파일 없음:', file);
+			return m;
+		}
+		return open + '\r\n' + fs.readFileSync(p, 'utf8').replace(/\s+$/, '') + '\r\n' + close;
+	});
 }
 
 /* ── 1) 파셜 include 전개 ──────────────────────────────── */
@@ -554,7 +574,8 @@ function expandPartials(html, baseDir, stack, ctx) {
 			return tag;
 		}
 
-		let content = protectRaw(fs.readFileSync(file, 'utf8'), ctx);
+		// 파셜 원문 칸(data-src-file)을 먼저 채우고 보호한다 — 채운 내용도 손대지 않게 한다
+		let content = protectRaw(fillSrcFiles(fs.readFileSync(file, 'utf8'), ctx), ctx);
 		// 슬롯 template 은 include 와 같은 파일에 둘 수 있다 — 안쪽 include 가 쓰기 전에 거둔다
 		Object.assign(ctx.templates, collectTemplates(content));
 		const vars = partialVars(tag);
@@ -749,6 +770,7 @@ function build(fileName, quiet) {
 	// ⚠ 슬롯(data-slot-*)이 가리키는 template 은 **파셜을 펴기 전에** 거둬야 한다 —
 	//    페이지에 둔 것은 여기서, 파셜에 둔 것은 expandPartials 가 읽으면서 더한다.
 	const ctx = { partials: 0, lists: 0, rows: 0, deps: new Set(), templates: collectTemplates(html), raw: [] };
+	html = fillSrcFiles(html, ctx); // 파셜 원문 칸(data-src-file)을 먼저 채우고
 	html = protectRaw(html, ctx); // 원문 블록(<textarea data-raw>)은 끝까지 손대지 않는다
 
 	// ⚠ 기준은 **그 페이지가 있는 폴더**다. 브라우저(dynamicImport)가 fetch 를 푸는 기준과 같다.

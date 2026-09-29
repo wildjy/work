@@ -45,9 +45,13 @@
 		flex-direction: column;
 		gap: 40px;
 		width: 100%;
-		max-width: 1280px;
+		height: 100%;
+		// max-width: 1280px;
 		background-color: variable.$white;
 		padding: 32px 32px 80px;
+		> section {
+			// max-width: 1280px;
+		}
 	}
 
 	@include mixin.medium {
@@ -97,6 +101,8 @@
 
 //**** 구역 ****/ — 제목 + 설명 + 내용
 .section {
+	scroll-margin-top: 24px; // 목차·본문 링크로 건너뛸 때 제목이 화면 끝에 붙지 않게
+
 	&__head {
 		margin-bottom: 16px;
 	}

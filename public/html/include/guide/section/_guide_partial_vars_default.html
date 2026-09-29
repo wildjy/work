@@ -1,0 +1,100 @@
+<!-- 구역 : 3-2. 기본값 — _guide_partial_vars.html 이 부른다. 옛 4-5 「조건문이 없다」를 합쳤다
+     ⚠ 설명 글에 파셜 변수의 기본값 문법을 적을 때는 세로막대를 &#124; 로 적는다 — 이 파일이 특히 많다. 코드 예시(textarea data-raw) 안은 그대로. -->
+<h3 class="guide__sub" id="guide_vars_default">3-2. 기본값 — 안 넘기면 무엇이 들어오나</h3>
+<p class="guide__desc">
+	<code>{{이름&#124;기본값}}</code> 으로 적으면 값을 넘기지 않은 화면에는 기본값이 들어간다.
+	<strong>대부분의 화면은 기본값, 다른 화면만 값을 넘긴다.</strong>
+</p>
+<div class="grid grid--2">
+	<div class="ui-card">
+		<div class="ui-card__header">
+			<h4 class="ui-card__title">코드</h4>
+		</div>
+		<div class="ui-card__body">
+			<textarea class="guide__src" data-raw readonly aria-label="코드 예시">
+				<!-- 파셜 _guide_v_default.html — btn 은 기본값 있음 · memo 는 없음 -->
+				<table class="ui-table ui-table--wrap">
+					<caption class="guide__caption">
+						기본값 결과
+					</caption>
+					<tbody>
+						<tr>
+							<td class="guide__term">기본값 있는 키 — btn</td>
+							<td><button type="button" class="ui-btn ui-btn--sm ui-btn--outlined">{{btn|저장하기}}</button></td>
+						</tr>
+						<tr>
+							<td class="guide__term">기본값 없는 키 — memo</td>
+							<td>{{memo}}</td>
+						</tr>
+					</tbody>
+				</table>
+
+				<!-- 페이지 ① 아무것도 안 넘긴다 -->
+				<div class="dynamic-content" data-source="/html/include/guide/_guide_v_default.html"></div>
+
+				<!-- 페이지 ② 둘 다 넘긴다 -->
+				<div class="dynamic-content" data-source="/html/include/guide/_guide_v_default.html"
+					data-btn="구독하기"
+					data-memo="넘긴 메모"></div>
+			</textarea>
+		</div>
+	</div>
+	<div class="ui-card">
+		<div class="ui-card__header">
+			<h4 class="ui-card__title">결과 — ① 안 넘김 · ② 둘 다 넘김</h4>
+		</div>
+		<div class="ui-card__body ui-card__body--flush">
+			<div class="dynamic-content" data-source="/html/include/guide/_guide_v_default.html"></div>
+			<div
+				class="dynamic-content"
+				data-source="/html/include/guide/_guide_v_default.html"
+				data-btn="구독하기"
+				data-memo="넘긴 메모"
+			></div>
+		</div>
+	</div>
+</div>
+<div class="ui-card">
+	<div class="ui-card__body">
+		<ul class="guide__list">
+			<li>
+				<strong>기본값이 없는 키를 안 넘기면 <code>{{memo}}</code> 가 화면에 그대로 찍힌다.</strong> 위 ① 의 둘째 줄이
+				그것이다.
+			</li>
+			<li>
+				그래서 <strong>여러 화면이 쓰는 파셜은 필수 값 외에는 전부 기본값을 준다.</strong> 새 화면마다 값을 넘겨야 하는
+				구조는 결국 하나를 빠뜨린다.
+			</li>
+			<li>
+				<strong>빈 값도 「넘긴 것」</strong>이다 — <code>data-btn=""</code> 은 기본값을 이기고 빈 칸이 된다. 기본값을
+				쓰려면 속성을 아예 적지 않는다.
+			</li>
+			<li>
+				<strong>기본값이 곧 <code>else</code> 다.</strong> <code>{{a ? b : c}}</code> 같은 조건 문법은 없고 앞으로도
+				두지 않는다 — 어느 쪽인지는 부르는 화면이 알고 있으니 <strong>결과</strong>를 넘긴다. 갈래가 더 많으면
+				<a href="#guide_ladder">무엇을 쓸까</a>.
+			</li>
+		</ul>
+	</div>
+</div>
+<details class="ui-card guide__src-fold">
+	<summary class="ui-card__header"><h4 class="ui-card__title">더 알아보기 — 기본값의 세부 규칙</h4></summary>
+	<div class="ui-card__body">
+		<ul class="guide__list">
+			<li>
+				<strong>왜 안 넘긴 키를 지우지 않나</strong> — 파셜 안에 목록 template 이 들어 있으면 그쪽
+				<code>{{name}}</code> · <code>{{@number}}</code> 를 먼저 지워 버리기 때문이다(<a href="#guide_flow">8</a>).
+			</li>
+			<li>
+				<strong>기본값은 이스케이프하지 않는다</strong> — 파셜 작성자가 직접 쓴 HTML 이라 <code>&amp;amp;</code> 가 두
+				번 바뀌면 안 된다.
+			</li>
+			<li>기본값 안에는 <code>}</code> 를 쓸 수 없다. 중괄호가 필요한 값은 넘겨서 채운다.</li>
+			<li>
+				<code>{{{attrs&#124;}}}</code> 처럼 빈 기본값이 <strong>한 줄을 통째로</strong> 차지하면, 넘기지 않았을 때
+				프리렌더가 <strong>그 줄을 지운다</strong>(빈 줄이 남지 않게). 넘겼으면 남는다 — 26.09.28 전에는 넘겨도 지워
+				<code>disabled</code> 가 산출물에서만 빠졌다.
+			</li>
+		</ul>
+	</div>
+</details>

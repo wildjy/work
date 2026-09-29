@@ -21,6 +21,7 @@
 				<p class="layout__brand">pub-base</p>
 				<!-- 공통 LNB -->
 				<!-- 현재 페이지 메뉴의 is-active 와 상위 메뉴의 is-open 은 common.js 의 lnbActive 가 붙인다 -->
+				<!-- 사용법 문서를 열면 현재 페이지 항목 아래에 그 페이지의 목차(.ui-lnb__toc)가 붙는다 — common.js 의 lnbTocBuild 가 절 제목을 읽어 만든다(여기 적지 않는다) -->
 				<nav class="ui-lnb">
 					<div class="ui-lnb__menu">
 						<ul class="ui-lnb__group">
@@ -114,10 +115,11 @@
 							<h2 class="section__title">날짜 · 기간</h2>
 							<p class="section__desc">jQuery UI datepicker — 입력을 누르면 달력이 열린다</p>
 						</div>
-						<details class="ui-card guide__src-fold">
+						<details class="ui-card guide__src-fold" open>
 							<summary class="ui-card__header"><h3 class="ui-card__title">소스 코드</h3></summary>
 							<div class="ui-card__body">
-								<textarea class="guide__src" data-raw readonly aria-label="소스 코드">
+								<p class="guide__src-path">부르는 쪽 — 페이지에 적는 줄</p>
+								<textarea class="guide__src" data-raw readonly aria-label="부르는 쪽 소스 코드">
 				&lt;div class="grid grid--2"&gt;
 					&lt;div&gt;
 						&lt;label class="ui-label" for="sample_period"&gt;기간&lt;/label&gt;
@@ -129,6 +131,65 @@
 					&lt;/div&gt;
 				&lt;/div&gt;
 			</textarea>
+
+								<!-- 아래 칸은 파셜 파일을 그대로 읽어 온다(data-src-file) — 파셜을 고치면 여기도 따라 바뀐다 -->
+								<p class="guide__src-path">펼친 마크업 — /html/include/ui/_ui_date.html</p>
+								<textarea
+									class="guide__src"
+									data-src-file="/html/include/ui/_ui_date.html"
+									readonly
+									aria-label="날짜 입력 파셜 원문"
+								>
+&lt;!-- 공통 날짜 입력 — 받는 값 : data-id(필수) · data-name · data-placeholder · data-value --&gt;
+&lt;!--@ 달력은 jQuery UI 가 그린다 — 이 파셜을 쓰는 페이지는 jquery · jquery-ui 를 불러야 한다 --&gt;
+&lt;div class="ui-field"&gt;
+	&lt;div class="ui-input ui-input--date"&gt;
+		&lt;input
+			type="text"
+			id="{{id}}"
+			name="{{name|}}"
+			placeholder="{{placeholder|날짜를 선택해주세요.}}"
+			value="{{value|}}"
+			autocomplete="off"
+			data-datepicker-day
+		/&gt;
+		&lt;button type="button" class="ui-input__clear"&gt;지우기&lt;/button&gt;
+	&lt;/div&gt;
+&lt;/div&gt;
+</textarea>
+
+								<p class="guide__src-path">펼친 마크업 — /html/include/ui/_ui_period.html</p>
+								<textarea
+									class="guide__src"
+									data-src-file="/html/include/ui/_ui_period.html"
+									readonly
+									aria-label="기간 입력 파셜 원문"
+								>
+&lt;!-- 공통 기간 입력 — 받는 값 : data-id(필수) · data-name · data-placeholder --&gt;
+&lt;!--@ 달력은 jQuery UI 가 그린다 — 이 파셜을 쓰는 페이지는 jquery · jquery-ui 를 불러야 한다 --&gt;
+&lt;div class="ui-field ui-field--period"&gt;
+	&lt;div class="ui-input ui-input--date"&gt;
+		&lt;input
+			type="text"
+			id="{{id}}"
+			name="{{name|}}"
+			placeholder="{{placeholder|기간을 선택해주세요.}}"
+			autocomplete="off"
+		/&gt;
+		&lt;button type="button" class="ui-input__clear"&gt;지우기&lt;/button&gt;
+	&lt;/div&gt;
+	&lt;div class="ui-period" id="{{id}}_period" data-datepicker hidden&gt;
+		&lt;div class="ui-period__header"&gt;
+			&lt;input type="text" class="ui-period__date" aria-label="시작일" readonly /&gt;
+			&lt;span class="ui-period__sep"&gt;~&lt;/span&gt;
+			&lt;input type="text" class="ui-period__date" aria-label="종료일" readonly /&gt;
+		&lt;/div&gt;
+		&lt;div class="ui-period__calendar"&gt;&lt;/div&gt;
+		&lt;!--@ 종료일 · 시간 포함 같은 옵션은 화면에 따라 이 자리에 넣는다 --&gt;
+		&lt;div class="ui-period__footer"&gt;&lt;/div&gt;
+	&lt;/div&gt;
+&lt;/div&gt;
+</textarea>
 							</div>
 						</details>
 						<div class="ui-card">

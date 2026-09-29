@@ -4,10 +4,11 @@
 		<h2 class="section__title">툴팁</h2>
 		<p class="section__desc">4방향 — 아이콘에 올리면 열리고, 누르면 고정된다</p>
 	</div>
-	<details class="ui-card guide__src-fold">
+	<details class="ui-card guide__src-fold" open>
 		<summary class="ui-card__header"><h3 class="ui-card__title">소스 코드</h3></summary>
 		<div class="ui-card__body">
-			<textarea class="guide__src" data-raw readonly aria-label="소스 코드">
+			<p class="guide__src-path">부르는 쪽 — 페이지에 적는 줄</p>
+			<textarea class="guide__src" data-raw readonly aria-label="부르는 쪽 소스 코드">
 				<div class="ui-choice-group">
 					<div class="ui-label">
 						<span>위</span>
@@ -51,6 +52,15 @@
 					</div>
 				</div>
 			</textarea>
+
+			<!--@ 아래 칸은 파셜 파일을 그대로 읽어 온다(data-src-file) — 파셜을 고치면 여기도 따라 바뀐다 -->
+			<p class="guide__src-path">펼친 마크업 — /html/include/ui/_ui_tooltip.html</p>
+			<textarea
+				class="guide__src"
+				data-src-file="/html/include/ui/_ui_tooltip.html"
+				readonly
+				aria-label="툴팁 파셜 원문"
+			></textarea>
 		</div>
 	</details>
 	<div class="ui-card">

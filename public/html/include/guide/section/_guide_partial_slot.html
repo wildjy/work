@@ -1,91 +1,136 @@
-<!-- 구역 : 슬롯 -->
+<!-- 구역 : 5. 슬롯 — 마크업 덩어리를 넘긴다
+     ⚠ 설명 글에 파셜 변수의 기본값 문법을 적을 때는 세로막대를 &#124; 로 적는다. 코드 예시(textarea data-raw) 안은 그대로.
+     ⚠ 슬롯 토큰(세 겹 괄호 + 이름)을 이 머리 주석에 적지 않는다 — 치환은 주석 안도 가리지 않는다. -->
 <section class="section" id="guide_slot">
 	<div class="section__head">
-		<h2 class="section__title">6. 슬롯 — 마크업 덩어리를 넘긴다</h2>
-		<p class="section__desc">React 의 children 자리 — 값이 문구가 아니라 여러 줄 마크업이면 data-slot-* 로 넘긴다</p>
+		<h2 class="section__title">5. 슬롯 — 껍데기는 같고 속만 다를 때</h2>
+		<p class="section__desc">
+			<strong>언제</strong> — 모달처럼 <strong>테두리 · 제목 · 닫기는 같고 본문만 다른</strong> 것. 값이 문구가 아니라
+			여러 줄 마크업이면 <code>data-slot-*</code> 로 넘긴다(React 의 children)
+		</p>
 	</div>
-	<div class="ui-card">
-		<div class="ui-card__body">
-			<textarea class="guide__src" data-raw readonly aria-label="코드 예시">
-				<!-- 부르는 쪽 : 컨테이너는 비우고, 내용은 같은 파일의 template 에 적는다 -->
+	<div class="grid grid--2">
+		<div class="ui-card">
+			<div class="ui-card__header">
+				<h3 class="ui-card__title">코드</h3>
+			</div>
+			<div class="ui-card__body">
+				<textarea class="guide__src" data-raw readonly aria-label="코드 예시">
+					<!-- 페이지 : div 는 비운 채로 template 을 가리킨다 -->
+					<div class="dynamic-content" data-source="/html/include/guide/_guide_slot_host.html"
+						data-title="첫째"
+						data-slot-body="#guide_slot_a"></div>
+					<div class="dynamic-content" data-source="/html/include/guide/_guide_slot_host.html"
+						data-title="둘째"
+						data-slot-body="#guide_slot_b"></div>
+
+					<!-- 넘길 본문 — include 와 같은 파일에 둔다 -->
+					<template id="guide_slot_a">
+						<p class="guide__desc"><strong>여기가 body 슬롯이다.</strong> 틀은 그대로, 이 덩어리만 넘겼다.</p>
+					</template>
+					<template id="guide_slot_b">
+						<p class="guide__desc">같은 틀, 다른 본문 — <button type="button" class="ui-btn ui-btn--sm ui-btn--outlined">버튼</button> 같은 마크업도 그대로 들어간다.</p>
+					</template>
+
+					<!-- 파셜 _guide_slot_host.html -->
+					<div class="ui-card">
+						<div class="ui-card__header">
+							<h4 class="ui-card__title">{{title|이름 없는 틀}}</h4>
+						</div>
+						<div class="ui-card__body">{{{body}}}</div>
+					</div>
+				</textarea>
+			</div>
+		</div>
+		<div class="ui-card">
+			<div class="ui-card__header">
+				<h3 class="ui-card__title">결과 — 틀 하나에 본문만 갈아 끼웠다</h3>
+			</div>
+			<div class="ui-card__body guide__ops">
 				<div
 					class="dynamic-content"
-					data-source="/html/include/ui/_ui_modal.html"
-					data-id="modal_invite"
-					data-title="멤버 초대"
-					data-slot-body="#modal_invite_body"
+					data-source="/html/include/guide/_guide_slot_host.html"
+					data-title="첫째"
+					data-slot-body="#guide_slot_a"
 				></div>
-
-				<template id="modal_invite_body">
-					<div class="grid">…</div>
-				</template>
-
-				<!-- 받는 쪽(_ui_modal.html) -->
-				<div class="ui-modal__body">{{{body}}}</div>
-			</textarea>
+				<div
+					class="dynamic-content"
+					data-source="/html/include/guide/_guide_slot_host.html"
+					data-title="둘째"
+					data-slot-body="#guide_slot_b"
+				></div>
+			</div>
 		</div>
-		<div class="ui-card__body ui-card__body--flush">
-			<table class="ui-table ui-table--wrap">
-				<caption class="guide__caption">
-					슬롯 문법
-				</caption>
-				<thead>
-					<tr>
-						<th scope="col">항목</th>
-						<th scope="col">규칙</th>
-					</tr>
-				</thead>
-				<tbody>
-					<tr>
-						<td>키 이름</td>
-						<td><code>data-slot-body</code> → 파셜 안 <code>&#123;&#123;&#123;body&#125;&#125;&#125;</code></td>
-					</tr>
-					<tr>
-						<td>값</td>
-						<td>template 요소의 아이디 선택자(<code>#아이디</code>) — 마크업을 속성에 직접 적지 않는다</td>
-					</tr>
-					<tr>
-						<td>template 위치</td>
-						<td>include 를 적은 같은 파일(페이지든 파셜이든). 산출물에서는 정의가 걷힌다</td>
-					</tr>
-					<tr>
-						<td>없어도 되는 슬롯</td>
-						<td>
-							파셜에 <code>&#123;&#123;&#123;body|&#125;&#125;&#125;</code> — 넘기지 않으면 프리렌더가 그 줄을 지운다.
-							넘겼으면 남는다(슬롯 · 일반 변수 모두 같은 규칙)
-						</td>
-					</tr>
-				</tbody>
-			</table>
-		</div>
+	</div>
+	<template id="guide_slot_a">
+		<p class="guide__desc"><strong>여기가 body 슬롯이다.</strong> 틀은 그대로, 이 덩어리만 넘겼다.</p>
+	</template>
+	<template id="guide_slot_b">
+		<p class="guide__desc">
+			같은 틀, 다른 본문 — <button type="button" class="ui-btn ui-btn--sm ui-btn--outlined">버튼</button> 같은 마크업도
+			그대로 들어간다.
+		</p>
+	</template>
+
+	<div class="ui-card">
 		<div class="ui-card__body">
 			<ul class="guide__list">
 				<li>
-					<strong>슬롯 안에서 파셜을 include 할 수 있다.</strong> 여러 화면이 함께 쓰는 본문은 template 안에서 그 파셜을
-					부른다.
+					<strong>문법</strong> — 부르는 쪽 <code>data-slot-<strong>이름</strong>="#template_id"</code> → 파셜 안
+					<code>{{{<strong>이름</strong>}}}</code>. <code>slot-</code> 까지 떼고 남은 이름으로 받는다(<a
+						href="#guide_vars_name"
+						>3-0</a
+					>). 이름은 자유라 슬롯을 여러 개 둘 수 있다.
 				</li>
-				<li>슬롯은 항상 세 겹이다. 두 겹으로 적으면 태그가 글자로 보인다.</li>
+				<li><strong>include div 는 여전히 비운다.</strong> 본문은 div 안이 아니라 <code>template</code> 에 둔다.</li>
 				<li>
-					<strong>template 안의 include 는 그 자리에서 펼쳐지지 않는다</strong> — 브라우저도 프리렌더도 같다. 슬롯으로
-					파셜에 꽂힌 뒤에 펼쳐진다. 그래서 본문 template 안에 목록 template 을 가진 파셜을 불러도 겹치지 않는다.
+					<strong><code>template</code> 은 include 를 적은 같은 파일에</strong> 둔다(페이지든 파셜이든). 산출물에서는
+					정의가 걷히고 채워진 결과만 남는다.
 				</li>
+				<li>
+					<strong>없어도 되는 슬롯</strong>은 파셜에 <code>{{{body&#124;}}}</code> — 넘기지 않으면 프리렌더가 그 줄을
+					지운다.
+				</li>
+				<li><strong>슬롯은 항상 세 겹이다.</strong> 두 겹으로 적으면 태그가 글자로 보인다.</li>
 			</ul>
-			<p class="guide__note guide__note--warn">
-				슬롯 이름을 <strong>파셜 안 목록 템플릿의 필드명과 겹치지 않게</strong> 짓는다. 겹치면 목록 필드 자리까지 슬롯
-				내용으로 덮인다(아코디언은 항목 필드로 <code>&#123;&#123;&#123;body&#125;&#125;&#125;</code> 를 쓴다).
-			</p>
 		</div>
 	</div>
+	<div class="grid grid--2">
+		<div class="ui-card guide__vs guide__vs--bad">
+			<div class="ui-card__header">
+				<h4 class="ui-card__title">✗ include div 안에 본문을 넣었다 — include 로 알아보지 못한다</h4>
+			</div>
+			<div class="ui-card__body">
+				<textarea class="guide__src" data-raw readonly aria-label="틀린 예">
+					<div class="dynamic-content" data-source="/html/include/ui/_ui_modal.html">
+						<div class="grid">…</div>
+					</div>
+				</textarea>
+			</div>
+		</div>
+		<div class="ui-card guide__vs guide__vs--good">
+			<div class="ui-card__header">
+				<h4 class="ui-card__title">✓ 본문은 template 에, div 는 가리키기만</h4>
+			</div>
+			<div class="ui-card__body">
+				<textarea class="guide__src" data-raw readonly aria-label="맞는 예">
+					<div class="dynamic-content" data-source="/html/include/ui/_ui_modal.html"
+						data-id="modal_invite" data-title="멤버 초대"
+						data-slot-body="#modal_invite_body"></div>
+					<template id="modal_invite_body">
+						<div class="grid">…</div>
+					</template>
+				</textarea>
+			</div>
+		</div>
+	</div>
+
+	<h3 class="guide__sub">본문을 어디에 두나</h3>
+	<p class="guide__desc">
+		본문은 <code>template</code> 안에 직접 적어도 되고, 파셜로 빼고 <code>template</code> 이 그 파셜만 부르게 해도 된다.
+		기준은 <strong>길이와 재사용</strong>이다 — 처음부터 다 파일로 만들면 파일만 늘어난다.
+	</p>
 	<div class="ui-card">
-		<div class="ui-card__header">
-			<h3 class="ui-card__title">본문을 어디에 두나</h3>
-		</div>
-		<div class="ui-card__body">
-			<p class="guide__desc">
-				본문은 <code>template</code> 안에 직접 적어도 되고, 파셜로 빼고 <code>template</code> 이 그 파셜만 부르게 해도
-				된다. 기준은 <strong>길이와 재사용</strong>이다 — 처음부터 다 파일로 만들면 파일만 늘어난다.
-			</p>
-		</div>
 		<div class="ui-card__body ui-card__body--flush">
 			<table class="ui-table ui-table--wrap">
 				<caption class="guide__caption">
@@ -129,17 +174,13 @@
 			</p>
 		</div>
 	</div>
+
+	<h3 class="guide__sub">template 째 파셜로 빼면 — 순서에 묶인다</h3>
+	<p class="guide__desc">
+		위는 <strong>본문 마크업만</strong> 파셜로 뺀 형태다. <code>template</code> 요소째 파셜로 빼는 것도 되지만, 파셜은
+		<strong>적힌 순서대로</strong> 전개되므로 뒤에 둔 파셜의 <code>template</code> 은 슬롯을 채울 때 아직 없다.
+	</p>
 	<div class="ui-card">
-		<div class="ui-card__header">
-			<h3 class="ui-card__title">template 째 파셜로 빼면 — 순서에 묶인다</h3>
-		</div>
-		<div class="ui-card__body">
-			<p class="guide__desc">
-				위는 <strong>본문 마크업만</strong> 파셜로 뺀 형태다. <code>template</code> 요소째 파셜로 빼는 것도 되지만,
-				파셜은 <strong>적힌 순서대로</strong> 전개되므로 뒤에 둔 파셜의 <code>template</code> 은 슬롯을 채울 때 아직
-				없다.
-			</p>
-		</div>
 		<div class="ui-card__body ui-card__body--flush">
 			<table class="ui-table ui-table--wrap">
 				<caption class="guide__caption">
@@ -164,18 +205,20 @@
 		<div class="ui-card__body">
 			<p class="guide__note guide__note--warn">
 				못 찾으면 <strong>조용히 빈 본문</strong>으로 나간다. 그래서 <code>template</code> 은
-				<strong>include 를 적은 파일에</strong> 둔다. 굳이 한곳에 모아 두려면 모든 사용처보다 앞에서 include 한다.
+				<strong>include 를 적은 파일에</strong>
+				둔다. 굳이 한곳에 모아 두려면 모든 사용처보다 앞에서 include 한다.
 			</p>
 		</div>
 	</div>
+
 	<div class="ui-card">
 		<div class="ui-card__header">
 			<h3 class="ui-card__title">React 라면</h3>
 		</div>
 		<div class="ui-card__body">
 			<p class="guide__desc">
-				파셜은 <code>data-slot-body="#modal_invite_body"</code> 로 넘기고
-				<code>&#123;&#123;&#123;body&#125;&#125;&#125;</code> 자리에 꽂는다. React 의 children 과 같다.
+				파셜은 <code>data-slot-body="#modal_invite_body"</code> 로 넘기고 <code>{{{body}}}</code> 자리에 꽂는다. React
+				의 children 과 같다.
 			</p>
 			<textarea class="guide__src" data-raw readonly aria-label="코드 예시">
 				// 여러 줄 마크업은 children 으로 넘긴다
@@ -194,6 +237,31 @@
 			</textarea>
 		</div>
 	</div>
+	<details class="ui-card guide__src-fold">
+		<summary class="ui-card__header">
+			<h3 class="ui-card__title">더 알아보기 — 겹치는 이름 · 안쪽 include · 구현</h3>
+		</summary>
+		<div class="ui-card__body">
+			<ul class="guide__list">
+				<li>
+					<strong>슬롯 이름을 파셜 안 목록 템플릿의 필드명과 겹치지 않게</strong> 짓는다. 겹치면 목록 필드 자리까지 슬롯
+					내용으로 덮인다(아코디언은 항목 필드로 <code>{{{body}}}</code> 를 쓴다).
+				</li>
+				<li>
+					<strong>슬롯 안에서 파셜을 include 할 수 있다.</strong> template 안의 include 는 그 자리에서 펼쳐지지 않고,
+					슬롯으로 파셜에 꽂힌 뒤에 펼쳐진다 — 본문 template 안에 목록 template 을 가진 파셜을 불러도 겹치지 않는다.
+				</li>
+				<li>
+					<strong>파셜 설명 주석에 슬롯 토큰을 그대로 적지 않는다</strong> — 치환은 주석 안도 가리지 않아 본문이 주석에
+					박힌다.
+				</li>
+				<li>
+					구현 : <code>prerender.js</code> 의 <code>resolveSlots()</code> · <code>fillSlots()</code> /
+					<code>dynamicImport.js</code> 의 <code>data-slot-*</code> 블록.
+				</li>
+			</ul>
+		</div>
+	</details>
 </section>
 
 <template id="tpl_guide_order">

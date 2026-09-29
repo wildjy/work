@@ -1,0 +1,110 @@
+<!-- 구역 : 2. 파셜 안의 파셜 — 경로 규칙 (26.09.29 신설)
+     ⚠ 설명 글에 파셜 변수의 기본값 문법을 적을 때는 세로막대를 &#124; 로 적는다. 코드 예시(textarea data-raw) 안은 그대로. -->
+<section class="section" id="guide_nested">
+	<div class="section__head">
+		<h2 class="section__title">2. 파셜 안의 파셜 — 경로는 늘 같은 모양으로</h2>
+		<p class="section__desc">
+			<strong>언제</strong> — 파셜 안에서 또 다른 파셜을 부를 때. 몇 겹이든 풀린다. 헷갈리는 것은 <strong>경로</strong>
+			하나뿐이다
+		</p>
+	</div>
+	<div class="grid grid--2">
+		<div class="ui-card">
+			<div class="ui-card__header">
+				<h3 class="ui-card__title">코드</h3>
+			</div>
+			<div class="ui-card__body">
+				<textarea class="guide__src" data-raw readonly aria-label="코드 예시">
+					<!-- 페이지 -->
+					<div class="dynamic-content" data-source="/html/include/guide/_guide_nested_outer.html"></div>
+
+					<!-- 파셜 _guide_nested_outer.html — 안에서 또 부른다(경로는 / 로 시작) -->
+					<div class="guide__op">
+						<span class="guide__op-badge">바깥</span>
+						<span class="guide__op-txt">_guide_nested_outer.html</span>
+					</div>
+					<div class="dynamic-content" data-source="/html/include/guide/_guide_nested_inner.html"></div>
+
+					<!-- 파셜 _guide_nested_inner.html -->
+					<div class="guide__op guide__op--plus">
+						<span class="guide__op-badge">안쪽</span>
+						<span class="guide__op-txt">_guide_nested_inner.html — 바깥 파셜이 불러 들어왔다</span>
+					</div>
+				</textarea>
+			</div>
+		</div>
+		<div class="ui-card">
+			<div class="ui-card__header">
+				<h3 class="ui-card__title">결과</h3>
+			</div>
+			<div class="ui-card__body guide__ops">
+				<div class="dynamic-content" data-source="/html/include/guide/_guide_nested_outer.html"></div>
+			</div>
+		</div>
+	</div>
+	<div class="ui-card">
+		<div class="ui-card__body">
+			<ul class="guide__list">
+				<li>
+					<strong>경로는 파셜 파일이 아니라 「페이지」 기준으로 풀린다.</strong> 같은 폴더의 파셜을 불러도
+					<code>./</code> 로 적으면 안 된다.
+				</li>
+				<li>
+					그래서 <strong>늘 <code>/</code> 로 시작하는 경로</strong>(루트 상대)로 적는다 — 어느 깊이의 페이지가 불러도
+					같은 파일을 가리킨다.
+				</li>
+				<li>
+					이미지 · 링크 · JSON 경로도 같다 — <code>/images/…</code> · <code>/html/…</code> · <code>/data/…</code>.
+				</li>
+			</ul>
+		</div>
+	</div>
+	<div class="grid grid--2">
+		<div class="ui-card guide__vs guide__vs--bad">
+			<div class="ui-card__header">
+				<h4 class="ui-card__title">✗ 파셜 파일 옆이라고 생각했다 — 404</h4>
+			</div>
+			<div class="ui-card__body">
+				<textarea class="guide__src" data-raw readonly aria-label="틀린 예">
+					<div class="dynamic-content" data-source="./_guide_nested_inner.html"></div>
+				</textarea>
+			</div>
+		</div>
+		<div class="ui-card guide__vs guide__vs--good">
+			<div class="ui-card__header">
+				<h4 class="ui-card__title">✓ / 로 시작한다</h4>
+			</div>
+			<div class="ui-card__body">
+				<textarea class="guide__src" data-raw readonly aria-label="맞는 예">
+					<div class="dynamic-content" data-source="/html/include/guide/_guide_nested_inner.html"></div>
+				</textarea>
+			</div>
+		</div>
+	</div>
+	<div class="ui-card">
+		<div class="ui-card__header">
+			<h3 class="ui-card__title">React 라면</h3>
+		</div>
+		<div class="ui-card__body">
+			<p class="guide__desc">
+				컴포넌트 안에서 다른 컴포넌트를 쓰는 것과 같다. 경로 문제는 퍼블 쪽에만 있다 — React 는 import 경로가 따로 있다.
+			</p>
+		</div>
+	</div>
+	<details class="ui-card guide__src-fold">
+		<summary class="ui-card__header"><h3 class="ui-card__title">더 알아보기 — 왜 페이지 기준인가</h3></summary>
+		<div class="ui-card__body">
+			<ul class="guide__list">
+				<li>
+					브라우저의 <code>fetch</code> 는 상대경로를 <strong>지금 열린 문서(페이지)</strong> 기준으로 푼다. 파셜 파일은
+					문서가 아니라 글자 조각일 뿐이다.
+				</li>
+				<li>프리렌더도 같은 결과가 나오도록 <strong>페이지 폴더</strong>를 기준으로 푼다.</li>
+				<li>
+					깊이가 다른 페이지가 같은 파셜을 쓰면 <code>../</code> 를 한 값으로 맞출 수 없다 — 그래서 루트 상대로 적는다.
+					폴더 규칙 전체는 <a href="/html/guide/Guide_Structure.html">폴더 구조</a>.
+				</li>
+			</ul>
+		</div>
+	</details>
+</section>

@@ -1,0 +1,151 @@
+<!-- 구역 : 0. 한눈에 보기 — 도구 여섯 · 목차 · 무엇을 쓸까(사다리)
+     ⚠ 설명 글에 파셜 변수의 기본값 문법을 적을 때는 세로막대를 &#124; 로 적는다 — 그대로 쓰면 이 파셜이 include 되며 기본값으로 치환된다.
+        코드 예시(textarea data-raw) 안은 보호되므로 그대로 적는다. -->
+<section class="section" id="guide_overview">
+	<div class="section__head">
+		<h2 class="section__title">0. 한눈에 보기</h2>
+		<p class="section__desc">
+			같은 마크업을 페이지마다 복사하지 않고 <code>public/html/include/</code> 파일 하나로 두는 방법. 할 수 있는 일은
+			여섯 가지다 — 처음이면 이 표와 아래 「무엇을 쓸까」만 읽고 필요한 절로 넘어간다.
+		</p>
+	</div>
+	<div class="ui-card">
+		<div class="ui-card__body ui-card__body--flush">
+			<table class="ui-table ui-table--wrap">
+				<caption class="guide__caption">
+					파셜로 할 수 있는 일
+				</caption>
+				<thead>
+					<tr>
+						<th scope="col">도구</th>
+						<th scope="col">이렇게 쓴다</th>
+						<th scope="col">언제</th>
+						<th scope="col">React 에서는</th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr>
+						<td class="guide__term"><a href="#guide_basic">1. 기본형</a></td>
+						<td>
+							<code>&lt;div class="dynamic-content" data-source="/html/include/…/_이름.html"&gt;&lt;/div&gt;</code>
+						</td>
+						<td>같은 마크업이 <strong>두 곳 이상</strong></td>
+						<td>컴포넌트 <code>&lt;Header /&gt;</code></td>
+					</tr>
+					<tr>
+						<td class="guide__term"><a href="#guide_vars">3. 값 넘기기</a></td>
+						<td>부르는 쪽 <code>data-page-title="…"</code> → 파셜 안 <code>{{pageTitle}}</code></td>
+						<td>문구 · class · 속성만 다르다</td>
+						<td>props</td>
+					</tr>
+					<tr>
+						<td class="guide__term"><a href="#guide_optional">4. 넣고 빼기</a></td>
+						<td>파셜 안 <code>data-source="{{extra&#124;/html/include/common/_none.html}}"</code></td>
+						<td>어떤 화면엔 <strong>덩어리째 없어야</strong> 한다</td>
+						<td>조건부 렌더링 <code>{extra &amp;&amp; …}</code></td>
+					</tr>
+					<tr>
+						<td class="guide__term"><a href="#guide_slot">5. 슬롯</a></td>
+						<td><code>data-slot-body="#본문id"</code> → 파셜 안 <code>{{{body}}}</code></td>
+						<td>껍데기는 같고 <strong>속만 다르다</strong></td>
+						<td><code>children</code></td>
+					</tr>
+					<tr>
+						<td class="guide__term"><a href="#guide_list">6. 목록</a></td>
+						<td><code>&lt;tbody class="dynamic-list" data-source="….json" data-template="#tpl_…"&gt;</code></td>
+						<td>같은 행이 <strong>반복</strong>된다</td>
+						<td><code>rows.map()</code></td>
+					</tr>
+					<tr>
+						<td class="guide__term"><a href="#guide_opcomp">7. 운영 컴포넌트</a></td>
+						<td>틀은 파셜, 내용은 JSON — <code>use</code> 로 켜고 <code>type</code> 이 class</td>
+						<td>배너 · 팝업처럼 <strong>계속 갈아 끼운다</strong></td>
+						<td>데이터 배열 + <code>map</code></td>
+					</tr>
+				</tbody>
+			</table>
+		</div>
+	</div>
+	<div class="ui-card">
+		<div class="ui-card__header">
+			<h3 class="ui-card__title">목차</h3>
+		</div>
+		<div class="ui-card__body">
+			<ul class="guide__toc">
+				<li><a href="#guide_basic">1. 기본형</a></li>
+				<li><a href="#guide_nested">2. 파셜 안의 파셜</a></li>
+				<li><a href="#guide_vars">3. 값 넘기기</a></li>
+				<li><a href="#guide_optional">4. 넣고 빼기</a></li>
+				<li><a href="#guide_slot">5. 슬롯</a></li>
+				<li><a href="#guide_list">6. 목록</a></li>
+				<li><a href="#guide_opcomp">7. 운영 컴포넌트</a></li>
+				<li><a href="#guide_flow">8. 동작 원리</a></li>
+				<li><a href="#guide_react">9. React 와 견주기</a></li>
+				<li><a href="#guide_new">10. 새로 만들 때</a></li>
+				<li><a href="#guide_trap">11. 함정</a></li>
+				<li><a href="#guide_symptom">12. 증상 → 원인</a></li>
+				<li><a href="#guide_sample">13. 예시 모음</a></li>
+				<li><a href="#guide_finish">14. 고친 뒤</a></li>
+			</ul>
+			<p class="guide__note guide__note--tip">
+				<strong>읽는 법.</strong> 각 절은 <strong>언제 쓰나 → 코드 | 결과 → 규칙</strong> 순서다.
+				<strong>✗ / ✓</strong> 는 실제로 틀렸던 것과 고친 모양이고, 「React 라면」은 개발자가 산출물을 옮길 때의
+				대응이다. 구현 함수 · 이력은 절 끝 <strong>더 알아보기</strong>를 펼치면 있다.
+			</p>
+			<p class="guide__note">
+				이 페이지의 <strong>헤더와 왼쪽 메뉴도 파셜</strong>이고, 표 · 예시 카드 · 데모는 전부
+				<strong>JSON + 템플릿 + 실제 include</strong> 로 그린다 — 규약이 깨지면 이 문서가 먼저 무너진다. 문서 판은
+				<code>docs/PARTIALS.md</code>(같은 JSON 에서 <code>npm run docs</code> 로 찍는다).
+			</p>
+		</div>
+	</div>
+
+	<h3 class="guide__sub" id="guide_ladder">무엇을 쓸까 — 위에서부터 물어 걸리는 데서 멈춘다</h3>
+	<div class="ui-card">
+		<div class="ui-card__body ui-card__body--flush">
+			<table class="ui-table ui-table--wrap">
+				<caption class="guide__caption">
+					무엇이 다른가에 따라 무엇을 쓰나
+				</caption>
+				<thead>
+					<tr>
+						<th scope="col">무엇이 다른가</th>
+						<th scope="col">무엇을 쓰나</th>
+						<th scope="col">어디서</th>
+					</tr>
+				</thead>
+				<tbody
+					class="dynamic-list"
+					data-source="/data/guide/partial_ladder.json"
+					data-template="#tpl_guide_ladder"
+					data-empty="#tpl_guide_ladder_none"
+				></tbody>
+			</table>
+		</div>
+		<div class="ui-card__body">
+			<p class="guide__note guide__note--warn">
+				<strong>세 겹 <code>{{{key}}}</code> 는 마지막 수단이다.</strong> 여기까지 내려왔다면 「무엇이 다른가」를 잘못
+				잡은 것이 아닌지 먼저 본다 — <strong>모양만</strong> 다르면 class, <strong>구조</strong>가 다르면 템플릿,
+				<strong>있다 / 없다</strong>면 경로 변수다.
+			</p>
+			<p class="guide__note guide__note--tip">
+				<strong>판단이 안 서면 아래쪽(자유로운 쪽)이 아니라 위쪽을 고른다.</strong> 위쪽은 할 수 있는 일이 적은 만큼
+				<strong>틀리게 쓸 방법도 적다.</strong>
+			</p>
+		</div>
+	</div>
+</section>
+
+<template id="tpl_guide_ladder">
+	<tr>
+		<td class="guide__term">{{{diff}}}</td>
+		<td>{{{tool}}}<br /><span class="guide__sample-args">{{{note}}}</span></td>
+		<td>{{where}}</td>
+	</tr>
+</template>
+
+<template id="tpl_guide_ladder_none">
+	<tr>
+		<td colspan="3" class="ui-table__empty">등록된 갈래가 없습니다.</td>
+	</tr>
+</template>

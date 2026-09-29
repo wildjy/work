@@ -178,6 +178,16 @@ $color-success-text: $green-700;
 $color-snackbar: $gray-900; // 토스트 바탕
 $color-tooltip: $gray-800; // 툴팁 바탕
 
+//**** 코드 블록 토큰 ****/ — 문서 코드 예시(.guide__code · 어두운 판) 전용. 다른 곳에 쓰지 않는다.
+// ara-pub 공통 UI 카탈로그(.uc_src)와 같은 색이다(26.09.29 이관). 팔레트에 없는 색은 어두운 바탕에서 읽히게 고른 문서 전용 값.
+$code-bg: $gray-900;
+$code-text: $gray-300; // 기본 글자
+$code-cmt: #7f8491; // 주석
+$code-tag: #7cb7ff; // 태그 이름 · 키워드
+$code-attr: #f0c674; // 속성 이름
+$code-str: #a5d6a7; // 문자열 · 문자 참조
+$code-fn: #d7a6ff; // 치환 자리 {{ }} · JSX 값
+
 $radius-sm: 4px; // 입력 · 버튼 · 목록
 $radius-md: 8px; // 카드 · 달력 · 모달
 $radius-full: 999px;

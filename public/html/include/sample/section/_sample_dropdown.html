@@ -4,10 +4,12 @@
 		<h2 class="section__title">드롭다운</h2>
 		<p class="section__desc">항목은 JSON · 0건이면 빈 안내 · 검색 드롭다운</p>
 	</div>
-	<details class="ui-card guide__src-fold">
+	<details class="ui-card guide__src-fold" open>
 		<summary class="ui-card__header"><h3 class="ui-card__title">소스 코드</h3></summary>
 		<div class="ui-card__body">
-			<textarea class="guide__src" data-raw readonly aria-label="소스 코드">
+			<!--@ 화면에는 아래 파셜을 include 해서 쓴다 — 펼친 마크업을 페이지에 복사하지 않는다 -->
+			<p class="guide__src-path">부르는 쪽 — 페이지에 적는 줄</p>
+			<textarea class="guide__src" data-raw readonly aria-label="부르는 쪽 소스 코드">
 				<div class="grid grid--2">
 					<div>
 						<p class="ui-label">드롭다운</p>
@@ -37,6 +39,31 @@
 					</div>
 				</div>
 			</textarea>
+
+			<!--@ 아래 세 칸은 파셜 파일을 그대로 읽어 온다(data-src-file) — 파셜을 고치면 여기도 따라 바뀐다 -->
+			<p class="guide__src-path">펼친 마크업 — /html/include/ui/_ui_dropdown.html</p>
+			<textarea
+				class="guide__src"
+				data-src-file="/html/include/ui/_ui_dropdown.html"
+				readonly
+				aria-label="드롭다운 파셜 원문"
+			></textarea>
+
+			<p class="guide__src-path">펼친 마크업 — /html/include/ui/_ui_dropdown_search.html</p>
+			<textarea
+				class="guide__src"
+				data-src-file="/html/include/ui/_ui_dropdown_search.html"
+				readonly
+				aria-label="검색 드롭다운 파셜 원문"
+			></textarea>
+
+			<p class="guide__src-path">항목 템플릿 — /html/include/ui/_ui_dropdown_tpl.html</p>
+			<textarea
+				class="guide__src"
+				data-src-file="/html/include/ui/_ui_dropdown_tpl.html"
+				readonly
+				aria-label="드롭다운 항목 템플릿 파셜 원문"
+			></textarea>
 		</div>
 	</details>
 	<div class="ui-card">

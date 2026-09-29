@@ -34,6 +34,8 @@
  * 11. 날짜 · 기간 달력          datePickerInit (jQuery UI)     [data-datepicker-day] · .ui-period[data-datepicker]
  * 12. 툴팁                    tooltipSet · tooltipCloseAll   .ui-tooltip__btn (hover · focus · 누르면 고정)
  * 13. 문서 코드 색칠          codeSource · codeHighlight    textarea.guide__src → .guide__code (사용법 문서 전용)
+ *     긴 코드 접기            codeFold                      12줄(작은 화면 8줄)만 보이고 「더보기」로 펼친다
+ * 14. 문서 목차(LNB)          lnbTocBuild · lnbTocSpy       .section[id] 제목 → LNB 현재 페이지 항목 아래 목차
  */
 
 /* ── 0. 공통 헬퍼 ─────────────────────────────────────────── */
@@ -1070,9 +1072,33 @@ function _codeHtml(src) {
 // ⚠ textarea 안은 문자 참조를 푼다 — 코드에 &quot; 를 글자로 보이려면 &amp;quot; 로 적는다. 닫는 textarea 태그는 적을 수 없다.
 // ⚠ data-raw 는 프리렌더가 안쪽을 손대지 않게 하는 표시다(include 전개 · 주석 정리 · 치환을 건너뛴다).
 //    목록 template 안에서는 쓰지 않는다 — 자리표로 바뀌어 모든 행이 {{code}} 글자로 나온다.
+// data-src-file="/html/include/ui/_ui_dropdown.html" 을 주면 **그 파일을 읽은 그대로** 코드로 보여 준다.
+//   <textarea class="guide__src" data-src-file="/html/include/ui/_ui_dropdown.html" readonly></textarea>
+// 파셜의 「펼친 마크업」을 손으로 옮겨 적지 않기 위한 것이다 — 옮겨 적으면 파셜을 고칠 때마다 조용히 어긋난다.
+// ⚠ scripts/prerender.js 의 fillSrcFiles 와 규칙이 같아야 한다 — 한쪽만 고치지 않는다.
+//    산출물에는 프리렌더가 이미 채워 넣으므로, 브라우저는 **비어 있을 때만** 읽는다.
+function codeSourceFile(ta) {
+	var file = ta.getAttribute('data-src-file');
+	if (!file || ta.value.trim()) return false;
+	fetch(file)
+		.then(function (res) {
+			if (!res.ok) throw new Error(file);
+			return res.text();
+		})
+		.then(function (text) {
+			ta.value = text;
+			codeHighlight(ta.parentNode); // 이 칸만 다시 그린다
+		})
+		.catch(function () {
+			console.warn('[코드] 원문 파일을 읽지 못했다 : ' + file);
+		});
+	return true;
+}
+
 function codeSource(root) {
 	var srcs = (root || document).querySelectorAll('textarea.guide__src');
 	Array.prototype.forEach.call(srcs, function (ta) {
+		if (codeSourceFile(ta)) return; // 파일에서 읽어오는 칸 — 받아온 뒤 다시 그린다
 		var lines = ta.value.replace(/\r\n?/g, '\n').split('\n');
 		while (lines.length && !lines[0].trim()) lines.shift();
 		while (lines.length && !lines[lines.length - 1].trim()) lines.pop();
@@ -1102,7 +1128,139 @@ function codeHighlight(root) {
 		code.innerHTML = _codeHtml(code.textContent);
 		code._codeDone = true;
 	});
+	codeFold(root);
+}
+
+// 긴 코드 접기(26.09.29) — .guide__code 가 CODE_FOLD_LINES 보다 4줄 이상 길면 앞부분만 보이고 「더보기」로 펼친다.
+//   작은 화면($breakpoint-small 750 이하)에서는 8줄만 보인다. 폭이 경계를 넘나들면 다시 맞춘다.
+// - 높이는 여기서 인라인으로 정한다 — 스타일이 없어도 접고 편다. 버튼 모양 · 아래 흐림은 _guide.scss 의 __code-fold.
+// - 짧은 코드는 감싸지 않는다 — 감싸는 상자가 생기면 부모의 격자 · 여백 규칙이 달라진다.
+// - 접힌 「소스 코드」 카드(details) 안에서도 동작한다(높이를 줄 높이로 계산하므로 펼쳐 있지 않아도 된다).
+var CODE_FOLD_LINES = 12;
+var CODE_FOLD_LINES_SM = 8;
+var CODE_FOLD_SM = window.matchMedia ? window.matchMedia('(max-width: 750px)') : null;
+
+function _codeFoldApply(box) {
+	var pre = box.querySelector('.guide__code');
+	var btn = box.querySelector('.guide__code-more');
+	var open = box.classList.contains('is-open');
+	var show = CODE_FOLD_SM && CODE_FOLD_SM.matches ? CODE_FOLD_LINES_SM : CODE_FOLD_LINES;
+	var code = pre.querySelector('code') || pre;
+	var cs = getComputedStyle(code);
+	var lh = parseFloat(cs.lineHeight) || 22;
+	var pad = parseFloat(getComputedStyle(pre).paddingTop) || 0;
+
+	pre.style.maxHeight = open ? '' : Math.round(show * lh + pad) + 'px';
+	pre.style.overflowY = open ? '' : 'hidden';
+	btn.setAttribute('aria-expanded', open ? 'true' : 'false');
+	btn.textContent = open ? '접기 ▴' : '더보기 ▾ — 전체 ' + box.getAttribute('data-total') + '줄';
+}
+
+function codeFold(root) {
+	var pres = (root || document).querySelectorAll('.guide__code:not([data-fold])');
+
+	Array.prototype.forEach.call(pres, function (pre) {
+		pre.setAttribute('data-fold', '');
+		var total = pre.textContent.split('\n').length;
+		if (total < CODE_FOLD_LINES + 4) return;
+
+		var box = document.createElement('div');
+		box.className = 'guide__code-fold';
+		box.setAttribute('data-total', total);
+		pre.parentNode.insertBefore(box, pre);
+		box.appendChild(pre);
+
+		var btn = document.createElement('button');
+		btn.type = 'button';
+		btn.className = 'guide__code-more';
+		btn.addEventListener('click', function () {
+			box.classList.toggle('is-open');
+			_codeFoldApply(box);
+			// 접을 때 코드 칸이 화면 위로 밀려나 있으면 그 자리로 돌아온다
+			if (!box.classList.contains('is-open') && box.getBoundingClientRect().top < 0) {
+				box.scrollIntoView({ block: 'start' });
+			}
+		});
+		box.appendChild(btn);
+		_codeFoldApply(box);
+	});
+}
+if (CODE_FOLD_SM) {
+	var _codeFoldAll = function () {
+		Array.prototype.forEach.call(document.querySelectorAll('.guide__code-fold'), _codeFoldApply);
+	};
+	if (CODE_FOLD_SM.addEventListener) CODE_FOLD_SM.addEventListener('change', _codeFoldAll);
+	else if (CODE_FOLD_SM.addListener) CODE_FOLD_SM.addListener(_codeFoldAll);
 }
 onRender(function () {
 	codeHighlight(document);
 });
+
+/* ── 14. 문서 목차 (LNB) ──────────────────────────────────── */
+// 사용법 문서의 절 제목을 모아 LNB 의 **현재 페이지 항목 아래**에 목차로 붙인다.
+//   읽는 곳 : .layout__main .section[id] > .section__head > .section__title
+//   만드는 것 : <ul class="ui-lnb__group ui-lnb__toc"> … <a class="ui-lnb__link ui-lnb__link--toc" href="#절아이디">
+// - **목차를 따로 적어 두지 않는다** — 절(파셜)을 더하거나 순서를 바꾸면 목차가 그대로 따라온다.
+// - 스크롤에 따라 보고 있는 절의 링크에 is-current 를 붙인다.
+// ⚠ 절이 파셜로 들어오므로 include 가 끝난 뒤(onRender)에 만든다. 다시 불러도 안전하다(먼저 지우고 새로 만든다).
+// ⚠ 이 목차는 **화면에서만** 만들어진다 — 산출물(prerender)에는 없다. 개발단이 읽을 마크업이 아니라 문서를 읽는 도구다.
+
+var TOC_TITLE = '.layout__main .section[id] > .section__head > .section__title';
+var TOC_OFFSET = 80; // 화면 위에서 이 안에 들어온 절을 「보고 있는 절」로 본다
+
+// 제목이 길면 「 — 」 앞까지만 쓴다(LNB 는 한 줄이다)
+function tocLabel(text) {
+	return String(text || '')
+		.replace(/\s*[—–]\s[\s\S]*$/, '')
+		.trim();
+}
+
+function lnbTocSpy() {
+	var links = document.querySelectorAll('.ui-lnb__toc .ui-lnb__link--toc');
+	if (!links.length) return;
+	var cur = 0;
+	for (var i = 0; i < links.length; i++) {
+		var sec = document.getElementById(links[i].getAttribute('href').slice(1));
+		if (sec && sec.getBoundingClientRect().top <= TOC_OFFSET) cur = i;
+	}
+	// 맨 아래까지 내렸으면 마지막 절 — 짧은 절은 위 판정만으로는 잡히지 않는다
+	if (window.innerHeight + window.pageYOffset >= document.documentElement.scrollHeight - 2) cur = links.length - 1;
+	for (var j = 0; j < links.length; j++) links[j].classList.toggle('is-current', j === cur);
+}
+
+function lnbTocBuild() {
+	var nav = document.querySelector('.ui-lnb');
+	if (!nav) return;
+	var old = nav.querySelector('.ui-lnb__toc');
+	if (old) old.parentNode.removeChild(old);
+
+	var link = nav.querySelector('.ui-lnb__link.is-active'); // 현재 페이지 항목 (lnbActive 가 붙인다)
+	var titles = document.querySelectorAll(TOC_TITLE);
+	if (!link || titles.length < 2) return;
+
+	var list = document.createElement('ul');
+	list.className = 'ui-lnb__group ui-lnb__toc';
+	list.setAttribute('aria-label', '이 페이지의 목차');
+	Array.prototype.forEach.call(titles, function (title) {
+		var sec = title.closest('.section');
+		if (!sec || !sec.id) return;
+		var a = document.createElement('a');
+		a.className = 'ui-lnb__link ui-lnb__link--toc';
+		a.href = '#' + sec.id;
+		a.textContent = tocLabel(title.textContent);
+		var li = document.createElement('li');
+		li.className = 'ui-lnb__item';
+		li.appendChild(a);
+		list.appendChild(li);
+	});
+	if (!list.children.length) return;
+
+	link.parentNode.appendChild(list); // 현재 페이지 링크와 같은 항목(li) 안에 둔다
+	lnbTocSpy();
+}
+
+// 스크롤마다 바로 계산한다 — 절 수만큼 위치를 재는 정도라 가볍다.
+// ⚠ requestAnimationFrame 으로 묶지 않는다 — 프레임이 그려지지 않는 환경(헤드리스 확인 등)에서 표시가 멈춘다.
+window.addEventListener('scroll', lnbTocSpy, { passive: true });
+window.addEventListener('resize', lnbTocSpy);
+onRender(lnbTocBuild);

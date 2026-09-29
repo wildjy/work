@@ -1,0 +1,154 @@
+<!-- 구역 : 3-0. 이름 규칙 — _guide_partial_vars.html 이 맨 먼저 부른다 (26.09.29 신설)
+     ⚠ 설명 글에 파셜 변수의 기본값 문법을 적을 때는 세로막대를 &#124; 로 적는다. 코드 예시(textarea data-raw) 안은 그대로. -->
+<h3 class="guide__sub" id="guide_vars_name">
+	3-0. 이름 규칙 — <code>data-make-new</code> 는 파셜에서 <code>{{makeNew}}</code>
+</h3>
+<p class="guide__desc">
+	넘기는 쪽(HTML 속성)과 받는 쪽(파셜 안)의 <strong>이름 모양이 다르다.</strong> 같은 값을 가리키는 두 가지 표기일
+	뿐이다. 앞의 <code>data-</code> 를 떼고, 하이픈을 지우며 <strong>바로 뒤 글자를 대문자로</strong> 바꾼다.
+</p>
+<div class="ui-card">
+	<div class="ui-card__body ui-card__body--flush">
+		<table class="ui-table ui-table--wrap">
+			<caption class="guide__caption">
+				속성 이름과 받는 이름
+			</caption>
+			<thead>
+				<tr>
+					<th scope="col">속성 (페이지에 적는 것)</th>
+					<th scope="col">파셜 안에서 받는 이름</th>
+					<th scope="col">어떻게 바뀌었나</th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr>
+					<td class="guide__term"><code>data-title</code></td>
+					<td><code>{{title}}</code></td>
+					<td><code>data-</code> 만 뗀다</td>
+				</tr>
+				<tr>
+					<td class="guide__term"><code>data-page-title</code></td>
+					<td><code>{{pageTitle}}</code></td>
+					<td>하이픈을 지우고 <strong>t</strong> → <strong>T</strong></td>
+				</tr>
+				<tr>
+					<td class="guide__term"><code>data-make-new</code></td>
+					<td><code>{{makeNew}}</code></td>
+					<td>하이픈을 지우고 <strong>n</strong> → <strong>N</strong></td>
+				</tr>
+				<tr>
+					<td class="guide__term"><code>data-card-title</code></td>
+					<td><code>{{cardTitle}}</code></td>
+					<td>하이픈이 몇 개든 같다</td>
+				</tr>
+			</tbody>
+		</table>
+	</div>
+</div>
+<div class="grid grid--2">
+	<div class="ui-card">
+		<div class="ui-card__header">
+			<h4 class="ui-card__title">코드</h4>
+		</div>
+		<div class="ui-card__body">
+			<textarea class="guide__src" data-raw readonly aria-label="코드 예시">
+				<!-- 페이지 : 속성은 소문자-하이픈 -->
+				<div class="dynamic-content" data-source="/html/include/guide/_guide_v_name.html"
+					data-max-size="10MB"
+					data-card-title="멤버 초대"
+					data-make-new="/html/include/guide/_guide_optional.html"></div>
+
+				<!-- 파셜 _guide_v_name.html : 이어 붙인 이름으로 받는다 -->
+				<table class="ui-table ui-table--wrap">
+					<caption class="guide__caption">
+						이름 규칙 결과
+					</caption>
+					<thead>
+						<tr>
+							<th scope="col">속성 → 받는 이름</th>
+							<th scope="col">들어온 값</th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr>
+							<td class="guide__term">data-max-size → maxSize</td>
+							<td>{{maxSize}}</td>
+						</tr>
+						<tr>
+							<td class="guide__term">data-card-title → cardTitle</td>
+							<td>{{cardTitle}}</td>
+						</tr>
+						<tr>
+							<td class="guide__term">data-make-new → makeNew</td>
+							<td>{{makeNew}}</td>
+						</tr>
+					</tbody>
+				</table>
+			</textarea>
+		</div>
+	</div>
+	<div class="ui-card">
+		<div class="ui-card__header">
+			<h4 class="ui-card__title">결과</h4>
+		</div>
+		<div class="ui-card__body ui-card__body--flush">
+			<div
+				class="dynamic-content"
+				data-source="/html/include/guide/_guide_v_name.html"
+				data-max-size="10MB"
+				data-card-title="멤버 초대"
+				data-make-new="/html/include/guide/_guide_optional.html"
+			></div>
+		</div>
+	</div>
+</div>
+<div class="grid grid--2">
+	<div class="ui-card guide__vs guide__vs--bad">
+		<div class="ui-card__header">
+			<h4 class="ui-card__title">✗ 속성에 대문자 — 브라우저가 makenew 로 읽어 못 채운다</h4>
+		</div>
+		<div class="ui-card__body">
+			<textarea class="guide__src" data-raw readonly aria-label="틀린 예">
+				<div class="dynamic-content" data-source="…" data-makeNew="…"></div>
+			</textarea>
+		</div>
+	</div>
+	<div class="ui-card guide__vs guide__vs--good">
+		<div class="ui-card__header">
+			<h4 class="ui-card__title">✓ 속성은 소문자-하이픈, 대문자는 파셜 안 이름에만</h4>
+		</div>
+		<div class="ui-card__body">
+			<textarea class="guide__src" data-raw readonly aria-label="맞는 예">
+				<div class="dynamic-content" data-source="…" data-make-new="…"></div>
+			</textarea>
+		</div>
+	</div>
+</div>
+<div class="ui-card">
+	<div class="ui-card__body">
+		<ul class="guide__list">
+			<li>
+				<strong>속성은 늘 소문자 · 하이픈</strong>, 파셜 안의 이름에만 대문자가 생긴다. 거꾸로 적으면 로컬 서버와 index
+				화면이 갈린다.
+			</li>
+			<li>
+				<strong><code>data-source</code> 는 변수가 아니다</strong> — 불러올 파셜의 경로라 파셜 안에서
+				<code>{{source}}</code> 로 받을 수 없다(두 구현 모두 뺀다).
+			</li>
+			<li>
+				<strong><code>data-slot-이름</code> 은 슬롯</strong>이다 — <code>slot-</code> 까지 떼고 남은 이름으로 받는다.
+				<code>data-slot-body</code> → <code>{{{body}}}</code>(<a href="#guide_slot">5</a>).
+			</li>
+			<li>
+				파셜 머리 주석의 「받는 값」은 <strong>속성 이름(<code>data-make-new</code>)</strong>으로 적는다 — 부르는 사람이
+				그대로 복사해 쓴다.
+			</li>
+		</ul>
+		<p class="guide__note guide__note--warn">
+			<strong>대문자는 왜 갈리나</strong> — 브라우저는 속성 이름을 전부 소문자로 바꿔 읽어 <code>data-makeNew</code> 가
+			<code>dataset.makenew</code> 가 된다. 프리렌더는 글자를 그대로 읽어 <code>makeNew</code> 로
+			<strong>채운다</strong>. 기본값이 있으면 브라우저 쪽도 에러 없이 <strong>조용히 기본값</strong>으로 나와 더 찾기
+			어렵다.
+		</p>
+	</div>
+</div>

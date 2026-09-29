@@ -1,0 +1,18 @@
+<!-- 사용법 문서 전용 데모 — 3-3 이스케이프와 원문. 같은 값을 두 겹 · 세 겹으로 넣어 차이를 본다.
+     받는 값 : data-msg
+     ⚠ 이 파일의 마크업은 _guide_partial_*.html 코드 예시(코드 칸)에 그대로 실려 있다 — 고치면 그쪽도 같이 고친다. -->
+<table class="ui-table ui-table--wrap">
+	<caption class="guide__caption">
+		이스케이프와 원문 결과
+	</caption>
+	<tbody>
+		<tr>
+			<td class="guide__term">두 겹 — 글자로 보인다</td>
+			<td>{{msg}}</td>
+		</tr>
+		<tr>
+			<td class="guide__term">세 겹 — 태그가 살아난다</td>
+			<td>{{{msg}}}</td>
+		</tr>
+	</tbody>
+</table>

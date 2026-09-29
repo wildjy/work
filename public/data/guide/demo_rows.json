@@ -1,0 +1,6 @@
+[
+  { "name": "김진학", "role": "관리자", "owner": true },
+  { "name": "이하늘", "role": "편집자", "owner": false },
+  { "name": "박서준", "role": "편집자", "owner": false },
+  { "name": "최유나", "role": "뷰어", "owner": false, "_tpl": "#tpl_guide_demo_row_alt" }
+]

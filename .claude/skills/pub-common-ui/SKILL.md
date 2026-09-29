@@ -146,6 +146,10 @@ description: >-
 - `.ui-lnb > .ui-lnb__menu > ul.ui-lnb__group > li.ui-lnb__item > a.ui-lnb__link[href]` · 하위 메뉴 `button.ui-lnb__link--toggle` + `.ui-lnb__sub[hidden]`.
 - 메뉴는 **파셜 안 마크업**(listRender 는 중첩 목록을 못 그린다). 단 **한 단계짜리 하위 목록**은 `ul.ui-lnb__group.dynamic-list` 로 JSON 에서 그려도 된다 — 「개발 확인용」이 `data/common/lnb_dev.json`(`title`·`href`) 을 쓴다. `lnbActive` 는 `dynamic-list-loaded` 에도 걸려 있다. `lnbActive()` 가 파일명 대조로 `is-active`, 하위가 활성이면 상위 `is-open` + 하위 목록 표시.
 - 자기 메뉴가 없는 상세·빈 화면은 `common.js` 의 `LNB_ALIAS` 에 `변형: '대표'`.
+- **이 페이지의 목차**(`.ui-lnb__toc`) — 본문에 `section.section[id]` 이 **두 개 이상**이면 그 절 제목을 모아 **현재 페이지 항목 아래**에 목차가 붙는다(`lnbTocBuild`). 스크롤하면 보고 있는 절의 링크에 `is-current`.
+  목차를 파셜이나 JSON 에 따로 적지 않는다 — 절을 더하거나 순서를 바꾸면 그대로 따라온다. 제목이 길면 「 — 」 앞까지만 쓴다.
+  ⚠ 목차에 넣으려면 **절에 `id` 가 있어야 한다**(`<section class="section" id="guide_slot">`). id 가 없는 절은 빠진다.
+  ⚠ 화면에서만 만들어진다 — **산출물(prerender)에는 없다.** 개발단에 넘길 마크업이 아니라 문서를 읽는 도구다.
 
 ## 6. 탭 — 파셜 없음, 구조대로 직접 쓴다
 

@@ -1,0 +1,124 @@
+<!-- 구역 : 3-3. 이스케이프와 원문 — _guide_partial_vars.html 이 부른다
+     ⚠ 설명 글에 파셜 변수의 기본값 문법을 적을 때는 세로막대를 &#124; 로 적는다. 코드 예시(textarea data-raw) 안은 그대로.
+     ⚠ 아래 목록 template(tpl_guide_syntax)은 8. 동작 원리의 대조표도 함께 쓴다 — 지우지 않는다. -->
+<h3 class="guide__sub" id="guide_vars_escape">3-3. 이스케이프와 원문 — 괄호 두 겹과 세 겹</h3>
+<p class="guide__desc">
+	같은 값을 두 가지 괄호로 넣었다. <strong>두 겹 <code>{{ }}</code> 는 태그를 글자로 보여 주고</strong>(이스케이프),
+	<strong>세 겹 <code>{{{ }}}</code> 는 태그를 살린다</strong>(원문).
+</p>
+<div class="grid grid--2">
+	<div class="ui-card">
+		<div class="ui-card__header">
+			<h4 class="ui-card__title">코드</h4>
+		</div>
+		<div class="ui-card__body">
+			<textarea class="guide__src" data-raw readonly aria-label="코드 예시">
+				<!-- 파셜 _guide_v_escape.html — 같은 값을 두 겹 · 세 겹으로 -->
+				<table class="ui-table ui-table--wrap">
+					<caption class="guide__caption">
+						이스케이프와 원문 결과
+					</caption>
+					<tbody>
+						<tr>
+							<td class="guide__term">두 겹 — 글자로 보인다</td>
+							<td>{{msg}}</td>
+						</tr>
+						<tr>
+							<td class="guide__term">세 겹 — 태그가 살아난다</td>
+							<td>{{{msg}}}</td>
+						</tr>
+					</tbody>
+				</table>
+
+				<!-- 페이지 : 값에 태그를 넣었다 -->
+				<div class="dynamic-content" data-source="/html/include/guide/_guide_v_escape.html"
+					data-msg="<b>굵게</b> · <em>기울임</em>"></div>
+			</textarea>
+		</div>
+	</div>
+	<div class="ui-card">
+		<div class="ui-card__header">
+			<h4 class="ui-card__title">결과</h4>
+		</div>
+		<div class="ui-card__body ui-card__body--flush">
+			<div
+				class="dynamic-content"
+				data-source="/html/include/guide/_guide_v_escape.html"
+				data-msg="<b>굵게</b> · <em>기울임</em>"
+			></div>
+		</div>
+	</div>
+</div>
+<div class="ui-card">
+	<div class="ui-card__body ui-card__body--flush">
+		<table class="ui-table ui-table--wrap">
+			<caption class="guide__caption">
+				이스케이프와 원문 대조
+			</caption>
+			<thead>
+				<tr>
+					<th scope="col">무엇이</th>
+					<th scope="col"><code>{{key}}</code> — 이스케이프</th>
+					<th scope="col"><code>{{{key}}}</code> — 원문</th>
+				</tr>
+			</thead>
+			<tbody
+				class="dynamic-list"
+				data-source="/data/guide/partial_syntax.json"
+				data-template="#tpl_guide_syntax"
+				data-empty="#tpl_guide_syntax_none"
+				data-filter="group=escape"
+			></tbody>
+		</table>
+	</div>
+</div>
+<div class="grid grid--2">
+	<div class="ui-card guide__vs guide__vs--bad">
+		<div class="ui-card__header">
+			<h4 class="ui-card__title">✗ 속성값 자리에 세 겹 — 값의 따옴표에서 속성이 끊긴다</h4>
+		</div>
+		<div class="ui-card__body">
+			<textarea class="guide__src" data-raw readonly aria-label="틀린 예">
+				<a href="{{{link}}}">바로가기</a>
+			</textarea>
+		</div>
+	</div>
+	<div class="ui-card guide__vs guide__vs--good">
+		<div class="ui-card__header">
+			<h4 class="ui-card__title">✓ 두 겹 — 따옴표가 &amp;quot; 로 바뀌어 안전하다</h4>
+		</div>
+		<div class="ui-card__body">
+			<textarea class="guide__src" data-raw readonly aria-label="맞는 예">
+				<a href="{{link}}">바로가기</a>
+			</textarea>
+		</div>
+	</div>
+</div>
+<div class="ui-card">
+	<div class="ui-card__body">
+		<ul class="guide__list">
+			<li><strong>기본은 두 겹</strong>이다. 사용자가 입력한 값이 들어올 자리는 반드시 두 겹.</li>
+			<li><strong>세 겹은 마크업 조각 · 속성 묶음을 넘길 때만</strong> 쓴다 — 믿을 수 있는 값.</li>
+			<li>
+				<strong>세 겹은 마지막 수단이다.</strong> 먼저 물어본다 — 모양만 다르면 class(<a href="#guide_vars_attr">3-4</a
+				>) · 덩어리가 있다 / 없다면 넣고 빼기(<a href="#guide_optional">4</a>) · 속이 다르면 슬롯(<a href="#guide_slot"
+					>5</a
+				>).
+			</li>
+		</ul>
+	</div>
+</div>
+
+<template id="tpl_guide_syntax">
+	<tr>
+		<td class="guide__term">{{{axis}}}</td>
+		<td>{{{left}}}</td>
+		<td>{{{right}}}</td>
+	</tr>
+</template>
+
+<template id="tpl_guide_syntax_none">
+	<tr>
+		<td colspan="3" class="ui-table__empty">등록된 대조가 없습니다.</td>
+	</tr>
+</template>

@@ -622,3 +622,32 @@ HTML 을 고칠 때마다 산출물을 옛 규칙(textarea 안 날것 `< >`)으�
 - 확인 : 저장소의 코드 예시 **48개를 Node 에서 칠한 뒤 태그를 걷으면 원문과 완전 일치** · 헤드리스 크롬으로 사용법 두 페이지 원본 · 산출물의 코드 블록 · 본문 글자가 이전과 같음(차이는 같은 날 넣은 함정 · 증상 4줄과 `data-msg` 예시뿐) · `validate` · `lint` 통과 · scratchpad CSS 를 씌운 복사본으로 모달 · 변수 샘플 화면 확인.
 - ⚠ **컴파일(Watch Sass)은 작업자** — 컴파일 전에는 새 토큰 7종이 기본 글자색으로 보인다(동작 · 글자는 같다).
 - index : 사용법 두 페이지 `update_date` 26.09.29(색이 바뀌어 화면이 달라졌다). 샘플 16장은 이미 26.09.29.
+
+## 26.09.29 · 코드 예시를 어두운 판으로 — ara-pub 카탈로그 색 이관 (유재영)
+
+- **무엇** — `.guide__code`(textarea.guide__src 가 바뀌어 그려지는 코드 블록)를 ara-pub 공통 UI 카탈로그(`.uc_src`)와 같은 **어두운 판 + 5색 계열**로 바꿨다. `.guide__flow`(흐름도 1곳)는 코드가 아니라 밝은 판 그대로.
+- **토큰** — `_variable.scss` 에 **`$code-*` 7종** 신설(`bg` · `text` · `cmt` · `tag` · `attr` · `str` · `fn`). 바탕 `$gray-900` · 글자 `$gray-300` 은 기존 토큰, 나머지 5색은 ara-pub 의 리터럴을 그대로 옮긴 **문서 전용 값**이다(작업자 확인 — 「토큰에 없으면 묻는다」 규칙). 다른 곳에 쓰지 않는다.
+- **세분 토큰은 구분을 유지**하고 색만 어두운 판용으로 묶었다(`codeHighlight` JS 는 무변경) — 태그 · 키워드 → `tag` / 일반 · data-* · 값 없는 속성 → `attr` / 문자열 · 문자 참조 → `str` / `{{ }}` · JSX 값 → `fn`(치환 자리는 굵게 유지) / 주석 → `cmt` + 기울임 / 꺾쇠 · = → `$gray-400` / 개발단 주석 → `rgba($code-cmt, .35)` 바탕 + 기본 글자.
+- 스크롤바 손잡이는 어두운 판에서 보이게 `$gray-600`.
+- 확인 : scratchpad 로 sass 컴파일 통과(`.guide__code` 규칙 · 토큰 값 출력 확인). ⚠ **컴파일(Watch Sass)은 작업자** — 컴파일 전에는 이전(밝은 판) 모양이다.
+- index : 영향 페이지 18개(Guide 2 · Sample 16) 모두 이미 `update_date` 26.09.29.
+
+## 26.09.29 · 파셜 사용법(`Guide_Partial`) 개편 — ara-pub `dev_partial_vars` 형식 이관 (유재영)
+
+- **무엇** — ara-pub 의 개발 확인용 `dev_partial_vars` 를 고치며 만든 형식을 이 페이지에 입혔다. **내용은 work 쪽이 넓어 그대로 살렸다**(함정 29 · 증상 13 · React 15 · 사다리 12 JSON, 새로 만들 때 · 예시 모음 · 고친 뒤, `{{{attrs|}}}` 속성 묶음 · 빈 줄 지우기 · 슬롯 본문 배치/순서 표). 표 9종의 JSON 구동과 `docs/PARTIALS.md` 는 손대지 않았다(`docs:check` 통과 — JSON 에 페이지 절 번호가 없어 재배치의 영향이 없다).
+- **새 목차** — 0 한눈에 보기(도구 6개 표 · 목차 · **사다리 JSON 을 여기로**) · 1 기본형(+옛 3 부르는 쪽 규칙) · **2 파셜 안의 파셜(신규)** · 3 값 넘기기(**3-0 이름 규칙 신규** · 3-1 문구 · 3-2 기본값(+옛 4-5 조건문 없다) · 3-3 이스케이프·원문 · 3-4 class·속성·style) · 4 넣고 빼기 · 5 슬롯 · 6 목록(+**data-filter 소단원**) · **7 운영 컴포넌트(옛 7 에서 분리 + `{{show|use}}` 두 단계 표)** · 8 동작 원리(옛 2 + 옛 4-4 같은 괄호 대조) · 9~14 그대로. 절 id 는 `#guide_*` 를 유지하고 `#guide_nested` · `#guide_opcomp` · `#guide_vars_*` · `#guide_filter` · `#guide_scope` 를 더했다. 폴더 구조 페이지의 「파셜 사용법 6절」 → 「5절」.
+- **절 틀** — 언제(`section__desc`) → **코드 | 결과**(`grid--2` + `ui-card`) → 규칙(`guide__list`) → **✗/✓**(`guide__vs--bad/--good`) → React 라면 → **더 알아보기**(기존 `guide__src-fold` 접기 카드로 구현 · 이력을 옮김). 11 함정 맨 위에 **체크리스트**(절 링크).
+- **데모** — 행이 몰려 있던 `_guide_var`(A~F) · `_guide_flags`(G~K) 를 지우고 **한 가지만 보이는 데모** 11개 : `_guide_hello` · `_guide_nested_outer/inner` · `_guide_v_name/text/default/escape/class/attrs/style` · `_guide_tpl_rows` + `data/guide/demo_rows.json`. 5 슬롯에 동작하는 데모(`_guide_slot_host` 두 번)를 처음 붙였다.
+- **코드 ↔ 결과 동기화** — 코드 칸은 실제 데모 파일(머리 주석만 뗌) · 실제 JSON(항목당 한 줄)에서 옮겼다. 데모 파셜 머리 주석마다 「이 마크업은 코드 칸에 그대로 실려 있다 — 고치면 같이 고친다」.
+- **긴 코드 접기** — `common.js` §13 에 `codeFold()` : `.guide__code` 가 12줄 + 4줄 이상이면 12줄(750 이하 8줄)만 보이고 「더보기 ▾ — 전체 N줄」로 편다. **가이드 · 샘플 전체**에 켜진다(Guide_Partial 8개 · Sample 8개). 높이는 스크립트가 인라인으로 정해 CSS 없이도 접힌다 — 모양은 `_guide.scss` 의 `__code-fold` · `__code-more`.
+- **스타일(`_guide.scss`, 토큰만)** — `guide--partial`(절 안 카드 사이 16 · 하위 절 제목 32) · `__sub` · `__row` · `__vs` · `__code-fold` · `__code-more`.
+- ⚠ **작업 중 밟은 함정 둘(이 문서가 경고하는 그대로)**
+  - **prettier 가 `&quot;` 가 든 속성을 작은따옴표로 바꿨다** → 프리렌더만 3-3 데모를 못 채워 `{{msg}}` 가 산출물에 찍혔다(브라우저는 정상). 옛 `_guide_var` 데모의 `data-msg='…'` 도 같은 모양이었다. 3-1 규칙에 한 줄 추가하고 데모 값에서 큰따옴표를 뺐다.
+  - **세 겹 데모 값에 `&` · `<` 를 넣으면 산출물 HTML 이 무효**가 돼 `validate` 가 막는다 → 값을 태그만(`<b>굵게</b> · <em>기울임</em>`)으로.
+  - textarea 안은 문자 참조를 푼다 — 코드 칸에 `&quot;` 를 글자로 보이려면 `&amp;quot;`(ara-pub 에도 같은 실수가 있어 함께 고쳤다).
+- 확인 : `prerender`(경고 0 · 파셜 48 / 목록 22) · `html-validate` 0 · `eslint` 0 · `docs:check` 동일 · prettier 통과 · 헤드리스 크롬 — 원본 보기 = 산출물 보이는 글자(48,277자) · 절 15 · 하위 절 17 · 깨진 링크 0 · 데모(행 10 · 체크 · 너비 72% · 숨김 플래그 · 운영 컴포넌트 ①3줄 ②1줄 · 슬롯 · 중첩) · 접힘 높이 281px(12줄) / 189px(8줄) · scratchpad 로 sass 컴파일 통과.
+- ⚠ **컴파일(Watch Sass)은 작업자** — `common.css` 에 새 블록이 들어가야 ✗/✓ 테두리 · 하위 절 제목 · 접힌 코드의 흐림 · 버튼 모양이 나온다(접기 동작 자체는 지금도 된다).
+- index : 가이드 2 · 샘플 16 모두 이미 `update_date` 26.09.29.
+| 2026-09-29 | **LNB 에 「이 페이지의 목차」** — `.ui-lnb__toc` · `.ui-lnb__link--toc`(`is-current`) · 함수 `lnbTocBuild` · `lnbTocSpy` · `tocLabel` | `public/js/common.js` · `public/scss/_ui_lnb.scss` · `_layout.scss` · `include/ui/_ui_lnb.html`(주석) · `pub-common-ui` | 사용법 문서가 15개 절로 길어져 어디를 보는지 알기 어려웠다. 본문의 `section.section[id]` 제목을 읽어 **현재 페이지 LNB 항목 아래**에 목차를 만들고, 스크롤에 따라 보고 있는 절에 `is-current` 를 붙인다. **목차를 따로 적지 않는 것이 핵심** — 파셜·JSON 에 적으면 절을 더할 때마다 어긋난다(절이 파셜이라 include 가 끝난 뒤 onRender 에서 만든다 · 다시 불러도 안전). 제목이 길면 「 — 」 앞까지만. 절 링크로 건너뛸 때를 위해 `.section { scroll-margin-top: 24px }`. ⚠ 스크롤 감시는 `requestAnimationFrame` 으로 묶지 않았다 — 프레임이 그려지지 않는 헤드리스 확인 환경에서 표시가 멈춰 처음에 오진했다. 15개 항목 · 절 이동 · 재생성(중복 없음) 확인 | |
+| 2026-09-29 | **소스 코드 칸에 「파셜 원문」** — `data-src-file` (`common.js` `codeSourceFile` · `prerender.js` `fillSrcFiles`) · 클래스 `.guide__src-path` · Sample_Dropdown 적용 | `public/js/common.js` · `scripts/prerender.js` · `public/scss/_guide.scss` · `include/sample/section/_sample_dropdown.html` · `pub-env` | 개발 확인용 카탈로그의 「소스 코드」가 **include 한 줄**만 보여 줘서, 실제로 어떤 마크업이 나오는지 알 수 없었다(ara-pub `dev/dev_ui_cell_dropdown` 은 컴포넌트 마크업을 그대로 보여 준다). 파셜 파일을 **읽어서** 코드 칸에 넣는 표시를 만들었다 — 손으로 옮겨 적으면 파셜을 고칠 때마다 조용히 어긋나기 때문이다. 브라우저는 비어 있을 때만 fetch, 프리렌더는 산출물에 채워 넣고 곧바로 원문 블록으로 보호한다(`RAW_RE` 가 `data-src-file` 도 본다 — 안의 include 줄이 진짜로 펴지지 않게). 소스 카드는 ara-pub 처럼 **펼친 채로**(`details open`) 시작하고, 칸마다 이름(`부르는 쪽` · 파셜 경로)을 붙였다. Sample_Dropdown 에 먼저 적용 — 나머지 샘플 페이지는 같은 방식으로 이어서 | |
+| 2026-09-29 | 개발 확인용 **샘플 15쪽에 「펼친 마크업」 확대 적용** — 구역 파셜 전부(`data-src-file` · 소스 카드 `open`) | `public/html/include/sample/section/*.html` | Dropdown 에 넣은 방식을 나머지 구역에 이었다. 쓰는 파셜을 칸 이름과 함께 그대로 보여 준다 — Date 는 날짜·기간 두 벌, Modal 은 프레임·기본 버튼·알림·확인창 네 벌, Var 는 공통 헤더. **파셜이 없는 구역(Button · List · Tab)은 코드 칸이 곧 마크업**이라 펼칠 것이 없어 카드만 펼친 채로 뒀다. 소스 카드는 ara-pub 카탈로그처럼 열린 채 시작한다. 산출물 채움 · 브라우저 fetch 양쪽 확인(남은 빈 칸 0) | |

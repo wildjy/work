@@ -1,32 +1,68 @@
-<!-- 구역 : 경로 변수 -->
+<!-- 구역 : 4. 넣고 빼기 — data-source 를 변수로 연다
+     ⚠ 설명 글에 파셜 변수의 기본값 문법을 적을 때는 세로막대를 &#124; 로 적는다. 코드 예시(textarea data-raw) 안은 그대로. -->
 <section class="section" id="guide_optional">
 	<div class="section__head">
-		<h2 class="section__title">5. 덩어리를 통째로 넣고 뺀다 — <code>data-source</code> 를 변수로 연다</h2>
+		<h2 class="section__title">4. 넣고 빼기 — 어떤 화면에만 있는 덩어리</h2>
 		<p class="section__desc">
-			파셜 하나를 여러 화면이 쓰는데 <strong>한 덩어리만 어떤 화면엔 없어야</strong> 할 때. 문구가 아니라 마크업이
-			통째로 빠지므로 4 의 값 치환으로는 안 된다
+			<strong>언제</strong> — 파셜 하나를 여러 화면이 쓰는데 <strong>한 덩어리만 어떤 화면엔 없어야</strong> 할 때.
+			글자가 아니라 마크업이 통째로 빠지므로 값 넘기기(3)로는 안 된다
 		</p>
 	</div>
-	<div class="ui-card">
-		<div class="ui-card__body">
-			<textarea class="guide__src" data-raw readonly aria-label="코드 예시">
-				<!-- 공통 파셜 : 갈아끼울 자리를 「경로 변수」로 비워 둔다 -->
-				<div class="dynamic-content" data-source="{{extra|/html/include/common/_none.html}}"></div>
 
-				<!-- ① 덩어리가 필요한 화면 : 조각의 경로를 넘긴다 -->
-				<div class="dynamic-content" data-source="/html/include/guide/_guide_optional_host.html"
-					data-extra="/html/include/guide/_guide_optional.html"></div>
-
-				<!-- ② 필요 없는 화면 : 아무것도 넘기지 않는다 → 기본값인 빈 파셜이 들어온다 -->
-				<div class="dynamic-content" data-source="/html/include/guide/_guide_optional_host.html"></div>
-			</textarea>
-		</div>
-	</div>
-
+	<h3 class="guide__sub">파셜 두 개 — 틀과 끼울 조각</h3>
 	<div class="grid grid--2">
 		<div class="ui-card">
 			<div class="ui-card__header">
-				<h3 class="ui-card__title">① 경로를 넘긴 화면</h3>
+				<h4 class="ui-card__title">틀 — _guide_optional_host.html</h4>
+			</div>
+			<div class="ui-card__body">
+				<textarea class="guide__src" data-raw readonly aria-label="코드 예시">
+					<!-- 공통 파셜 _guide_optional_host.html : 끼울 자리의 「경로」를 변수로 비워 둔다 -->
+					<div class="ui-card">
+						<div class="ui-card__header">
+							<h4 class="ui-card__title">틀 — 어느 화면에서나 나온다</h4>
+						</div>
+						<div class="ui-card__body">
+							<p class="guide__desc">이 문단은 틀에 있으므로 두 경우 모두 나온다.</p>
+							<div class="dynamic-content" data-source="{{extra|/html/include/common/_none.html}}"></div>
+						</div>
+					</div>
+				</textarea>
+			</div>
+		</div>
+		<div class="ui-card">
+			<div class="ui-card__header">
+				<h4 class="ui-card__title">끼울 조각 — _guide_optional.html</h4>
+			</div>
+			<div class="ui-card__body">
+				<textarea class="guide__src" data-raw readonly aria-label="코드 예시">
+					<!-- 끼울 조각 _guide_optional.html : 필요한 화면만 이 경로를 넘긴다 -->
+					<p class="guide__note guide__note--tip">
+						<strong>이 덩어리는 경로를 넘긴 화면에만 나온다.</strong> 안 넘긴 화면의 산출물에는
+						<strong>한 줄도 나가지 않는다</strong> — CSS 로 감춘 것이 아니라 <strong>애초에 그려지지 않는다</strong>.
+					</p>
+				</textarea>
+			</div>
+		</div>
+	</div>
+
+	<h3 class="guide__sub">① 덩어리가 필요한 화면 — 조각의 경로를 넘긴다</h3>
+	<div class="grid grid--2">
+		<div class="ui-card">
+			<div class="ui-card__header">
+				<h4 class="ui-card__title">코드</h4>
+			</div>
+			<div class="ui-card__body">
+				<textarea class="guide__src" data-raw readonly aria-label="코드 예시">
+					<!-- 페이지 : data-extra 로 넘긴 경로가 파셜의 extra 자리에 들어간다 -->
+					<div class="dynamic-content" data-source="/html/include/guide/_guide_optional_host.html"
+						data-extra="/html/include/guide/_guide_optional.html"></div>
+				</textarea>
+			</div>
+		</div>
+		<div class="ui-card">
+			<div class="ui-card__header">
+				<h4 class="ui-card__title">결과 — 조각이 들어왔다</h4>
 			</div>
 			<div class="ui-card__body">
 				<div
@@ -36,9 +72,24 @@
 				></div>
 			</div>
 		</div>
+	</div>
+
+	<h3 class="guide__sub">② 필요 없는 화면 — 아무것도 안 넘긴다</h3>
+	<div class="grid grid--2">
 		<div class="ui-card">
 			<div class="ui-card__header">
-				<h3 class="ui-card__title">② 넘기지 않은 화면</h3>
+				<h4 class="ui-card__title">코드</h4>
+			</div>
+			<div class="ui-card__body">
+				<textarea class="guide__src" data-raw readonly aria-label="코드 예시">
+					<!-- 페이지 : 기본값 /html/include/common/_none.html(빈 파일)이 들어간다 -->
+					<div class="dynamic-content" data-source="/html/include/guide/_guide_optional_host.html"></div>
+				</textarea>
+			</div>
+		</div>
+		<div class="ui-card">
+			<div class="ui-card__header">
+				<h4 class="ui-card__title">결과 — 틀만 남고 조각은 한 줄도 안 나간다</h4>
 			</div>
 			<div class="ui-card__body">
 				<div class="dynamic-content" data-source="/html/include/guide/_guide_optional_host.html"></div>
@@ -47,67 +98,53 @@
 	</div>
 
 	<div class="ui-card">
-		<div class="ui-card__body ui-card__body--flush">
-			<table class="ui-table ui-table--wrap">
-				<caption class="guide__caption">
-					경로 변수 규칙
-				</caption>
-				<thead>
-					<tr>
-						<th scope="col">항목</th>
-						<th scope="col">규칙</th>
-					</tr>
-				</thead>
-				<tbody>
-					<tr>
-						<td class="guide__term">빈 파셜</td>
-						<td>
-							<code>include/common/_none.html</code> 은 <strong>0바이트 빈 파일</strong>이다. 주석 한 줄도 넣지 않는다 —
-							짧은 주석은 「구역 표시」로 판정돼 산출물에 그대로 남는다
-						</td>
-					</tr>
-					<tr>
-						<td class="guide__term">기본값은 필수</td>
-						<td>
-							기본값 없이 <code>&#123;&#123;extra&#125;&#125;</code> 로 두면 안 넘긴 화면에서
-							<strong>토큰째 fetch</strong> 한다 → 브라우저는 404, 프리렌더는 <code>! 파셜 없음</code>
-						</td>
-					</tr>
-					<tr>
-						<td class="guide__term">산출물에 뭐가 남나</td>
-						<td>
-							<code>replaceWith</code> 라 컨테이너까지 사라진다 — 끈 화면의 산출물에는
-							<strong>죽은 마크업이 한 줄도 안 나간다</strong>
-						</td>
-					</tr>
-					<tr>
-						<td class="guide__term">중첩도 그대로</td>
-						<td>
-							치환이 끝난 뒤 다시 전개하므로(<code>fillVars</code> → <code>expandPartials</code>) 넣은 조각 안에 또
-							include 가 있어도 풀린다. 브라우저도 같은 순서다
-						</td>
-					</tr>
-					<tr>
-						<td class="guide__term">실물</td>
-						<td>
-							모달 프레임이 버튼 영역을 갈아 끼우는 <code>data-footer</code> 가 같은 모양이다 —
-							<strong>비우는 쪽</strong>이 아니라 <strong>바꾸는 쪽</strong>으로 쓴 예
-						</td>
-					</tr>
-				</tbody>
-			</table>
-		</div>
 		<div class="ui-card__body">
-			<p class="guide__note guide__note--warn">
-				<strong>CSS 로 감추지 않는다.</strong> <code>display: none</code> 으로 끄면
-				<strong>산출물에 죽은 마크업이 그대로 남아</strong> 개발자가 그것을 옮겨 쓴다. 「이 화면에는 없다」는
-				<strong>없애는 것</strong>이지 감추는 게 아니다.
-			</p>
-			<p class="guide__note guide__note--tip">
-				<strong>조각이 두세 벌로 늘어나면 변수 대신 파셜을 나눈다.</strong>
-				이 방식은 <strong>있다 / 없다 한 가지</strong>일 때가 제일 깔끔하다 — 버튼이 없는 모달을
-				<code>_ui_modal_alert.html</code> 로 따로 둔 것이 그 판단이다.
-			</p>
+			<ul class="guide__list">
+				<li>
+					<strong>이름</strong> — 페이지는 <code>data-extra</code> 로 넘기고 파셜은 <code>{{extra}}</code> 로 받는다(<a
+						href="#guide_vars_name"
+						>3-0</a
+					>).
+				</li>
+				<li>
+					<strong>기본값은 빈 파셜 <code>/html/include/common/_none.html</code></strong> 이다. 0바이트 빈 파일이고 주석
+					한 줄도 넣지 않는다 — 짧은 주석은 「구역 표시」로 판정돼 산출물에 남는다.
+				</li>
+				<li>
+					<strong>기본값을 꼭 준다.</strong> 없으면 안 넘긴 화면이 <code>{{extra}}</code> 라는 경로를 불러 브라우저는
+					404, 프리렌더는 <code>! 파셜 없음</code>.
+				</li>
+				<li>
+					안 넘긴 화면의 산출물에는 <strong>빠진 덩어리가 한 줄도 남지 않는다</strong> — include div 까지 사라진다.
+				</li>
+				<li>
+					조각이 <strong>두세 벌로 늘어나면</strong> 변수 대신 파셜을 나눈다. 이 방법은
+					<strong>있다 / 없다 한 가지</strong>일 때 가장 깔끔하다 — 버튼 없는 모달을
+					<code>_ui_modal_alert.html</code> 로 따로 둔 것이 그 판단이다.
+				</li>
+			</ul>
+		</div>
+	</div>
+	<div class="grid grid--2">
+		<div class="ui-card guide__vs guide__vs--bad">
+			<div class="ui-card__header">
+				<h4 class="ui-card__title">✗ CSS 로 감췄다 — 산출물에 죽은 마크업이 남아 개발자가 옮겨 쓴다</h4>
+			</div>
+			<div class="ui-card__body">
+				<textarea class="guide__src" data-raw readonly aria-label="틀린 예">
+					.payment .extra { display: none; }
+				</textarea>
+			</div>
+		</div>
+		<div class="ui-card guide__vs guide__vs--good">
+			<div class="ui-card__header">
+				<h4 class="ui-card__title">✓ 필요한 화면만 경로를 넘긴다 — 나머지는 아예 안 나간다</h4>
+			</div>
+			<div class="ui-card__body">
+				<textarea class="guide__src" data-raw readonly aria-label="맞는 예">
+					data-extra="/html/include/guide/_guide_optional.html"
+				</textarea>
+			</div>
 		</div>
 	</div>
 
@@ -127,4 +164,25 @@
 			</textarea>
 		</div>
 	</div>
+	<details class="ui-card guide__src-fold">
+		<summary class="ui-card__header">
+			<h3 class="ui-card__title">더 알아보기 — 실물 · 「~일 때만」과 다른 점</h3>
+		</summary>
+		<div class="ui-card__body">
+			<ul class="guide__list">
+				<li>
+					<strong>실물</strong> — 모달 프레임이 버튼 영역을 갈아 끼우는 <code>data-footer</code> 가 같은 모양이다.
+					<strong>비우는 쪽</strong>이 아니라 <strong>바꾸는 쪽</strong>으로 쓴 예.
+				</li>
+				<li>
+					<strong>「~일 때만 보인다」와 다르다.</strong> 로그인 여부처럼 실행 중에 갈리는 조건은 마크업에 두고 주석으로
+					넘긴다. 이 절은 <strong>화면마다 구성이 다른 것</strong> — 아예 안 내보낸다.
+				</li>
+				<li>
+					치환이 끝난 뒤 다시 전개하므로(<code>fillVars</code> → <code>expandPartials</code>) 끼운 조각 안에 또 include
+					가 있어도 풀린다. 브라우저도 같은 순서다.
+				</li>
+			</ul>
+		</div>
+	</details>
 </section>

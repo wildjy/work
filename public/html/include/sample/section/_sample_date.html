@@ -4,10 +4,11 @@
 		<h2 class="section__title">날짜 · 기간</h2>
 		<p class="section__desc">jQuery UI datepicker — 입력을 누르면 달력이 열린다</p>
 	</div>
-	<details class="ui-card guide__src-fold">
+	<details class="ui-card guide__src-fold" open>
 		<summary class="ui-card__header"><h3 class="ui-card__title">소스 코드</h3></summary>
 		<div class="ui-card__body">
-			<textarea class="guide__src" data-raw readonly aria-label="소스 코드">
+			<p class="guide__src-path">부르는 쪽 — 페이지에 적는 줄</p>
+			<textarea class="guide__src" data-raw readonly aria-label="부르는 쪽 소스 코드">
 				<div class="grid grid--2">
 					<div>
 						<label class="ui-label" for="sample_period">기간</label>
@@ -19,6 +20,23 @@
 					</div>
 				</div>
 			</textarea>
+
+			<!--@ 아래 칸은 파셜 파일을 그대로 읽어 온다(data-src-file) — 파셜을 고치면 여기도 따라 바뀐다 -->
+			<p class="guide__src-path">펼친 마크업 — /html/include/ui/_ui_date.html</p>
+			<textarea
+				class="guide__src"
+				data-src-file="/html/include/ui/_ui_date.html"
+				readonly
+				aria-label="날짜 입력 파셜 원문"
+			></textarea>
+
+			<p class="guide__src-path">펼친 마크업 — /html/include/ui/_ui_period.html</p>
+			<textarea
+				class="guide__src"
+				data-src-file="/html/include/ui/_ui_period.html"
+				readonly
+				aria-label="기간 입력 파셜 원문"
+			></textarea>
 		</div>
 	</details>
 	<div class="ui-card">

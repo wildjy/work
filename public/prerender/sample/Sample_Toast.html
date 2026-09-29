@@ -18,6 +18,7 @@
 				<p class="layout__brand">pub-base</p>
 				<!-- 공통 LNB -->
 				<!-- 현재 페이지 메뉴의 is-active 와 상위 메뉴의 is-open 은 common.js 의 lnbActive 가 붙인다 -->
+				<!-- 사용법 문서를 열면 현재 페이지 항목 아래에 그 페이지의 목차(.ui-lnb__toc)가 붙는다 — common.js 의 lnbTocBuild 가 절 제목을 읽어 만든다(여기 적지 않는다) -->
 				<nav class="ui-lnb">
 					<div class="ui-lnb__menu">
 						<ul class="ui-lnb__group">
@@ -111,10 +112,11 @@
 							<h2 class="section__title">토스트</h2>
 							<p class="section__desc">data-toast 로 띄운다 — 2.5초 뒤 저절로 숨는다</p>
 						</div>
-						<details class="ui-card guide__src-fold">
+						<details class="ui-card guide__src-fold" open>
 							<summary class="ui-card__header"><h3 class="ui-card__title">소스 코드</h3></summary>
 							<div class="ui-card__body">
-								<textarea class="guide__src" data-raw readonly aria-label="소스 코드">
+								<p class="guide__src-path">부르는 쪽 — 페이지에 적는 줄</p>
+								<textarea class="guide__src" data-raw readonly aria-label="부르는 쪽 소스 코드">
 				&lt;div class="ui-btn-group"&gt;
 					&lt;button type="button" class="ui-btn ui-btn--outlined" data-toast="sample_toast"&gt;토스트 띄우기&lt;/button&gt;
 				&lt;/div&gt;
@@ -126,6 +128,22 @@
 					data-text="저장되었습니다."
 				&gt;&lt;/div&gt;
 			</textarea>
+
+								<!-- 아래 칸은 파셜 파일을 그대로 읽어 온다(data-src-file) — 파셜을 고치면 여기도 따라 바뀐다 -->
+								<p class="guide__src-path">펼친 마크업 — /html/include/ui/_ui_toast.html</p>
+								<textarea
+									class="guide__src"
+									data-src-file="/html/include/ui/_ui_toast.html"
+									readonly
+									aria-label="토스트 파셜 원문"
+								>
+&lt;!-- 공통 토스트 — 받는 값 : data-id(필수) · data-text · data-type(success · error) --&gt;
+&lt;!--@ 페이지 끝에 둔다. 띄우기 : data-toast="아이디" 버튼 또는 toastShow('아이디') --&gt;
+&lt;div class="ui-toast ui-toast--{{type|success}}" id="{{id}}" role="status" aria-live="polite" hidden&gt;
+	&lt;span class="ui-toast__icon"&gt;&lt;/span&gt;
+	&lt;p class="ui-toast__text"&gt;{{text|처리되었습니다.}}&lt;/p&gt;
+&lt;/div&gt;
+</textarea>
 							</div>
 						</details>
 						<div class="ui-card">

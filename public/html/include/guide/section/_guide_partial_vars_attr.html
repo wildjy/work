@@ -1,0 +1,187 @@
+<!-- 구역 : 3-4. class · 속성 · style 자리 — _guide_partial_vars.html 이 부른다
+     ⚠ 설명 글에 파셜 변수의 기본값 문법을 적을 때는 세로막대를 &#124; 로 적는다 — 이 파일이 특히 많다. 코드 예시(textarea data-raw) 안은 그대로. -->
+<h3 class="guide__sub" id="guide_vars_attr">3-4. class · 속성 · style 자리</h3>
+<p class="guide__desc">
+	값은 문구 자리만이 아니라 <strong>속성 안 어디에나</strong> 들어간다. 치환은 <strong>글자 바꿔치기</strong>일 뿐이라,
+	무엇을 넘기든 그 글자가 그대로 박힌다.
+</p>
+
+<div class="grid grid--2">
+	<div class="ui-card">
+		<div class="ui-card__header">
+			<h4 class="ui-card__title">① class — 모양만 다른 변형</h4>
+		</div>
+		<div class="ui-card__body">
+			<textarea class="guide__src" data-raw readonly aria-label="코드 예시">
+				<!-- 파셜 _guide_v_class.html — 안 넘기면 ui-btn--outlined -->
+				<button type="button" class="ui-btn ui-btn--sm {{variant|ui-btn--outlined}}">{{variant|ui-btn--outlined}}</button>
+
+				<!-- 페이지 -->
+				<div class="dynamic-content" data-source="/html/include/guide/_guide_v_class.html"></div>
+				<div class="dynamic-content" data-source="/html/include/guide/_guide_v_class.html"
+					data-variant="ui-btn--contained"></div>
+			</textarea>
+		</div>
+	</div>
+	<div class="ui-card">
+		<div class="ui-card__header">
+			<h4 class="ui-card__title">결과</h4>
+		</div>
+		<div class="ui-card__body guide__row">
+			<div class="dynamic-content" data-source="/html/include/guide/_guide_v_class.html"></div>
+			<div
+				class="dynamic-content"
+				data-source="/html/include/guide/_guide_v_class.html"
+				data-variant="ui-btn--contained"
+			></div>
+		</div>
+	</div>
+</div>
+
+<div class="grid grid--2">
+	<div class="ui-card">
+		<div class="ui-card__header">
+			<h4 class="ui-card__title">② 속성이 있다 / 없다 — 속성 묶음을 통째로</h4>
+		</div>
+		<div class="ui-card__body">
+			<textarea class="guide__src" data-raw readonly aria-label="코드 예시">
+				<!-- 파셜 _guide_v_attrs.html — 받은 속성 묶음을 공통 체크박스에 그대로 이어 넘긴다 -->
+				<div class="guide__row">
+					<div
+						class="dynamic-content"
+						data-source="/html/include/ui/_ui_checkbox.html"
+						data-id="{{chkId}}"
+						data-label="체크"
+						data-attrs="{{attrs|}}"
+					></div>
+					<button type="button" class="ui-btn ui-btn--sm ui-btn--contained" {{disabled|}}>버튼</button>
+				</div>
+
+				<!-- 페이지 : 켤 때는 속성 글자를 넘기고, 끌 때는 안 넘긴다 -->
+				<div class="dynamic-content" data-source="/html/include/guide/_guide_v_attrs.html"
+					data-chk-id="guide_attrs_off"></div>
+				<div class="dynamic-content" data-source="/html/include/guide/_guide_v_attrs.html"
+					data-chk-id="guide_attrs_on"
+					data-attrs="checked"
+					data-disabled="disabled"></div>
+			</textarea>
+		</div>
+	</div>
+	<div class="ui-card">
+		<div class="ui-card__header">
+			<h4 class="ui-card__title">결과 — ① 안 넘김 · ② 넘김</h4>
+		</div>
+		<div class="ui-card__body guide__ops">
+			<div
+				class="dynamic-content"
+				data-source="/html/include/guide/_guide_v_attrs.html"
+				data-chk-id="guide_attrs_off"
+			></div>
+			<div
+				class="dynamic-content"
+				data-source="/html/include/guide/_guide_v_attrs.html"
+				data-chk-id="guide_attrs_on"
+				data-attrs="checked"
+				data-disabled="disabled"
+			></div>
+		</div>
+	</div>
+</div>
+<div class="grid grid--2">
+	<div class="ui-card guide__vs guide__vs--bad">
+		<div class="ui-card__header">
+			<h4 class="ui-card__title">✗ false 를 넘겼다 — 결과가 input false 가 된다</h4>
+		</div>
+		<div class="ui-card__body">
+			<textarea class="guide__src" data-raw readonly aria-label="틀린 예">
+				<div class="dynamic-content" data-source="…" data-attrs="false"></div>
+			</textarea>
+		</div>
+	</div>
+	<div class="ui-card guide__vs guide__vs--good">
+		<div class="ui-card__header">
+			<h4 class="ui-card__title">✓ 끄려면 속성을 적지 않는다</h4>
+		</div>
+		<div class="ui-card__body">
+			<textarea class="guide__src" data-raw readonly aria-label="맞는 예">
+				<div class="dynamic-content" data-source="…"></div>
+			</textarea>
+		</div>
+	</div>
+</div>
+
+<div class="grid grid--2">
+	<div class="ui-card">
+		<div class="ui-card__header">
+			<h4 class="ui-card__title">③ style · 보였다 / 숨었다</h4>
+		</div>
+		<div class="ui-card__body">
+			<textarea class="guide__src" data-raw readonly aria-label="코드 예시">
+				<!-- 파셜 _guide_v_style.html — flagAttrs 기본값 hidden -->
+				<div class="guide__row">
+					<span class="guide__bar"><i style="width: {{width|10}}%"></i></span>
+					<span class="guide__flag" {{{flagAttrs|hidden}}}>넘긴 화면에서만 보인다</span>
+				</div>
+
+				<!-- 페이지 : 빈 값을 넘겨 hidden 을 밀어낸다 -->
+				<div class="dynamic-content" data-source="/html/include/guide/_guide_v_style.html"></div>
+				<div class="dynamic-content" data-source="/html/include/guide/_guide_v_style.html"
+					data-width="72"
+					data-flag-attrs=""></div>
+			</textarea>
+		</div>
+	</div>
+	<div class="ui-card">
+		<div class="ui-card__header">
+			<h4 class="ui-card__title">결과 — ① 안 넘김 · ② 넘김</h4>
+		</div>
+		<div class="ui-card__body guide__ops">
+			<div class="dynamic-content" data-source="/html/include/guide/_guide_v_style.html"></div>
+			<div
+				class="dynamic-content"
+				data-source="/html/include/guide/_guide_v_style.html"
+				data-width="72"
+				data-flag-attrs=""
+			></div>
+		</div>
+	</div>
+</div>
+
+<div class="ui-card">
+	<div class="ui-card__body">
+		<ul class="guide__list">
+			<li><strong>모양만 다르면 class 이름을 넘긴다.</strong> 세 갈래 이상이어도 파셜은 그대로다.</li>
+			<li>
+				<strong>있다 / 없다는 속성 글자를 통째로</strong> 넘긴다 — <code>data-attrs="checked disabled"</code>. 끄는
+				방법은 「안 넘기는 것」 하나뿐이다.
+			</li>
+			<li>
+				<strong>빈 값은 넘긴 것이다</strong> — ③ 의 <code>data-flag-attrs=""</code> 가 빈 값으로
+				기본값(<code>hidden</code>)을 밀어내 보이게 만들었다.
+			</li>
+			<li>
+				<strong>속성 자리에 세 겹을 쓸 때는 값에 <code>"</code> 가 없어야 한다</strong> — 하나라도 있으면 속성이 거기서
+				끊긴다(<a href="#guide_vars_escape">3-3</a>).
+			</li>
+		</ul>
+	</div>
+</div>
+<details class="ui-card guide__src-fold">
+	<summary class="ui-card__header"><h4 class="ui-card__title">더 알아보기 — 실물 · 작은 차이</h4></summary>
+	<div class="ui-card__body">
+		<ul class="guide__list">
+			<li>
+				<strong>실물</strong> — 공통 체크박스 <code>ui/_ui_checkbox.html</code> 이 <code>{{{attrs&#124;}}}</code> 로
+				속성 묶음을 받는다. ② 의 데모 파셜은 받은 값을 그대로 이어 넘길 뿐이다.
+			</li>
+			<li>
+				<code>class="a {{x&#124;}}"</code> 를 안 넘기면 <strong>끝에 공백 하나</strong>가 남는다. 화면엔 영향이 없고
+				산출물 비교에서만 보인다.
+			</li>
+			<li>
+				<code>style</code> 자리는 두 겹으로 둔다 — <code>font-family: "Noto Sans"</code> 처럼 따옴표가 든 값도
+				<code>&amp;quot;</code> 로 나가 브라우저가 되돌려 읽는다.
+			</li>
+		</ul>
+	</div>
+</details>

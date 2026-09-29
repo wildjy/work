@@ -18,6 +18,7 @@
 				<p class="layout__brand">pub-base</p>
 				<!-- 공통 LNB -->
 				<!-- 현재 페이지 메뉴의 is-active 와 상위 메뉴의 is-open 은 common.js 의 lnbActive 가 붙인다 -->
+				<!-- 사용법 문서를 열면 현재 페이지 항목 아래에 그 페이지의 목차(.ui-lnb__toc)가 붙는다 — common.js 의 lnbTocBuild 가 절 제목을 읽어 만든다(여기 적지 않는다) -->
 				<nav class="ui-lnb">
 					<div class="ui-lnb__menu">
 						<ul class="ui-lnb__group">
@@ -111,10 +112,11 @@
 							<h2 class="section__title">툴팁</h2>
 							<p class="section__desc">4방향 — 아이콘에 올리면 열리고, 누르면 고정된다</p>
 						</div>
-						<details class="ui-card guide__src-fold">
+						<details class="ui-card guide__src-fold" open>
 							<summary class="ui-card__header"><h3 class="ui-card__title">소스 코드</h3></summary>
 							<div class="ui-card__body">
-								<textarea class="guide__src" data-raw readonly aria-label="소스 코드">
+								<p class="guide__src-path">부르는 쪽 — 페이지에 적는 줄</p>
+								<textarea class="guide__src" data-raw readonly aria-label="부르는 쪽 소스 코드">
 				&lt;div class="ui-choice-group"&gt;
 					&lt;div class="ui-label"&gt;
 						&lt;span&gt;위&lt;/span&gt;
@@ -158,6 +160,23 @@
 					&lt;/div&gt;
 				&lt;/div&gt;
 			</textarea>
+
+								<!-- 아래 칸은 파셜 파일을 그대로 읽어 온다(data-src-file) — 파셜을 고치면 여기도 따라 바뀐다 -->
+								<p class="guide__src-path">펼친 마크업 — /html/include/ui/_ui_tooltip.html</p>
+								<textarea
+									class="guide__src"
+									data-src-file="/html/include/ui/_ui_tooltip.html"
+									readonly
+									aria-label="툴팁 파셜 원문"
+								>
+&lt;!-- 공통 툴팁 — 받는 값 : data-id(필수) · data-text(필수) · data-position(top · right · bottom · left — 기본 top) · data-label(아이콘 버튼 이름 · 기본 도움말) --&gt;
+&lt;!-- position 은 아이콘 기준으로 레이어가 뜨는 쪽이다. 꼬리(화살표)는 아이콘을 가리킨다 --&gt;
+&lt;!--@ 마우스를 올리거나 포커스하면 열리고, 누르면 고정된다. 바깥을 누르거나 ESC 로 닫힌다(common.js) --&gt;
+&lt;span class="ui-tooltip ui-tooltip--{{position|top}}"&gt;
+	&lt;button type="button" class="ui-tooltip__btn" aria-describedby="{{id}}"&gt;{{label|도움말}}&lt;/button&gt;
+	&lt;span class="ui-tooltip__layer" id="{{id}}" role="tooltip" hidden&gt;{{text}}&lt;/span&gt;
+&lt;/span&gt;
+</textarea>
 							</div>
 						</details>
 						<div class="ui-card">

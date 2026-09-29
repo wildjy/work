@@ -1,0 +1,23 @@
+<!-- 사용법 문서 전용 데모 — 템플릿 전용 파셜. 6. 목록의 데모 표 셋이 이 template 을 함께 쓴다. 받는 값 없음.
+     ⚠ 이 파일의 마크업은 _guide_partial_*.html 코드 예시(코드 칸)에 그대로 실려 있다 — 고치면 그쪽도 같이 고친다. -->
+<template id="tpl_guide_demo_row">
+	<tr>
+		<td class="guide__term">{{@number}}번</td>
+		<td>{{name}} · {{role}}</td>
+	</tr>
+</template>
+
+<!-- 항목별 다른 템플릿 : JSON 항목에 _tpl 로 이 아이디를 적은 줄만 이걸로 그린다 -->
+<template id="tpl_guide_demo_row_alt">
+	<tr>
+		<td class="guide__term">{{@number}}번 (다른 템플릿)</td>
+		<td><strong>{{name}}</strong> · {{role}}</td>
+	</tr>
+</template>
+
+<!-- 0건일 때 : data-empty 로 가리킨다 -->
+<template id="tpl_guide_demo_row_none">
+	<tr>
+		<td colspan="2" class="ui-table__empty">표시할 데이터가 없습니다.</td>
+	</tr>
+</template>

@@ -18,6 +18,7 @@
 				<p class="layout__brand">pub-base</p>
 				<!-- 공통 LNB -->
 				<!-- 현재 페이지 메뉴의 is-active 와 상위 메뉴의 is-open 은 common.js 의 lnbActive 가 붙인다 -->
+				<!-- 사용법 문서를 열면 현재 페이지 항목 아래에 그 페이지의 목차(.ui-lnb__toc)가 붙는다 — common.js 의 lnbTocBuild 가 절 제목을 읽어 만든다(여기 적지 않는다) -->
 				<nav class="ui-lnb">
 					<div class="ui-lnb__menu">
 						<ul class="ui-lnb__group">
@@ -111,10 +112,11 @@
 							<h2 class="section__title">토글</h2>
 							<p class="section__desc">누르는 즉시 반영되는 설정에 쓴다 — 저장 버튼이 있으면 체크박스</p>
 						</div>
-						<details class="ui-card guide__src-fold">
+						<details class="ui-card guide__src-fold" open>
 							<summary class="ui-card__header"><h3 class="ui-card__title">소스 코드</h3></summary>
 							<div class="ui-card__body">
-								<textarea class="guide__src" data-raw readonly aria-label="소스 코드">
+								<p class="guide__src-path">부르는 쪽 — 페이지에 적는 줄</p>
+								<textarea class="guide__src" data-raw readonly aria-label="부르는 쪽 소스 코드">
 				&lt;div class="ui-choice-group ui-choice-group--column" role="group" aria-label="토글 예시"&gt;
 					&lt;div
 						class="dynamic-content"
@@ -138,6 +140,31 @@
 					&gt;&lt;/div&gt;
 				&lt;/div&gt;
 			</textarea>
+
+								<!-- 아래 칸은 파셜 파일을 그대로 읽어 온다(data-src-file) — 파셜을 고치면 여기도 따라 바뀐다 -->
+								<p class="guide__src-path">펼친 마크업 — /html/include/ui/_ui_toggle.html</p>
+								<textarea
+									class="guide__src"
+									data-src-file="/html/include/ui/_ui_toggle.html"
+									readonly
+									aria-label="토글 파셜 원문"
+								>
+&lt;!-- 공통 토글(스위치) — 받는 값 : data-id(필수) · data-label(필수) · data-name · data-value · data-attrs(checked · disabled) · data-modifier --&gt;
+&lt;!--@ 켜고 끄는 즉시 반영되는 설정에 쓴다. 저장 버튼을 눌러야 반영되는 선택은 체크박스를 쓴다 --&gt;
+&lt;label class="ui-toggle {{modifier|}}"&gt;
+	&lt;input
+		type="checkbox"
+		class="ui-toggle__input"
+		role="switch"
+		id="{{id}}"
+		name="{{name|}}"
+		value="{{value|}}"
+		{{{attrs|}}}
+	/&gt;
+	&lt;span class="ui-toggle__track"&gt;&lt;/span&gt;
+	&lt;span class="ui-toggle__label"&gt;{{label}}&lt;/span&gt;
+&lt;/label&gt;
+</textarea>
 							</div>
 						</details>
 						<div class="ui-card">
