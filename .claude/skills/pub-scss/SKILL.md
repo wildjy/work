@@ -72,9 +72,9 @@ public/font/Pretendard/Pretendard-*.woff2
 ⚠ 벤더 접두어 믹스인(border-radius · rotate · appearance)은 두지 않는다 — 속성을 그대로 쓴다.
 ⚠ 컴포넌트 모양(입력칸 · 표 · 그림자)을 믹스인으로 만들지 않는다 — 컴포넌트 스타일 파일에 둔다.
 
-### 아이콘 목록 (31개)
+### 아이콘 목록 (32개)
 
-`arr3-down` `arr3-up` `arrow-left-S` `arrow-right-S` `close-S` `close-M` `clear-S` `search1` `check-S` `checkbox-S` `checkbox-S-checked` `checkbox-S-disabled` `radio-M` `radio-M-checked` `radio-M-disabled` `info1` `info1-line` `error` `success` `caution` `plus-S` `minus-S` `more1` `cal` `time` `eye-S-view` `eye-S-close` `link` `copy1` `delete1` `edit`
+`arr3-down` `arr3-up` `arrow-left-S` `arrow-right-S` `close-S` `close-M` `clear-S` `search1` `check-S` `checkbox-S` `checkbox-S-checked` `checkbox-S-disabled` `radio-M` `radio-M-checked` `radio-M-disabled` `info1` `info1-line` `error` `success` `caution` `plus-S` `minus-S` `more1` `menu` `cal` `time` `eye-S-view` `eye-S-close` `link` `copy1` `delete1` `edit`
 
 **추가하는 법** : Figma 에서 SVG 로 내보낸다 → `<` `>` `#` 을 `%3C` `%3E` `%23` 으로, 큰따옴표를 작은따옴표로 바꾼다 →
 색 자리(`fill`·`stroke`)를 `'#{data-color($color)}'` 로 바꾼다(고정 색은 그대로) → `icon()` 의 `$iconList` 에 `'이름': "…"` 한 줄.

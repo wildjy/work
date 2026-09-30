@@ -360,7 +360,7 @@
 		margin-top: 32px;
 		padding-top: 20px;
 		border-top: 1px dashed variable.$color-border;
-		scroll-margin-top: 24px;
+		scroll-margin-top: 88px; // 고정 헤더(64px) + 24px
 		@include mixin.font-set(1rem, 600, variable.$color-text);
 	}
 	// 데모 한 줄 — 버튼 · 체크박스 · 막대를 가로로

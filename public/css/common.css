@@ -98,6 +98,11 @@ body {
   overflow-x: hidden;
 }
 
+html.has-modal body,
+html.has-side-open body {
+  overflow-x: visible;
+}
+
 html {
   scrollbar-width: thin;
   scrollbar-color: #8b8b8b transparent;
@@ -257,6 +262,10 @@ textarea {
   font-weight: 700;
 }
 
+html.has-side-open {
+  overflow: hidden;
+}
+
 .layout {
   display: -webkit-box;
   display: -ms-flexbox;
@@ -331,18 +340,57 @@ textarea {
   padding: 32px 32px 80px;
 }
 @media (max-width: 1000px) {
-  .layout {
-    -webkit-box-orient: vertical;
-    -webkit-box-direction: normal;
-        -ms-flex-direction: column;
-            flex-direction: column;
+  .layout::before {
+    content: "";
+    position: fixed;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    z-index: 800;
+    background-color: rgba(0, 0, 0, 0.32);
+    opacity: 0;
+    visibility: hidden;
+    -webkit-transition: opacity 250ms cubic-bezier(0.4, 0, 0.2, 1), visibility 0s linear 250ms;
+    transition: opacity 250ms cubic-bezier(0.4, 0, 0.2, 1), visibility 0s linear 250ms;
   }
   .layout__side {
-    position: static;
-    width: auto;
+    position: fixed;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    z-index: 810;
+    width: 80%;
+    min-width: 300px;
+    max-width: 400px;
     height: auto;
     border-right: 0;
-    border-bottom: 1px solid #e1e1e3;
+    -ms-scroll-chaining: none;
+        overscroll-behavior: contain;
+    -webkit-transform: translateX(-100%);
+            transform: translateX(-100%);
+    visibility: hidden;
+    -webkit-transition: visibility 0s linear 250ms, -webkit-transform 250ms cubic-bezier(0.4, 0, 0.2, 1);
+    transition: visibility 0s linear 250ms, -webkit-transform 250ms cubic-bezier(0.4, 0, 0.2, 1);
+    transition: transform 250ms cubic-bezier(0.4, 0, 0.2, 1), visibility 0s linear 250ms;
+    transition: transform 250ms cubic-bezier(0.4, 0, 0.2, 1), visibility 0s linear 250ms, -webkit-transform 250ms cubic-bezier(0.4, 0, 0.2, 1);
+  }
+  .layout.is-side-open::before {
+    opacity: 1;
+    visibility: visible;
+    -webkit-transition: opacity 250ms cubic-bezier(0.4, 0, 0.2, 1);
+    transition: opacity 250ms cubic-bezier(0.4, 0, 0.2, 1);
+  }
+  .layout.is-side-open .layout__side {
+    -webkit-transform: none;
+            transform: none;
+    visibility: visible;
+    -webkit-box-shadow: 0 5px 5px -3px rgba(0, 0, 0, 0.2), 0 8px 10px 1px rgba(0, 0, 0, 0.14), 0 3px 14px 2px rgba(0, 0, 0, 0.12);
+            box-shadow: 0 5px 5px -3px rgba(0, 0, 0, 0.2), 0 8px 10px 1px rgba(0, 0, 0, 0.14), 0 3px 14px 2px rgba(0, 0, 0, 0.12);
+    -webkit-transition: -webkit-transform 250ms cubic-bezier(0.4, 0, 0.2, 1);
+    transition: -webkit-transform 250ms cubic-bezier(0.4, 0, 0.2, 1);
+    transition: transform 250ms cubic-bezier(0.4, 0, 0.2, 1);
+    transition: transform 250ms cubic-bezier(0.4, 0, 0.2, 1), -webkit-transform 250ms cubic-bezier(0.4, 0, 0.2, 1);
   }
   .layout__brand {
     height: 56px;
@@ -357,18 +405,23 @@ textarea {
 }
 
 .app-header {
+  position: sticky;
+  top: 0;
+  z-index: 100;
   display: -webkit-box;
   display: -ms-flexbox;
   display: flex;
   -webkit-box-align: center;
       -ms-flex-align: center;
           align-items: center;
+  gap: 8px;
   min-height: 64px;
   padding: 0 32px;
   border-bottom: 1px solid #e1e1e3;
   background-color: #ffffff;
 }
 .app-header__title {
+  min-width: 0;
   font-size: 1.25rem;
   font-weight: 600;
   color: #292a31;
@@ -376,6 +429,32 @@ textarea {
   text-overflow: ellipsis;
   white-space: nowrap;
   word-wrap: normal;
+}
+.app-header__menu {
+  display: none;
+  -webkit-box-flex: 0;
+      -ms-flex: none;
+          flex: none;
+  width: 40px;
+  height: 40px;
+  margin: 0 -8px 0 auto;
+  border-radius: 999px;
+  background-image: url("data:image/svg+xml;charset=utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='none'%3E%3Cpath d='M4 6H20M4 12H20M4 18H20' stroke='%23292a31' stroke-width='1.8' stroke-linecap='round'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: 24px;
+}
+.app-header__menu:hover {
+  background-color: #f9f9fa;
+}
+.app-header__menu:focus-visible {
+  outline: 2px solid #2264d1;
+  outline-offset: -2px;
+}
+@media (max-width: 1000px) {
+  .app-header__menu {
+    display: block;
+  }
 }
 @media (max-width: 750px) {
   .app-header {
@@ -388,7 +467,7 @@ textarea {
 }
 
 .section {
-  scroll-margin-top: 24px;
+  scroll-margin-top: 88px;
 }
 .section__head {
   margin-bottom: 16px;
@@ -2573,7 +2652,7 @@ html.has-modal {
   margin-top: 32px;
   padding-top: 20px;
   border-top: 1px dashed #d2d2d6;
-  scroll-margin-top: 24px;
+  scroll-margin-top: 88px;
   font-size: 1rem;
   font-weight: 600;
   color: #292a31;

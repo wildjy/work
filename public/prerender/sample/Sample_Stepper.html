@@ -197,6 +197,8 @@
 				<!-- 공통 헤더 -->
 				<header class="app-header">
 					<h1 class="app-header__title">Stepper</h1>
+					<!-- 메뉴 버튼 — 1000px 이하에서만 보인다(헤더 오른쪽 끝). 누르면 사이드(LNB)가 왼쪽에서 밀려 나온다 (common.js sideOpen · aria-expanded 도 JS 가 맞춘다) -->
+					<button type="button" class="app-header__menu" aria-label="메뉴 열기" aria-expanded="false"></button>
 				</header>
 
 				<main class="layout__main">

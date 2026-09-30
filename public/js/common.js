@@ -31,6 +31,7 @@
  *  8. 입력 지우기 버튼          clearInput (+ 입력 동기화)     .ui-input__clear
  *  9. 전체 선택 체크박스        CHECK_GROUPS
  * 10. LNB                     lnbActive                     .ui-lnb__link--toggle
+ *     작은 화면 드로어         sideOpen                      .app-header__menu → .layout__side (1000px 이하)
  * 11. 날짜 · 기간 달력          datePickerInit (jQuery UI)     [data-datepicker-day] · .ui-period[data-datepicker]
  * 12. 툴팁                    tooltipSet · tooltipCloseAll   .ui-tooltip__btn (hover · focus · 누르면 고정)
  * 13. 문서 코드 색칠          codeSource · codeHighlight    textarea.guide__src → .guide__code (사용법 문서 전용)
@@ -691,6 +692,61 @@ document.addEventListener('click', function (e) {
 	if (item) lnbSetOpen(item, !item.classList.contains('is-open'));
 });
 
+/* ── 10-1. 작은 화면 사이드(LNB) 드로어 ─────────────────────
+   1000px 이하에서 .layout__side 는 화면 왼쪽 밖에 있다가 헤더 메뉴 버튼(.app-header__menu)을 누르면
+   딤이 깔리며 왼쪽 → 오른쪽으로 밀려 나온다(폭 80% · 모양과 모션은 _layout.scss).
+   상태 : .layout 에 is-side-open(딤 = .layout::before) · <html> 에 has-side-open(스크롤 잠금) · 버튼 aria-expanded
+   닫기 : 딤 클릭 · ESC · 드로어 안 링크 클릭(같은 페이지 목차) · 큰 화면으로 넓어질 때
+   ⚠ 사이드는 큰 화면에서 늘 보이는 요소라 hidden 을 쓰지 않는다 — 닫힌 드로어는 스타일의 visibility 가 초점을 막는다. */
+var SIDE_MQ = window.matchMedia('(max-width: 1000px)'); // _variable.scss $breakpoint-medium 과 맞춘다
+
+function sideIsOpen() {
+	var layout = document.querySelector('.layout');
+	return !!layout && layout.classList.contains('is-side-open');
+}
+
+// open 을 빼면 뒤집는다
+function sideOpen(open) {
+	var layout = document.querySelector('.layout');
+	if (!layout) return;
+	var on = open === undefined ? !sideIsOpen() : !!open;
+	layout.classList.toggle('is-side-open', on);
+	document.documentElement.classList.toggle('has-side-open', on);
+	Array.prototype.forEach.call(document.querySelectorAll('.app-header__menu'), function (btn) {
+		btn.setAttribute('aria-expanded', on ? 'true' : 'false');
+		btn.setAttribute('aria-label', on ? '메뉴 닫기' : '메뉴 열기');
+	});
+	if (!on) return;
+	closeOpenLayers(null);
+	// 드로어 안 첫 링크로 초점을 옮긴다
+	var first = layout.querySelector('.layout__side a[href], .layout__side button');
+	if (first) first.focus({ preventScroll: true });
+}
+
+document.addEventListener('click', function (e) {
+	var t = e.target;
+	if (!t || !t.closest) return;
+	if (t.closest('.app-header__menu')) {
+		sideOpen();
+		return;
+	}
+	if (!sideIsOpen()) return;
+	// 딤(.layout::before)을 누르면 target 이 .layout 자신이다
+	if (t.classList.contains('layout') || t.closest('.layout__side a[href]')) sideOpen(false);
+});
+
+document.addEventListener('keydown', function (e) {
+	if (e.key !== 'Escape' || !sideIsOpen()) return;
+	sideOpen(false);
+	var btn = document.querySelector('.app-header__menu');
+	if (btn) btn.focus();
+});
+
+// 드로어를 연 채 큰 화면으로 넓히면 닫는다 (딤·스크롤 잠금이 남지 않게)
+SIDE_MQ.addEventListener('change', function (e) {
+	if (!e.matches && sideIsOpen()) sideOpen(false);
+});
+
 /* ── 11. 날짜 · 기간 달력 — jQuery UI datepicker ──────────────
    달력은 **jQuery UI 가 그리고** 모양만 스타일(.ui-datepicker)로 시안에 맞춘다.
    ⚠ 이 페이지에는 jQuery 와 jQuery UI 가 있어야 한다. 없으면 콘솔 경고만 남기고 건너뛴다.
@@ -1206,7 +1262,7 @@ onRender(function () {
 // ⚠ 이 목차는 **화면에서만** 만들어진다 — 산출물(prerender)에는 없다. 개발단이 읽을 마크업이 아니라 문서를 읽는 도구다.
 
 var TOC_TITLE = '.layout__main .section[id] > .section__head > .section__title';
-var TOC_OFFSET = 80; // 화면 위에서 이 안에 들어온 절을 「보고 있는 절」로 본다
+var TOC_OFFSET = 100; // 화면 위에서 이 안에 들어온 절을 「보고 있는 절」로 본다 — 고정 헤더(64px) + 절 이동 여백(scroll-margin-top 88px)보다 크게
 
 // 제목이 길면 「 — 」 앞까지만 쓴다(LNB 는 한 줄이다)
 function tocLabel(text) {

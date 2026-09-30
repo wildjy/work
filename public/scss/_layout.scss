@@ -6,6 +6,11 @@
 // ⚠ 공통 UI 컴포넌트(.ui-*)를 이 셀렉터 안에 넣지 않는다 — 배치만 여기서 잡는다.
 // ─────────────────────────────────────────────────────────────
 
+// 작은 화면에서 드로어가 열려 있는 동안 뒤 페이지 스크롤을 잠근다
+html.has-side-open {
+	overflow: hidden;
+}
+
 //**** 레이아웃 ****/
 // <div class="layout">
 //   <aside class="layout__side"> 브랜드 + LNB </aside>
@@ -54,14 +59,47 @@
 		}
 	}
 
+	// 작은 화면 : 사이드는 **왼쪽 드로어** — 화면 밖에 있다가 헤더 메뉴 버튼(.app-header__menu)으로 밀려 나온다
+	// 상태 : .layout 에 is-side-open · <html> 에 has-side-open (common.js sideOpen) · 딤 = .layout::before
+	// ⚠ 큰 화면에서는 늘 보이는 요소라 hidden 을 쓰지 않는다 — 닫힌 드로어는 visibility 로 초점까지 막는다
+	// 딤은 헤더까지 덮고(화면 전체), 드로어는 그 위에 화면 높이 전체로 깔린다 — 헤더(z-index 100) < 딤(800) < 드로어(810)
 	@include mixin.medium {
-		flex-direction: column;
+		&::before {
+			content: '';
+			@include mixin.position(fixed, $top: 0, $right: 0, $bottom: 0, $left: 0, $z-index: 800);
+			background-color: variable.$scrim;
+			opacity: 0;
+			visibility: hidden;
+			transition:
+				opacity variable.$duration-medium variable.$easing-standard,
+				visibility 0s linear variable.$duration-medium;
+		}
 		&__side {
-			position: static;
-			width: auto;
+			@include mixin.position(fixed, $top: 0, $bottom: 0, $left: 0, $z-index: 810);
+			width: 80%;
+			min-width: 300px;
+			max-width: 400px;
 			height: auto;
 			border-right: 0;
-			border-bottom: 1px solid variable.$color-divider;
+			overscroll-behavior: contain;
+			transform: translateX(-100%);
+			visibility: hidden;
+			transition:
+				transform variable.$duration-medium variable.$easing-standard,
+				visibility 0s linear variable.$duration-medium;
+		}
+		&.is-side-open {
+			&::before {
+				opacity: 1;
+				visibility: visible;
+				transition: opacity variable.$duration-medium variable.$easing-standard;
+			}
+			.layout__side {
+				transform: none;
+				visibility: visible;
+				box-shadow: variable.$elevation-8;
+				transition: transform variable.$duration-medium variable.$easing-standard;
+			}
 		}
 		&__brand {
 			height: 56px;
@@ -77,19 +115,47 @@
 }
 
 //**** 앱 헤더 ****/ — 파셜 include/common/_header.html
+// 스크롤해도 화면 위에 붙어 있다(sticky) — 절 이동 여백(.section scroll-margin-top)은 이 높이를 더해 잡는다
 .app-header {
+	@include mixin.position(sticky, $top: 0, $z-index: 100);
 	display: flex;
 	align-items: center;
+	gap: 8px;
 	min-height: 64px;
 	padding: 0 32px;
 	border-bottom: 1px solid variable.$color-divider;
 	background-color: variable.$color-surface;
 
 	&__title {
+		min-width: 0;
 		@include mixin.font-set(1.25rem, 600, variable.$color-text);
 		@include mixin.txt-shorten;
 	}
 
+	// 메뉴 버튼 — 사이드가 드로어로 바뀌는 크기(medium 이하)에서만 보인다 · 헤더 오른쪽 끝
+	&__menu {
+		display: none;
+		flex: none;
+		width: 40px;
+		height: 40px;
+		margin: 0 -8px 0 auto;
+		border-radius: variable.$radius-full;
+		@include mixin.background-data('menu', variable.$color-text, null, center, 24px);
+
+		&:hover {
+			background-color: variable.$color-hover;
+		}
+		&:focus-visible {
+			outline: 2px solid variable.$color-primary;
+			outline-offset: -2px;
+		}
+	}
+
+	@include mixin.medium {
+		&__menu {
+			display: block;
+		}
+	}
 	@include mixin.small {
 		min-height: 56px;
 		padding: 0 16px;
@@ -101,7 +167,7 @@
 
 //**** 구역 ****/ — 제목 + 설명 + 내용
 .section {
-	scroll-margin-top: 24px; // 목차·본문 링크로 건너뛸 때 제목이 화면 끝에 붙지 않게
+	scroll-margin-top: 88px; // 목차·본문 링크로 건너뛸 때 제목이 고정 헤더(64px)에 가리지 않게 — 헤더 + 24px
 
 	&__head {
 		margin-bottom: 16px;

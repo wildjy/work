@@ -29,6 +29,14 @@ body {
 body {
 	overflow-x: hidden;
 }
+// 스크롤 잠금(모달 has-modal · 드로어 has-side-open) 중에는 body 의 overflow-x 를 풀어 준다
+// ⚠ html 에 overflow 를 주면 body 의 overflow-x: hidden 이 뷰포트로 넘어가지 않고 body 자신에 걸려
+//    body 가 스크롤 영역(스크롤 0)이 된다 → sticky 헤더가 body 기준으로 바뀌어 문서 맨 위 자리로 튄다.
+//    가로 넘침은 잠금 중 html 의 overflow: hidden 이 뷰포트에서 자른다.
+html.has-modal body,
+html.has-side-open body {
+	overflow-x: visible;
+}
 // 페이지(뷰포트) 스크롤바 — 뷰포트 스크롤바는 root(html)에 걸어야 적용된다
 html {
 	@include mixin.scrollbar();

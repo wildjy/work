@@ -1,7 +1,7 @@
 ---
 name: pub-common-ui
 description: >-
-  공통 UI 컴포넌트를 화면에 넣거나 고칠 때 — 드롭다운·검색 드롭다운·입력+지우기+안내문·수량 스테퍼·LNB·탭·아코디언·토스트·모달(프레임·알림·확인창)·체크박스·라디오·토글·툴팁·날짜 입력·기간 입력(jQuery UI datepicker). 공통 UI 는 BEM(ui- 접두어 · is-/has- 상태) 네이밍이고, 보이고 숨기기는 상태 클래스 + hidden 속성, 동작은 onclick 없이 클래스·data-* 위임(public/js/common.js)이다. 마크업은 public/html/include/ui/_ui_*.html 파셜을 data-* 변수로 include 하고, 탭은 구조 규칙대로 직접 쓰고 모달은 프레임 파셜에 본문 파셜을 넘긴다. 파셜별 받는 값, 함수별 호출법, 새 컴포넌트를 추가할 때 함께 고칠 곳(eslint.config.js COMMON_FUNCTIONS · WORKLOG)을 담는다. ui-dropdown·ui-input·ui-stepper·ui-lnb·ui-tab·ui-accordion·ui-toast·ui-tooltip·ui-checkbox·ui-radio·ui-toggle·ui-modal·ui-period·ui-calendar·data-modal-open·data-toast·toggleMenu·dropdownSelect·modalOpen·tabActivate·accordionToggle·toastShow·stepperChange·CHECK_GROUPS·lnbActive·datepicker 키워드에서 사용.
+  공통 UI 컴포넌트를 화면에 넣거나 고칠 때 — 드롭다운·검색 드롭다운·입력+지우기+안내문·수량 스테퍼·LNB·사이드 드로어(모바일 햄버거 메뉴)·탭·아코디언·토스트·모달(프레임·알림·확인창)·체크박스·라디오·토글·툴팁·날짜 입력·기간 입력(jQuery UI datepicker). 공통 UI 는 BEM(ui- 접두어 · is-/has- 상태) 네이밍이고, 보이고 숨기기는 상태 클래스 + hidden 속성, 동작은 onclick 없이 클래스·data-* 위임(public/js/common.js)이다. 마크업은 public/html/include/ui/_ui_*.html 파셜을 data-* 변수로 include 하고, 탭은 구조 규칙대로 직접 쓰고 모달은 프레임 파셜에 본문 파셜을 넘긴다. 파셜별 받는 값, 함수별 호출법, 새 컴포넌트를 추가할 때 함께 고칠 곳(eslint.config.js COMMON_FUNCTIONS · WORKLOG)을 담는다. ui-dropdown·ui-input·ui-stepper·ui-lnb·ui-tab·ui-accordion·ui-toast·ui-tooltip·ui-checkbox·ui-radio·ui-toggle·ui-modal·ui-period·ui-calendar·data-modal-open·data-toast·toggleMenu·dropdownSelect·modalOpen·tabActivate·accordionToggle·toastShow·stepperChange·CHECK_GROUPS·lnbActive·sideOpen·사이드 드로어·햄버거·모바일 메뉴·드로어·datepicker 키워드에서 사용.
 ---
 # 공통 UI (`include/ui/_ui_*.html` + `public/js/common.js`)
 
@@ -160,10 +160,48 @@ description: >-
 - `.ui-lnb > .ui-lnb__menu > ul.ui-lnb__group > li.ui-lnb__item > a.ui-lnb__link[href]` · 하위 메뉴 `button.ui-lnb__link--toggle` + `.ui-lnb__sub[hidden]`.
 - 메뉴는 **파셜 안 마크업**(listRender 는 중첩 목록을 못 그린다). 단 **한 단계짜리 하위 목록**은 `ul.ui-lnb__group.dynamic-list` 로 JSON 에서 그려도 된다 — 「개발 확인용」이 `data/common/lnb_dev.json`(`title`·`href`) 을 쓴다. `lnbActive` 는 `dynamic-list-loaded` 에도 걸려 있다. `lnbActive()` 가 파일명 대조로 `is-active`, 하위가 활성이면 상위 `is-open` + 하위 목록 표시.
 - 자기 메뉴가 없는 상세·빈 화면은 `common.js` 의 `LNB_ALIAS` 에 `변형: '대표'`.
+- 작은 화면(1000px 이하)에서는 사이드가 **사이드 드로어**가 된다 → §5-1.
 - **이 페이지의 목차**(`.ui-lnb__toc`) — 본문에 `section.section[id]` 이 **두 개 이상**이면 그 절 제목을 모아 **현재 페이지 항목 아래**에 목차가 붙는다(`lnbTocBuild`). 스크롤하면 보고 있는 절의 링크에 `is-current`.
   목차를 파셜이나 JSON 에 따로 적지 않는다 — 절을 더하거나 순서를 바꾸면 그대로 따라온다. 제목이 길면 「 — 」 앞까지만 쓴다.
   ⚠ 목차에 넣으려면 **절에 `id` 가 있어야 한다**(`<section class="section" id="guide_slot">`). id 가 없는 절은 빠진다.
   ⚠ 화면에서만 만들어진다 — **산출물(prerender)에는 없다.** 개발단에 넘길 마크업이 아니라 문서를 읽는 도구다.
+
+## 5-1. 사이드 드로어 (모바일 LNB 드로어)
+
+> **명칭 : 「사이드 드로어」** — 작은 화면에서 LNB 가 들어 있는 사이드(`.layout__side`)가 헤더 햄버거 버튼으로 왼쪽에서 밀려 나오는 메뉴 레이어.
+> 「모바일 메뉴」·「햄버거 메뉴」·「LNB 드로어」로 부르면 이것이다. 26.10.01 도입(`docs/WORKLOG.md`).
+
+**동작 한 줄** — 1000px(`$breakpoint-medium`) 이하에서 사이드는 화면 왼쪽 밖에 있다가, 헤더 오른쪽 끝의 햄버거 버튼을 누르면 **딤이 헤더까지 덮고, 그 위에 폭 80%(최소 300 · 최대 400px) 레이어가 화면 높이 전체로** 왼쪽 → 오른쪽으로 밀려 나온다. 큰 화면에서는 늘 보이는 사이드 그대로다.
+
+| 구성 | 이름 | 자리 |
+| --- | --- | --- |
+| 햄버거 버튼 | `button.app-header__menu`(`aria-label` · `aria-expanded`) · 아이콘 `icon('menu')` | `include/common/_header.html` — 제목 뒤(오른쪽 끝) |
+| 레이어 | `.layout__side`(브랜드 + LNB 파셜) | 페이지 마크업 그대로 |
+| 딤 | `.layout::before` (마크업 없음) | `_layout.scss` |
+| 열림 상태 | `.layout.is-side-open` · `<html>.has-side-open`(스크롤 잠금) | `common.js` 가 붙인다 — 마크업에 쓰지 않는다 |
+| 함수 | `sideOpen(true \| false)` · 인자 없으면 뒤집기 | `common.js` 「10-1」 · `eslint.config.js` `COMMON_FUNCTIONS` |
+
+- **쌓임** : 헤더 100(sticky) < 딤 800 < 레이어 810 < 모달 900. 레이어가 열리면 헤더는 딤 아래에 보인다(버튼은 누를 수 없다).
+- **닫기** : 딤 클릭 · ESC(초점은 햄버거 버튼으로) · 레이어 안 링크 클릭 · 1000px 보다 넓어질 때(`matchMedia`).
+- **열 때** : 열린 드롭다운·달력을 닫고(`closeOpenLayers`), 초점을 레이어의 첫 링크로 옮긴다.
+- **모션** : `transform: translateX(-100%) → none` · 딤 `opacity` — `$duration-medium` · `$easing-standard`.
+- **페이지가 할 일은 없다** — `.layout > .layout__side` + `.layout__body` 안 헤더 파셜이면 자동으로 붙는다.
+
+**다른 프로젝트로 옮길 때 가져갈 것**
+
+1. `scss/_layout.scss` — `html.has-side-open` 잠금 · `.layout` 의 `@include mixin.medium` 안 `&::before` · `&__side` · `&.is-side-open` · `.app-header` 의 sticky · `&__menu`
+2. `scss/_reset.scss` — `html.has-modal body, html.has-side-open body { overflow-x: visible }` (⚠ 빠뜨리면 아래 함정 1)
+3. `scss/_mixin.scss` — `icon()` 의 `'menu'`
+4. `include/common/_header.html` — 햄버거 버튼
+5. `js/common.js` 「10-1. 작은 화면 사이드(LNB) 드로어」 블록 통째(`SIDE_MQ` · `sideIsOpen` · `sideOpen` · 클릭 · ESC · 넓힘) — 브레이크포인트를 바꾸면 `SIDE_MQ` 도 함께
+6. 고정 헤더 때문에 함께 바꾼 값 — `.section` · `.guide__sub` `scroll-margin-top: 88px`(헤더 64 + 24) · `TOC_OFFSET = 100`
+
+**함정 (실제로 겪은 것)**
+
+1. **스크롤한 채 열면 sticky 헤더가 맨 위로 튄다** — 잠금으로 `html` 에 `overflow: hidden` 이 붙으면 `body { overflow-x: hidden }` 이 뷰포트로 넘어가지 않고 `body` 자신에 걸려 `body` 가 스크롤 0 인 스크롤 영역이 된다. sticky 가 그 `body` 를 기준으로 삼아 문서 맨 위 자리로 간다. → 잠금 중에만 `body` 의 `overflow-x` 를 푼다(`_reset.scss`). 모달(`has-modal`)도 같은 원인이라 함께 막는다.
+2. **레이어를 닫을 때 `hidden` 을 쓰지 않는다** — 큰 화면에서는 늘 보이는 요소이고, `hidden` 은 슬라이드 모션도 죽인다. 닫힌 레이어는 `visibility: hidden`(닫힘 transition 끝에 걸리도록 지연)으로 키보드 초점까지 막는다.
+3. **딤은 헤더까지 덮는다** — 헤더를 딤 위로 올리고 레이어를 헤더 아래에서 시작하게 했던 안은 시안 의도와 달라 되돌렸다(26.10.01).
+4. **헤더가 sticky 라 절 이동 링크의 제목이 헤더에 가린다** — `scroll-margin-top` 과 목차 판정 `TOC_OFFSET` 을 헤더 높이만큼 늘린다.
 
 ## 6. 탭 — 파셜 없음, 구조대로 직접 쓴다
 

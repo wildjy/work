@@ -35,6 +35,7 @@ const COMMON_FUNCTIONS = Object.fromEntries(
 		'clearInput',
 		'checkGroupSyncAll',
 		'lnbActive',
+		'sideOpen',
 		'datePickerInit',
 		'codeSource',
 		'codeHighlight',
