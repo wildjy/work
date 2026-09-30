@@ -1,9 +1,16 @@
-<!-- 공통 드롭다운 — 받는 값 : data-items(JSON 경로 · 필수) · data-placeholder · data-modifier -->
-<div class="ui-dropdown {{modifier|}}">
-	<button type="button" class="ui-dropdown__btn is-placeholder" onclick="toggleMenu(this)">
+<!-- 공통 드롭다운 — 받는 값 : data-items(JSON 경로 · 필수) · data-placeholder · data-cls(class 전체 · 기본 ui-dropdown) -->
+<div class="{{cls|ui-dropdown}}">
+	<button
+		type="button"
+		class="ui-dropdown__btn is-placeholder"
+		onclick="toggleMenu(this)"
+	>
 		{{placeholder|선택해주세요.}}
 	</button>
-	<div class="ui-dropdown__list" hidden>
+	<div
+		class="ui-dropdown__list"
+		hidden
+	>
 		<ul
 			class="dynamic-list"
 			data-source="{{items}}"
@@ -12,4 +19,7 @@
 		></ul>
 	</div>
 </div>
-<div class="dynamic-content" data-source="/html/include/ui/_ui_dropdown_tpl.html"></div>
+<div
+	class="dynamic-content"
+	data-source="/html/include/ui/_ui_dropdown_tpl.html"
+></div>

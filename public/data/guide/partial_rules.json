@@ -47,7 +47,7 @@
   {
     "group": "call",
     "term": "class 를 더 줘도 사라진다",
-    "desc": "<code>replaceWith</code> 라 래퍼가 남지 않는다. 위치 보정은 <strong>형제 셀렉터</strong>나 파셜이 받는 <code>data-modifier</code> 로 한다"
+    "desc": "<code>replaceWith</code> 라 래퍼가 남지 않는다. 위치 보정은 <strong>형제 셀렉터</strong>나 파셜이 받는 <code>data-cls</code>(class 전체) 로 한다"
   },
   {
     "group": "call",

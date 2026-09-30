@@ -23,6 +23,7 @@ npm run prerender:watch             # 저장할 때마다 자동 재생성
 npm run lint                        # ESLint (JS · HTML 인라인 script)
 npx prettier --write <고친 파일>    # 정렬 — 고친 파일만
 npm run validate                    # 산출물 마크업 검사 (html-validate)
+npm run verify -- snap a            # 파셜을 고치기 전 산출물 보관 → 고친 뒤 verify -- cmp a 로 대조 (캡처 : shots · shots-cmp)
 ```
 
 > 🔒 **커밋 직전 검사가 걸려 있다**(simple-git-hooks → lint-staged → `scripts/precommit.js`).
@@ -161,7 +162,7 @@ public/
 3. **반복 목록은 JSON + `template` 요소.** 5행 이상이거나 행 수가 데이터에 따라 변하면 하드코딩하지 않는다. **0건 상태(`data-empty`)를 같은 커밋에서 함께** 만든다. → `pub-list-render`
 4. **「~일 때만 노출」은 CSS 로 숨기지 않는다.** 마크업에 두고 조건은 `@` 주석으로 넘긴다(개발단 조건부 렌더링). 「같은 자리의 상태 전환」만 상태 클래스로.
 5. **개발단에서 값이 채워지는 자리는 `{{ }}` 로 감싸 표시한다.** 사용량·금액·개수·조건부 문구. ⚠ **마커 안에 영문 한 단어만 넣지 않는다** — 파셜 변수·listRender 키로 잡혀 치환되거나 **지워진다**. → `pub-markup`
-6. **공통 UI 는 `include/ui/_ui_*.html` 파셜을 `data-*` 로 include 한다.** 마크업을 복사하지 않는다. 네이밍은 **BEM + `ui-` 접두어**(`ui-블록__요소--변형`), 상태는 **`is-*` · `has-*`** — JS 가 붙이는 상태는 마크업에 쓰지 않는다. **보이고 숨기기는 상태 클래스 + `hidden`** 이고(닫힌 채 시작하는 요소에 `hidden` 을 적는다 · `style.display` 금지), **동작은 `onclick` 없이 클래스·`data-*`**(`data-modal-open` · `data-toast` …)로 `common.js` 가 처리한다 — 페이지에 전용 토글 스크립트를 남기지 않는다. 탭과 확인창이 아닌 모달은 파셜 없이 구조 규칙대로 쓴다. 날짜는 달력을 손으로 짜지 않고 `data-datepicker-day` / `data-datepicker` 표시만 넣는다. 함수를 추가하면 `eslint.config.js` 의 `COMMON_FUNCTIONS` 도 맞춘다. → `pub-common-ui`
+6. **공통 UI 는 `include/ui/_ui_*.html` 파셜을 `data-*` 로 include 한다.** 마크업을 복사하지 않는다. 받는 값은 **`data-cls`(class 전체) · `data-attrs`(원문) · 마크업은 슬롯(`data-slot-*`)** 으로 통일한다(`docs/PARTIALS.md` 「공통 UI 파셜의 받는 값 규칙」). 네이밍은 **BEM + `ui-` 접두어**(`ui-블록__요소--변형`), 상태는 **`is-*` · `has-*`** — JS 가 붙이는 상태는 마크업에 쓰지 않는다. **보이고 숨기기는 상태 클래스 + `hidden`** 이고(닫힌 채 시작하는 요소에 `hidden` 을 적는다 · `style.display` 금지), **동작은 `onclick` 없이 클래스·`data-*`**(`data-modal-open` · `data-toast` …)로 `common.js` 가 처리한다 — 페이지에 전용 토글 스크립트를 남기지 않는다. 탭과 확인창이 아닌 모달은 파셜 없이 구조 규칙대로 쓴다. 날짜는 달력을 손으로 짜지 않고 `data-datepicker-day` / `data-datepicker` 표시만 넣는다. 함수를 추가하면 `eslint.config.js` 의 `COMMON_FUNCTIONS` 도 맞춘다. → `pub-common-ui`
 7. **같은 마크업이 두 곳 이상이면 파셜로 뺀다.** 차이(id·문구)는 먼저 통일하거나 `data-*` 로 넘긴다. → `pub-markup`
 8. **운영하며 갈아 끼울 컴포넌트는 틀(파셜)과 내용(JSON)을 가른다.** `type` → class, 노출은 `use`(`data-filter="use"`). → `pub-markup`
 9. **상태가 여러 개인 화면은 전환 페이지 + 상태별 페이지를 함께** 만들고 index 에 등록한다. → `pub-markup`

@@ -65,27 +65,32 @@ description: >-
 
 | 파셜 | 받는 값 (`data-*`, **굵게** = 필수) | 비고 |
 | --- | --- | --- |
-| `_ui_dropdown.html` | **`items`**(JSON 경로) · `placeholder` · `modifier` | 항목 JSON `text`·`value`·`state` |
-| `_ui_dropdown_search.html` | **`items`** · `placeholder` · `name` | |
+| `_ui_dropdown.html` | **`items`**(JSON 경로) · `placeholder` · `cls` | 항목 JSON `text`·`value`·`state` |
+| `_ui_dropdown_search.html` | **`items`** · `placeholder` · `name` · `cls` | |
 | `_ui_dropdown_tpl.html` | — | 위 둘이 안에서 include 한다. **직접 쓰지 않는다** |
-| `_ui_input.html` | **`id`** · `name` · `type` · `placeholder` · `value` · `modifier` · `helper` · `helper-type` | |
-| `_ui_stepper.html` | **`id`** · `name` · `value`(0) · `min`(0) · `max` | |
+| `_ui_input.html` | **`id`** · `name` · `type` · `placeholder`(원문) · `value` · `cls` · `box-cls` · `attrs` · `clear` · `slot-extra` · `slot-side` · `slot-helper` | §3 |
+| `_ui_search.html` | **`id`** · `name` · `placeholder`(원문) · `value` · `cls` · `box-cls` · `attrs` · `clear` · `search-label` · `slot-helper` | 결과 목록이 붙으면 검색 드롭다운 |
+| `_ui_textarea.html` | **`id`** · `name` · `placeholder`(원문) · `value` · `cls` · `box-cls` · `attrs` · `count` · `max` · `slot-helper` | |
+| `_ui_stepper.html` | **`id`** · `name` · `value`(0) · `min`(0) · `max` · `cls` · `attrs` | |
 | `_ui_lnb.html` | — | 메뉴는 **파셜 안에서** 고친다 · 「개발 확인용」 하위 목록만 `data/common/lnb_dev.json` |
 | `_ui_accordion.html` | **`items`** · `mode`(`single` \| `multiple`) | 항목 JSON `title`·`body`(HTML)·`state` |
 | `_ui_toast.html` | **`id`** · `text` · `type`(`success` \| `error`) | 페이지 끝에 둔다 |
-| `_ui_modal.html` | **`id`** · **`title`** · **`slot-body`**(본문 template 아이디) · `subtext` · `footer`(버튼 파셜 경로) · `cancel`(취소) · `confirm`(확인) · `modifier`(`ui-modal--md`) | 공통 모달 프레임 |
+| `_ui_modal.html` | **`id`** · **`title`** · **`slot-body`**(본문 template 아이디) · `subtext` · `footer`(버튼 파셜 경로) · `cancel`(취소) · `confirm`(확인) · `cls`(기본 `ui-modal ui-modal--md`) | 공통 모달 프레임 |
 | `_ui_modal_footer.html` | `cancel` · `confirm` | 프레임의 기본 버튼. **직접 쓰지 않는다** |
-| `_ui_modal_alert.html` | **`id`** · **`title`** · `subtext` · `text` · `slot-body`(본문 template 아이디) · `modifier`(`ui-modal--sm`) | 정보성 알림 — 버튼 없음 · **딤 클릭으로 닫힘** |
-| `_ui_modal_confirm.html` | **`id`** · **`title`** · `text` · `confirm`(확인) · `cancel`(취소) · `modifier`(추가 변형) | 확인창 전용(`ui-modal--confirm`) |
-| `_ui_checkbox.html` | **`id`** · **`label`** · `name` · `value` · `attrs`(`checked` · `disabled`) · `modifier` | |
-| `_ui_radio.html` | **`id`** · **`name`** · **`label`** · `value` · `attrs` · `modifier` | 같은 묶음은 같은 `name` |
-| `_ui_toggle.html` | **`id`** · **`label`** · `name` · `value` · `attrs` · `modifier` | 즉시 반영되는 설정 |
+| `_ui_modal_alert.html` | **`id`** · **`title`** · `subtext` · `text` · `slot-body`(본문 template 아이디) · `cls`(기본 `ui-modal ui-modal--alert ui-modal--sm`) | 정보성 알림 — 버튼 없음 · **딤 클릭으로 닫힘** |
+| `_ui_modal_confirm.html` | **`id`** · **`title`** · `text` · `confirm`(확인) · `cancel`(취소) · `cls`(기본 `ui-modal ui-modal--confirm`) | 확인창 전용(`ui-modal--confirm`) |
+| `_ui_checkbox.html` | **`id`** · **`label`**(원문) · `name` · `value` · `attrs`(`checked` · `disabled`) · `cls` · `slot-extra`(라벨 뒤) | |
+| `_ui_radio.html` | **`id`** · **`name`** · **`label`**(원문) · `value` · `attrs` · `cls` · `slot-extra`(라벨 뒤) | 같은 묶음은 같은 `name` |
+| `_ui_toggle.html` | **`id`** · **`label`** · `name` · `value` · `attrs` · `cls` | 즉시 반영되는 설정 |
 | `_ui_tooltip.html` | **`id`** · **`text`** · `position`(`top` \| `right` \| `bottom` \| `left`) · `label`(도움말) | |
 | `_ui_date.html` | **`id`** · `name` · `placeholder` · `value` | jQuery UI 필요 |
 | `_ui_period.html` | **`id`** · `name` · `placeholder` | jQuery UI 필요 · 달력 id = `아이디_period` |
 
 > ⚠ **필수 값을 빼면 `{{id}}` · `{{items}}` 가 산출물에 글자 그대로 남는다.**
-> ⚠ `data-*` 는 **케밥**으로 적는다(`data-helper-type` → `{{helperType}}`). 대문자를 쓰면 브라우저만 치환에 실패한다.
+> ⚠ `data-*` 는 **케밥**으로 적는다(`data-box-cls` → `{{boxCls}}`). 대문자를 쓰면 브라우저만 치환에 실패한다.
+> ⚠ **받는 값 규칙(26.09.30)** — `cls` · `box-cls` 는 class **전체**(안 넘기면 기본 class) · `attrs` 는 **원문**(값 있는 속성은 `maxlength=&quot;40&quot;`) ·
+>    마크업은 **슬롯**(`slot-extra` · `slot-side` · `slot-helper`) · `placeholder` · 체크 · 라디오 `label` 은 **원문**(큰따옴표 금지) · `clear=""` 는 지우기 없음.
+>    왜 이렇게 정했는지는 `docs/PARTIALS.md` 「공통 UI 파셜의 받는 값 규칙」.
 > ⚠ 파셜 변수는 문자열뿐이다. **마크업 덩어리는 슬롯**(`data-slot-이름="#template"` → `{{{이름}}}`), **반복 데이터는 JSON 경로**로 넘긴다(`pub-markup` §2-1).
 > ⚠ **`id` 를 받는 파셜은 한 페이지에서 id 를 겹치지 않게** 넘긴다(모달·토스트·달력이 id 로 찾는다).
 
@@ -122,11 +127,20 @@ description: >-
 
 ```html
 <div class="dynamic-content" data-source="/html/include/ui/_ui_input.html" data-id="join_birth"
-     data-modifier="is-error" data-helper="생년월일 8자리를 입력해주세요." data-helper-type="ui-helper--error"></div>
+     data-cls="ui-input is-error" data-slot-helper="#join_birth_helper"></div>
+<template id="join_birth_helper">
+	<p class="ui-helper ui-helper--error">생년월일 8자리를 입력해주세요.</p>
+</template>
+
+<!-- 옆에 버튼 : 필드를 한 줄로(ui-field--row) + 버튼은 side 슬롯 -->
+<div class="dynamic-content" data-source="/html/include/ui/_ui_input.html" data-id="join_phone"
+     data-attrs="inputmode=&quot;numeric&quot; maxlength=&quot;11&quot;" data-box-cls="ui-field ui-field--row" data-slot-side="#join_phone_side"></div>
+<template id="join_phone_side"><button type="button" class="ui-btn">인증 요청</button></template>
 ```
 
-- `modifier` → `.ui-input` 에 붙일 변형·조건 상태(`ui-input--sm` · `is-error` · `is-disabled`), `helper-type` → `ui-helper--error` / `--success` / `--info`.
-- `.ui-helper` 는 늘 마크업에 있고 문구가 없으면 비어 있다 → 스타일에서 `.ui-helper:empty { display: none }`.
+- `cls` → 입력칸 class 전체(`ui-input ui-input--sm` · `ui-input is-error` · `ui-input is-disabled`). 안내문은 `p.ui-helper` + `--error` / `--success` / `--info` 를 **슬롯**으로.
+- 안내문 슬롯을 안 넘기면 그 줄이 지워진다(빈 태그도 남지 않는다). 개발단이 문구를 비워 두면 `.ui-helper:empty { display: none }` 이 숨긴다.
+- 읽기 전용 · 수량 입력처럼 지우기가 없어야 하면 `data-clear=""`. 검색은 `_ui_search`, 여러 줄은 `_ui_textarea`(글자 수 `ui-textarea__count`).
 - 값이 있으면 `.ui-input` 에 `is-filled`, 지우기 버튼이 있으면 `has-value`. `disabled`·`readonly` 면 같은 `.ui-field` 의 `.ui-helper` 를 숨긴다.
 
 ## 4. 수량 스테퍼
@@ -212,7 +226,7 @@ description: >-
 ```
 
 - 대화상자 **최대 높이 90dvh**(모르는 브라우저는 90vh). 머리·버튼은 늘 보이고 본문만 스크롤된다.
-- 크기 변형 `ui-modal--sm`(360) · `--md`(560 · 기본) · `--lg`(800) → `data-modifier`.
+- 크기 변형 `ui-modal--sm`(360) · `--md`(560 · 기본) · `--lg`(800) → `data-cls="ui-modal ui-modal--lg"`(class 전체).
 
 ### 공통 프레임 — 본문은 파셜로 넘긴다
 
@@ -345,7 +359,7 @@ description: >-
 
 ## 새 공통 컴포넌트를 추가할 때
 
-1. **같은 것이 이미 있는지** 위 표에서 찾는다 — `data-*` 하나나 `modifier` 로 해결되면 새로 만들지 않는다.
+1. **같은 것이 이미 있는지** 위 표에서 찾는다 — `data-*` 하나나 `data-cls`(변형 class) · 슬롯으로 해결되면 새로 만들지 않는다.
 2. 이름은 §0 규칙(`ui-블록__요소--변형` · `is-*`)으로 정하고 `grep` 충돌 검사.
 3. 마크업은 `include/ui/_ui_이름.html` — 머리 주석에 **받는 `data-*` 와 필수 여부**. 반복 항목은 JSON + 템플릿(템플릿 필드 이름이 파셜 변수와 겹치지 않게). 닫힌 채 시작하는 요소에 `hidden`.
 4. 동작은 `common.js` 에 **위임 + `setOpen`** 으로. 초기화가 필요하면 `onRender(fn)`(세 시점)에 건다.

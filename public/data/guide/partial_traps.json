@@ -12,7 +12,7 @@
   {
     "trap": "래퍼 클래스가 사라진다",
     "what": "include 한 <code>div</code> 에 준 class 가 없다",
-    "how": "형제 셀렉터 · <code>data-modifier</code>"
+    "how": "형제 셀렉터 · <code>data-cls</code>(class 전체)"
   },
   {
     "trap": "넘기지 않은 키",
@@ -100,9 +100,9 @@
     "how": "큰따옴표로 적는다. <code>npx prettier --write</code> 가 자동으로 맞춘다"
   },
   {
-    "trap": "<strong>빈 값</strong>을 넘김 — <code>data-tone=\"\"</code>",
-    "what": "「넘긴 것」이라 <strong>기본값을 이긴다</strong>. 안 넘긴 것과 결과가 다르다",
-    "how": "기본값을 쓰려면 <strong>속성을 아예 적지 않는다</strong>"
+    "trap": "<strong>빈 값</strong>을 넘김 — <code>data-cls=\"\"</code>",
+    "what": "「넘긴 것」이라 <strong>기본값을 이긴다</strong> — class 가 통째로 비어 모양이 사라진다. 안 넘긴 것과 결과가 다르다",
+    "how": "기본값을 쓰려면 <strong>속성을 아예 적지 않는다</strong>. 비우는 것이 목적일 때만 빈 값을 넘긴다 — <code>data-clear=\"\"</code>(지우기 버튼 없앰)"
   },
   {
     "trap": "참 · 거짓을 문자열로 — <code>data-checked=\"false\"</code>",

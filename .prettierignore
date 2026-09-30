@@ -16,3 +16,11 @@ public/css
 
 # 외부 라이브러리 원본
 *.min.js
+
+# 공통 UI 파셜 중 슬롯 · attrs 줄을 가진 것 — 넘기지 않으면 프리렌더가 「혼자 있는 줄」을 지우는데,
+# prettier 가 그 줄들을 한 줄로 합치고 기본값 안의 태그(지우기 버튼)를 쪼갠다. 손으로 속성 한 줄에 하나로 둔다(26.09.30)
+public/html/include/ui/_ui_input.html
+public/html/include/ui/_ui_search.html
+public/html/include/ui/_ui_textarea.html
+public/html/include/ui/_ui_checkbox.html
+public/html/include/ui/_ui_radio.html

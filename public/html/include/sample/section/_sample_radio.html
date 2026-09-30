@@ -2,7 +2,9 @@
 <section class="section">
 	<div class="section__head">
 		<h2 class="section__title">라디오</h2>
-		<p class="section__desc">같은 묶음은 같은 name · 처음 선택은 data-attrs="checked"</p>
+		<p class="section__desc">
+			같은 묶음은 같은 name · 처음 선택은 data-attrs="checked" · 라벨 뒤 설명은 data-slot-extra
+		</p>
 	</div>
 	<details class="ui-card guide__src-fold" open>
 		<summary class="ui-card__header"><h3 class="ui-card__title">소스 코드</h3></summary>
@@ -26,7 +28,11 @@
 						data-name="sample_radio"
 						data-value="member"
 						data-label="멤버 공개"
+						data-slot-extra="#sample_radio2_desc"
 					></div>
+					<template id="sample_radio2_desc">
+						<p class="ui-helper ui-helper--info">워크스페이스 멤버만 볼 수 있습니다.</p>
+					</template>
 					<div
 						class="dynamic-content"
 						data-source="/html/include/ui/_ui_radio.html"
@@ -68,7 +74,11 @@
 					data-name="sample_radio"
 					data-value="member"
 					data-label="멤버 공개"
+					data-slot-extra="#sample_radio2_desc"
 				></div>
+				<template id="sample_radio2_desc">
+					<p class="ui-helper ui-helper--info">워크스페이스 멤버만 볼 수 있습니다.</p>
+				</template>
 				<div
 					class="dynamic-content"
 					data-source="/html/include/ui/_ui_radio.html"

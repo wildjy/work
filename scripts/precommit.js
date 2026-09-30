@@ -54,10 +54,13 @@ if (stagedSrc.length) {
 		process.stderr.write(r.stdout + r.stderr);
 		fail('프리렌더가 실패했습니다.', [], ['위 출력을 확인하세요.']);
 	}
-	// ⚠ prerender.js 의 경고(! 파셜 없음 · ! 데이터 없음 · ! 템플릿 없음)는 console.warn — stderr 로 나온다
+	// ⚠ prerender.js 의 경고(! 파셜 없음 · ! 데이터 없음 · ! 템플릿 없음 · ! 받지 않는 값 · ! 필수 값 빠짐)는 console.warn — stderr 로 나온다
 	const warns = lines(r.stdout + '\n' + r.stderr).filter((l) => l.trim().startsWith('!'));
 	if (warns.length) {
-		fail('프리렌더 경고가 있습니다(파셜·데이터·템플릿 경로).', warns, ['경로를 고친 뒤 다시 커밋하세요.']);
+		fail('프리렌더 경고가 있습니다(파셜·데이터·템플릿 경로 · 파셜 받는 값).', warns, [
+			'경로 · data-* 이름을 고친 뒤 다시 커밋하세요.',
+			'일부러 안 넘기는 자리는 파셜에 적는다 : <!-- ⚠ 받는 값 검사 제외 : 키 — 이유 -->',
+		]);
 	}
 
 	// 원본이 사라졌는데 남은 산출물

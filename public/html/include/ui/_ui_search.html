@@ -1,0 +1,26 @@
+<!-- 26.09.30 : 공통 검색 입력 — 필드(입력 + 지우기 + 검색 버튼 + 안내문) 한 세트. 결과 목록이 붙는 검색은 _ui_dropdown_search.html
+     받는 값 : data-id(필수) · data-name · data-value
+               data-placeholder(기본 검색어를 입력해주세요.) — 원문 · 큰따옴표는 넣지 않는다
+               data-cls — 입력칸 class 전체(기본 ui-input ui-input--search) : 작은 크기 ui-input ui-input--search ui-input--sm
+               data-box-cls — 필드 class 전체(기본 ui-field)
+               data-attrs — 입력에 더할 속성(원문) : disabled · maxlength=&quot;40&quot;
+               data-clear — 지우기 버튼. 없애려면 빈 값("")을 넘긴다
+               data-search-label — 검색 버튼 글자(화면에는 아이콘 · 읽기용, 기본 검색) : 주소 검색
+               data-slot-helper — 안내문 template : p 태그 ui-helper(--error · --success · --info)
+     ⚠ 슬롯 · attrs 줄은 넘기지 않으면 프리렌더가 그 줄을 지운다 — 줄에 혼자 둔다. 그래서 이 파일은 prettier 가 정렬하지 않는다(.prettierignore). -->
+<div class="{{boxCls|ui-field}}">
+	<div class="{{cls|ui-input ui-input--search}}">
+		<input
+			type="text"
+			id="{{id}}"
+			name="{{name|}}"
+			{{{attrs|}}}
+			placeholder="{{{placeholder|검색어를 입력해주세요.}}}"
+			value="{{value|}}"
+		/>
+		{{{clear|<button type="button" class="ui-input__clear">지우기</button>}}}
+		<!--@ 검색 실행은 개발 연동 -->
+		<button type="button" class="ui-input__search">{{searchLabel|검색}}</button>
+	</div>
+	{{{helper|}}}
+</div>

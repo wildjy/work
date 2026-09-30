@@ -12,3 +12,6 @@ Thumbs.db
 /_site
 
 # ⚠ public/prerender/ 는 제외하지 않는다 — index.html 이 산출물을 링크한다. 원본과 함께 커밋한다.
+
+# 산출물 대조 · 캡처 결과 (scripts/verify_prerender.js)
+/.verify/

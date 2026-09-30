@@ -5,24 +5,54 @@
 	<div class="ui-lnb__menu">
 		<ul class="ui-lnb__group">
 			<li class="ui-lnb__item">
-				<a class="ui-lnb__link" href="/index.html">작업 목록</a>
+				<a
+					class="ui-lnb__link"
+					href="/index.html"
+					>작업 목록</a
+				>
 			</li>
 			<li class="ui-lnb__item">
-				<button type="button" class="ui-lnb__link ui-lnb__link--toggle" aria-expanded="false">사용법</button>
-				<div class="ui-lnb__sub" hidden>
+				<button
+					type="button"
+					class="ui-lnb__link ui-lnb__link--toggle"
+					aria-expanded="false"
+				>
+					사용법
+				</button>
+				<div
+					class="ui-lnb__sub"
+					hidden
+				>
 					<ul class="ui-lnb__group">
 						<li class="ui-lnb__item">
-							<a class="ui-lnb__link" href="/html/guide/Guide_Structure.html">폴더 구조</a>
+							<a
+								class="ui-lnb__link"
+								href="/html/guide/Guide_Structure.html"
+								>폴더 구조</a
+							>
 						</li>
 						<li class="ui-lnb__item">
-							<a class="ui-lnb__link" href="/html/guide/Guide_Partial.html">파셜(include)</a>
+							<a
+								class="ui-lnb__link"
+								href="/html/guide/Guide_Partial.html"
+								>파셜(include)</a
+							>
 						</li>
 					</ul>
 				</div>
 			</li>
 			<li class="ui-lnb__item">
-				<button type="button" class="ui-lnb__link ui-lnb__link--toggle" aria-expanded="false">개발 확인용</button>
-				<div class="ui-lnb__sub" hidden>
+				<button
+					type="button"
+					class="ui-lnb__link ui-lnb__link--toggle"
+					aria-expanded="false"
+				>
+					개발 확인용
+				</button>
+				<div
+					class="ui-lnb__sub"
+					hidden
+				>
 					<!--@ 개발 확인용 페이지 목록은 /data/common/lnb_dev.json 에서 고친다 -->
 					<ul
 						class="ui-lnb__group dynamic-list"
@@ -38,7 +68,11 @@
 <!-- 목록 템플릿 (listRender.js 가 JSON 을 순회해 렌더) -->
 <template id="tpl_lnb_dev">
 	<li class="ui-lnb__item">
-		<a class="ui-lnb__link" href="{{href}}">{{title}}</a>
+		<a
+			class="ui-lnb__link"
+			href="{{href}}"
+			>{{title}}</a
+		>
 	</li>
 </template>
 <template id="tpl_lnb_dev_none">

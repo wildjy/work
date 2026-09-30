@@ -188,7 +188,12 @@ function fillSrcFiles(src, ctx) {
 			console.warn('  ! 원문 파일 없음:', file);
 			return m;
 		}
-		return open + '\r\n' + fs.readFileSync(p, 'utf8').replace(/\s+$/, '') + '\r\n' + close;
+		// ⚠ 원문에 닫는 textarea 가 있으면(여러 줄 입력 파셜) 바깥 칸이 거기서 닫힌다 — 그것만 &lt; 로 적는다(화면에는 < 로 보인다)
+		const text = fs
+			.readFileSync(p, 'utf8')
+			.replace(/\s+$/, '')
+			.replace(/<\/textarea/gi, '&lt;/textarea');
+		return open + '\r\n' + text + '\r\n' + close;
 	});
 }
 
@@ -565,6 +570,50 @@ function fillSlots(str, slots, vars) {
 	});
 }
 
+// 받는 값 검사(26.09.30) — 파셜을 펼칠 때 「부르는 쪽이 넘긴 값」과 「파셜이 받는 자리」를 맞춰 본다.
+//   ① 받지 않는 값 : 넘긴 data-* · data-slot-* 가 파셜 안에 {{ }} 자리로 없다 — 오타 · 옛 이름(data-modifier 등)
+//   ② 필수 값 빠짐 : 기본값 없는 {{key}} 자리를 넘기지 않았다 — 산출물에 {{key}} 가 글자로 남는다
+//   경고는 「!」 로 시작해 커밋 훅(precommit.js)이 막는다. 파셜 머리 주석의 「받는 값」은 사람이 읽는 것이고
+//   **기준은 파셜 본문의 {{ }} 자리**다 — 주석과 본문이 어긋나도 본문을 따른다.
+// ⚠ 원문 칸(textarea data-raw · data-src-file) 안은 보지 않는다 — protectRaw 가 자리표로 바꾼 뒤에 부른다.
+// ⚠ template 요소 · 주석 · code 요소 안의 기본값 없는 자리는 필수로 보지 않는다 — 목록 template 의 행 값이거나 설명이다.
+//    받는 자리로는 센다(파셜 변수가 먼저 먹으므로 넘기면 실제로 채워진다).
+// ⚠ 검사만 한다 — 치환 규칙이 아니므로 dynamicImport.js 에 짝이 없다.
+const VAR_ANY_RE = /\{\{\{?\s*([\w@.-]+)\s*(\|[^}]*?)?\s*\}?\}\}/g;
+function declaredVars(content) {
+	const all = new Set();
+	const required = new Set();
+	content.replace(VAR_ANY_RE, (m, k) => all.add(k));
+	content
+		.replace(/<template\b[\s\S]*?<\/template>/gi, '')
+		.replace(/<!--[\s\S]*?-->/g, '')
+		.replace(/<code\b[\s\S]*?<\/code>/gi, '') // 설명 글 속 문법 보기
+		.replace(VAR_ANY_RE, (m, k, d) => {
+			if (d === undefined && k[0] !== '@') required.add(k);
+			return m;
+		});
+	// 일부러 안 넘기는 자리 — 파셜에 적는다 : <!-- ⚠ 받는 값 검사 제외 : memo · note — 이유 -->
+	const skip = content.match(/받는 값 검사 제외\s*:\s*([\w@. ·,-]+)/);
+	if (skip) skip[1].split(/[\s·,]+/).forEach((k) => required.delete(k));
+	return { all, required };
+}
+// data-slot-helper → slotHelper → helper (resolveSlots 와 같은 규칙)
+const slotName = (k) => {
+	const m = k.match(/^slot([A-Z]\w*)$/);
+	return m ? m[1].charAt(0).toLowerCase() + m[1].slice(1) : k;
+};
+const toAttr = (k) => 'data-' + k.replace(/[A-Z]/g, (c) => '-' + c.toLowerCase());
+function checkVars(file, declared, passed, where) {
+	const at = rel(file) + ' ← ' + rel(where);
+	const got = new Set(passed.map(slotName));
+	passed.forEach((k) => {
+		if (!declared.all.has(slotName(k))) console.warn('  ! 받지 않는 값:', toAttr(k), '—', at);
+	});
+	declared.required.forEach((k) => {
+		if (!got.has(k)) console.warn('  ! 필수 값 빠짐:', toAttr(k), '—', at);
+	});
+}
+
 function expandPartials(html, baseDir, stack, ctx) {
 	return html.replace(PARTIAL_RE, (tag, offset, whole) => {
 		if (!IS_PARTIAL.test(tag)) return tag;
@@ -591,6 +640,7 @@ function expandPartials(html, baseDir, stack, ctx) {
 		// 슬롯 template 은 include 와 같은 파일에 둘 수 있다 — 안쪽 include 가 쓰기 전에 거둔다
 		Object.assign(ctx.templates, collectTemplates(content));
 		const vars = partialVars(tag);
+		checkVars(file, declaredVars(content), Object.keys(vars), stack[stack.length - 1]);
 		const slots = resolveSlots(vars, ctx);
 		// ⚠ vars 가 비어도 부른다 — {{key|기본값}} 을 채워야 하기 때문이다.
 		//    기본값이 없는 {{key}} 는 여전히 그대로 남으므로 목록 template 은 안전하다.

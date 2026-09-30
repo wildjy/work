@@ -105,7 +105,7 @@ DOMContentLoaded
 | **태그는 `div`** | 프리렌더가 `div` 만 잡는다(`PARTIAL_RE`). `span`·`li`·`td` 자리에는 파셜을 못 넣는다 — 문장 한가운데 툴팁을 넣지 못하는 이유다(`.ui-label` 을 flex 로 두고 옆에 둔다) |
 | **컨테이너는 비운다** | `<div …></div>`. 안에 내용을 적으면 전개 대상이 아니다. 슬롯도 내용을 넣지 않고 template 요소를 가리킨다 |
 | **경로는 루트 기준** | 파셜은 **「심어진 페이지」 기준**으로 풀리므로, 깊이가 다른 페이지들이 같은 파셜을 쓰면 `./` 로는 한 값으로 맞출 수가 없다. 그래서 `/html/include/…` 로 적는다 — 페이지 폴더와 무관해진다. 파셜 위치 기준(`./_x.html`)으로 적으면 404 |
-| **class 를 더 줘도 사라진다** | `replaceWith` 라 래퍼가 남지 않는다. 위치 보정은 **형제 셀렉터**나 파셜이 받는 `data-modifier` 로 한다 |
+| **class 를 더 줘도 사라진다** | `replaceWith` 라 래퍼가 남지 않는다. 위치 보정은 **형제 셀렉터**나 파셜이 받는 `data-cls`(class 전체) 로 한다 |
 | **주석 처리하면 전개되지 않는다** | 런타임·프리렌더 모두 주석 안은 건너뛴다. 잠깐 끄고 싶을 때 안전하게 쓸 수 있다 |
 | **순환 include 를 만들지 않는다** | 프리렌더는 경고하고 건너뛰지만 **브라우저에는 방어가 없다** — 요청이 멈추지 않는다 |
 
@@ -181,6 +181,10 @@ DOMContentLoaded
 
 - `{{{attrs|}}}` 가 **한 줄을 통째로** 차지하면(공통 토글처럼 속성을 줄마다 적은 태그) 넘기지 않았을 때 프리렌더가 **그 줄을 지운다.** 넘겼으면 남는다.
   ⚠ 26.09.28 전의 `prerender.js` 는 **슬롯만 보고** 판정해 `data-attrs` 를 넘겨도 지웠다 — `disabled` 가 산출물에서만 빠졌다.
+- **값이 있는 속성도 넘긴다** — 원문 자리라 `maxlength="40"` 같은 것도 들어간다. 부르는 쪽 따옴표 안에 적으므로 큰따옴표는 `&quot;` 로 쓴다.
+  `data-attrs="maxlength=&quot;40&quot; inputmode=&quot;numeric&quot;"` → 산출물 `maxlength="40" inputmode="numeric"` (두 러너 모두 엔티티를 풀어 넣는다).
+- ⚠ 슬롯 · `attrs` 줄을 가진 파셜(`_ui_input` · `_ui_search` · `_ui_textarea` · `_ui_checkbox` · `_ui_radio`)은 **`.prettierignore` 대상**이다 —
+  prettier 가 「혼자 있는 줄」들을 한 줄로 합치고, 기본값 안의 태그(`{{{clear|<button …>}}}`)를 쪼갠다. 손으로 속성 한 줄에 하나로 둔다.
 
 ### 중첩 include 의 `data-source` 에도 변수를 쓸 수 있다
 
@@ -310,12 +314,37 @@ template   id="sample_invite_body"
 2. **파일명은 저장소 안에서 고유하게.** `_` 로 시작한다(프리렌더가 페이지로 오인하지 않는다).
 3. **머리 주석에 「받는 값」을 적는다.** 이 저장소의 모든 파셜이 같은 형식이다.
    ```html
-   <!-- 공통 입력 — 받는 값 : data-id(필수) · data-placeholder · data-value · data-modifier -->
+   <!-- 공통 입력 — 받는 값 : data-id(필수) · data-placeholder · data-value · data-cls(class 전체 · 기본 ui-input) -->
    ```
+   공통 UI 파셜은 아래 「받는 값 규칙」을 따른다.
 4. **재사용할 파셜은 `id` 를 `data-*` 로 받는다** — `id="{{id}}"` · `id="{{id}}_title"`. 고정 id 를 박으면 한 페이지에 두 번 못 넣는다.
 5. **활성 상태를 파셜에 박지 않는다.** 현재 메뉴·현재 탭은 `common.js`(`lnbActive`) 나 페이지의 `dynamic-content-loaded` 에서 붙인다.
 6. **새 이름은 `grep` 으로 충돌 검사**하고, 만들었으면 `docs/WORKLOG.md` 에 한 줄 남긴다.
 7. `npm run prerender` 로 **파셜 개수가 늘었는지** 확인한다 — 페이지마다 `✓ 파일명 (파셜 n / 목록 n · n행)` 이 찍힌다.
+8. 고친 뒤에는 **산출물 대조 · 캡처**로 다른 화면이 그대로인지 본다 — `npm run verify -- snap a` → 고치기 → `npm run prerender` → `npm run verify -- cmp a`
+   (캡처는 `shots a` / `shots b` → `shots-cmp a b`. 자세한 것은 `scripts/verify_prerender.js` 머리 주석)
+
+### 공통 UI 파셜의 받는 값 규칙 (`include/ui/_ui_*.html`, 26.09.30)
+
+| 받는 값 | 뜻 | 예 |
+| --- | --- | --- |
+| `data-cls` | 바깥 class **전체** — 변형 · 상태를 한 값으로. 안 넘기면 기본 class | `ui-input is-error` · `ui-modal ui-modal--lg` |
+| `data-box-cls` | 감싸는 필드 class 전체(입력류) | `ui-field ui-field--row`(옆에 버튼) |
+| `data-attrs` | 입력 태그에 더할 속성 — **원문** · 값 있는 속성은 `&quot;` | `checked disabled` · `maxlength=&quot;40&quot;` |
+| `data-slot-*` | 마크업 덩어리 — `extra`(입력칸 안 · 라벨 뒤) · `side`(입력칸 옆) · `helper`(안내문) | 비밀번호 보기 · 인증 요청 버튼 · 오류 / 성공 안내 |
+| `data-clear=""` | 지우기 버튼 없앰 | 읽기 전용 · 수량 입력 |
+| `data-placeholder` | **원문** — 안내 문구의 작은따옴표가 `&#39;` 로 바뀌지 않게. 큰따옴표는 넣지 않는다 | `'-' 없이 숫자만` |
+
+- **왜 class 전체인가** — 기본 class 를 파셜이 고정하고 덧붙이게 하면(예전 `data-modifier`) 기본 class 를 바꾸거나 뺄 수 없다.
+  전체를 받으면 변형 · 상태 · 크기를 한 자리에서 읽고, 안 넘긴 곳은 기본값으로 그대로다.
+- **왜 안내문은 슬롯인가** — 글자 하나(예전 `data-helper`)로는 오류 · 성공을 함께 두거나 링크 · 강조를 넣을 수 없다. 안 넘기면 줄째 지워져 빈 태그도 남지 않는다.
+- 이 규칙은 ara-pub 저장소에서 공통 입력 파셜 246곳에 적용하며 검증한 것을 옮겼다.
+- **받는 값 검사(프리렌더 · 커밋 훅)** — 파셜을 펼칠 때 넘긴 값과 파셜 본문의 `{{ }}` 자리를 맞춰 본다. 기준은 머리 주석이 아니라 **본문의 자리**다.
+  - `! 받지 않는 값: data-modifier — _ui_input.html ← 부른 파일` — 파셜에 그 자리가 없다(오타 · 옛 이름). 조용히 무시되던 것이다.
+  - `! 필수 값 빠짐: data-id — …` — 기본값 없는 `{{id}}` 를 안 넘겼다. 산출물에 `{{id}}` 가 글자로 남는다.
+  - template 요소 · 주석 · code 요소 안, 원문 칸(`data-raw` · `data-src-file`) 안은 필수로 보지 않는다(목록 행 값 · 설명 글).
+  - 일부러 안 넘기는 자리는 파셜에 `<!-- ⚠ 받는 값 검사 제외 : memo — 이유 -->` 로 적는다(`⚠` 라 산출물에서 걷힌다).
+  - 한계 — 슬롯 자리에 글자를 넘기는 것(`data-helper="…"` → `{{{helper|}}}`)은 이름이 같아 통과한다. template 안의 include 는 펼치지 않으므로 검사하지 않는다.
 
 ---
 
@@ -328,7 +357,7 @@ template   id="sample_invite_body"
 | 무엇이 다른가 | 쓰는 것 | 어디에 적혀 있나 |
 | --- | --- | --- |
 | **문구 한 줄** | `{{key\|기본값}}` 으로 받는다 | 값 넘기기 |
-| **모양만 (색 · 크기 · 정렬)** | class 이름을 값으로 받는다 — `class="ui-btn {{tone\|}}"` | class · 속성 · style |
+| **모양만 (색 · 크기 · 정렬)** | class **전체**를 값으로 받는다 — `class="{{cls\|ui-btn ui-btn--sm}}"` | class · 속성 · style |
 | **속성이 있다 / 없다** | `{{{attrs\|}}}` 한 자리에 `"checked disabled"` 를 통째로 | class · 속성 · style |
 | **길이 · 표시 여부** | `style="width: {{width\|10}}%"` | class · 속성 · style |
 | **덩어리가 통째로 있다 / 없다** | **경로 변수 + 빈 파셜** — `data-source="{{block\|/html/include/common/_none.html}}"` | 경로 변수 |
@@ -354,7 +383,7 @@ template   id="sample_invite_body"
 | --- | --- | --- |
 | **`div` 가 아닌 태그로 include** | 프리렌더가 전개하지 않아 **산출물에만 빈 자리**가 생긴다 | `div` 로 두고 레이아웃으로 위치를 맞춘다 |
 | **컨테이너에 내용을 적음** | 전개되지 않는다 | 비운다. 마크업은 슬롯으로 넘긴다 |
-| **래퍼 클래스가 사라진다** | include 한 `div` 에 준 class 가 없다 | 형제 셀렉터 · `data-modifier` |
+| **래퍼 클래스가 사라진다** | include 한 `div` 에 준 class 가 없다 | 형제 셀렉터 · `data-cls`(class 전체) |
 | **넘기지 않은 키** | `{{key}}` 가 **글자로 보인다** — React 처럼 값이 없다고 빈칸이 되지 않는다 | 파셜에 기본값을 준다(React 의 기본 props 와 같은 자리) |
 | **`data-*` 에 대문자** | 브라우저만 치환 실패 → **화면과 산출물이 다르다** | 케밥으로 적는다 (`data-make-new`) |
 | **고정 `id` 파셜을 두 번 include** | id 중복 → 라벨·`getElementById` 가 **먼저 것만** 가리킨다 | id 를 `data-*` 로 받는다. `npm run validate` 의 `no-dup-id` 가 막아 준다 |
@@ -372,7 +401,7 @@ template   id="sample_invite_body"
 | **Live Server 로 열기** | 파셜 조각에 라이브리로드 스크립트가 주입돼 마크업이 깨진다 | `npm run serve` (http://localhost:3500) (http://localhost:3500) |
 | **`template` 요소째 파셜로 빼서 사용처보다 **뒤**에서 include** | 슬롯을 채울 때 `template` 이 아직 없어 **본문이 빈 채로** 나간다 — 프리렌더만 경고를 찍는다 | `template` 은 **include 를 적은 파일에** 두고, 내용만 `<슬라이스>/body/` 파셜로 뺀다 |
 | **`data-*` 를 **작은따옴표**로** | **브라우저는 읽고 프리렌더는 못 읽는다** — `partialVars()` 의 정규식이 큰따옴표만 본다. 값이 조용히 기본값으로 떨어진다 | 큰따옴표로 적는다. `npx prettier --write` 가 자동으로 맞춘다 |
-| ****빈 값**을 넘김 — `data-tone=""`** | 「넘긴 것」이라 **기본값을 이긴다**. 안 넘긴 것과 결과가 다르다 | 기본값을 쓰려면 **속성을 아예 적지 않는다** |
+| ****빈 값**을 넘김 — `data-cls=""`** | 「넘긴 것」이라 **기본값을 이긴다** — class 가 통째로 비어 모양이 사라진다. 안 넘긴 것과 결과가 다르다 | 기본값을 쓰려면 **속성을 아예 적지 않는다**. 비우는 것이 목적일 때만 빈 값을 넘긴다 — `data-clear=""`(지우기 버튼 없앰) |
 | **참 · 거짓을 문자열로 — `data-checked="false"`** | 치환은 **글자 바꿔치기**라 참/거짓을 모른다. `<input false>` 가 되고 class 자리면 `class="ui-tag false"` 가 된다 | **끄는 방법은 「안 넘기는 것」 하나뿐이다** |
 | **기본값 안에 `}`** | 정규식이 `[^}]*?` 라 **거기서 끊긴다** — 기본값이 잘린 채 나온다 | 중괄호가 필요한 값은 기본값에 두지 않고 **넘겨서** 채운다 |
 | **파셜을 **「상태 예시」**인 채로 복사** | 파셜은 `is-active` · `is-error` 같은 상태를 보여주려 만들어 둔 것이 많다 — 복사하면 **그 상태가 따라온다** | 기준 마크업은 **실제 화면**에서 가져온다 |
@@ -408,7 +437,7 @@ template   id="sample_invite_body"
 
 ### 입력 — `include/ui/`
 
-**입력** — data-id(필수) · data-name · data-type · data-placeholder · data-value · data-modifier · data-helper · data-helper-type
+**입력** — data-id(필수) · data-name · data-type · data-placeholder(원문) · data-value · data-cls(class 전체 · 기본 ui-input) · data-box-cls · data-attrs(원문 : readonly · maxlength="40") · data-clear(빈 값이면 지우기 없음) · data-slot-extra · data-slot-side · data-slot-helper
 
 ```html
 <div
@@ -416,13 +445,39 @@ template   id="sample_invite_body"
 	data-source="/html/include/ui/_ui_input.html"
 	data-id="join_birth"
 	data-value="1999"
-	data-modifier="is-error"
-	data-helper="생년월일 8자리를 입력해주세요."
-	data-helper-type="ui-helper--error"
+	data-cls="ui-input is-error"
+	data-slot-helper="#join_birth_helper"
+></div>
+<template id="join_birth_helper">
+	<p class="ui-helper ui-helper--error">생년월일 8자리를 입력해주세요.</p>
+</template>
+```
+
+**검색** — data-id(필수) · data-name · data-placeholder(원문) · data-value · data-cls(기본 ui-input ui-input--search) · data-attrs · data-clear · data-search-label(검색 버튼 읽기용 글자) · data-slot-helper — 결과 목록이 붙으면 검색 드롭다운
+
+```html
+<div
+	class="dynamic-content"
+	data-source="/html/include/ui/_ui_search.html"
+	data-id="addr_search"
+	data-placeholder="주소를 검색해주세요."
+	data-search-label="주소 검색"
 ></div>
 ```
 
-**드롭다운** — data-items(JSON 경로 · 필수) · data-placeholder · data-modifier
+**여러 줄 입력** — data-id(필수) · data-name · data-placeholder(원문) · data-value · data-cls(기본 ui-textarea) · data-attrs(maxlength="500") · data-count · data-max · data-slot-helper
+
+```html
+<div
+	class="dynamic-content"
+	data-source="/html/include/ui/_ui_textarea.html"
+	data-id="req_memo"
+	data-attrs="maxlength=&quot;500&quot;"
+	data-max="500"
+></div>
+```
+
+**드롭다운** — data-items(JSON 경로 · 필수) · data-placeholder · data-cls(class 전체)
 
 ```html
 <div
@@ -433,7 +488,7 @@ template   id="sample_invite_body"
 ></div>
 ```
 
-**검색 드롭다운** — data-items(필수) · data-placeholder · data-name
+**검색 드롭다운** — data-items(필수) · data-placeholder · data-name · data-cls(class 전체)
 
 ```html
 <div
@@ -444,7 +499,7 @@ template   id="sample_invite_body"
 ></div>
 ```
 
-**수량 스테퍼** — data-id(필수) · data-name · data-value · data-min · data-max
+**수량 스테퍼** — data-id(필수) · data-name · data-value · data-min · data-max · data-cls(class 전체) · data-attrs(disabled)
 
 ```html
 <div
@@ -457,7 +512,7 @@ template   id="sample_invite_body"
 ></div>
 ```
 
-**날짜 · 기간** — data-id(필수) · data-name · data-placeholder · data-value — 이 페이지에 jQuery · jQuery UI 가 있어야 한다
+**날짜 · 기간** — data-id(필수) · data-name · data-placeholder · data-value(날짜만) — 이 페이지에 jQuery · jQuery UI 가 있어야 한다
 
 ```html
 <div class="dynamic-content" data-source="/html/include/ui/_ui_date.html" data-id="open_date"></div>
@@ -466,7 +521,7 @@ template   id="sample_invite_body"
 
 ### 선택 · 안내 — `include/ui/`
 
-**체크박스 · 라디오 · 토글** — data-id(필수) · data-label(필수) · data-name · data-value · data-attrs(checked · disabled) · data-modifier
+**체크박스 · 라디오 · 토글** — data-id(필수) · data-label(필수 · 체크 · 라디오는 원문) · data-name · data-value · data-attrs(원문 : checked · disabled · onchange="…") · data-cls(class 전체) · data-slot-extra(체크 · 라디오 — 라벨 뒤 설명)
 
 ```html
 <div
@@ -524,7 +579,7 @@ template   id="sample_invite_body"
 ></div>
 ```
 
-**확인창** — data-id(필수) · data-title(필수) · data-text · data-cancel · data-confirm · data-modifier
+**확인창** — data-id(필수) · data-title(필수) · data-text · data-cancel · data-confirm · data-cls(class 전체 · 기본 ui-modal ui-modal--confirm)
 
 ```html
 <div
@@ -537,7 +592,7 @@ template   id="sample_invite_body"
 ></div>
 ```
 
-**모달 프레임 (본문은 슬롯)** — data-id(필수) · data-title(필수) · data-slot-body(필수) · data-subtext · data-footer · data-cancel · data-confirm · data-modifier
+**모달 프레임 (본문은 슬롯)** — data-id(필수) · data-title(필수) · data-slot-body(필수) · data-subtext · data-footer · data-cancel · data-confirm · data-cls(class 전체 · 기본 ui-modal ui-modal--md)
 
 ```html
 <div
@@ -554,7 +609,7 @@ template   id="sample_invite_body"
 </template>
 ```
 
-**알림 모달 (버튼 없음)** — data-id(필수) · data-title(필수) · data-subtext · data-text · data-slot-body · data-modifier — data-text 와 슬롯은 택일
+**알림 모달 (버튼 없음)** — data-id(필수) · data-title(필수) · data-subtext · data-text · data-slot-body · data-cls(class 전체 · 기본 ui-modal ui-modal--alert ui-modal--sm) — data-text 와 슬롯은 택일
 
 ```html
 <div

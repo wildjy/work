@@ -1,9 +1,28 @@
-<!-- 공통 입력 — 받는 값 : data-id(필수) · data-name · data-type · data-placeholder · data-value · data-modifier · data-helper · data-helper-type -->
-<div class="ui-field">
-	<div class="ui-input {{modifier|}}">
-		<input type="{{type|text}}" id="{{id}}" name="{{name|}}" placeholder="{{placeholder|}}" value="{{value|}}" />
-		<button type="button" class="ui-input__clear">지우기</button>
+<!-- 26.09.30 : 공통 입력 — 필드(입력 + 지우기 + 안내문) 한 세트
+     받는 값 : data-id(필수) · data-name · data-type(기본 text · password · email …) · data-value
+               data-placeholder — 원문으로 넣는다(안내 문구의 작은따옴표가 &#39; 로 바뀌지 않게) · 큰따옴표는 넣지 않는다
+               data-cls — 입력칸 class 전체(기본 ui-input) : ui-input ui-input--sm · ui-input is-error · ui-input is-disabled
+               data-box-cls — 필드 class 전체(기본 ui-field)
+               data-attrs — 입력에 더할 속성(원문) : disabled · readonly · maxlength=&quot;40&quot; · inputmode=&quot;numeric&quot;
+               data-clear — 지우기 버튼. 없애려면 빈 값("")을 넘긴다(읽기 전용 · 수량 입력)
+               data-slot-extra — 입력칸 안, 지우기 뒤에 붙는 것 template : 비밀번호 보기 · 남은 시간
+               data-slot-side — 입력칸 옆(필드 안)에 붙는 것 template : 인증 요청 버튼
+               data-slot-helper — 안내문 template : p 태그 ui-helper(--error · --success · --info). 여러 줄도 된다
+     ⚠ 슬롯 · attrs 줄은 넘기지 않으면 프리렌더가 그 줄을 지운다 — 줄에 혼자 둔다. 그래서 이 파일은 prettier 가 정렬하지 않는다(.prettierignore).
+     ⚠ data-modifier(덧붙임) → data-cls(class 전체), data-helper · data-helper-type(글자) → data-slot-helper(마크업)로 바꿨다. -->
+<div class="{{boxCls|ui-field}}">
+	<div class="{{cls|ui-input}}">
+		<input
+			type="{{type|text}}"
+			id="{{id}}"
+			name="{{name|}}"
+			{{{attrs|}}}
+			placeholder="{{{placeholder|}}}"
+			value="{{value|}}"
+		/>
+		{{{clear|<button type="button" class="ui-input__clear">지우기</button>}}}
+		{{{extra|}}}
 	</div>
-	<!--@ 오류·성공일 때만 문구를 채운다. 비어 있으면 스타일에서 숨긴다 -->
-	<p class="ui-helper {{helperType|}}">{{helper|}}</p>
+	{{{side|}}}
+	{{{helper|}}}
 </div>

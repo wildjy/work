@@ -1,8 +1,8 @@
-<!-- 공통 확인창 — 받는 값 : data-id(필수) · data-title(필수) · data-text · data-confirm · data-cancel · data-modifier(추가 변형) -->
+<!-- 공통 확인창 — 받는 값 : data-id(필수) · data-title(필수) · data-text · data-confirm · data-cancel · data-cls(class 전체 · 기본 ui-modal ui-modal--confirm) -->
 <!--@ 열기 : data-modal-open="아이디" 버튼 또는 modalOpen('아이디') -->
 <!--@ 확인창은 닫기(X) 없이 취소 · 확인 중 하나를 고르게 한다 -->
 <div
-	class="ui-modal ui-modal--confirm {{modifier|}}"
+	class="{{cls|ui-modal ui-modal--confirm}}"
 	id="{{id}}"
 	role="dialog"
 	aria-modal="true"
@@ -11,15 +11,32 @@
 >
 	<div class="ui-modal__dialog">
 		<div class="ui-modal__header">
-			<h2 class="ui-modal__title" id="{{id}}_title">{{title}}</h2>
+			<h2
+				class="ui-modal__title"
+				id="{{id}}_title"
+			>
+				{{title}}
+			</h2>
 		</div>
 		<div class="ui-modal__body">
 			<p class="ui-modal__text">{{text|}}</p>
 		</div>
 		<div class="ui-modal__footer">
-			<button type="button" class="ui-btn" data-modal-close>{{cancel|취소}}</button>
+			<button
+				type="button"
+				class="ui-btn"
+				data-modal-close
+			>
+				{{cancel|취소}}
+			</button>
 			<!--@ 확인 동작은 개발 연동 — 처리 후 닫는다 -->
-			<button type="button" class="ui-btn ui-btn--contained" data-modal-close>{{confirm|확인}}</button>
+			<button
+				type="button"
+				class="ui-btn ui-btn--contained"
+				data-modal-close
+			>
+				{{confirm|확인}}
+			</button>
 		</div>
 	</div>
 </div>

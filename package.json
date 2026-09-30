@@ -19,7 +19,8 @@
     "prepare": "simple-git-hooks",
     "docs": "node scripts/docs_from_json.js",
     "docs:check": "node scripts/docs_from_json.js --check",
-    "sync": "node scripts/sync_runtime.js"
+    "sync": "node scripts/sync_runtime.js",
+    "verify": "node scripts/verify_prerender.js"
   },
   "engines": {
     "node": ">=20"

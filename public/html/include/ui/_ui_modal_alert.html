@@ -1,9 +1,9 @@
-<!-- 공통 알림 모달(정보성 · 버튼 없음) — 받는 값 : data-id(필수) · data-title(필수) · data-subtext · data-text · data-slot-body(본문 template 아이디) · data-modifier(크기 · 기본 ui-modal--sm) -->
+<!-- 공통 알림 모달(정보성 · 버튼 없음) — 받는 값 : data-id(필수) · data-title(필수) · data-subtext · data-text · data-slot-body(본문 template 아이디) · data-cls(class 전체 · 기본 ui-modal ui-modal--alert ui-modal--sm) -->
 <!-- 본문은 data-text 한 문단이 기본이다. 내용이 많으면 template 에 적어 data-slot-body="#아이디" 로 넘긴다(그때 data-text 는 넘기지 않는다) -->
 <!--@ 열기 : data-modal-open="아이디" 버튼 또는 modalOpen('아이디') -->
 <!--@ 버튼이 없는 모달이라 딤을 누르거나 닫기(X)로 닫는다(common.js) -->
 <div
-	class="ui-modal ui-modal--alert {{modifier|ui-modal--sm}}"
+	class="{{cls|ui-modal ui-modal--alert ui-modal--sm}}"
 	id="{{id}}"
 	role="dialog"
 	aria-modal="true"
@@ -12,13 +12,23 @@
 >
 	<div class="ui-modal__dialog">
 		<div class="ui-modal__header">
-			<h2 class="ui-modal__title" id="{{id}}_title">{{title}}</h2>
+			<h2
+				class="ui-modal__title"
+				id="{{id}}_title"
+			>
+				{{title}}
+			</h2>
 			<p class="ui-modal__subtext">{{subtext|}}</p>
 		</div>
 		<div class="ui-modal__body">
 			{{{body|}}}
 			<p class="ui-modal__text">{{text|}}</p>
 		</div>
-		<button type="button" class="ui-modal__close">닫기</button>
+		<button
+			type="button"
+			class="ui-modal__close"
+		>
+			닫기
+		</button>
 	</div>
 </div>

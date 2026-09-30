@@ -1,6 +1,20 @@
-<!-- 공통 체크박스 — 받는 값 : data-id(필수) · data-label(필수) · data-name · data-value · data-attrs(checked · disabled) · data-modifier -->
-<label class="ui-checkbox {{modifier|}}">
-	<input type="checkbox" class="ui-checkbox__input" id="{{id}}" name="{{name|}}" value="{{value|}}" {{{attrs|}}} />
+<!-- 26.09.30 : 공통 체크박스
+     받는 값 : data-id(필수) · data-label(필수 · 원문 — 필수 표시 em 태그를 그대로 넣는다) · data-name · data-value
+               data-cls — class 전체(기본 ui-checkbox) : ui-checkbox is-disabled 등
+               data-attrs — 입력에 더할 속성(원문) : checked · disabled · onchange=&quot;…&quot;
+               data-slot-extra — 라벨 뒤에 붙는 것 template(라벨 밖) : 설명 · 기타 사유 입력
+     ⚠ 슬롯 · attrs 줄은 넘기지 않으면 프리렌더가 그 줄을 지운다 — 줄에 혼자 둔다. 그래서 이 파일은 prettier 가 정렬하지 않는다(.prettierignore).
+     ⚠ 라벨(label 태그) 안에는 입력을 하나만 둔다 — 그래서 extra 는 라벨 밖, 바로 뒤에 붙는다. -->
+<label class="{{cls|ui-checkbox}}">
+	<input
+		type="checkbox"
+		class="ui-checkbox__input"
+		id="{{id}}"
+		name="{{name|}}"
+		{{{attrs|}}}
+		value="{{value|}}"
+	/>
 	<span class="ui-checkbox__box"></span>
-	<span class="ui-checkbox__label">{{label}}</span>
+	<span class="ui-checkbox__label">{{{label}}}</span>
 </label>
+{{{extra|}}}

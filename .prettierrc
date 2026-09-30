@@ -10,6 +10,10 @@
 		{
 			"files": ["*.json", "*.yml", "*.yaml"],
 			"options": { "useTabs": false }
+		},
+		{
+			"files": ["public/html/include/ui/*.html"],
+			"options": { "singleAttributePerLine": true }
 		}
 	]
 }

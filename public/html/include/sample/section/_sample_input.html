@@ -1,8 +1,10 @@
-<!-- 입력 구역 — 기본(라벨 옆 툴팁) · 오류 안내 -->
+<!-- 입력 구역 — 기본(라벨 옆 툴팁) · 오류 안내 · 옆 버튼 · 읽기 전용 · 검색 · 여러 줄 -->
 <section class="section">
 	<div class="section__head">
 		<h2 class="section__title">입력</h2>
-		<p class="section__desc">값을 넣으면 지우기 버튼 · 오류 안내문(helper)</p>
+		<p class="section__desc">
+			값을 넣으면 지우기 버튼 · 안내문은 슬롯(data-slot-helper) · 입력칸 옆 버튼(data-slot-side) · 검색 · 여러 줄 입력
+		</p>
 	</div>
 	<details class="ui-card guide__src-fold" open>
 		<summary class="ui-card__header"><h3 class="ui-card__title">소스 코드</h3></summary>
@@ -30,14 +32,69 @@
 					</div>
 					<div>
 						<label class="ui-label" for="sample_birth">입력 (오류 안내)</label>
+						<!-- data-cls 는 class 전체 : ui-input is-error · ui-input ui-input--sm · ui-input is-disabled -->
 						<div
 							class="dynamic-content"
 							data-source="/html/include/ui/_ui_input.html"
 							data-id="sample_birth"
 							data-value="1999"
-							data-modifier="is-error"
-							data-helper="생년월일 8자리를 입력해주세요."
-							data-helper-type="ui-helper--error"
+							data-cls="ui-input is-error"
+							data-slot-helper="#sample_birth_helper"
+						></div>
+						<template id="sample_birth_helper">
+							<p class="ui-helper ui-helper--error">생년월일 8자리를 입력해주세요.</p>
+						</template>
+					</div>
+					<div>
+						<label class="ui-label" for="sample_phone">입력 (옆 버튼 · 성공 안내)</label>
+						<div
+							class="dynamic-content"
+							data-source="/html/include/ui/_ui_input.html"
+							data-id="sample_phone"
+							data-value="01012345678"
+							data-attrs="inputmode=&quot;numeric&quot; maxlength=&quot;11&quot;"
+							data-box-cls="ui-field ui-field--row"
+							data-slot-side="#sample_phone_side"
+							data-slot-helper="#sample_phone_helper"
+						></div>
+						<template id="sample_phone_side">
+							<button type="button" class="ui-btn">인증 요청</button>
+						</template>
+						<template id="sample_phone_helper">
+							<p class="ui-helper ui-helper--success">인증번호를 보냈습니다.</p>
+						</template>
+					</div>
+					<div>
+						<label class="ui-label" for="sample_readonly">입력 (읽기 전용 · 지우기 없음)</label>
+						<div
+							class="dynamic-content"
+							data-source="/html/include/ui/_ui_input.html"
+							data-id="sample_readonly"
+							data-value="member@example.com"
+							data-cls="ui-input is-disabled"
+							data-attrs="readonly"
+							data-clear=""
+						></div>
+					</div>
+					<div>
+						<label class="ui-label" for="sample_search">검색</label>
+						<div
+							class="dynamic-content"
+							data-source="/html/include/ui/_ui_search.html"
+							data-id="sample_search"
+							data-placeholder="주소를 검색해주세요."
+							data-search-label="주소 검색"
+						></div>
+					</div>
+					<div>
+						<label class="ui-label" for="sample_memo">여러 줄 입력</label>
+						<div
+							class="dynamic-content"
+							data-source="/html/include/ui/_ui_textarea.html"
+							data-id="sample_memo"
+							data-placeholder="요청 사항을 입력해주세요."
+							data-attrs="maxlength=&quot;500&quot;"
+							data-max="500"
 						></div>
 					</div>
 				</div>
@@ -50,6 +107,20 @@
 				data-src-file="/html/include/ui/_ui_input.html"
 				readonly
 				aria-label="입력 파셜 원문"
+			></textarea>
+			<p class="guide__src-path">펼친 마크업 — /html/include/ui/_ui_search.html</p>
+			<textarea
+				class="guide__src"
+				data-src-file="/html/include/ui/_ui_search.html"
+				readonly
+				aria-label="검색 파셜 원문"
+			></textarea>
+			<p class="guide__src-path">펼친 마크업 — /html/include/ui/_ui_textarea.html</p>
+			<textarea
+				class="guide__src"
+				data-src-file="/html/include/ui/_ui_textarea.html"
+				readonly
+				aria-label="여러 줄 입력 파셜 원문"
 			></textarea>
 		</div>
 	</details>
@@ -81,9 +152,63 @@
 						data-source="/html/include/ui/_ui_input.html"
 						data-id="sample_birth"
 						data-value="1999"
-						data-modifier="is-error"
-						data-helper="생년월일 8자리를 입력해주세요."
-						data-helper-type="ui-helper--error"
+						data-cls="ui-input is-error"
+						data-slot-helper="#sample_birth_helper"
+					></div>
+					<template id="sample_birth_helper">
+						<p class="ui-helper ui-helper--error">생년월일 8자리를 입력해주세요.</p>
+					</template>
+				</div>
+				<div>
+					<label class="ui-label" for="sample_phone">입력 (옆 버튼 · 성공 안내)</label>
+					<div
+						class="dynamic-content"
+						data-source="/html/include/ui/_ui_input.html"
+						data-id="sample_phone"
+						data-value="01012345678"
+						data-attrs='inputmode="numeric" maxlength="11"'
+						data-box-cls="ui-field ui-field--row"
+						data-slot-side="#sample_phone_side"
+						data-slot-helper="#sample_phone_helper"
+					></div>
+					<template id="sample_phone_side">
+						<button type="button" class="ui-btn">인증 요청</button>
+					</template>
+					<template id="sample_phone_helper">
+						<p class="ui-helper ui-helper--success">인증번호를 보냈습니다.</p>
+					</template>
+				</div>
+				<div>
+					<label class="ui-label" for="sample_readonly">입력 (읽기 전용 · 지우기 없음)</label>
+					<div
+						class="dynamic-content"
+						data-source="/html/include/ui/_ui_input.html"
+						data-id="sample_readonly"
+						data-value="member@example.com"
+						data-cls="ui-input is-disabled"
+						data-attrs="readonly"
+						data-clear=""
+					></div>
+				</div>
+				<div>
+					<label class="ui-label" for="sample_search">검색</label>
+					<div
+						class="dynamic-content"
+						data-source="/html/include/ui/_ui_search.html"
+						data-id="sample_search"
+						data-placeholder="주소를 검색해주세요."
+						data-search-label="주소 검색"
+					></div>
+				</div>
+				<div>
+					<label class="ui-label" for="sample_memo">여러 줄 입력</label>
+					<div
+						class="dynamic-content"
+						data-source="/html/include/ui/_ui_textarea.html"
+						data-id="sample_memo"
+						data-placeholder="요청 사항을 입력해주세요."
+						data-attrs='maxlength="500"'
+						data-max="500"
 					></div>
 				</div>
 			</div>

@@ -9,17 +9,18 @@
 <div class="grid grid--2">
 	<div class="ui-card">
 		<div class="ui-card__header">
-			<h4 class="ui-card__title">① class — 모양만 다른 변형</h4>
+			<h4 class="ui-card__title">① class — 모양만 다른 변형 · class 전체를 넘긴다</h4>
 		</div>
 		<div class="ui-card__body">
 			<textarea class="guide__src" data-raw readonly aria-label="코드 예시">
-				<!-- 파셜 _guide_v_class.html — 안 넘기면 ui-btn--outlined -->
-				<button type="button" class="ui-btn ui-btn--sm {{variant|ui-btn--outlined}}">{{variant|ui-btn--outlined}}</button>
+				<!-- 파셜 _guide_v_class.html — data-cls 는 class 전체 · 안 넘기면 기본 class -->
+				<button type="button" class="{{cls|ui-btn ui-btn--sm ui-btn--outlined}}">{{text|안 넘김}}</button>
 
 				<!-- 페이지 -->
 				<div class="dynamic-content" data-source="/html/include/guide/_guide_v_class.html"></div>
 				<div class="dynamic-content" data-source="/html/include/guide/_guide_v_class.html"
-					data-variant="ui-btn--contained"></div>
+					data-cls="ui-btn ui-btn--sm ui-btn--contained"
+					data-text="넘김"></div>
 			</textarea>
 		</div>
 	</div>
@@ -32,7 +33,8 @@
 			<div
 				class="dynamic-content"
 				data-source="/html/include/guide/_guide_v_class.html"
-				data-variant="ui-btn--contained"
+				data-cls="ui-btn ui-btn--sm ui-btn--contained"
+				data-text="넘김"
 			></div>
 		</div>
 	</div>
@@ -150,7 +152,10 @@
 <div class="ui-card">
 	<div class="ui-card__body">
 		<ul class="guide__list">
-			<li><strong>모양만 다르면 class 이름을 넘긴다.</strong> 세 갈래 이상이어도 파셜은 그대로다.</li>
+			<li>
+				<strong>모양만 다르면 class 전체를 넘긴다</strong> — <code>data-cls</code>. 기본 class 까지 한 값이라 바꾸거나
+				뺄 수 있고, 세 갈래 이상이어도 파셜은 그대로다.
+			</li>
 			<li>
 				<strong>있다 / 없다는 속성 글자를 통째로</strong> 넘긴다 — <code>data-attrs="checked disabled"</code>. 끄는
 				방법은 「안 넘기는 것」 하나뿐이다.
@@ -173,6 +178,15 @@
 			<li>
 				<strong>실물</strong> — 공통 체크박스 <code>ui/_ui_checkbox.html</code> 이 <code>{{{attrs&#124;}}}</code> 로
 				속성 묶음을 받는다. ② 의 데모 파셜은 받은 값을 그대로 이어 넘길 뿐이다.
+			</li>
+			<li>
+				<strong>값이 있는 속성은 <code>&amp;quot;</code> 로</strong> 적는다 —
+				<code>data-attrs="maxlength=&amp;quot;40&amp;quot;"</code>. 날것 <code>"</code> 는 data 속성을 거기서 끊는다.
+			</li>
+			<li>
+				<strong>공통 입력의 안내 문구 · 안내문</strong> — <code>data-placeholder</code> 는 원문으로 받아 작은따옴표가
+				<code>&amp;#39;</code> 로 바뀌지 않는다(큰따옴표는 넣지 않는다). 입력 아래 안내문은 글자가 아니라
+				<code>data-slot-helper</code>(마크업)로 넘긴다 — 오류 · 성공을 함께 두거나 링크를 넣을 수 있다.
 			</li>
 			<li>
 				<code>class="a {{x&#124;}}"</code> 를 안 넘기면 <strong>끝에 공백 하나</strong>가 남는다. 화면엔 영향이 없고

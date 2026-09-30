@@ -7,9 +7,9 @@
   },
   {
     "diff": "모양만 (색 · 크기 · 정렬)",
-    "tool": "class 이름을 값으로 받는다 — <code>class=\"ui-btn &#123;&#123;tone|&#125;&#125;\"</code>",
+    "tool": "class <strong>전체</strong>를 값으로 받는다 — <code>class=\"&#123;&#123;cls|ui-btn ui-btn--sm&#125;&#125;\"</code>",
     "where": "class · 속성 · style",
-    "note": "변종이 늘어도 파셜은 그대로다"
+    "note": "기본 class 도 바꾸거나 뺄 수 있다 — 변종이 늘어도 파셜은 그대로다"
   },
   {
     "diff": "속성이 있다 / 없다",

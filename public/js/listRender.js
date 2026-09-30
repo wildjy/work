@@ -6,7 +6,7 @@
  *
  * ── 사용법 ────────────────────────────────────────────────
  *  <tbody class="dynamic-list"
- *         data-source="/data/파일.json"
+ *         data-source="../data/파일.json"
  *         data-template="#tpl_row"
  *         data-empty="#tpl_empty"     <!-- 선택: 0건일 때 -->
  *         data-filter="!owner">      <!-- 선택: 값이 거짓인 항목만. "owner"=참인 항목만, "page=1"=값이 일치하는 항목만 -->
@@ -50,13 +50,25 @@
 		}
 		ctx['@index'] = index;
 		ctx['@number'] = index + 1;
+		// 키는 먼저 그대로, 없으면 대소문자 없이 찾는다 — 태그 안의 괄호 속성은 브라우저가 소문자로 바꿔 둔다(templateHtml 참고)
+		var lower = {};
+		for (var lk in ctx) {
+			if (Object.prototype.hasOwnProperty.call(ctx, lk)) lower[lk.toLowerCase()] = lk;
+		}
+		function val(key) {
+			if (key in ctx) return ctx[key];
+			var real = lower[key.toLowerCase()];
+			return real === undefined ? null : ctx[real];
+		}
 
 		return html
 			.replace(/\{\{\{\s*([\w@.-]+)\s*\}\}\}/g, function (_m, key) {
-				return ctx[key] == null ? '' : String(ctx[key]);
+				var v = val(key);
+				return v == null ? '' : String(v);
 			})
 			.replace(/\{\{\s*([\w@.-]+)\s*\}\}/g, function (_m, key) {
-				return ctx[key] == null ? '' : escapeHtml(ctx[key]);
+				var v = val(key);
+				return v == null ? '' : escapeHtml(v);
 			});
 	}
 
@@ -90,7 +102,11 @@
 			return null;
 		}
 		// <template> 이면 innerHTML, 아니면 요소 자체의 innerHTML 사용
-		return tpl.innerHTML;
+		// ⚠ 태그 안에 괄호만 단독으로 적은 속성(<input … {{chkAttr}}>)은 브라우저가 template 을 읽을 때
+		//    속성 이름으로 받아 소문자로 바꾸고 빈 값을 붙인다 → {{chkattr}}="" . 그대로 채우면 키를 못 찾아
+		//    ="" 만 남는다(26.09.30). 빈 값 꼬리를 떼어 원래 모양으로 되돌린다 — 소문자는 fillTemplate 이 대소문자 없이 찾는다.
+		//    프리렌더는 원본 글자를 읽으므로 이 문제가 없다(브라우저로 볼 때만).
+		return tpl.innerHTML.replace(/(\{\{\{?\s*[\w@.-]+\s*\}?\}\})=""/g, '$1');
 	}
 
 	function renderOne(el) {

@@ -14,37 +14,49 @@
   {
     "group": "input",
     "name": "입력",
-    "args": "data-id(필수) · data-name · data-type · data-placeholder · data-value · data-modifier · data-helper · data-helper-type",
-    "code": "<div\n\tclass=\"dynamic-content\"\n\tdata-source=\"/html/include/ui/_ui_input.html\"\n\tdata-id=\"join_birth\"\n\tdata-value=\"1999\"\n\tdata-modifier=\"is-error\"\n\tdata-helper=\"생년월일 8자리를 입력해주세요.\"\n\tdata-helper-type=\"ui-helper--error\"\n></div>"
+    "args": "data-id(필수) · data-name · data-type · data-placeholder(원문) · data-value · data-cls(class 전체 · 기본 ui-input) · data-box-cls · data-attrs(원문 : readonly · maxlength=&quot;40&quot;) · data-clear(빈 값이면 지우기 없음) · data-slot-extra · data-slot-side · data-slot-helper",
+    "code": "<div\n\tclass=\"dynamic-content\"\n\tdata-source=\"/html/include/ui/_ui_input.html\"\n\tdata-id=\"join_birth\"\n\tdata-value=\"1999\"\n\tdata-cls=\"ui-input is-error\"\n\tdata-slot-helper=\"#join_birth_helper\"\n></div>\n<template id=\"join_birth_helper\">\n\t<p class=\"ui-helper ui-helper--error\">생년월일 8자리를 입력해주세요.</p>\n</template>"
+  },
+  {
+    "group": "input",
+    "name": "검색",
+    "args": "data-id(필수) · data-name · data-placeholder(원문) · data-value · data-cls(기본 ui-input ui-input--search) · data-attrs · data-clear · data-search-label(검색 버튼 읽기용 글자) · data-slot-helper — 결과 목록이 붙으면 검색 드롭다운",
+    "code": "<div\n\tclass=\"dynamic-content\"\n\tdata-source=\"/html/include/ui/_ui_search.html\"\n\tdata-id=\"addr_search\"\n\tdata-placeholder=\"주소를 검색해주세요.\"\n\tdata-search-label=\"주소 검색\"\n></div>"
+  },
+  {
+    "group": "input",
+    "name": "여러 줄 입력",
+    "args": "data-id(필수) · data-name · data-placeholder(원문) · data-value · data-cls(기본 ui-textarea) · data-attrs(maxlength=&quot;500&quot;) · data-count · data-max · data-slot-helper",
+    "code": "<div\n\tclass=\"dynamic-content\"\n\tdata-source=\"/html/include/ui/_ui_textarea.html\"\n\tdata-id=\"req_memo\"\n\tdata-attrs=\"maxlength=&quot;500&quot;\"\n\tdata-max=\"500\"\n></div>"
   },
   {
     "group": "input",
     "name": "드롭다운",
-    "args": "data-items(JSON 경로 · 필수) · data-placeholder · data-modifier",
+    "args": "data-items(JSON 경로 · 필수) · data-placeholder · data-cls(class 전체)",
     "code": "<div\n\tclass=\"dynamic-content\"\n\tdata-source=\"/html/include/ui/_ui_dropdown.html\"\n\tdata-items=\"/data/ui/sample_options.json\"\n\tdata-placeholder=\"정렬을 선택해주세요.\"\n></div>"
   },
   {
     "group": "input",
     "name": "검색 드롭다운",
-    "args": "data-items(필수) · data-placeholder · data-name",
+    "args": "data-items(필수) · data-placeholder · data-name · data-cls(class 전체)",
     "code": "<div\n\tclass=\"dynamic-content\"\n\tdata-source=\"/html/include/ui/_ui_dropdown_search.html\"\n\tdata-items=\"/data/ui/sample_options.json\"\n\tdata-placeholder=\"회사명을 검색해주세요.\"\n></div>"
   },
   {
     "group": "input",
     "name": "수량 스테퍼",
-    "args": "data-id(필수) · data-name · data-value · data-min · data-max",
+    "args": "data-id(필수) · data-name · data-value · data-min · data-max · data-cls(class 전체) · data-attrs(disabled)",
     "code": "<div\n\tclass=\"dynamic-content\"\n\tdata-source=\"/html/include/ui/_ui_stepper.html\"\n\tdata-id=\"order_count\"\n\tdata-value=\"1\"\n\tdata-min=\"1\"\n\tdata-max=\"3\"\n></div>"
   },
   {
     "group": "input",
     "name": "날짜 · 기간",
-    "args": "data-id(필수) · data-name · data-placeholder · data-value — 이 페이지에 jQuery · jQuery UI 가 있어야 한다",
+    "args": "data-id(필수) · data-name · data-placeholder · data-value(날짜만) — 이 페이지에 jQuery · jQuery UI 가 있어야 한다",
     "code": "<div class=\"dynamic-content\" data-source=\"/html/include/ui/_ui_date.html\" data-id=\"open_date\"></div>\n<div class=\"dynamic-content\" data-source=\"/html/include/ui/_ui_period.html\" data-id=\"search_period\"></div>"
   },
   {
     "group": "choice",
     "name": "체크박스 · 라디오 · 토글",
-    "args": "data-id(필수) · data-label(필수) · data-name · data-value · data-attrs(checked · disabled) · data-modifier",
+    "args": "data-id(필수) · data-label(필수 · 체크 · 라디오는 원문) · data-name · data-value · data-attrs(원문 : checked · disabled · onchange=&quot;…&quot;) · data-cls(class 전체) · data-slot-extra(체크 · 라디오 — 라벨 뒤 설명)",
     "code": "<div\n\tclass=\"dynamic-content\"\n\tdata-source=\"/html/include/ui/_ui_checkbox.html\"\n\tdata-id=\"agree_sms\"\n\tdata-name=\"agree_sms\"\n\tdata-value=\"Y\"\n\tdata-label=\"문자 수신\"\n\tdata-attrs=\"checked\"\n></div>\n<div\n\tclass=\"dynamic-content\"\n\tdata-source=\"/html/include/ui/_ui_radio.html\"\n\tdata-id=\"open_all\"\n\tdata-name=\"open_range\"\n\tdata-value=\"all\"\n\tdata-label=\"전체 공개\"\n></div>\n<div class=\"dynamic-content\" data-source=\"/html/include/ui/_ui_toggle.html\" data-id=\"use_push\" data-label=\"알림 받기\"></div>"
   },
   {
@@ -68,19 +80,19 @@
   {
     "group": "modal",
     "name": "확인창",
-    "args": "data-id(필수) · data-title(필수) · data-text · data-cancel · data-confirm · data-modifier",
+    "args": "data-id(필수) · data-title(필수) · data-text · data-cancel · data-confirm · data-cls(class 전체 · 기본 ui-modal ui-modal--confirm)",
     "code": "<div\n\tclass=\"dynamic-content\"\n\tdata-source=\"/html/include/ui/_ui_modal_confirm.html\"\n\tdata-id=\"del_confirm\"\n\tdata-title=\"이벤트를 삭제하시겠습니까?\"\n\tdata-text=\"삭제한 이벤트는 복구할 수 없습니다.\"\n\tdata-confirm=\"삭제\"\n></div>"
   },
   {
     "group": "modal",
     "name": "모달 프레임 (본문은 슬롯)",
-    "args": "data-id(필수) · data-title(필수) · data-slot-body(필수) · data-subtext · data-footer · data-cancel · data-confirm · data-modifier",
+    "args": "data-id(필수) · data-title(필수) · data-slot-body(필수) · data-subtext · data-footer · data-cancel · data-confirm · data-cls(class 전체 · 기본 ui-modal ui-modal--md)",
     "code": "<div\n\tclass=\"dynamic-content\"\n\tdata-source=\"/html/include/ui/_ui_modal.html\"\n\tdata-id=\"modal_invite\"\n\tdata-title=\"멤버 초대\"\n\tdata-subtext=\"초대할 멤버의 정보를 입력해주세요.\"\n\tdata-slot-body=\"#modal_invite_body\"\n\tdata-confirm=\"초대하기\"\n></div>\n<template id=\"modal_invite_body\">\n\t<div class=\"dynamic-content\" data-source=\"/html/include/member/_modal_invite_body.html\"></div>\n</template>"
   },
   {
     "group": "modal",
     "name": "알림 모달 (버튼 없음)",
-    "args": "data-id(필수) · data-title(필수) · data-subtext · data-text · data-slot-body · data-modifier — data-text 와 슬롯은 택일",
+    "args": "data-id(필수) · data-title(필수) · data-subtext · data-text · data-slot-body · data-cls(class 전체 · 기본 ui-modal ui-modal--alert ui-modal--sm) — data-text 와 슬롯은 택일",
     "code": "<div\n\tclass=\"dynamic-content\"\n\tdata-source=\"/html/include/ui/_ui_modal_alert.html\"\n\tdata-id=\"notice_alert\"\n\tdata-title=\"점검 안내\"\n\tdata-subtext=\"2026.09.20 02:00 ~ 06:00\"\n\tdata-text=\"점검 시간에는 로그인과 결제를 이용할 수 없습니다.\"\n></div>"
   }
 ]

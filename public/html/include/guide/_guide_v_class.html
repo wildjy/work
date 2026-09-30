@@ -1,4 +1,4 @@
-<!-- 사용법 문서 전용 데모 — 3-4 class 자리. 모양만 다른 변형을 class 이름으로 받는다.
-     받는 값 : data-variant (안 넘기면 ui-btn--outlined)
+<!-- 사용법 문서 전용 데모 — 3-4 class 자리. 모양만 다른 변형을 class 전체(data-cls)로 받는다.
+     받는 값 : data-cls(class 전체 · 기본 ui-btn ui-btn--sm ui-btn--outlined) · data-text(버튼 글자)
      ⚠ 이 파일의 마크업은 _guide_partial_*.html 코드 예시(코드 칸)에 그대로 실려 있다 — 고치면 그쪽도 같이 고친다. -->
-<button type="button" class="ui-btn ui-btn--sm {{variant|ui-btn--outlined}}">{{variant|ui-btn--outlined}}</button>
+<button type="button" class="{{cls|ui-btn ui-btn--sm ui-btn--outlined}}">{{text|안 넘김}}</button>
