@@ -6,13 +6,13 @@
  * dynamicImport.js(파셜)·listRender.js(목록)로 그린 마크업은 소스에 나오지 않는다.
  * 개발 인계·산출물 검수용으로 전개된 HTML 이 필요할 때 이 스크립트를 쓴다.
  *
- *   npm run prerender                            # public/html 전체
- *   npm run prerender -- FormFollowupDraw.html   # 특정 파일만
- *   npm run prerender -- --keep-templates        # <template> 정의도 남기기
- *   npm run prerender -- --keep-comments         # 원본 주석 그대로 (정리하지 않는다)
- *   npm run prerender:watch                      # 감시 모드 (저장할 때마다 자동 재생성)
+ *   pnpm run prerender                            # public/html 전체
+ *   pnpm run prerender -- FormFollowupDraw.html   # 특정 파일만
+ *   pnpm run prerender -- --keep-templates        # <template> 정의도 남기기
+ *   pnpm run prerender -- --keep-comments         # 원본 주석 그대로 (정리하지 않는다)
+ *   pnpm run prerender:watch                      # 감시 모드 (저장할 때마다 자동 재생성)
  *
- * ⚠ **주석 정리는 기본으로 켜져 있다**(stripComments 참고) — 세 명령 모두, npm run badges 도 마찬가지다.
+ * ⚠ **주석 정리는 기본으로 켜져 있다**(stripComments 참고) — 세 명령 모두, pnpm run badges 도 마찬가지다.
  *   인라인 <script> 안의 주석도 함께 걷는다(stripScriptComments) — 그쪽은 @ 표시한 것만 남는다.
  *   켜고 끄는 곳이 갈리면 「방금 정리한 산출물이 다음 프리렌더에 되살아나는」 일이 생겨서다.
  *
@@ -55,7 +55,7 @@ const OUT_DIR = path.join(ROOT, 'public', 'prerender');
 // 페이지가 아닌 폴더 — 파셜 모음과 보관용. 하위 폴더를 훑기 시작하면 반드시 걸러야 한다.
 const SKIP_DIRS = new Set(['include', '_bak']);
 
-// 브라우저가 보는 사이트 루트. `npx serve public` 이 이 폴더를 / 로 준다.
+// 브라우저가 보는 사이트 루트. `pnpm dlx serve public` 이 이 폴더를 / 로 준다.
 const PUBLIC_DIR = path.join(ROOT, 'public');
 
 // data-source 한 줄을 실제 파일 경로로 푼다.
@@ -110,7 +110,7 @@ function indentAt(src, index) {
 //   파셜은 탭으로 들여쓰는데 페이지가 공백으로 들여쓰면, 끼운 자리의 공백 뒤에 파셜 안쪽 탭이 붙어
 //   한 줄에 「공백+탭」이 섞였다(공통 입력 파셜을 계정 화면에 넣으며 드러났다).
 //   자리가 **공백뿐**이면 파셜 안쪽의 앞 탭을 공백 두 칸으로 바꾼다. 자리가 탭이거나 없으면 그대로다.
-//   ⚠ 공백만 바뀐다 — 화면 · 마크업은 같다. npm run sync 는 이 차이 때문에 prerender 를 「로직 다름」으로 보고한다.
+//   ⚠ 공백만 바뀐다 — 화면 · 마크업은 같다. pnpm run sync 는 이 차이 때문에 prerender 를 「로직 다름」으로 보고한다.
 const INDENT_SPACES = '  ';
 const spaceIndented = (indent) => !!indent && !indent.includes('\t');
 const indentUnit = (indent) => (spaceIndented(indent) ? INDENT_SPACES : '\t');

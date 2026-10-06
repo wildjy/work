@@ -2,12 +2,12 @@
 /**
  * verify_prerender.js — 파셜 · 공통 UI 를 고친 뒤 「산출물 마크업 · 화면이 그대로인가」를 확인한다 (26.09.30)
  *
- *   npm run verify -- snap <이름>               # 지금 산출물(public/prerender)을 .verify/<이름>/ 에 보관
- *   npm run verify -- cmp <이름>                # 보관본과 지금 산출물을 대조
- *   npm run verify -- shots <이름> [폴더…]      # 산출물 화면 캡처 → .verify/shots-<이름>/  (기본 : 전 폴더)
- *   npm run verify -- shots-cmp <이름A> <이름B>  # 두 캡처 묶음을 픽셀(파일) 단위로 비교
+ *   pnpm run verify -- snap <이름>               # 지금 산출물(public/prerender)을 .verify/<이름>/ 에 보관
+ *   pnpm run verify -- cmp <이름>                # 보관본과 지금 산출물을 대조
+ *   pnpm run verify -- shots <이름> [폴더…]      # 산출물 화면 캡처 → .verify/shots-<이름>/  (기본 : 전 폴더)
+ *   pnpm run verify -- shots-cmp <이름A> <이름B>  # 두 캡처 묶음을 픽셀(파일) 단위로 비교
  *
- * 순서 : 고치기 전 snap + shots a → 고치기 → npm run prerender → cmp → shots b → shots-cmp a b
+ * 순서 : 고치기 전 snap + shots a → 고치기 → pnpm run prerender → cmp → shots b → shots-cmp a b
  *        캡처가 다른 페이지가 cmp 에서 「같음」이면 매번 달라지는 페이지(애니메이션 · 여는 레이어)다 — 한 번 더 찍어 가려낸다.
  *
  * cmp 가 무시하는 것 — 공백 · 주석 · template 정의 · 빈 속성(id · name · value · class · placeholder = "") ·
@@ -141,6 +141,8 @@ async function shots(name, folders) {
 	fs.mkdirSync(dir, { recursive: true });
 	const port = 3700 + Math.floor(Math.random() * 200);
 	const conf = path.join(ROOT, 'scripts', 'serve.json');
+	// ⚠ 여기만 npx 를 쓴다 — 설치하지 않은 패키지를 한 번 받아 쓰는 자리라, **노드에 딸려 온다**는 점이 중요하다.
+	//    (pnpm dlx 로 바꾸면 pnpm 이 PATH 에 없는 환경에서 로컬 서버가 아예 안 뜬다)
 	const server = spawn('npx', ['--yes', SERVE, 'public', '-l', String(port), '-c', conf], {
 		cwd: ROOT,
 		shell: true,

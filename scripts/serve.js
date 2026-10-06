@@ -2,7 +2,7 @@
 /**
  * serve.js — 로컬 서버를 **고정 포트**로 띄운다.
  *
- *   npm run serve                 # http://localhost:3500
+ *   pnpm run serve                 # http://localhost:3500
  *
  * ⚠ serve 의 `--no-port-switching` 은 믿지 않는다.
  *    14.2.6 은 도움말에만 있고 코드가 읽지 않는다 — 포트가 쓰이고 있으면 **조용히 빈 포트(49xxx)로 뜬다.**
@@ -42,6 +42,8 @@ function portFree(port) {
 	}
 
 	const CONFIG = path.join(__dirname, 'serve.json');
+	// ⚠ 여기만 npx 를 쓴다 — 설치하지 않은 패키지를 한 번 받아 쓰는 자리라, **노드에 딸려 온다**는 점이 중요하다.
+	//    (pnpm dlx 로 바꾸면 pnpm 이 PATH 에 없는 환경에서 로컬 서버가 아예 안 뜬다)
 	const child = spawn('npx', ['--yes', SERVE, 'public', '-l', String(PORT), '-c', CONFIG], {
 		cwd: ROOT,
 		stdio: 'inherit',

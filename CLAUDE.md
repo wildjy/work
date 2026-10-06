@@ -12,19 +12,19 @@
 | # | 규칙 |
 | --- | --- |
 | 0 | **스타일은 `.scss` 만 수정** — `.css` 직접 수정 금지. 컴파일은 **작업자가 Watch Sass** 로 한다(AI 는 프로젝트 css 를 만들지 않는다 · 문법 확인은 scratchpad 출력만). 색은 **`_variable` 토큰만**, 폰트 굵기는 **시안 값 그대로**. |
-| 1 | **로컬 서버는 `npm run serve`(**http://localhost:3500 고정** · `scripts/serve.js`)** — VSCode Live Server 금지(파셜에 라이브리로드 스크립트가 주입돼 마크업이 깨진다). |
-| 2 | **HTML·파셜·JSON 을 수정했으면 `npm run prerender`** 로 산출물을 갱신하고 원본과 **함께 커밋**한다. |
+| 1 | **로컬 서버는 `pnpm run serve`(**http://localhost:3500 고정** · `scripts/serve.js`)** — VSCode Live Server 금지(파셜에 라이브리로드 스크립트가 주입돼 마크업이 깨진다). |
+| 2 | **HTML·파셜·JSON 을 수정했으면 `pnpm run prerender`** 로 산출물을 갱신하고 원본과 **함께 커밋**한다. |
 | 3 | **프리렌더 다음에 `public/index.html` 의 작업일자를 갱신**한다 — 신규 페이지는 등록하고 **`create_date`·`update_date` 를 둘 다 오늘로**, 화면이 달라진 기존 페이지는 `update_date` 만. **시키지 않아도 매 작업 끝에 한다.** |
 | 4 | **작업 보고 끝에 커밋 메시지를 써서 알려준다** — 커밋은 **작업자가 요청할 때만** 한다. 형식은 아래 「커밋 메시지」. **시키지 않아도 매 작업 끝에 한다.** 수정 요청이 이어져도 **매번 「커밋 안 된 변경 전체」로 다시 써서** 준다. |
 
 ```sh
-npm run prerender                   # public/html 전체 → public/prerender/ (기본. 이걸 쓴다)
-npm run prerender -- Sample.html    # 특정 파일만 (페이지 간 링크가 404 나므로 확인용으로만)
-npm run prerender:watch             # 저장할 때마다 자동 재생성
-npm run lint                        # ESLint (JS · HTML 인라인 script)
-npx prettier --write <고친 파일>    # 정렬 — 고친 파일만
-npm run validate                    # 산출물 마크업 검사 (html-validate)
-npm run verify -- snap a            # 파셜을 고치기 전 산출물 보관 → 고친 뒤 verify -- cmp a 로 대조 (캡처 : shots · shots-cmp)
+pnpm run prerender                   # public/html 전체 → public/prerender/ (기본. 이걸 쓴다)
+pnpm run prerender -- Sample.html    # 특정 파일만 (페이지 간 링크가 404 나므로 확인용으로만)
+pnpm run prerender:watch             # 저장할 때마다 자동 재생성
+pnpm run lint                        # ESLint (JS · HTML 인라인 script)
+pnpm exec prettier --write <고친 파일>    # 정렬 — 고친 파일만
+pnpm run validate                    # 산출물 마크업 검사 (html-validate)
+pnpm run verify -- snap a            # 파셜을 고치기 전 산출물 보관 → 고친 뒤 verify -- cmp a 로 대조 (캡처 : shots · shots-cmp)
 ```
 
 > 🔒 **커밋 직전 검사가 걸려 있다**(simple-git-hooks → lint-staged → `scripts/precommit.js`).
@@ -56,7 +56,7 @@ npm run verify -- snap a            # 파셜을 고치기 전 산출물 보관 �
 > - 파셜을 고쳤으면 **그 파셜을 include 한 페이지**(`grep -rl "_파셜명" public/html/*.html`)가 대상이다.
 
 > 🗒 **산출물은 주석이 정리된 채로 나간다.** 프리렌더는 **퍼블 작업 메모를 걷어내고** 마크업을 읽는 데 쓰이는 것만 남긴다
-> (`npm run prerender:keep` 로 끌 수 있다). 인라인 `<script>` 안도 함께 걷는다.
+> (`pnpm run prerender:keep` 로 끌 수 있다). 인라인 `<script>` 안도 함께 걷는다.
 > **개발자가 꼭 봐야 하는 주석에는 `@` 를 붙인다** — 그것만 살아남는다. 산출물에서 `@` 는 떨어진다.
 > ```html
 > <!--@ 새 알림 있는 경우 new 추가 -->   →   <!-- 새 알림 있는 경우 new 추가 -->
@@ -105,7 +105,7 @@ public/
 > **왜** — 파셜은 「심어진 페이지」 기준으로 풀린다. 깊이가 다른 페이지들이 같은 파셜을 쓰면
 > `../images/…` 를 **한 값으로 맞출 수가 없다.** 루트 기준이면 깊이와 무관해져, 폴더를 더 나눠도 안 깨진다.
 >
-> ⚠ **기준은 `public/`** 이다 — `npm run serve` 가 그 폴더를 `/` 로 준다(http://localhost:3500).
+> ⚠ **기준은 `public/`** 이다 — `pnpm run serve` 가 그 폴더를 `/` 로 준다(http://localhost:3500).
 > 그래서 **산출물을 `file://` 로 더블클릭해 열 수 없다.** 반드시 서버로 본다.
 > ⚠ **`public/data/*.json` 안의 경로도 같다** — 목록이 그려 내는 `img`·`href` 도 `/images/…` · `/html/…` 로 적는다.
 > ⚠ **`onclick` 안의 `location.href` 도 같다.** 눈에 잘 안 띄는 자리라 빠뜨리기 쉽다.
@@ -115,8 +115,8 @@ public/
 > 빌드는 하위 폴더를 알아서 훑고(`_bak/`·`include/` 제외), 전체 빌드 끝에 **원본 없는 산출물을 지운다.**
 >
 > ```sh
-> npm run prerender -- guide/Guide_Partial.html   # 폴더를 적어도 되고
-> npm run prerender -- Guide_Partial.html         # 이름만 적어도 찾아 준다
+> pnpm run prerender -- guide/Guide_Partial.html   # 폴더를 적어도 되고
+> pnpm run prerender -- Guide_Partial.html         # 이름만 적어도 찾아 준다
 > ```
 > ⚠ **`dynamicImport.js` 와 `prerender.js` 는 같은 치환 규칙을 각각 구현한다 — 한쪽만 고치지 않는다.**
 > 📄 동작 예시는 `public/html/Sample.html` — 실제 화면을 만들기 시작하면 샘플과 index 의 그 줄을 지운다.
@@ -167,7 +167,7 @@ public/
 
 # 규칙 요약 — 자세한 건 각 스킬
 
-1. **로컬 서버는 `npm run serve`.** Live Server 금지. → `pub-env`
+1. **로컬 서버는 `pnpm run serve`.** Live Server 금지. → `pub-env`
 2. **기존 작업물을 먼저 찾는다.** 클래스명 검색보다 **같은 UI 를 쓰는 화면**을 먼저 연다. 파셜은 **상태 예시**(`active`/`disabled`/`error`)인 경우가 많아 기준 마크업이 아니다. → `pub-new-screen`
 3. **반복 목록은 JSON + `template` 요소.** 5행 이상이거나 행 수가 데이터에 따라 변하면 하드코딩하지 않는다. **0건 상태(`data-empty`)를 같은 커밋에서 함께** 만든다. → `pub-list-render`
 4. **「~일 때만 노출」은 CSS 로 숨기지 않는다.** 마크업에 두고 조건은 `@` 주석으로 넘긴다(개발단 조건부 렌더링). 「같은 자리의 상태 전환」만 상태 클래스로.
@@ -188,7 +188,7 @@ public/
 - [ ] 색은 `_variable` 토큰만 썼다(HEX 직접 금지 · 토큰에 없으면 물었다). 폰트 굵기는 시안 값 그대로다.
 - [ ] 닫힌 상태를 CSS `display: none` 으로 만들지 않았다(`hidden` 이 맡는다). 상태 클래스는 블록·요소와 함께 썼다.
 
-- [ ] HTML·파셜·JSON 을 고쳤으면 **`npm run prerender`(전체)** 를 돌리고 산출물을 함께 커밋한다.
+- [ ] HTML·파셜·JSON 을 고쳤으면 **`pnpm run prerender`(전체)** 를 돌리고 산출물을 함께 커밋한다.
 - [ ] **`public/index.html` 작업일자를 갱신했다** — 신규는 두 날짜 **둘 다** · 화면이 달라진 기존 페이지는 `update_date`. 구조 정리만 한 페이지에는 찍지 않았다.
 - [ ] 신규 항목 생성 **전에** 기존 자산을 검색했고, 파셜의 **상태 예시**를 그대로 복사하지 않았다.
 - [ ] 새 이름을 **grep 으로 충돌 검사**했다.
@@ -201,5 +201,5 @@ public/
 - [ ] 작업 보고 끝에 **커밋 메시지**를 적어 알렸다(커밋은 요청이 있을 때만). 이어진 수정이면 **커밋 안 된 변경 전체**로 다시 썼고, `git status` 로 범위를 확인했다.
 - [ ] 설명 주석에 **태그를 그대로 쓰지 않았다.** 산출물의 주석 균형을 확인했다.
 - [ ] **개발자가 봐야 하는 주석에 `@` 를 붙였다.** 표시가 없으면 산출물에서 걷힌다.
-- [ ] HTML·파셜을 고쳤으면 **`npm run validate`** 에 error 가 없다(커밋 훅도 검사한다).
-- [ ] JS·인라인 script 를 고쳤으면 **`npm run lint`** 가 통과한다. 고친 파일은 **`npx prettier --write <파일>`** 로 정렬했다(전체 `format` 은 작업자가 요청할 때만).
+- [ ] HTML·파셜을 고쳤으면 **`pnpm run validate`** 에 error 가 없다(커밋 훅도 검사한다).
+- [ ] JS·인라인 script 를 고쳤으면 **`pnpm run lint`** 가 통과한다. 고친 파일은 **`pnpm exec prettier --write <파일>`** 로 정렬했다(전체 `format` 은 작업자가 요청할 때만).

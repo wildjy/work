@@ -11,7 +11,7 @@ model: sonnet
 ## 점검 항목
 
 ### 1. 프리렌더 동기화
-- `public/html/**` · `public/data/**` 의 수정 시각이 `public/prerender/**` 보다 **뒤면 미갱신**이다 → `npm run prerender` 필요라고 보고한다(직접 실행하지 않는다).
+- `public/html/**` · `public/data/**` 의 수정 시각이 `public/prerender/**` 보다 **뒤면 미갱신**이다 → `pnpm run prerender` 필요라고 보고한다(직접 실행하지 않는다).
 - `public/html/*.html` 인데 `public/prerender/` 에 **산출물이 없는 페이지**, 반대로 **원본이 사라졌는데 남은 산출물**.
 
 ### 2. 산출물에 남으면 안 되는 것
@@ -21,7 +21,7 @@ model: sonnet
   (⚠ 한글·태그가 섞인 `{{ }}` 는 개발단 표시 마커라 정상이다)
 
 ### 3. 태그·주석 균형
-먼저 **`npx html-validate public/prerender`** 를 돌려 error 를 그대로 옮긴다(닫는 태그·중복 id·허용 자식). 아래 수작업 집계는 주석 균형과 원본 대조용이다.
+먼저 **`pnpm exec html-validate public/prerender`** 를 돌려 error 를 그대로 옮긴다(닫는 태그·중복 id·허용 자식). 아래 수작업 집계는 주석 균형과 원본 대조용이다.
 `public/html` · `public/html/include` · `public/prerender` 에서 `<div>`/`</div>`, `<ul>`/`</ul>`, `<li>`/`</li>`, `<!--`/`-->` 개수를 센다.
 ⚠ **불균형이 나오면 `git show HEAD:파일` 과 대조**해 기존 오류인지 이번 작업 탓인지 구분해 보고한다.
 ⚠ **설명 주석 안에 실제 태그(`<template>` 등)를 그대로 쓴 곳** — 프리렌더가 오인해 문서 뒷부분을 통째로 주석 처리할 수 있다.

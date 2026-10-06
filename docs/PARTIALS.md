@@ -33,7 +33,7 @@
 | 값 | `data-page-title="…"` → 파셜 안 `{{pageTitle}}` · 기본값은 `{{pageTitle\|페이지 제목}}` — **React 의 props 자리** |
 | 마크업 덩어리 | `data-slot-body="#tpl_id"` → 파셜 안 `{{{body}}}` — **React 의 children 자리**(같은 파일의 template 요소를 가리킨다) |
 | 결과 | include 한 `div` 는 **사라지고**(`replaceWith`) 파셜 내용이 그 자리에 들어간다 — React 의 Fragment 처럼 래퍼가 남지 않는다 |
-| 마무리 | 고쳤으면 **`npm run prerender`** → `public/index.html` 작업일자 → `docs/WORKLOG.md` |
+| 마무리 | 고쳤으면 **`pnpm run prerender`** → `public/index.html` 작업일자 → `docs/WORKLOG.md` |
 
 <!-- /auto:summary -->
 
@@ -55,7 +55,7 @@
 | 감싸는 요소 | `replaceWith` 라 래퍼가 남지 않는다 | `<></>` (Fragment) |
 | 조건부 노출 | 마크업에 두고 `<!--@ 조건 -->` 로 개발단에 넘긴다 | `{cond && <A />}` |
 | 상태 전환 | 상태 클래스 + `hidden` (동작은 `common.js` 위임) | `useState` → 조건부 class · 조건부 렌더 |
-| 미리 그려 두기 | `npm run prerender` → `public/prerender/*.html` | SSG — `next build` 가 만드는 정적 HTML |
+| 미리 그려 두기 | `pnpm run prerender` → `public/prerender/*.html` | SSG — `next build` 가 만드는 정적 HTML |
 | 주입이 끝나는 시점 | `dynamic-content-loaded` 이벤트 뒤에 DOM 에 있다 | 마운트 뒤(`useEffect`)와 같은 자리 |
 | 이름 규칙 | BEM — `ui-블록__요소--변형` · 상태 `is-*` | CSS Module · styled-components 대신 전역 CSS |
 
@@ -320,8 +320,8 @@ template   id="sample_invite_body"
 4. **재사용할 파셜은 `id` 를 `data-*` 로 받는다** — `id="{{id}}"` · `id="{{id}}_title"`. 고정 id 를 박으면 한 페이지에 두 번 못 넣는다.
 5. **활성 상태를 파셜에 박지 않는다.** 현재 메뉴·현재 탭은 `common.js`(`lnbActive`) 나 페이지의 `dynamic-content-loaded` 에서 붙인다.
 6. **새 이름은 `grep` 으로 충돌 검사**하고, 만들었으면 `docs/WORKLOG.md` 에 한 줄 남긴다.
-7. `npm run prerender` 로 **파셜 개수가 늘었는지** 확인한다 — 페이지마다 `✓ 파일명 (파셜 n / 목록 n · n행)` 이 찍힌다.
-8. 고친 뒤에는 **산출물 대조 · 캡처**로 다른 화면이 그대로인지 본다 — `npm run verify -- snap a` → 고치기 → `npm run prerender` → `npm run verify -- cmp a`
+7. `pnpm run prerender` 로 **파셜 개수가 늘었는지** 확인한다 — 페이지마다 `✓ 파일명 (파셜 n / 목록 n · n행)` 이 찍힌다.
+8. 고친 뒤에는 **산출물 대조 · 캡처**로 다른 화면이 그대로인지 본다 — `pnpm run verify -- snap a` → 고치기 → `pnpm run prerender` → `pnpm run verify -- cmp a`
    (캡처는 `shots a` / `shots b` → `shots-cmp a b`. 자세한 것은 `scripts/verify_prerender.js` 머리 주석)
 
 ### 공통 UI 파셜의 받는 값 규칙 (`include/ui/_ui_*.html`, 26.09.30)
@@ -386,7 +386,7 @@ template   id="sample_invite_body"
 | **래퍼 클래스가 사라진다** | include 한 `div` 에 준 class 가 없다 | 형제 셀렉터 · `data-cls`(class 전체) |
 | **넘기지 않은 키** | `{{key}}` 가 **글자로 보인다** — React 처럼 값이 없다고 빈칸이 되지 않는다 | 파셜에 기본값을 준다(React 의 기본 props 와 같은 자리) |
 | **`data-*` 에 대문자** | 브라우저만 치환 실패 → **화면과 산출물이 다르다** | 케밥으로 적는다 (`data-make-new`) |
-| **고정 `id` 파셜을 두 번 include** | id 중복 → 라벨·`getElementById` 가 **먼저 것만** 가리킨다 | id 를 `data-*` 로 받는다. `npm run validate` 의 `no-dup-id` 가 막아 준다 |
+| **고정 `id` 파셜을 두 번 include** | id 중복 → 라벨·`getElementById` 가 **먼저 것만** 가리킨다 | id 를 `data-*` 로 받는다. `pnpm run validate` 의 `no-dup-id` 가 막아 준다 |
 | **같은 본문 파셜을 슬롯 두 곳에** | 위와 같은 id 중복 | 본문 파셜도 id 를 받게 하거나 따로 만든다 |
 | **슬롯 이름 ↔ 목록 필드명 충돌** | 목록 템플릿 자리가 슬롯 내용으로 덮인다 | 이름을 갈라 쓴다 (아코디언은 항목 필드로 `{{{body}}}` 를 쓴다) |
 | **`data-text` 와 `data-slot-body` 를 함께** | 본문이 두 벌 나온다 | 택일한다 |
@@ -397,15 +397,15 @@ template   id="sample_invite_body"
 | **설명 주석에 태그를 그대로** | 프리렌더가 실제 태그로 오인한다 | 「template 요소」처럼 풀어 쓴다 |
 | **개발단이 봐야 할 주석** | 산출물에서 걷힌다 | `<!--@ … -->` 로 표시한다 |
 | **jQuery 가 필요한 파셜** | 날짜·기간 파셜은 jQuery UI 로 달력을 그린다 | 그 페이지에 `jquery` · `jquery-ui` 를 넣는다 |
-| **브라우저 캐시** | 규칙을 고쳤는데 옛 `dynamicImport.js` 가 돌아 `{{{body}}}` 가 글자로 보인다 | `npm run serve`(no-store)로 띄우고 강력 새로고침 |
-| **Live Server 로 열기** | 파셜 조각에 라이브리로드 스크립트가 주입돼 마크업이 깨진다 | `npm run serve` (http://localhost:3500) (http://localhost:3500) |
+| **브라우저 캐시** | 규칙을 고쳤는데 옛 `dynamicImport.js` 가 돌아 `{{{body}}}` 가 글자로 보인다 | `pnpm run serve`(no-store)로 띄우고 강력 새로고침 |
+| **Live Server 로 열기** | 파셜 조각에 라이브리로드 스크립트가 주입돼 마크업이 깨진다 | `pnpm run serve` (http://localhost:3500) (http://localhost:3500) |
 | **`template` 요소째 파셜로 빼서 사용처보다 **뒤**에서 include** | 슬롯을 채울 때 `template` 이 아직 없어 **본문이 빈 채로** 나간다 — 프리렌더만 경고를 찍는다 | `template` 은 **include 를 적은 파일에** 두고, 내용만 `<슬라이스>/body/` 파셜로 뺀다 |
-| **`data-*` 를 **작은따옴표**로** | **브라우저는 읽고 프리렌더는 못 읽는다** — `partialVars()` 의 정규식이 큰따옴표만 본다. 값이 조용히 기본값으로 떨어진다 | 큰따옴표로 적는다. `npx prettier --write` 가 자동으로 맞춘다 |
+| **`data-*` 를 **작은따옴표**로** | **브라우저는 읽고 프리렌더는 못 읽는다** — `partialVars()` 의 정규식이 큰따옴표만 본다. 값이 조용히 기본값으로 떨어진다 | 큰따옴표로 적는다. `pnpm exec prettier --write` 가 자동으로 맞춘다 |
 | ****빈 값**을 넘김 — `data-cls=""`** | 「넘긴 것」이라 **기본값을 이긴다** — class 가 통째로 비어 모양이 사라진다. 안 넘긴 것과 결과가 다르다 | 기본값을 쓰려면 **속성을 아예 적지 않는다**. 비우는 것이 목적일 때만 빈 값을 넘긴다 — `data-clear=""`(지우기 버튼 없앰) |
 | **참 · 거짓을 문자열로 — `data-checked="false"`** | 치환은 **글자 바꿔치기**라 참/거짓을 모른다. `<input false>` 가 되고 class 자리면 `class="ui-tag false"` 가 된다 | **끄는 방법은 「안 넘기는 것」 하나뿐이다** |
 | **기본값 안에 `}`** | 정규식이 `[^}]*?` 라 **거기서 끊긴다** — 기본값이 잘린 채 나온다 | 중괄호가 필요한 값은 기본값에 두지 않고 **넘겨서** 채운다 |
 | **파셜을 **「상태 예시」**인 채로 복사** | 파셜은 `is-active` · `is-error` 같은 상태를 보여주려 만들어 둔 것이 많다 — 복사하면 **그 상태가 따라온다** | 기준 마크업은 **실제 화면**에서 가져온다 |
-| **빈 기본값 원문 자리(`{{{attrs\|}}}`)가 **한 줄을 통째로** 차지** | 넘기지 않으면 프리렌더가 **그 줄을 지운다**(빈 줄이 남지 않게). 넘겼으면 남는다 — **슬롯이든 일반 변수든 같다** | 그대로 두면 된다. ⚠ 26.09.28 전 `prerender.js` 는 슬롯만 봐서 `data-attrs` 를 넘겨도 지웠다 — 짝 프로젝트는 `npm run sync` 로 맞춘다 |
+| **빈 기본값 원문 자리(`{{{attrs\|}}}`)가 **한 줄을 통째로** 차지** | 넘기지 않으면 프리렌더가 **그 줄을 지운다**(빈 줄이 남지 않게). 넘겼으면 남는다 — **슬롯이든 일반 변수든 같다** | 그대로 두면 된다. ⚠ 26.09.28 전 `prerender.js` 는 슬롯만 봐서 `data-attrs` 를 넘겨도 지웠다 — 짝 프로젝트는 `pnpm run sync` 로 맞춘다 |
 | **template 요소 안에 include** | **브라우저도 프리렌더도 펼치지 않는다.** 슬롯으로 꺼내 파셜에 꽂힌 뒤에 펼쳐진다 | 슬롯 template 안의 include 는 **정상 패턴**이다. 목록 template 안의 include 는 행에 그대로 남으므로 template 자체를 파셜로 뺀다 |
 | **파셜 안 코드 예시의 `{{key\|기본값}}`** | 파셜이 되면 브라우저 · 프리렌더 **둘 다 기본값을 채운다** — 보여주려던 코드가 바뀐다(`{{extra\|…}}` 는 통째로 사라진다) | 예시는 `<textarea class="guide__src" data-raw>` 안에 **적은 그대로** 적는다 — 두 구현 모두 안쪽을 건너뛴다. 글자로 보일 `&` 는 `&amp;` 로 |
 | **파셜 안 문장의 `{{key\|기본값}}`** | 문장 속 인라인 코드도 **똑같이 채워진다** | 중괄호를 엔티티(`&#123;` · `&#125;`)로 적는다 |
@@ -635,14 +635,14 @@ template   id="sample_invite_body"
 | `{{{body}}}` 가 글자로 보인다 | 슬롯을 안 넘겼다 / template 아이디가 다르다 / 옛 `dynamicImport.js`(강력 새로고침) |
 | 파셜 자리가 통째로 비어 있다 | 경로가 파셜 기준이거나 `./` 로 적혀 있다(루트 기준 `/html/include/…` 로 적는다) / 파일명 오타 — 콘솔과 프리렌더 경고(`! 파셜 없음`)를 본다 |
 | 화면은 되는데 **산출물만** 다르다 | include 태그가 `div` 가 아니다 / 컨테이너에 내용을 적었다 / 두 구현 중 한쪽만 고쳤다 |
-| index 에서 열면 옛 화면이다 | `npm run prerender` 를 돌리지 않았다 (index 링크는 전부 `./prerender/`) |
-| 라벨을 눌렀는데 다른 입력이 반응한다 | 고정 id 파셜을 두 번 넣었다 → `npm run validate` 의 `no-dup-id` |
-| 마크업이 깨져 보인다 | Live Server 로 열었다 → `npm run serve` (http://localhost:3500) |
+| index 에서 열면 옛 화면이다 | `pnpm run prerender` 를 돌리지 않았다 (index 링크는 전부 `./prerender/`) |
+| 라벨을 눌렀는데 다른 입력이 반응한다 | 고정 id 파셜을 두 번 넣었다 → `pnpm run validate` 의 `no-dup-id` |
+| 마크업이 깨져 보인다 | Live Server 로 열었다 → `pnpm run serve` (http://localhost:3500) |
 | class 가 하나 모자라거나 `false` 가 붙어 있다 | 빈 값을 넘겨 기본값이 밀렸다 / 참·거짓을 문자열로 넘겼다 — 끄려면 **안 넘긴다** |
 | 기본값이 **잘린 채** 나온다 | 기본값 안에 `}` 를 썼다 — 정규식이 거기서 끊는다 |
 | **산출물에서만** 값이 기본값이다 | `data-*` 를 작은따옴표로 적었다 / `data-*` 에 대문자를 썼다(이쪽은 반대로 브라우저만 실패) |
-| `disabled` · `checked` 가 원본 화면엔 있는데 **산출물에만 없다** | 옛 `prerender.js` — 한 줄짜리 `{{{attrs\|}}}` 를 「슬롯을 넘겼나」로만 보고 지웠다(26.09.28 수정). `npm run sync` 로 짝과 맞는지 본다 |
-| `npm run validate` 에 `Stray end tag </template>` · 중복 id | 옛 `prerender.js` 가 template 안의 include 를 펼쳐 **목록 template 이 슬롯 template 안에 겹쳤다**(26.09.28 수정) / 설명 주석에 template 태그를 그대로 적었다 |
+| `disabled` · `checked` 가 원본 화면엔 있는데 **산출물에만 없다** | 옛 `prerender.js` — 한 줄짜리 `{{{attrs\|}}}` 를 「슬롯을 넘겼나」로만 보고 지웠다(26.09.28 수정). `pnpm run sync` 로 짝과 맞는지 본다 |
+| `pnpm run validate` 에 `Stray end tag </template>` · 중복 id | 옛 `prerender.js` 가 template 안의 include 를 펼쳐 **목록 template 이 슬롯 template 안에 겹쳤다**(26.09.28 수정) / 설명 주석에 template 태그를 그대로 적었다 |
 | 코드 예시의 `{{key\|기본값}}` 가 **기본값으로 바뀌어** 보인다 | 파셜 안 예시를 `<textarea data-raw>` 로 적지 않았다 / 옛 `dynamicImport.js`(강력 새로고침) |
 
 <!-- /auto:symptoms -->
@@ -651,9 +651,9 @@ template   id="sample_invite_body"
 
 ## 10. 파셜을 고친 뒤
 
-- [ ] `npm run prerender` — **전체**를 돌린다(특정 파일만 돌리면 페이지 간 링크가 404).
+- [ ] `pnpm run prerender` — **전체**를 돌린다(특정 파일만 돌리면 페이지 간 링크가 404).
 - [ ] `public/index.html` — 그 파셜을 include 한 페이지(`grep -rl "_파셜명" public/html/*.html`)의 `update_date` 갱신.
       ⚠ **화면·동작이 달라진 페이지에만.** 구조만 옮긴 정리는 찍지 않는다.
 - [ ] 신규 파셜이면 `docs/WORKLOG.md` 에 한 줄(날짜 · 항목 · 위치 · 사유 · 작성자).
-- [ ] `npm run validate` 에 error 가 없다 · 고친 파일은 `npx prettier --write <파일>`.
+- [ ] `pnpm run validate` 에 error 가 없다 · 고친 파일은 `pnpm exec prettier --write <파일>`.
 - [ ] 커밋에 **원본과 산출물을 함께** 넣는다(커밋 직전 검사가 확인한다).

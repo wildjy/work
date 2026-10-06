@@ -6,11 +6,11 @@
   "scripts": {
     "serve": "node scripts/serve.js",
     "prerender": "node scripts/prerender.js",
-    "postprerender": "npm run validate",
+    "postprerender": "pnpm run validate",
     "prerender:watch": "node scripts/prerender.js --watch",
     "prerender:keep": "node scripts/prerender.js --keep-comments",
     "lint": "eslint .",
-    "check": "npm run prerender && npm run lint",
+    "check": "pnpm run prerender && pnpm run lint",
     "lint:fix": "eslint . --fix",
     "format": "prettier --write .",
     "format:check": "prettier --check .",
@@ -22,6 +22,7 @@
     "sync": "node scripts/sync_runtime.js",
     "verify": "node scripts/verify_prerender.js"
   },
+  "packageManager": "pnpm@12.3.4",
   "engines": {
     "node": ">=20"
   },
@@ -36,7 +37,7 @@
     "simple-git-hooks": "^2.14.0"
   },
   "simple-git-hooks": {
-    "pre-commit": "npx lint-staged && node scripts/precommit.js"
+    "pre-commit": "pnpm exec lint-staged && node scripts/precommit.js"
   },
   "lint-staged": {
     "*.js": [

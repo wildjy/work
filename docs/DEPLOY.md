@@ -49,12 +49,12 @@ Actions 방식은 올릴 폴더를 한 줄로 정한다 — 폴더를 옮기거�
 
 | 스텝 | 왜 |
 | --- | --- |
-| `npm ci` → `npm run prerender` | 러너에서 산출물을 새로 만든다 |
+| `pnpm install --frozen-lockfile` → `pnpm run prerender` | 러너에서 산출물을 새로 만든다 |
 | `git diff --exit-code --ignore-cr-at-eol public/prerender` | **원본만 고치고 프리렌더 없이 푸시**한 것을 잡는다(커밋 훅과 같은 검사) |
-| `npm run validate` | 마크업 오류 |
+| `pnpm run validate` | 마크업 오류 |
 | `upload-pages-artifact` → `deploy-pages` | `public/` 을 올려 배포 |
 
-> 아티팩트는 `npm run prerender` **뒤의** `public/` 이므로, 검사 4줄을 지워도 **배포되는 화면은 항상 최신**이다.
+> 아티팩트는 `pnpm run prerender` **뒤의** `public/` 이므로, 검사 4줄을 지워도 **배포되는 화면은 항상 최신**이다.
 > 그 검사는 「저장소에 커밋된 산출물」이 최신인지 보는 보조 장치다.
 
 ---
@@ -133,7 +133,7 @@ public/** text eol=crlf   # 리눅스 러너에서도 CRLF
 | 파셜(include) 사용법 | `https://wildjy.github.io/work/prerender/Guide_Partial.html` |
 | 폴더 구조 | `https://wildjy.github.io/work/prerender/Guide_Structure.html` |
 
-> ⚠ **로컬과 다른 점** — `npm run serve` 는 확장자를 떼도 열리지만(`/prerender/Sample` → 301),
+> ⚠ **로컬과 다른 점** — `pnpm run serve` 는 확장자를 떼도 열리지만(`/prerender/Sample` → 301),
 > **GitHub Pages 는 `.html` 을 붙여야 한다.** `index.html` 의 링크는 전부 확장자가 붙어 있어
 > 목록에서 눌러 들어가는 경로는 그대로 동작한다.
 
@@ -165,7 +165,7 @@ curl -s -o /dev/null -w "%{http_code}\n" https://wildjy.github.io/work/prerender
 curl -s https://wildjy.github.io/work/ | grep -i jekyll
 
 # 4. CI 가드가 로컬에서는 통과하나
-npm run prerender && git diff --exit-code --ignore-cr-at-eol public/prerender && npm run validate
+pnpm run prerender && git diff --exit-code --ignore-cr-at-eol public/prerender && pnpm run validate
 ```
 
 그래도 같은 스텝에서 막히면 워크플로의 **검사 4줄(`setup-node` ~ `validate`)을 통째로 빼면** 된다.

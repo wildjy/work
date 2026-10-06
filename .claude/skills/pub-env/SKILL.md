@@ -1,14 +1,14 @@
 ---
 name: pub-env
 description: >-
-  로컬 서버를 띄우거나, 파일 편집이 CRLF·탭 때문에 실패하거나, 프리렌더 산출물의 주석이 사라지거나 남는 이유를 확인할 때, 또는 dynamicImport·listRender·prerender 스크립트 자체를 고칠 때. npm run serve(npx serve public)를 쓰고 Live Server 를 쓰지 않는 이유, public 소스의 CRLF+탭 규칙과 node 치환, 산출물 주석 정리 규칙(@ 표시), 런타임 스크립트와 프리렌더가 같은 규칙을 이중 구현한다는 점을 담는다. 로컬서버·serve·Live Server·CRLF·탭·주석·@·prerender.js·dynamicImport 키워드에서 사용.
+  로컬 서버를 띄우거나, 파일 편집이 CRLF·탭 때문에 실패하거나, 프리렌더 산출물의 주석이 사라지거나 남는 이유를 확인할 때, 또는 dynamicImport·listRender·prerender 스크립트 자체를 고칠 때. pnpm run serve(pnpm dlx serve public)를 쓰고 Live Server 를 쓰지 않는 이유, public 소스의 CRLF+탭 규칙과 node 치환, 산출물 주석 정리 규칙(@ 표시), 런타임 스크립트와 프리렌더가 같은 규칙을 이중 구현한다는 점을 담는다. 로컬서버·serve·Live Server·CRLF·탭·주석·@·prerender.js·dynamicImport 키워드에서 사용.
 ---
 # 작업 환경 (로컬 서버 · 줄바꿈 · 산출물 주석 · 런타임 스크립트)
 
-## 1. 로컬 서버는 `npm run serve` (Live Server 사용 금지)
+## 1. 로컬 서버는 `pnpm run serve` (Live Server 사용 금지)
 
 ```sh
-npm run serve      # = node scripts/serve.js  →  http://localhost:3500 (고정)
+pnpm run serve      # = node scripts/serve.js  →  http://localhost:3500 (고정)
 ```
 
 - `http://localhost:3500/` 가 작업 목록(`index.html`), 원본은 `/html/파일명`, 산출물은 `/prerender/파일명`.
@@ -36,9 +36,9 @@ npm run serve      # = node scripts/serve.js  →  http://localhost:3500 (고정
 
 | 도구 | 설정 | 명령 | 맡는 것 |
 | --- | --- | --- | --- |
-| **Prettier** | `.prettierrc` · `.prettierignore` | `npx prettier --write <파일>` · `npm run format(:check)` | 모양 — 탭 · CRLF · 따옴표 · 120자. JSON 은 공백 |
-| **ESLint 9** | `eslint.config.js` (flat) | `npm run lint` · `lint:fix` | 버그 — 미정의 변수 · `==` · 빈 블록. `public/js` · HTML 인라인 script · `scripts` |
-| **html-validate** | `.htmlvalidate.json` | `npm run validate` | **산출물**(`public/prerender`) 마크업 — 닫는 태그 · 중복 id · 허용 자식. 원본·파셜은 조각이라 검사하지 않는다 |
+| **Prettier** | `.prettierrc` · `.prettierignore` | `pnpm exec prettier --write <파일>` · `pnpm run format(:check)` | 모양 — 탭 · CRLF · 따옴표 · 120자. JSON 은 공백 |
+| **ESLint 9** | `eslint.config.js` (flat) | `pnpm run lint` · `lint:fix` | 버그 — 미정의 변수 · `==` · 빈 블록. `public/js` · HTML 인라인 script · `scripts` |
+| **html-validate** | `.htmlvalidate.json` | `pnpm run validate` | **산출물**(`public/prerender`) 마크업 — 닫는 태그 · 중복 id · 허용 자식. 원본·파셜은 조각이라 검사하지 않는다 |
 | **커밋 훅** | `package.json` 의 `simple-git-hooks` · `lint-staged` · `scripts/precommit.js` | 커밋 시 자동 | ① 스테이징 파일 ESLint·Prettier ② 원본이 있으면 프리렌더 → 산출물 자동 add ③ 산출물 html-validate |
 
 - **정렬은 고친 파일만** 돌린다. 전체 `format` 은 작업자가 요청할 때만 — diff 가 커져 검토가 어렵다.
@@ -55,7 +55,7 @@ node -e "const fs=require('fs');const f='public/html/X.html';let s=fs.readFileSy
 
 ## 3. 산출물 주석 정리 — `@` 표시
 
-`npm run prerender` 는 **전개가 끝난 뒤** 주석을 정리한다(원본은 건드리지 않는다). 끄려면 `npm run prerender:keep`.
+`pnpm run prerender` 는 **전개가 끝난 뒤** 주석을 정리한다(원본은 건드리지 않는다). 끄려면 `pnpm run prerender:keep`.
 
 | | HTML 주석 | 인라인 script 주석 |
 | --- | --- | --- |
@@ -79,7 +79,7 @@ node -e "const fs=require('fs');const f='public/html/X.html';let s=fs.readFileSy
 | **파셜 원문 보여주기** `<textarea class="guide__src" data-src-file="/html/include/…/_x.html">` — 그 파일을 읽은 그대로 코드로 보여 준다(카탈로그의 「펼친 마크업」). 손으로 옮겨 적지 않는다 | `public/js/common.js` `codeSourceFile`(비어 있을 때만 fetch) | `scripts/prerender.js` `fillSrcFiles`(산출물에 채워 넣고 원문 블록으로 보호) |
 | 원문 블록 `<textarea data-raw>` — 안쪽은 치환하지 않는다 | `public/js/dynamicImport.js` `protect` · `RAW_TOKEN_RE` | `scripts/prerender.js` `protectRaw`·`restoreRaw`(산출물에서 `<` `>` 만 엔티티로) |
 
-> ⚠ **한쪽만 고치면 `npm run serve` 로 본 화면과 index(산출물)로 본 화면이 달라진다.** 두 파일을 함께 고치고 `Sample.html` 로 양쪽을 확인한다.
+> ⚠ **한쪽만 고치면 `pnpm run serve` 로 본 화면과 index(산출물)로 본 화면이 달라진다.** 두 파일을 함께 고치고 `Sample.html` 로 양쪽을 확인한다.
 
 ### 알려진 차이 (고치지 않았으면 피한다)
 

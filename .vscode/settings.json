@@ -1,6 +1,6 @@
 {
   // ── Live Server 를 쓰지 않는다 — 파셜에 라이브리로드 스크립트가 주입돼 마크업이 깨진다.
-  //    로컬 서버는 `npm run serve` (npx serve public · http://localhost:3500 고정).
+  //    로컬 서버는 `pnpm run serve` (pnpm dlx serve public · http://localhost:3500 고정).
 
   // ── Open File From Path (jack89ita.open-file-from-path)
   //    파셜 경로(data-source="./include/...") 위에서 Alt+D 를 누르면 그 파일이 열린다.

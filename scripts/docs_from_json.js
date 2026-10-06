@@ -2,8 +2,8 @@
 /**
  * docs_from_json.js — 문서판(docs/PARTIALS.md)의 표를 JSON 에서 찍는다.
  *
- *   npm run docs            # 갈아 끼운다
- *   npm run docs -- --check # 갈아 끼우지 않고 「낡았는가」만 본다(종료코드 1 이면 낡았다)
+ *   pnpm run docs            # 갈아 끼운다
+ *   pnpm run docs -- --check # 갈아 끼우지 않고 「낡았는가」만 본다(종료코드 1 이면 낡았다)
  *
  * 왜 있나 — 같은 표가 화면(Guide_Partial.html)과 문서(PARTIALS.md) 두 곳에 있었고,
  * 화면만 JSON 으로 돌면서 **손으로 쓴 문서 쪽이 조용히 낡았다**(함정 표가 18 vs 24 로 갈렸다).
@@ -156,7 +156,7 @@ function main() {
 			console.log('문서가 JSON 과 같다 (' + done.length + '블록).');
 			return;
 		}
-		console.error('문서가 낡았다 — `npm run docs` 를 돌린다. (' + done.length + '블록 검사)');
+		console.error('문서가 낡았다 — `pnpm run docs` 를 돌린다. (' + done.length + '블록 검사)');
 		process.exit(1);
 	}
 

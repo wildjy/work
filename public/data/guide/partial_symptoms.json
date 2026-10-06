@@ -17,15 +17,15 @@
   },
   {
     "symptom": "index 에서 열면 옛 화면이다",
-    "cause": "<code>npm run prerender</code> 를 돌리지 않았다 (index 링크는 전부 <code>./prerender/</code>)"
+    "cause": "<code>pnpm run prerender</code> 를 돌리지 않았다 (index 링크는 전부 <code>./prerender/</code>)"
   },
   {
     "symptom": "라벨을 눌렀는데 다른 입력이 반응한다",
-    "cause": "고정 id 파셜을 두 번 넣었다 → <code>npm run validate</code> 의 <code>no-dup-id</code>"
+    "cause": "고정 id 파셜을 두 번 넣었다 → <code>pnpm run validate</code> 의 <code>no-dup-id</code>"
   },
   {
     "symptom": "마크업이 깨져 보인다",
-    "cause": "Live Server 로 열었다 → <code>npm run serve</code> (http://localhost:3500)"
+    "cause": "Live Server 로 열었다 → <code>pnpm run serve</code> (http://localhost:3500)"
   },
   {
     "symptom": "class 가 하나 모자라거나 <code>false</code> 가 붙어 있다",
@@ -41,10 +41,10 @@
   },
   {
     "symptom": "<code>disabled</code> · <code>checked</code> 가 원본 화면엔 있는데 <strong>산출물에만 없다</strong>",
-    "cause": "옛 <code>prerender.js</code> — 한 줄짜리 <code>&#123;&#123;&#123;attrs|&#125;&#125;&#125;</code> 를 「슬롯을 넘겼나」로만 보고 지웠다(26.09.28 수정). <code>npm run sync</code> 로 짝과 맞는지 본다"
+    "cause": "옛 <code>prerender.js</code> — 한 줄짜리 <code>&#123;&#123;&#123;attrs|&#125;&#125;&#125;</code> 를 「슬롯을 넘겼나」로만 보고 지웠다(26.09.28 수정). <code>pnpm run sync</code> 로 짝과 맞는지 본다"
   },
   {
-    "symptom": "<code>npm run validate</code> 에 <code>Stray end tag &lt;/template&gt;</code> · 중복 id",
+    "symptom": "<code>pnpm run validate</code> 에 <code>Stray end tag &lt;/template&gt;</code> · 중복 id",
     "cause": "옛 <code>prerender.js</code> 가 template 안의 include 를 펼쳐 <strong>목록 template 이 슬롯 template 안에 겹쳤다</strong>(26.09.28 수정) / 설명 주석에 template 태그를 그대로 적었다"
   },
   {

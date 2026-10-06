@@ -22,7 +22,7 @@ cd <폴더>
 ```
 
 ```sh
-npm install     # prettier · eslint · html-validate · 커밋 훅 설치(prepare → simple-git-hooks)
+pnpm install     # prettier · eslint · html-validate · 커밋 훅 설치(prepare → simple-git-hooks)
 ```
 
 > Windows 에서 npm 스크립트가 막히면 PowerShell 에서 `Set-ExecutionPolicy RemoteSigned -Scope CurrentUser`.
@@ -30,15 +30,15 @@ npm install     # prettier · eslint · html-validate · 커밋 훅 설치(prepa
 ## 2. 실행
 
 ```sh
-npm run serve             # http://localhost:3500  (index = 작업 목록 · 포트 고정)
-npm run prerender         # public/html → public/prerender
-npm run prerender:watch   # 저장할 때마다 자동 재생성
-npm run prerender:keep    # 주석 정리 없이
-npm run lint              # ESLint — JS · HTML 인라인 script
-npm run lint:fix          # 자동 수정 가능한 것만
-npm run format            # Prettier — 전체 정렬
-npm run format:check      # 정렬 안 된 파일만 확인
-npm run validate          # html-validate — 산출물 마크업 검사(.htmlvalidate.json)
+pnpm run serve             # http://localhost:3500  (index = 작업 목록 · 포트 고정)
+pnpm run prerender         # public/html → public/prerender
+pnpm run prerender:watch   # 저장할 때마다 자동 재생성
+pnpm run prerender:keep    # 주석 정리 없이
+pnpm run lint              # ESLint — JS · HTML 인라인 script
+pnpm run lint:fix          # 자동 수정 가능한 것만
+pnpm run format            # Prettier — 전체 정렬
+pnpm run format:check      # 정렬 안 된 파일만 확인
+pnpm run validate          # html-validate — 산출물 마크업 검사(.htmlvalidate.json)
 ```
 
 ⚠ **VSCode Live Server 로 열지 않는다** — 파셜에 스크립트가 주입돼 마크업이 깨진다.
@@ -73,7 +73,7 @@ CLAUDE.md · .claude/           Claude Code 규칙 · 스킬 · 에이전트
 ## 4. 작업 순서
 
 1. `public/html/`·`include/`·`data/` 수정
-2. `npm run prerender`
+2. `pnpm run prerender`
 3. `public/index.html` 에 `viewlist(…)` 등록·작업일자 갱신
 4. 신규 항목은 `docs/WORKLOG.md` 에 한 줄
 5. 커밋 — **커밋 직전 검사가 자동으로 돈다**(아래)
@@ -86,7 +86,7 @@ CLAUDE.md · .claude/           Claude Code 규칙 · 스킬 · 에이전트
 | 2 | 원본(`public/html` · `public/data`)이 커밋에 있으면 프리렌더 → **바뀐 산출물을 자동으로 커밋에 추가** | 커밋에 안 넣은 원본 변경이 있음 · 파셜/데이터/템플릿 경로 오류 · 원본 없는 산출물 |
 | 3 | 커밋에 들어가는 산출물을 html-validate 로 검사 | 닫는 태그 누락 · 중복 id · 허용되지 않는 자식 요소 등 **error** (접근성 권고는 warning 으로 표시만) |
 
-- 훅은 `npm install` 때 설치된다. 수동 설치 : `npx simple-git-hooks`
+- 훅은 `pnpm install` 때 설치된다. 수동 설치 : `pnpm exec simple-git-hooks`
 - 급할 때만 건너뛴다 : `git commit --no-verify`
 
 ## 5. 새 프로젝트로 시작할 때 바꿀 곳

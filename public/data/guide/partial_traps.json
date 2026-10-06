@@ -27,7 +27,7 @@
   {
     "trap": "고정 <code>id</code> 파셜을 두 번 include",
     "what": "id 중복 → 라벨·<code>getElementById</code> 가 <strong>먼저 것만</strong> 가리킨다",
-    "how": "id 를 <code>data-*</code> 로 받는다. <code>npm run validate</code> 의 <code>no-dup-id</code> 가 막아 준다"
+    "how": "id 를 <code>data-*</code> 로 받는다. <code>pnpm run validate</code> 의 <code>no-dup-id</code> 가 막아 준다"
   },
   {
     "trap": "같은 본문 파셜을 슬롯 두 곳에",
@@ -82,12 +82,12 @@
   {
     "trap": "브라우저 캐시",
     "what": "규칙을 고쳤는데 옛 <code>dynamicImport.js</code> 가 돌아 <code>&#123;&#123;&#123;body&#125;&#125;&#125;</code> 가 글자로 보인다",
-    "how": "<code>npm run serve</code>(no-store)로 띄우고 강력 새로고침"
+    "how": "<code>pnpm run serve</code>(no-store)로 띄우고 강력 새로고침"
   },
   {
     "trap": "Live Server 로 열기",
     "what": "파셜 조각에 라이브리로드 스크립트가 주입돼 마크업이 깨진다",
-    "how": "<code>npm run serve</code> (http://localhost:3500) (http://localhost:3500)"
+    "how": "<code>pnpm run serve</code> (http://localhost:3500) (http://localhost:3500)"
   },
   {
     "trap": "<code>template</code> 요소째 파셜로 빼서 사용처보다 <strong>뒤</strong>에서 include",
@@ -97,7 +97,7 @@
   {
     "trap": "<code>data-*</code> 를 <strong>작은따옴표</strong>로",
     "what": "<strong>브라우저는 읽고 프리렌더는 못 읽는다</strong> — <code>partialVars()</code> 의 정규식이 큰따옴표만 본다. 값이 조용히 기본값으로 떨어진다",
-    "how": "큰따옴표로 적는다. <code>npx prettier --write</code> 가 자동으로 맞춘다"
+    "how": "큰따옴표로 적는다. <code>pnpm exec prettier --write</code> 가 자동으로 맞춘다"
   },
   {
     "trap": "<strong>빈 값</strong>을 넘김 — <code>data-cls=\"\"</code>",
@@ -122,7 +122,7 @@
   {
     "trap": "빈 기본값 원문 자리(<code>&#123;&#123;&#123;attrs|&#125;&#125;&#125;</code>)가 <strong>한 줄을 통째로</strong> 차지",
     "what": "넘기지 않으면 프리렌더가 <strong>그 줄을 지운다</strong>(빈 줄이 남지 않게). 넘겼으면 남는다 — <strong>슬롯이든 일반 변수든 같다</strong>",
-    "how": "그대로 두면 된다. ⚠ 26.09.28 전 <code>prerender.js</code> 는 슬롯만 봐서 <code>data-attrs</code> 를 넘겨도 지웠다 — 짝 프로젝트는 <code>npm run sync</code> 로 맞춘다"
+    "how": "그대로 두면 된다. ⚠ 26.09.28 전 <code>prerender.js</code> 는 슬롯만 봐서 <code>data-attrs</code> 를 넘겨도 지웠다 — 짝 프로젝트는 <code>pnpm run sync</code> 로 맞춘다"
   },
   {
     "trap": "template 요소 안에 include",

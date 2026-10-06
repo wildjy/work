@@ -297,7 +297,7 @@
 								<p class="guide__note">
 									이 페이지의 <strong>헤더와 왼쪽 메뉴도 파셜</strong>이고, 표 · 예시 카드 · 데모는 전부
 									<strong>JSON + 템플릿 + 실제 include</strong> 로 그린다 — 규약이 깨지면 이 문서가 먼저 무너진다. 문서 판은
-									<code>docs/PARTIALS.md</code>(같은 JSON 에서 <code>npm run docs</code> 로 찍는다).
+									<code>docs/PARTIALS.md</code>(같은 JSON 에서 <code>pnpm run docs</code> 로 찍는다).
 								</p>
 							</div>
 						</div>
@@ -445,7 +445,7 @@
 										>).
 									</li>
 									<li>
-										파셜을 고쳤으면 <code>npm run prerender</code> — 안 돌리면 index 로 연 화면에 반영되지 않는다(<a
+										파셜을 고쳤으면 <code>pnpm run prerender</code> — 안 돌리면 index 로 연 화면에 반영되지 않는다(<a
 											href="#guide_finish"
 											>14</a
 										>).
@@ -514,7 +514,7 @@
 									  </tr>
 									  <tr>
 									  	<td class="guide__term">마무리</td>
-									  	<td>고쳤으면 <strong><code>npm run prerender</code></strong> → <code>public/index.html</code> 작업일자 → <code>docs/WORKLOG.md</code></td>
+									  	<td>고쳤으면 <strong><code>pnpm run prerender</code></strong> → <code>public/index.html</code> 작업일자 → <code>docs/WORKLOG.md</code></td>
 									  </tr>
 									</tbody>
 								</table>
@@ -2380,7 +2380,7 @@
 								<ul class="guide__list">
 									<li>
 										산출물에서는 template 정의가 지워진다(이미 그렸으므로). 남기려면
-										<code>npm run prerender -- --keep-templates</code>.
+										<code>pnpm run prerender -- --keep-templates</code>.
 									</li>
 									<li>template 안에서는 include 가 동작하지 않는다 — 그래서 template 자체를 파셜로 뺀다.</li>
 									<li>
@@ -2666,7 +2666,7 @@
 									<tbody>
 										<tr>
 											<td class="guide__term">언제 보나</td>
-											<td><code>npm run serve</code> 로 <code>/html/…</code> 을 연 작업 화면</td>
+											<td><code>pnpm run serve</code> 로 <code>/html/…</code> 을 연 작업 화면</td>
 											<td>index 의 링크 · 개발자에게 넘기는 <code>/prerender/…</code></td>
 										</tr>
 										<tr>
@@ -2894,7 +2894,7 @@
 									  </tr>
 									  <tr>
 									  	<td class="guide__term">미리 그려 두기</td>
-									  	<td><code>npm run prerender</code> → <code>public/prerender/*.html</code></td>
+									  	<td><code>pnpm run prerender</code> → <code>public/prerender/*.html</code></td>
 									  	<td>SSG — <code>next build</code> 가 만드는 정적 HTML</td>
 									  </tr>
 									  <tr>
@@ -2958,7 +2958,7 @@
 									<li><strong>활성 상태를 파셜에 박지 않는다.</strong> 현재 메뉴·현재 탭은 <code>common.js</code> 가 붙인다.</li>
 									<li><strong>새 이름은 grep 으로 충돌 검사</strong>하고, 만들었으면 <code>docs/WORKLOG.md</code> 에 한 줄.</li>
 									<li>
-										<code>npm run prerender</code> 로 파셜 개수가 늘었는지 확인한다 — 페이지마다
+										<code>pnpm run prerender</code> 로 파셜 개수가 늘었는지 확인한다 — 페이지마다
 										<code>✓ 파일명 (파셜 n / 목록 n · n행)</code> 이 찍힌다.
 									</li>
 								</ol>
@@ -3014,7 +3014,7 @@
 										개발단 표시 <code>{{ }}</code> 안이 <strong>영문 한 단어만은 아니다</strong> — <a href="#guide_scope">8</a>
 									</li>
 									<li>
-										파셜 · JSON 을 고쳤으면 <strong><code>npm run prerender</code></strong> — <a href="#guide_finish">14</a>
+										파셜 · JSON 을 고쳤으면 <strong><code>pnpm run prerender</code></strong> — <a href="#guide_finish">14</a>
 									</li>
 								</ul>
 							</div>
@@ -3061,7 +3061,7 @@
 									  <tr>
 									  	<td class="guide__term">고정 <code>id</code> 파셜을 두 번 include</td>
 									  	<td>id 중복 → 라벨·<code>getElementById</code> 가 <strong>먼저 것만</strong> 가리킨다</td>
-									  	<td>id 를 <code>data-*</code> 로 받는다. <code>npm run validate</code> 의 <code>no-dup-id</code> 가 막아 준다</td>
+									  	<td>id 를 <code>data-*</code> 로 받는다. <code>pnpm run validate</code> 의 <code>no-dup-id</code> 가 막아 준다</td>
 									  </tr>
 									  <tr>
 									  	<td class="guide__term">같은 본문 파셜을 슬롯 두 곳에</td>
@@ -3116,12 +3116,12 @@
 									  <tr>
 									  	<td class="guide__term">브라우저 캐시</td>
 									  	<td>규칙을 고쳤는데 옛 <code>dynamicImport.js</code> 가 돌아 <code>&#123;&#123;&#123;body&#125;&#125;&#125;</code> 가 글자로 보인다</td>
-									  	<td><code>npm run serve</code>(no-store)로 띄우고 강력 새로고침</td>
+									  	<td><code>pnpm run serve</code>(no-store)로 띄우고 강력 새로고침</td>
 									  </tr>
 									  <tr>
 									  	<td class="guide__term">Live Server 로 열기</td>
 									  	<td>파셜 조각에 라이브리로드 스크립트가 주입돼 마크업이 깨진다</td>
-									  	<td><code>npm run serve</code> (http://localhost:3500) (http://localhost:3500)</td>
+									  	<td><code>pnpm run serve</code> (http://localhost:3500) (http://localhost:3500)</td>
 									  </tr>
 									  <tr>
 									  	<td class="guide__term"><code>template</code> 요소째 파셜로 빼서 사용처보다 <strong>뒤</strong>에서 include</td>
@@ -3131,7 +3131,7 @@
 									  <tr>
 									  	<td class="guide__term"><code>data-*</code> 를 <strong>작은따옴표</strong>로</td>
 									  	<td><strong>브라우저는 읽고 프리렌더는 못 읽는다</strong> — <code>partialVars()</code> 의 정규식이 큰따옴표만 본다. 값이 조용히 기본값으로 떨어진다</td>
-									  	<td>큰따옴표로 적는다. <code>npx prettier --write</code> 가 자동으로 맞춘다</td>
+									  	<td>큰따옴표로 적는다. <code>pnpm exec prettier --write</code> 가 자동으로 맞춘다</td>
 									  </tr>
 									  <tr>
 									  	<td class="guide__term"><strong>빈 값</strong>을 넘김 — <code>data-cls=""</code></td>
@@ -3156,7 +3156,7 @@
 									  <tr>
 									  	<td class="guide__term">빈 기본값 원문 자리(<code>&#123;&#123;&#123;attrs|&#125;&#125;&#125;</code>)가 <strong>한 줄을 통째로</strong> 차지</td>
 									  	<td>넘기지 않으면 프리렌더가 <strong>그 줄을 지운다</strong>(빈 줄이 남지 않게). 넘겼으면 남는다 — <strong>슬롯이든 일반 변수든 같다</strong></td>
-									  	<td>그대로 두면 된다. ⚠ 26.09.28 전 <code>prerender.js</code> 는 슬롯만 봐서 <code>data-attrs</code> 를 넘겨도 지웠다 — 짝 프로젝트는 <code>npm run sync</code> 로 맞춘다</td>
+									  	<td>그대로 두면 된다. ⚠ 26.09.28 전 <code>prerender.js</code> 는 슬롯만 봐서 <code>data-attrs</code> 를 넘겨도 지웠다 — 짝 프로젝트는 <code>pnpm run sync</code> 로 맞춘다</td>
 									  </tr>
 									  <tr>
 									  	<td class="guide__term">template 요소 안에 include</td>
@@ -3222,15 +3222,15 @@
 									  </tr>
 									  <tr>
 									  	<td class="guide__term">index 에서 열면 옛 화면이다</td>
-									  	<td><code>npm run prerender</code> 를 돌리지 않았다 (index 링크는 전부 <code>./prerender/</code>)</td>
+									  	<td><code>pnpm run prerender</code> 를 돌리지 않았다 (index 링크는 전부 <code>./prerender/</code>)</td>
 									  </tr>
 									  <tr>
 									  	<td class="guide__term">라벨을 눌렀는데 다른 입력이 반응한다</td>
-									  	<td>고정 id 파셜을 두 번 넣었다 → <code>npm run validate</code> 의 <code>no-dup-id</code></td>
+									  	<td>고정 id 파셜을 두 번 넣었다 → <code>pnpm run validate</code> 의 <code>no-dup-id</code></td>
 									  </tr>
 									  <tr>
 									  	<td class="guide__term">마크업이 깨져 보인다</td>
-									  	<td>Live Server 로 열었다 → <code>npm run serve</code> (http://localhost:3500)</td>
+									  	<td>Live Server 로 열었다 → <code>pnpm run serve</code> (http://localhost:3500)</td>
 									  </tr>
 									  <tr>
 									  	<td class="guide__term">class 가 하나 모자라거나 <code>false</code> 가 붙어 있다</td>
@@ -3246,10 +3246,10 @@
 									  </tr>
 									  <tr>
 									  	<td class="guide__term"><code>disabled</code> · <code>checked</code> 가 원본 화면엔 있는데 <strong>산출물에만 없다</strong></td>
-									  	<td>옛 <code>prerender.js</code> — 한 줄짜리 <code>&#123;&#123;&#123;attrs|&#125;&#125;&#125;</code> 를 「슬롯을 넘겼나」로만 보고 지웠다(26.09.28 수정). <code>npm run sync</code> 로 짝과 맞는지 본다</td>
+									  	<td>옛 <code>prerender.js</code> — 한 줄짜리 <code>&#123;&#123;&#123;attrs|&#125;&#125;&#125;</code> 를 「슬롯을 넘겼나」로만 보고 지웠다(26.09.28 수정). <code>pnpm run sync</code> 로 짝과 맞는지 본다</td>
 									  </tr>
 									  <tr>
-									  	<td class="guide__term"><code>npm run validate</code> 에 <code>Stray end tag &lt;/template&gt;</code> · 중복 id</td>
+									  	<td class="guide__term"><code>pnpm run validate</code> 에 <code>Stray end tag &lt;/template&gt;</code> · 중복 id</td>
 									  	<td>옛 <code>prerender.js</code> 가 template 안의 include 를 펼쳐 <strong>목록 template 이 슬롯 template 안에 겹쳤다</strong>(26.09.28 수정) / 설명 주석에 template 태그를 그대로 적었다</td>
 									  </tr>
 									  <tr>
@@ -3501,13 +3501,15 @@
 						<div class="ui-card">
 							<div class="ui-card__body">
 								<ul class="guide__check">
-									<li><code>npm run prerender</code> — 전체를 돌린다(특정 파일만 돌리면 페이지 간 링크가 404).</li>
+									<li><code>pnpm run prerender</code> — 전체를 돌린다(특정 파일만 돌리면 페이지 간 링크가 404).</li>
 									<li>
 										<code>public/index.html</code> — 그 파셜을 include 한 페이지의 수정일 갱신.
 										<strong>화면·동작이 달라진 페이지에만</strong> 찍는다.
 									</li>
 									<li>신규 파셜이면 <code>docs/WORKLOG.md</code> 에 한 줄(날짜 · 항목 · 위치 · 사유 · 작성자).</li>
-									<li><code>npm run validate</code> 에 error 가 없다 · 고친 파일은 <code>npx prettier --write</code> 로 정렬.</li>
+									<li>
+										<code>pnpm run validate</code> 에 error 가 없다 · 고친 파일은 <code>pnpm exec prettier --write</code> 로 정렬.
+									</li>
 									<li>커밋에 <strong>원본과 산출물을 함께</strong> 넣는다(커밋 직전 검사가 확인한다).</li>
 								</ul>
 							</div>

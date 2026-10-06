@@ -6,7 +6,7 @@
  *   node scripts/pages_base.js --base /work --out dist # 출력 폴더 지정
  *
  * 왜 필요한가 : 저장소의 경로는 전부 「사이트 루트」 기준(/css/ · /js/ · /html/include/…)이다.
- * 로컬(npm run serve)은 public/ 을 / 로 주지만, GitHub Pages 프로젝트 사이트는 /<저장소명>/ 아래에 올라간다.
+ * 로컬(pnpm run serve)은 public/ 을 / 로 주지만, GitHub Pages 프로젝트 사이트는 /<저장소명>/ 아래에 올라간다.
  * 그대로 올리면 /css/common.css 가 wildjy.github.io/css/… 를 찾아 스타일·스크립트·파셜이 전부 404 가 된다.
  *
  * ⚠ 원본(public/)과 커밋된 산출물(public/prerender)은 **건드리지 않는다** — 복사본(_site)만 바꾼다.

@@ -635,7 +635,7 @@ document.addEventListener('change', function (e) {
 //
 // ⚠ 페이지마다 「메뉴명 문자열」로 토글하는 스크립트를 붙이지 않는다 —
 //    메뉴명이 바뀌면 여러 곳이 조용히 깨지고, 새 페이지를 만들 때마다 빠뜨린다.
-// ⚠ 확장자를 떼고 비교한다 — `npx serve` 는 cleanUrls 가 기본이라
+// ⚠ 확장자를 떼고 비교한다 — `pnpm dlx serve` 는 cleanUrls 가 기본이라
 //    /prerender/faq.html 로 들어가도 주소가 /prerender/faq 로 바뀐다.
 //    (파일을 직접 열면 .html 이 남는다 → 양쪽 다 떼야 어느 환경에서도 맞는다)
 // 상세·빈 화면처럼 자기 메뉴가 없는 변형 페이지는 아래 표로 대표 페이지에 연결한다.

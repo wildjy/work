@@ -61,7 +61,7 @@
   },
   {
     "concept": "미리 그려 두기",
-    "pub": "<code>npm run prerender</code> → <code>public/prerender/*.html</code>",
+    "pub": "<code>pnpm run prerender</code> → <code>public/prerender/*.html</code>",
     "react": "SSG — <code>next build</code> 가 만드는 정적 HTML"
   },
   {

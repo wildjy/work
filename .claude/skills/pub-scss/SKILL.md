@@ -34,12 +34,12 @@ public/font/Pretendard/Pretendard-*.woff2
 
 > 🤖 **AI 작업 규칙 : 프로젝트의 css 는 작업자가 컴파일한다.**
 > Claude 는 **`.scss` 만 고치고** `public/css` 에 파일을 만들거나 고치지 않는다. 수정한 `.scss` 목록을 보고에 적는다.
-> 문법 확인이 필요하면 **scratchpad 로만** 출력한다 — `npx --yes sass@1 --no-source-map --load-path=public/scss public/scss/common.scss <scratchpad>/common.css`
+> 문법 확인이 필요하면 **scratchpad 로만** 출력한다 — `pnpm dlx sass@1 --no-source-map --load-path=public/scss public/scss/common.scss <scratchpad>/common.css`
 > (그 결과를 `public/css` 로 복사하지 않는다)
 
 - **`.css` 를 직접 고치지 않는다** — 다음 컴파일에 덮인다. `.scss` 와 컴파일된 `.css` 를 **함께 커밋**한다.
 - `public/css` 는 Prettier 대상이 아니다(`.prettierignore`) — 정렬하면 다음 컴파일에 되돌아가 diff 만 생긴다.
-- ⚠ **Live Server 와 Live Sass Compiler 는 다른 확장이다.** 서버는 `npm run serve`, 컴파일만 Watch Sass.
+- ⚠ **Live Server 와 Live Sass Compiler 는 다른 확장이다.** 서버는 `pnpm run serve`, 컴파일만 Watch Sass.
 
 ## 3. 토큰 규칙
 

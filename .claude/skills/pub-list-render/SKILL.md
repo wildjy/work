@@ -1,7 +1,7 @@
 ---
 name: pub-list-render
 description: >-
-  목록·테이블·카드처럼 같은 구조가 반복되는 마크업을 만들 때, 그리고 HTML·파셜·JSON 수정 후 프리렌더로 마무리할 때. 행을 하드코딩하지 않고 public/data 의 JSON + template 요소 + listRender.js 로 렌더한다. data-source/data-template/data-empty/data-filter 문법, 0건 상태를 함께 만드는 규칙, npm run prerender 가 왜 필수인지, 그리고 프리렌더 다음에 index.html 의 작업일자(create_date/update_date)를 어떤 기준으로 갱신하는지를 담는다. 목록·테이블·JSON·프리렌더·prerender·index.html·작업일자·작업목록 키워드에서 사용.
+  목록·테이블·카드처럼 같은 구조가 반복되는 마크업을 만들 때, 그리고 HTML·파셜·JSON 수정 후 프리렌더로 마무리할 때. 행을 하드코딩하지 않고 public/data 의 JSON + template 요소 + listRender.js 로 렌더한다. data-source/data-template/data-empty/data-filter 문법, 0건 상태를 함께 만드는 규칙, pnpm run prerender 가 왜 필수인지, 그리고 프리렌더 다음에 index.html 의 작업일자(create_date/update_date)를 어떤 기준으로 갱신하는지를 담는다. 목록·테이블·JSON·프리렌더·prerender·index.html·작업일자·작업목록 키워드에서 사용.
 ---
 # 반복 목록 · 프리렌더 · 작업일자
 
@@ -85,7 +85,7 @@ description: >-
 
 - **실행 시점** — 페이지에 `.dynamic-content`(파셜) 가 있으면 `dynamic-content-loaded` 이후, 없으면 `DOMContentLoaded` 직후에 렌더한다.
   렌더가 끝나면 **`dynamic-list-loaded`** 가 한 번 발생한다. **목록에 의존하는 스크립트는 이 이벤트에 연결**한다.
-- **`fetch` 기반**이라 `file://` 로 열면 동작하지 않는다. `npm run serve` 로 확인한다.
+- **`fetch` 기반**이라 `file://` 로 열면 동작하지 않는다. `pnpm run serve` 로 확인한다.
 - **템플릿 안에서는 파셜 include 가 동작하지 않는다**— 브라우저도 프리렌더도 template 안은 펼치지 않는다(26.09.28 부터 프리렌더도 같다).
   템플릿을 여러 페이지에서 공유하려면 **`<template>` 자체를 파셜 파일로** 만들어 include 한다.
 - **데이터 JSON 은 기능 단위 폴더로 관리한다.** `public/data/<기능명>/<화면>_<용도>.json`
@@ -104,11 +104,11 @@ description: >-
 → 프리렌더는 선택이 아니라 **HTML·파셜·JSON 을 고칠 때마다 거치는 마무리 단계**다.
 
 ```sh
-npm run prerender                     # public/html 전체
-npm run prerender -- Sample.html      # 특정 파일만
-npm run prerender -- --keep-templates # <template> 정의도 남기기
-npm run prerender:keep                # 원본 주석 그대로
-npm run prerender:watch               # 감시 모드
+pnpm run prerender                     # public/html 전체
+pnpm run prerender -- Sample.html      # 특정 파일만
+pnpm run prerender -- --keep-templates # <template> 정의도 남기기
+pnpm run prerender:keep                # 원본 주석 그대로
+pnpm run prerender:watch               # 감시 모드
 ```
 
 - 출력 폴더는 `public/html` 과 **같은 폴더 구조**로 난다. 경로는 전부 사이트 루트 기준(`/css/`·`/js/`·`/images/`)이라 페이지가 어느 폴더에 있어도 그대로 동작한다.
@@ -116,9 +116,9 @@ npm run prerender:watch               # 감시 모드
 - 산출물은 **git 에 포함된다.** 원본 `.html`·`.json` 과 **함께 커밋**한다.
 - **특정 파일만** 프리렌더하면 페이지 간 링크가 404 날 수 있다. 링크까지 확인하려면 전체를 돌린다.
 - **프리렌더를 통과시키려면** ① 목록 컨테이너를 **완전히 비워** 두고 ② `data-template` 은 `#id` 이며 대상이 진짜 `<template id="…">` 이고
-  ③ 여는 태그 속성값에 `>` 가 없어야 한다. 하나라도 어기면 **`npm run serve` 화면에는 나오는데 산출물에는 안 나온다.**
+  ③ 여는 태그 속성값에 `>` 가 없어야 한다. 하나라도 어기면 **`pnpm run serve` 화면에는 나오는데 산출물에는 안 나온다.**
 
-> 🤖 **AI 작업 규칙:** HTML·파셜·JSON 을 수정했으면 **마무리로 `npm run prerender`(전체)를 직접 실행**하고
+> 🤖 **AI 작업 규칙:** HTML·파셜·JSON 을 수정했으면 **마무리로 `pnpm run prerender`(전체)를 직접 실행**하고
 > 출력의 「파셜 N / 목록 N · N행」 과 경고(`! 파셜 없음` 등)를 확인한 뒤 보고한다.
 
 ---

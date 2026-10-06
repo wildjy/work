@@ -27,7 +27,7 @@
   {
     "group": "summary",
     "term": "마무리",
-    "desc": "고쳤으면 <strong><code>npm run prerender</code></strong> → <code>public/index.html</code> 작업일자 → <code>docs/WORKLOG.md</code>"
+    "desc": "고쳤으면 <strong><code>pnpm run prerender</code></strong> → <code>public/index.html</code> 작업일자 → <code>docs/WORKLOG.md</code>"
   },
   {
     "group": "call",

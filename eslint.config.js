@@ -1,8 +1,8 @@
 /**
  * ESLint 9 (flat config)
  *
- *   npm run lint        # 검사
- *   npm run lint:fix    # 자동 수정 가능한 것만 고친다
+ *   pnpm run lint        # 검사
+ *   pnpm run lint:fix    # 자동 수정 가능한 것만 고친다
  *
  * ⚠ 코드 모양(들여쓰기·따옴표·줄바꿈)은 Prettier 담당이다. 여기에는 「버그가 될 것」만 둔다.
  *

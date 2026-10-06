@@ -1,0 +1,6 @@
+# pnpm 설정 — pnpm 10+ 는 의존성의 설치 스크립트를 기본으로 막는다(ERR_PNPM_IGNORED_BUILDS).
+# simple-git-hooks 는 설치될 때 .git/hooks/pre-commit 을 만든다 — 이 저장소는 커밋 직전 검사가 필수라 허용한다.
+#   (훅 내용은 package.json 의 "simple-git-hooks" 항목, 검사는 scripts/precommit.js)
+# 새 패키지가 여기에 추가로 뜨면 **무엇을 하는 스크립트인지 보고** true/false 를 정한다.
+allowBuilds:
+  simple-git-hooks: true
