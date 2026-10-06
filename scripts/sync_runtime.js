@@ -2,14 +2,14 @@
 /**
  * sync_runtime.js — 짝 프로젝트와 **공용 런타임 파일**이 벌어졌는지 보고, 원하는 방향으로 옮긴다.
  *
- *   npm run sync                          # 설정(package.json 의 pubSync.peers)의 짝과 비교
- *   npm run sync -- D:/ara-pub            # 짝을 직접 지정
- *   npm run sync -- --check               # 벌어졌으면 종료코드 1 (훅에 걸 때)
- *   npm run sync -- --pull prerender      # 짝 → 여기   (짝이 앞섰을 때)
- *   npm run sync -- --push prerender      # 여기 → 짝   (여기가 앞섰을 때)
- *   npm run sync -- --pull prerender --format    # 받은 뒤 이 프로젝트 prettier 까지
+ *   pnpm run sync                          # 설정(package.json 의 pubSync.peers)의 짝과 비교
+ *   pnpm run sync -- D:/ara-pub            # 짝을 직접 지정
+ *   pnpm run sync -- --check               # 벌어졌으면 종료코드 1 (훅에 걸 때)
+ *   pnpm run sync -- --pull prerender      # 짝 → 여기   (짝이 앞섰을 때)
+ *   pnpm run sync -- --push prerender      # 여기 → 짝   (여기가 앞섰을 때)
+ *   pnpm run sync -- --pull prerender --format    # 받은 뒤 이 프로젝트 prettier 까지
  *
- * ⚠ **이 파일은 두 프로젝트에 같은 내용으로 둔다.** 그래서 어느 쪽에서 작업하든 `npm run sync` 로
+ * ⚠ **이 파일은 두 프로젝트에 같은 내용으로 둔다.** 그래서 어느 쪽에서 작업하든 `pnpm run sync` 로
  *   확인·반영할 수 있다(스크립트 자신도 비교 대상에 들어 있어 벌어지면 알려 준다).
  *
  * 왜 「자동 복사」가 아니라 「검사 + 명시적 반영」인가
@@ -117,11 +117,13 @@ function copy(entry, peer, dir) {
 	}
 	if (!flag('format')) {
 		console.log('\n  서식은 건드리지 않았습니다(로직만 맞추는 것이 이 도구의 일).');
-		console.log('  이 프로젝트 서식으로 맞추려면 : npm run sync -- ... --pull ' + entry.key + ' --format');
+		console.log('  이 프로젝트 서식으로 맞추려면 : pnpm run sync -- ... --pull ' + entry.key + ' --format');
 		console.log('  ⚠ --format 은 파일 전체를 다시 찍습니다 — diff 가 수백~수천 줄이 될 수 있습니다.');
 		// 받은 파일이 이 프로젝트 서식과 맞는지 **읽기만** 해서 알려 준다 — 고칠지는 사람이 정한다.
 		// (두 프로젝트의 줄끝이 다르면 CRLF/LF 가 섞인 채로 남는다)
 		if (hasPrettier()) {
+			// ⚠ 여기는 npx 로 둔다 — 로컬에 깔린 prettier 를 부르는 자리라 npm·pnpm 어느 쪽으로 설치했든 node_modules/.bin 에서 찾는다.
+			//    (이 파일은 두 프로젝트가 같은 내용으로 쓰므로, 한쪽 패키지 매니저에만 되는 명령을 넣지 않는다)
 			const chk = spawnSync('npx', ['prettier', '--check', entry.file], { cwd: ROOT, shell: true, encoding: 'utf8' });
 			console.log(
 				chk.status === 0
@@ -143,12 +145,12 @@ function copy(entry, peer, dir) {
 function usage() {
 	const keys = FILES.map((f) => f.key).join(' · ');
 	const rows = [
-		['npm run sync', '짝과 비교 (파일은 건드리지 않는다)'],
-		['npm run sync -- --pull <키>', '짝 → 여기   (짝이 앞섰을 때)'],
-		['npm run sync -- --push <키>', '여기 → 짝   (여기가 앞섰을 때)'],
-		['npm run sync -- --pull <키> --format', '받은 뒤 이 프로젝트 prettier 까지 (파일 전체가 다시 찍힌다)'],
-		['npm run sync -- --check', '벌어졌으면 종료코드 1 (훅에 걸 때)'],
-		['npm run sync -- <경로> ...', '짝을 직접 지정 (다른 PC · 짝이 여러 개일 때)'],
+		['pnpm run sync', '짝과 비교 (파일은 건드리지 않는다)'],
+		['pnpm run sync -- --pull <키>', '짝 → 여기   (짝이 앞섰을 때)'],
+		['pnpm run sync -- --push <키>', '여기 → 짝   (여기가 앞섰을 때)'],
+		['pnpm run sync -- --pull <키> --format', '받은 뒤 이 프로젝트 prettier 까지 (파일 전체가 다시 찍힌다)'],
+		['pnpm run sync -- --check', '벌어졌으면 종료코드 1 (훅에 걸 때)'],
+		['pnpm run sync -- <경로> ...', '짝을 직접 지정 (다른 PC · 짝이 여러 개일 때)'],
 	];
 	console.log('  ── 사용할 수 있는 명령 ─────────────────────────────');
 	// 한글은 터미널에서 두 칸이라 padEnd 로는 줄이 어긋난다 — 보이는 폭으로 맞춘다
@@ -157,14 +159,14 @@ function usage() {
 	const width = (s) => [...s].reduce((n, c) => n + (wide(c.codePointAt(0)) ? 2 : 1), 0);
 	rows.forEach(([cmd, desc]) => console.log('    ' + cmd + ' '.repeat(Math.max(1, 40 - width(cmd))) + desc));
 	console.log('\n    <키> : ' + keys);
-	console.log('    받거나 보낸 뒤에는 npm run sync 로 다시 비교하고, 산출물은 npm run prerender 로 새로 만든다.\n');
+	console.log('    받거나 보낸 뒤에는 pnpm run sync 로 다시 비교하고, 산출물은 pnpm run prerender 로 새로 만든다.\n');
 }
 
 /* ── 실행 ───────────────────────────────────────────── */
 const list = peers();
 if (!list.length) {
 	console.log('\n  짝 프로젝트가 지정되지 않았습니다 — 비교를 건너뜁니다.');
-	console.log('    npm run sync -- <경로>');
+	console.log('    pnpm run sync -- <경로>');
 	console.log('    또는 package.json 에 "pubSync": { "peers": ["../다른프로젝트"] }\n');
 	process.exit(0);
 }
@@ -216,8 +218,8 @@ for (const peer of list) {
 		console.log('        문맥 …' + d.before);
 		console.log('        여기 : ' + (d.mine || '(없음)'));
 		console.log('        짝   : ' + (d.theirs || '(없음)'));
-		console.log('        짝이 맞다면 : npm run sync -- ' + peer + ' --pull ' + entry.key);
-		console.log('        여기가 맞다면 : npm run sync -- ' + peer + ' --push ' + entry.key);
+		console.log('        짝이 맞다면 : pnpm run sync -- ' + peer + ' --pull ' + entry.key);
+		console.log('        여기가 맞다면 : pnpm run sync -- ' + peer + ' --push ' + entry.key);
 	}
 }
 

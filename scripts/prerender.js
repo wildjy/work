@@ -94,9 +94,10 @@ const escapeMap = { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": 
 const escapeHtml = (v) => String(v).replace(/[&<>"']/g, (c) => escapeMap[c]);
 const rel = (p) => path.relative(ROOT, p);
 
+// 큰따옴표 · 작은따옴표 둘 다 받는다 — partialVars 와 같은 규칙(prettier 가 값에 " 가 든 속성을 작은따옴표로 바꾼다)
 function getAttr(tagStr, name) {
-	const m = tagStr.match(new RegExp('\\b' + name + '\\s*=\\s*"([^"]*)"', 'i'));
-	return m ? m[1] : null;
+	const m = tagStr.match(new RegExp('\\b' + name + '\\s*=\\s*(?:"([^"]*)"|\'([^\']*)\')', 'i'));
+	return m ? (m[1] !== undefined ? m[1] : m[2]) : null;
 }
 
 // 매치 위치가 속한 줄의 들여쓰기
@@ -495,11 +496,14 @@ const decodeEntities = (v) =>
 		return k in decodeMap ? decodeMap[k] : m;
 	});
 
+// 값은 큰따옴표 · 작은따옴표 둘 다 받는다(26.10.06) — 값 안에 큰따옴표가 있으면 바깥을 작은따옴표로 감싼다 :
+//   data-attrs='oninput="drawSearch()"'   (&quot; 로 적지 않아도 된다 · 브라우저 dataset 도 같다)
+//   두 따옴표가 다 들어가야 하면(onclick="toggleLayer('x')") 바깥을 큰따옴표로 두고 안쪽 큰따옴표만 &quot; 로 적는다.
 function partialVars(tagStr) {
 	const vars = {};
-	tagStr.replace(/\bdata-([\w-]+)\s*=\s*"([^"]*)"/gi, (m, k, v) => {
+	tagStr.replace(/\bdata-([\w-]+)\s*=\s*(?:"([^"]*)"|'([^']*)')/gi, (m, k, dq, sq) => {
 		if (k.toLowerCase() !== 'source') {
-			vars[k.replace(/-([a-z])/g, (_x, c) => c.toUpperCase())] = decodeEntities(v);
+			vars[k.replace(/-([a-z])/g, (_x, c) => c.toUpperCase())] = decodeEntities(dq !== undefined ? dq : sq);
 		}
 		return m;
 	});

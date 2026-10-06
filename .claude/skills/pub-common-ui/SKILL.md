@@ -88,7 +88,7 @@ description: >-
 
 > ⚠ **필수 값을 빼면 `{{id}}` · `{{items}}` 가 산출물에 글자 그대로 남는다.**
 > ⚠ `data-*` 는 **케밥**으로 적는다(`data-box-cls` → `{{boxCls}}`). 대문자를 쓰면 브라우저만 치환에 실패한다.
-> ⚠ **받는 값 규칙(26.09.30)** — `cls` · `box-cls` 는 class **전체**(안 넘기면 기본 class) · `attrs` 는 **원문**(값 있는 속성은 `maxlength=&quot;40&quot;`) ·
+> ⚠ **받는 값 규칙(26.09.30)** — `cls` · `box-cls` 는 class **전체**(안 넘기면 기본 class) · `attrs` 는 **원문**(값 있는 속성은 바깥을 작은따옴표로 `data-attrs='maxlength="40"'`) ·
 >    마크업은 **슬롯**(`slot-extra` · `slot-side` · `slot-helper`) · `placeholder` · 체크 · 라디오 `label` 은 **원문**(큰따옴표 금지) · `clear=""` 는 지우기 없음.
 >    왜 이렇게 정했는지는 `docs/PARTIALS.md` 「공통 UI 파셜의 받는 값 규칙」.
 > ⚠ 파셜 변수는 문자열뿐이다. **마크업 덩어리는 슬롯**(`data-slot-이름="#template"` → `{{{이름}}}`), **반복 데이터는 JSON 경로**로 넘긴다(`pub-markup` §2-1).
@@ -134,7 +134,7 @@ description: >-
 
 <!-- 옆에 버튼 : 필드를 한 줄로(ui-field--row) + 버튼은 side 슬롯 -->
 <div class="dynamic-content" data-source="/html/include/ui/_ui_input.html" data-id="join_phone"
-     data-attrs="inputmode=&quot;numeric&quot; maxlength=&quot;11&quot;" data-box-cls="ui-field ui-field--row" data-slot-side="#join_phone_side"></div>
+     data-attrs='inputmode="numeric" maxlength="11"' data-box-cls="ui-field ui-field--row" data-slot-side="#join_phone_side"></div>
 <template id="join_phone_side"><button type="button" class="ui-btn">인증 요청</button></template>
 ```
 

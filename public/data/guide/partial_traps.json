@@ -95,9 +95,9 @@
     "how": "<code>template</code> 은 <strong>include 를 적은 파일에</strong> 두고, 내용만 <code>&lt;슬라이스&gt;/body/</code> 파셜로 뺀다"
   },
   {
-    "trap": "<code>data-*</code> 를 <strong>작은따옴표</strong>로",
-    "what": "<strong>브라우저는 읽고 프리렌더는 못 읽는다</strong> — <code>partialVars()</code> 의 정규식이 큰따옴표만 본다. 값이 조용히 기본값으로 떨어진다",
-    "how": "큰따옴표로 적는다. <code>pnpm exec prettier --write</code> 가 자동으로 맞춘다"
+    "trap": "<code>data-*</code> 값 안의 큰따옴표를 <strong>바깥 큰따옴표 안에 그대로</strong>",
+    "what": "속성이 <strong>안쪽 큰따옴표에서 끊긴다</strong> — <code>data-attrs=\"maxlength=\"40\"\"</code> 는 값이 <code>maxlength=</code> 로 잘린다",
+    "how": "바깥을 <strong>작은따옴표</strong>로 감싼다 — <code>data-attrs='maxlength=\"40\"'</code>(26.10.06 부터 프리렌더도 작은따옴표 값을 읽는다 · prettier 도 이 모양으로 맞춘다). 두 따옴표가 다 들어가면 바깥은 큰따옴표, 안쪽 큰따옴표만 <code>&amp;quot;</code>"
   },
   {
     "trap": "<strong>빈 값</strong>을 넘김 — <code>data-cls=\"\"</code>",

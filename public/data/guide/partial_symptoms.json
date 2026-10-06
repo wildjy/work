@@ -37,7 +37,7 @@
   },
   {
     "symptom": "<strong>산출물에서만</strong> 값이 기본값이다",
-    "cause": "<code>data-*</code> 를 작은따옴표로 적었다 / <code>data-*</code> 에 대문자를 썼다(이쪽은 반대로 브라우저만 실패)"
+    "cause": "옛 <code>prerender.js</code> — 작은따옴표로 적은 <code>data-*</code> 를 읽지 못했다(26.10.06 수정) / <code>data-*</code> 에 대문자를 썼다(이쪽은 반대로 브라우저만 실패)"
   },
   {
     "symptom": "<code>disabled</code> · <code>checked</code> 가 원본 화면엔 있는데 <strong>산출물에만 없다</strong>",

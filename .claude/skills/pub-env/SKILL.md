@@ -25,6 +25,10 @@ pnpm run serve      # = node scripts/serve.js  →  http://localhost:3500 (고�
 - **브라우저 캐시를 끈다**(`scripts/serve.json` → `Cache-Control: no-store`). `serve` 는 이 헤더를 스스로 붙이지 않아 브라우저가 판단해 캐시하고, 그러면 파셜·JSON·`js/*.js` 를 고쳐도 **옛 파일이 그려진다.**
   증상이 「치환이 안 된다 · 마크업이 안 바뀐다 · `{{{키}}}` 가 글자로 보인다」로 나타나 코드 문제로 보이기 쉽다. 치환 규칙(`dynamicImport.js`)을 고친 직후가 특히 위험하다.
   ⚠ 서버를 이미 띄워 둔 상태라면 **서버를 껐다 켜고**(설정이 시작할 때 읽힌다) 브라우저를 강력 새로고침(Ctrl+F5)한다.
+- ⚠ **pnpm 은 `--` 를 스크립트에 그대로 넘긴다**(npm 은 뗀다). `pnpm run verify -- snap a` 면 스크립트가 받는 첫 인자가 `--` 다 —
+  플래그를 보는 스크립트(`prerender` · `pages` · `docs`)는 `--` 로 시작하는 인자를 무시하니 괜찮고, **자리로 받는 스크립트는 걷어내야 한다**(`verify_prerender.js` 가 그렇게 한다).
+- ⚠ **의존성의 설치 스크립트는 pnpm 이 기본으로 막는다**(ERR_PNPM_IGNORED_BUILDS). 허용할 것은 `pnpm-workspace.yaml` 의 `allowBuilds` 에 적는다 —
+  지금은 `simple-git-hooks: true` 하나뿐이다(커밋 훅을 깐다). 대화형 `pnpm approve-builds` 로 넘기면 PC·CI 마다 다시 막힌다.
 - `serve` 는 **버전을 고정**해 받는다(`scripts/serve.js` 의 `SERVE`) — 최신판이 옵션·cleanUrls 동작을 바꿔도 환경이 흔들리지 않는다.
 
 ## 2. `public/` 소스는 **CRLF + 탭** · Prettier · ESLint

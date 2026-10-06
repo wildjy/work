@@ -424,7 +424,7 @@
 							data-source="/html/include/ui/_ui_input.html"
 							data-id="sample_phone"
 							data-value="01012345678"
-							data-attrs="inputmode=&quot;numeric&quot; maxlength=&quot;11&quot;"
+							data-attrs='inputmode="numeric" maxlength="11"'
 							data-box-cls="ui-field ui-field--row"
 							data-slot-side="#sample_phone_side"
 							data-slot-helper="#sample_phone_helper"
@@ -465,7 +465,7 @@
 							data-source="/html/include/ui/_ui_textarea.html"
 							data-id="sample_memo"
 							data-placeholder="요청 사항을 입력해주세요."
-							data-attrs="maxlength=&quot;500&quot;"
+							data-attrs='maxlength="500"'
 							data-max="500"
 						&gt;&lt;/div&gt;
 					&lt;/div&gt;
@@ -485,7 +485,7 @@
                data-placeholder — 원문으로 넣는다(안내 문구의 작은따옴표가 &#39; 로 바뀌지 않게) · 큰따옴표는 넣지 않는다
                data-cls — 입력칸 class 전체(기본 ui-input) : ui-input ui-input--sm · ui-input is-error · ui-input is-disabled
                data-box-cls — 필드 class 전체(기본 ui-field)
-               data-attrs — 입력에 더할 속성(원문) : disabled · readonly · maxlength=&quot;40&quot; · inputmode=&quot;numeric&quot;
+               data-attrs — 입력에 더할 속성(원문) : disabled · readonly · maxlength="40" · inputmode="numeric"
                data-clear — 지우기 버튼. 없애려면 빈 값("")을 넘긴다(읽기 전용 · 수량 입력)
                data-slot-extra — 입력칸 안, 지우기 뒤에 붙는 것 template : 비밀번호 보기 · 남은 시간
                data-slot-side — 입력칸 옆(필드 안)에 붙는 것 template : 인증 요청 버튼
@@ -521,7 +521,7 @@
                data-placeholder(기본 검색어를 입력해주세요.) — 원문 · 큰따옴표는 넣지 않는다
                data-cls — 입력칸 class 전체(기본 ui-input ui-input--search) : 작은 크기 ui-input ui-input--search ui-input--sm
                data-box-cls — 필드 class 전체(기본 ui-field)
-               data-attrs — 입력에 더할 속성(원문) : disabled · maxlength=&quot;40&quot;
+               data-attrs — 입력에 더할 속성(원문) : disabled · maxlength="40"
                data-clear — 지우기 버튼. 없애려면 빈 값("")을 넘긴다
                data-search-label — 검색 버튼 글자(화면에는 아이콘 · 읽기용, 기본 검색) : 주소 검색
                data-slot-helper — 안내문 template : p 태그 ui-helper(--error · --success · --info)
@@ -555,7 +555,7 @@
                data-placeholder(기본 내용을 입력해주세요.) — 원문 · 큰따옴표는 넣지 않는다
                data-cls — 입력칸 class 전체(기본 ui-textarea) : ui-textarea is-error · ui-textarea is-disabled
                data-box-cls — 필드 class 전체(기본 ui-field)
-               data-attrs — 입력에 더할 속성(원문) : disabled · readonly · maxlength=&quot;1000&quot;
+               data-attrs — 입력에 더할 속성(원문) : disabled · readonly · maxlength="1000"
                data-count(기본 0) · data-max(기본 1000) — 글자 수 표시
                data-slot-helper — 안내문 template : p 태그 ui-helper(--error · --success · --info)
      ⚠ 슬롯 · attrs 줄은 넘기지 않으면 프리렌더가 그 줄을 지운다 — 줄에 혼자 둔다. 그래서 이 파일은 prettier 가 정렬하지 않는다(.prettierignore).
@@ -638,6 +638,7 @@
 													type="text"
 													id="sample_phone"
 													name=""
+													inputmode="numeric" maxlength="11"
 													placeholder=""
 													value="01012345678"
 												/>
@@ -687,6 +688,7 @@
 												<textarea
 													id="sample_memo"
 													name=""
+													maxlength="500"
 													placeholder="요청 사항을 입력해주세요."
 												></textarea>
 											</div>
@@ -1353,7 +1355,7 @@
 &lt;!-- 26.09.30 : 공통 체크박스
      받는 값 : data-id(필수) · data-label(필수 · 원문 — 필수 표시 em 태그를 그대로 넣는다) · data-name · data-value
                data-cls — class 전체(기본 ui-checkbox) : ui-checkbox is-disabled 등
-               data-attrs — 입력에 더할 속성(원문) : checked · disabled · onchange=&quot;…&quot;
+               data-attrs — 입력에 더할 속성(원문) : checked · disabled · onchange="…"
                data-slot-extra — 라벨 뒤에 붙는 것 template(라벨 밖) : 설명 · 기타 사유 입력
      ⚠ 슬롯 · attrs 줄은 넘기지 않으면 프리렌더가 그 줄을 지운다 — 줄에 혼자 둔다. 그래서 이 파일은 prettier 가 정렬하지 않는다(.prettierignore).
      ⚠ 라벨(label 태그) 안에는 입력을 하나만 둔다 — 그래서 extra 는 라벨 밖, 바로 뒤에 붙는다. --&gt;
@@ -1487,7 +1489,7 @@
 &lt;!-- 26.09.30 : 공통 라디오
      받는 값 : data-id(필수) · data-name(필수 · 같은 묶음은 같은 이름) · data-label(필수 · 원문) · data-value
                data-cls — class 전체(기본 ui-radio) : ui-radio is-disabled 등
-               data-attrs — 입력에 더할 속성(원문) : checked · disabled · onchange=&quot;…&quot;
+               data-attrs — 입력에 더할 속성(원문) : checked · disabled · onchange="…"
                data-slot-extra — 라벨 뒤에 붙는 것 template(라벨 밖) : 설명 · 기타 사유 입력
      ⚠ 슬롯 · attrs 줄은 넘기지 않으면 프리렌더가 그 줄을 지운다 — 줄에 혼자 둔다. 그래서 이 파일은 prettier 가 정렬하지 않는다(.prettierignore).
      ⚠ 라벨(label 태그) 안에는 입력을 하나만 둔다 — 그래서 extra 는 라벨 밖, 바로 뒤에 붙는다. --&gt;
@@ -1595,7 +1597,7 @@
 									readonly
 									aria-label="토글 파셜 원문"
 								>
-&lt;!-- 공통 토글(스위치) — 받는 값 : data-id(필수) · data-label(필수) · data-name · data-value · data-attrs(원문 : checked · disabled · onchange=&quot;…&quot;) · data-cls(class 전체 · 기본 ui-toggle) --&gt;
+&lt;!-- 공통 토글(스위치) — 받는 값 : data-id(필수) · data-label(필수) · data-name · data-value · data-attrs(원문 : checked · disabled · onchange="…") · data-cls(class 전체 · 기본 ui-toggle) --&gt;
 &lt;!--@ 켜고 끄는 즉시 반영되는 설정에 쓴다. 저장 버튼을 눌러야 반영되는 선택은 체크박스를 쓴다 --&gt;
 &lt;label class="{{cls|ui-toggle}}"&gt;
 	&lt;input

@@ -181,8 +181,9 @@ DOMContentLoaded
 
 - `{{{attrs|}}}` 가 **한 줄을 통째로** 차지하면(공통 토글처럼 속성을 줄마다 적은 태그) 넘기지 않았을 때 프리렌더가 **그 줄을 지운다.** 넘겼으면 남는다.
   ⚠ 26.09.28 전의 `prerender.js` 는 **슬롯만 보고** 판정해 `data-attrs` 를 넘겨도 지웠다 — `disabled` 가 산출물에서만 빠졌다.
-- **값이 있는 속성도 넘긴다** — 원문 자리라 `maxlength="40"` 같은 것도 들어간다. 부르는 쪽 따옴표 안에 적으므로 큰따옴표는 `&quot;` 로 쓴다.
-  `data-attrs="maxlength=&quot;40&quot; inputmode=&quot;numeric&quot;"` → 산출물 `maxlength="40" inputmode="numeric"` (두 러너 모두 엔티티를 풀어 넣는다).
+- **값이 있는 속성도 넘긴다** — 원문 자리라 `maxlength="40"` 같은 것도 들어간다. 값에 큰따옴표가 들어가므로 **바깥을 작은따옴표로 감싼다**(26.10.06 — 두 러너 모두 작은따옴표 값을 읽는다).
+  `data-attrs='maxlength="40" inputmode="numeric"'` → 산출물 `maxlength="40" inputmode="numeric"`. prettier 도 `&quot;` 가 든 속성을 이 모양으로 바꾼다.
+  두 따옴표가 다 들어가야 하면(`onclick="toggleLayer('x')"`) 바깥을 큰따옴표로 두고 안쪽 큰따옴표만 `&quot;` 로 적는다(두 러너 모두 엔티티를 풀어 넣는다).
 - ⚠ 슬롯 · `attrs` 줄을 가진 파셜(`_ui_input` · `_ui_search` · `_ui_textarea` · `_ui_checkbox` · `_ui_radio`)은 **`.prettierignore` 대상**이다 —
   prettier 가 「혼자 있는 줄」들을 한 줄로 합치고, 기본값 안의 태그(`{{{clear|<button …>}}}`)를 쪼갠다. 손으로 속성 한 줄에 하나로 둔다.
 
@@ -330,7 +331,7 @@ template   id="sample_invite_body"
 | --- | --- | --- |
 | `data-cls` | 바깥 class **전체** — 변형 · 상태를 한 값으로. 안 넘기면 기본 class | `ui-input is-error` · `ui-modal ui-modal--lg` |
 | `data-box-cls` | 감싸는 필드 class 전체(입력류) | `ui-field ui-field--row`(옆에 버튼) |
-| `data-attrs` | 입력 태그에 더할 속성 — **원문** · 값 있는 속성은 `&quot;` | `checked disabled` · `maxlength=&quot;40&quot;` |
+| `data-attrs` | 입력 태그에 더할 속성 — **원문** · 값 있는 속성은 바깥을 작은따옴표로 | `checked disabled` · `data-attrs='maxlength="40"'` |
 | `data-slot-*` | 마크업 덩어리 — `extra`(입력칸 안 · 라벨 뒤) · `side`(입력칸 옆) · `helper`(안내문) | 비밀번호 보기 · 인증 요청 버튼 · 오류 / 성공 안내 |
 | `data-clear=""` | 지우기 버튼 없앰 | 읽기 전용 · 수량 입력 |
 | `data-placeholder` | **원문** — 안내 문구의 작은따옴표가 `&#39;` 로 바뀌지 않게. 큰따옴표는 넣지 않는다 | `'-' 없이 숫자만` |
@@ -400,7 +401,7 @@ template   id="sample_invite_body"
 | **브라우저 캐시** | 규칙을 고쳤는데 옛 `dynamicImport.js` 가 돌아 `{{{body}}}` 가 글자로 보인다 | `pnpm run serve`(no-store)로 띄우고 강력 새로고침 |
 | **Live Server 로 열기** | 파셜 조각에 라이브리로드 스크립트가 주입돼 마크업이 깨진다 | `pnpm run serve` (http://localhost:3500) (http://localhost:3500) |
 | **`template` 요소째 파셜로 빼서 사용처보다 **뒤**에서 include** | 슬롯을 채울 때 `template` 이 아직 없어 **본문이 빈 채로** 나간다 — 프리렌더만 경고를 찍는다 | `template` 은 **include 를 적은 파일에** 두고, 내용만 `<슬라이스>/body/` 파셜로 뺀다 |
-| **`data-*` 를 **작은따옴표**로** | **브라우저는 읽고 프리렌더는 못 읽는다** — `partialVars()` 의 정규식이 큰따옴표만 본다. 값이 조용히 기본값으로 떨어진다 | 큰따옴표로 적는다. `pnpm exec prettier --write` 가 자동으로 맞춘다 |
+| **`data-*` 값 안의 큰따옴표를 **바깥 큰따옴표 안에 그대로**** | 속성이 **안쪽 큰따옴표에서 끊긴다** — `data-attrs="maxlength="40""` 는 값이 `maxlength=` 로 잘린다 | 바깥을 **작은따옴표**로 감싼다 — `data-attrs='maxlength="40"'`(26.10.06 부터 프리렌더도 작은따옴표 값을 읽는다 · prettier 도 이 모양으로 맞춘다). 두 따옴표가 다 들어가면 바깥은 큰따옴표, 안쪽 큰따옴표만 `&quot;` |
 | ****빈 값**을 넘김 — `data-cls=""`** | 「넘긴 것」이라 **기본값을 이긴다** — class 가 통째로 비어 모양이 사라진다. 안 넘긴 것과 결과가 다르다 | 기본값을 쓰려면 **속성을 아예 적지 않는다**. 비우는 것이 목적일 때만 빈 값을 넘긴다 — `data-clear=""`(지우기 버튼 없앰) |
 | **참 · 거짓을 문자열로 — `data-checked="false"`** | 치환은 **글자 바꿔치기**라 참/거짓을 모른다. `<input false>` 가 되고 class 자리면 `class="ui-tag false"` 가 된다 | **끄는 방법은 「안 넘기는 것」 하나뿐이다** |
 | **기본값 안에 `}`** | 정규식이 `[^}]*?` 라 **거기서 끊긴다** — 기본값이 잘린 채 나온다 | 중괄호가 필요한 값은 기본값에 두지 않고 **넘겨서** 채운다 |
@@ -640,7 +641,7 @@ template   id="sample_invite_body"
 | 마크업이 깨져 보인다 | Live Server 로 열었다 → `pnpm run serve` (http://localhost:3500) |
 | class 가 하나 모자라거나 `false` 가 붙어 있다 | 빈 값을 넘겨 기본값이 밀렸다 / 참·거짓을 문자열로 넘겼다 — 끄려면 **안 넘긴다** |
 | 기본값이 **잘린 채** 나온다 | 기본값 안에 `}` 를 썼다 — 정규식이 거기서 끊는다 |
-| **산출물에서만** 값이 기본값이다 | `data-*` 를 작은따옴표로 적었다 / `data-*` 에 대문자를 썼다(이쪽은 반대로 브라우저만 실패) |
+| **산출물에서만** 값이 기본값이다 | 옛 `prerender.js` — 작은따옴표로 적은 `data-*` 를 읽지 못했다(26.10.06 수정) / `data-*` 에 대문자를 썼다(이쪽은 반대로 브라우저만 실패) |
 | `disabled` · `checked` 가 원본 화면엔 있는데 **산출물에만 없다** | 옛 `prerender.js` — 한 줄짜리 `{{{attrs\|}}}` 를 「슬롯을 넘겼나」로만 보고 지웠다(26.09.28 수정). `pnpm run sync` 로 짝과 맞는지 본다 |
 | `pnpm run validate` 에 `Stray end tag </template>` · 중복 id | 옛 `prerender.js` 가 template 안의 include 를 펼쳐 **목록 template 이 슬롯 template 안에 겹쳤다**(26.09.28 수정) / 설명 주석에 template 태그를 그대로 적었다 |
 | 코드 예시의 `{{key\|기본값}}` 가 **기본값으로 바뀌어** 보인다 | 파셜 안 예시를 `<textarea data-raw>` 로 적지 않았다 / 옛 `dynamicImport.js`(강력 새로고침) |

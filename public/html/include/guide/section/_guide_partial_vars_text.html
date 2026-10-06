@@ -49,11 +49,15 @@
 	<div class="ui-card__body">
 		<ul class="guide__list">
 			<li><strong>속성 이름은 소문자와 하이픈만</strong> 쓴다(<a href="#guide_vars_name">3-0</a>).</li>
-			<li><strong>값은 큰따옴표로</strong> 감싼다 — 작은따옴표는 프리렌더가 읽지 못한다.</li>
 			<li>
-				⚠ <strong>prettier 는 값에 <code>&amp;quot;</code> 가 든 속성을 작은따옴표로 바꾼다</strong> — 그러면 위 규칙에
-				걸려 프리렌더만 값을 못 채운다(이 문서의 옛 데모가 실제로 그랬다). 값에서 큰따옴표를 빼거나, 꼭 필요하면 그 요소
-				위에 <code>prettier-ignore</code> 주석을 단다.
+				<strong>값은 큰따옴표로</strong> 감싸는 것이 기본이다 —
+				<strong>값 안에 큰따옴표가 있으면 바깥을 작은따옴표로</strong>
+				감싼다(26.10.06 부터 프리렌더도 작은따옴표 값을 읽는다).
+			</li>
+			<li>
+				<strong>prettier 는 값에 <code>&amp;quot;</code> 가 든 속성을 작은따옴표로 바꾼다</strong> — 그래서 처음부터 그
+				모양으로 적는다. 두 따옴표가 다 들어가야 할 때만 바깥을 큰따옴표로 두고 안쪽 큰따옴표를
+				<code>&amp;quot;</code> 로 적는다.
 			</li>
 			<li>
 				파셜 맨 위 주석에 <strong>어떤 <code>data-*</code> 를 받는지</strong> 적어 둔다 — 부르는 사람이 파셜을 열지
@@ -65,22 +69,62 @@
 <div class="grid grid--2">
 	<div class="ui-card guide__vs guide__vs--bad">
 		<div class="ui-card__header">
-			<h4 class="ui-card__title">✗ 작은따옴표 — 프리렌더만 못 읽는다</h4>
+			<h4 class="ui-card__title">✗ 큰따옴표 안에 큰따옴표 — 속성이 거기서 끊긴다</h4>
 		</div>
 		<div class="ui-card__body">
 			<textarea class="guide__src" data-raw readonly aria-label="틀린 예">
-				<div class="dynamic-content" data-source="…" data-title='멤버 초대'></div>
+				<div class="dynamic-content" data-source="…" data-attrs="maxlength="40""></div>
 			</textarea>
 		</div>
 	</div>
 	<div class="ui-card guide__vs guide__vs--good">
 		<div class="ui-card__header">
-			<h4 class="ui-card__title">✓ 큰따옴표 — 값 안의 큰따옴표는 &amp;quot;</h4>
+			<h4 class="ui-card__title">✓ 값에 큰따옴표가 있으면 바깥은 작은따옴표</h4>
 		</div>
 		<div class="ui-card__body">
 			<textarea class="guide__src" data-raw readonly aria-label="맞는 예">
-				<div class="dynamic-content" data-source="…" data-title="멤버 초대"></div>
+				<div class="dynamic-content" data-source="…" data-title="멤버 초대" data-attrs='maxlength="40"'></div>
 			</textarea>
 		</div>
+	</div>
+</div>
+<div class="ui-card">
+	<div class="ui-card__header">
+		<h4 class="ui-card__title">예제 — 값에 든 따옴표로 바깥 따옴표를 고른다</h4>
+	</div>
+	<div class="ui-card__body">
+		<textarea class="guide__src" data-raw readonly aria-label="따옴표 고르기 예시">
+			<!-- ① 글자만 — 큰따옴표 (기본) -->
+			data-title="멤버 초대"
+			data-msg="'저장' 을 눌러야 반영됩니다."          <!-- 문구 안 작은따옴표는 그대로 -->
+
+			<!-- ② 속성값 — 값 안에 큰따옴표 → 바깥은 작은따옴표 -->
+			data-attrs='maxlength="40"'
+			data-attrs='inputmode="numeric" maxlength="11"'
+			data-attrs='disabled placeholder="숫자만 입력"'
+			data-attrs="checked disabled"                     <!-- 값 없는 속성만이면 큰따옴표 그대로 -->
+
+			<!-- ③ 함수 — 인자가 없거나 숫자면 같은 모양 -->
+			data-attrs='onclick="toggleMenu(this)"'
+			data-attrs='onclick="stepperChange(this, 1)"'
+
+			<!-- ④ 함수에 문자열 인자 — 두 따옴표가 다 든다 -->
+			<!--    바깥은 큰따옴표, 안쪽 큰따옴표만 &amp;quot; (작은따옴표는 그대로) -->
+			data-attrs="onclick=&amp;quot;toggleLayer('layer_x')&amp;quot;"
+			data-attrs="onclick=&amp;quot;location.href='/html/sample/Sample.html'&amp;quot;"
+
+			<!-- ⑤ 스크립트(여러 문장) — 문자열은 작은따옴표로 써서 ④ 와 같게 -->
+			data-attrs="oninput=&amp;quot;this.value = this.value.replace(/[^0-9]/g, '')&amp;quot;"
+			data-attrs="onclick=&amp;quot;toastShow('저장했습니다'); return false;&amp;quot;"
+
+			<!-- ⑥ 산출물 — 어느 쪽으로 적어도 같은 속성이 나온다 -->
+			<input … maxlength="40" />
+			<button … onclick="toggleLayer('layer_x')">
+		</textarea>
+		<p class="guide__note guide__note--tip">
+			<strong>값 안에 큰따옴표만</strong> → 바깥 작은따옴표 · <strong>작은따옴표만</strong> 또는
+			<strong>따옴표 없음</strong> → 바깥 큰따옴표 · <strong>둘 다</strong> → 바깥 큰따옴표 + 안쪽 큰따옴표만
+			<code>&amp;quot;</code>. 함수 안 문자열은 작은따옴표로 써서 「둘 다」 한 가지로 모은다.
+		</p>
 	</div>
 </div>

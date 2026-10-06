@@ -26,7 +26,9 @@ const ROOT = path.resolve(__dirname, '..');
 const OUT = path.join(ROOT, 'public', 'prerender');
 const BOX = path.join(ROOT, '.verify');
 const SERVE = 'serve@14.2.6';
-const [cmd, ...rest] = process.argv.slice(2);
+// ⚠ 홀로 선 `--` 는 걷어낸다 — pnpm 은 `pnpm run verify -- snap a` 의 `--` 를 **스크립트에 그대로 넘긴다**(npm 은 뗀다).
+//    걷어내지 않으면 cmd 자리에 '--' 가 들어가 「모르는 명령」으로 끝난다.
+const [cmd, ...rest] = process.argv.slice(2).filter((a) => a !== '--');
 
 function walk(d, base = d, acc = []) {
 	for (const f of fs.readdirSync(d)) {
